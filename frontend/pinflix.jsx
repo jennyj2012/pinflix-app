@@ -2,4 +2,6 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var PinsIndex = require('./components/pins_index');
 
-ReactDOM.render(<PinsIndex/>, document.getElementById('root'));
+document.addEventListener("DOMContentLoaded", function () {
+  ReactDOM.render(<PinsIndex/>, document.getElementById('root'));
+});

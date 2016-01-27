@@ -1,3 +1,3 @@
 json.array! @pins do |pin|
-  json.title pin.title
+  json.partial! 'pin', pin: pin
 end

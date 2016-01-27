@@ -1,14 +1,14 @@
 var React = require('react');
 var PinUtil = require('../util/pins_util');
 var PinsStore = require('../stores/pins_store');
+var PinsIndexItem = require('./pins_index_item');
 
 var PinsIndex = React.createClass({
   getInitialState: function (){
-    return { userPins: [] };
+    return {userPins: []};
   },
   componentDidMount: function (){
     this.pinListener = PinsStore.addListener(this.__onChange);
-    debugger
     PinUtil.fetchPins();
   },
   componentWillUnMount: function (){
@@ -19,8 +19,14 @@ var PinsIndex = React.createClass({
   },
 
   render: function () {
+    var pins = this.state.userPins.map(function (pin) {
+      return <PinsIndexItem key={pin.id} pin={pin}></PinsIndexItem>;
+    });
+
     return (
-      <div>PinsIndex</div>
+      <div className="user-page group">
+        <h2>{pins}</h2>
+      </div>
     );
   }
 });

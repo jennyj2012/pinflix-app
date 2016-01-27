@@ -1,3 +1,44 @@
 // Place all the styles related to the Pins controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.pin-index-item {
+  width: 236px;
+  margin: auto 5px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 30px #ccc;
+  border: 1px solid #ccc;
+  float:left;
+}
+
+.pin-summary {
+  text-align: left;
+  font-weight: normal;
+}
+
+.pin-summary figcaption {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.pin-summary p {
+  font-size: 12px;
+  margin: 0;
+}
+.pin-summary a {
+  text-decoration: none;
+  color: #525252;
+  font-weight: bold;
+}
+
+.pin-summary section {
+  font-size: 12px;
+  margin: 10px;
+}
+
+.divison {
+  border-bottom: 1px solid #ccc;
+  margin: 10px 0;
+  display: block;
+}

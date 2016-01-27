@@ -15,7 +15,7 @@
  */
 
 /*RESET*/
- body h1 form input button div {
+ body h1 p li ul form input button div section img figcaption a{
    margin: 0;
    border: 0;
    padding: 0;
@@ -48,4 +48,16 @@
 
  input:focus {
    box-shadow: none;
+ }
+
+ img {
+   width: 100%;
+   height: auto;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+ }
+
+ img:hover {
+   cursor: zoom-in;
+   background: #000;
  }
