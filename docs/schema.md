@@ -18,6 +18,7 @@ column name | data type | details
 id          | integer   | not null, primary key
 author_id   | integer   | not null, foreign key (references users), indexed
 title       | string    | not null, indexed
+tag_id      | integer   | not null, foreign key (references tags), indexed
 description | text      |
 created_at  | datetime  | not null
 updated_at  | datetime  | not null
