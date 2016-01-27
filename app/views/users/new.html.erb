@@ -1,0 +1,31 @@
+
+<div class="sign-up">
+  <div class="log-in-button">
+    <form class="log-in-button-form" action="<%= new_session_url %>" method="get">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <button>Log in</button>
+    </form>
+  </div>
+<form class="sign-up-form" action="<%= users_url %>" method="post">
+  <h1>Sign Up for PinFlix</h1>
+  <p>Join PinFlix and discover and save movie ideas.</p>
+  <p>PinFlix is a Pinterest clone.</p>
+
+  <div class="input">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  </div>
+  <div class="input">
+    <input type="text" name="user[username]" id="user_username" value="Username"></input>
+  </div>
+  <div class="input">
+    <input type="text" name="user[email]" id="user_email" value="Email"></input>
+  </div>
+  <div class="input">
+    <input type="password" name="user[password]" id="user_password"></input>
+  </div>
+  <p class="errors"><%=flash[:errors].join("<br>") if flash[:errors] %></p>
+  <div class="sign-up-button">
+    <button>Sign Up</button>
+  </div>
+</form>
+</div>

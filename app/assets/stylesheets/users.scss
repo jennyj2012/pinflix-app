@@ -1,0 +1,87 @@
+// Place all the styles related to the Users controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+  text-align: center;
+  background: #eee;
+  margin: 0 auto;
+  font-family: sans-serif;
+  box-sizing: content-box;
+}
+
+.sign-up-form {
+
+}
+
+.sign-up-form h1 {
+  font-size: 24px;
+}
+
+.sign-up {
+  margin: 0 auto;
+  width: 600px;
+  height: 460px;
+  margin-top: 100px;
+  position: relative;
+  display: block;
+  background: #fff;
+  padding-top: 20px;
+  border-radius: 5%;
+  box-shadow: 0 0 30px #ccc;
+}
+
+.input {
+  text-align: center;
+  display: block;
+  margin: 10px auto;
+}
+
+
+.sign-up-button {
+  box-sizing: border-box;
+
+  text-align: center;
+  display: block;
+  margin: 10px auto;
+
+
+  display: block;
+  border-radius: 5%;
+}
+
+.sign-up-button button {
+  width: 330px;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 5%;
+  color: #fff;
+  background-image: linear-gradient(#e3262e, #ab171e);
+  border: 1px solid #aaa;
+}
+
+.log-in-button {
+  right: 50px;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.log-in-button button{
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10%;
+  color: #525252;
+  background: #fff;
+  border: 1px solid #aaa;
+  box-shadow: 0 0 10px #ccc;
+}
+
+.log-in-button button:hover {
+  color: #000;
+  background: #fff;
+}
+
+.sign-up-form p {
+  margin: 0;
+}

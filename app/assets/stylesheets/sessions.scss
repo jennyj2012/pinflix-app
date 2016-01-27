@@ -1,0 +1,93 @@
+// Place all the styles related to the Sessions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+  text-align: center;
+  background: #eee;
+  margin: 0 auto;
+  font-family: sans-serif;
+  box-sizing: content-box;
+}
+
+.log-in {
+  width: 390px;
+  height: 420px;
+  display: block;
+  background: #fff;
+  margin: 0 auto;
+  padding-top: 20px;
+  border-radius: 5%;
+  box-shadow: 0 0 30px #ccc;
+}
+
+.log-in form h1 {
+  font-size: 24px;
+}
+
+.log-in {
+  margin-top: 100px;
+}
+
+.input {
+  text-align: center;
+  display: block;
+  margin: 10px auto;
+}
+
+
+input {
+  width: 300px;
+  text-align: left;
+  font-size: 20px;
+  background: #eee;
+  border: 1px solid #aaa;
+  padding: 15px;
+  border-radius: 5%;
+  color: #aaa;
+}
+
+input:hover {
+  color: #000;
+  background: #fff;
+}
+
+input:required {
+  border: 1px solid red;
+}
+
+.action-links {
+  box-sizing: border-box;
+  border-top: 1px solid #aaa;
+  width: 390px;
+  padding: 30px 30px 30px 30px;
+  margin: 30px auto;
+  background: #eee;
+  display: block;
+  border-bottom-left-radius: 5%;
+  border-bottom-right-radius: 5%;
+}
+
+.action-links a {
+  float: left;
+  color: #525252;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.action-links button {
+  float: right;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10%;
+  color: #525252;
+  background: #eee;
+  border: 1px solid #aaa;
+}
+
+.action-links button:hover {
+  color: #000;
+  background: #fff;
+}
