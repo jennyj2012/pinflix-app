@@ -4,12 +4,11 @@
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-title       | string    | not null
+title       | string    | not null, indexed
 url	        | string    | not null
-description | text      | 
+description | text      |
 author_id   | integer   | not null, foreign key (references users), indexed
 board_id    | integer   | not null, foreign key (references boards), indexed
-comment_id  | integer   | foreign key (references comments), indexed
 created_at  | datetime  | not null
 updated_at  | datetime  | not null
 
@@ -18,8 +17,8 @@ column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 author_id   | integer   | not null, foreign key (references users), indexed
-title       | string    | not null
-description | string    | 
+title       | string    | not null, indexed
+description | text      |
 created_at  | datetime  | not null
 updated_at  | datetime  | not null
 
@@ -45,13 +44,12 @@ updated_at  | datetime  | not null
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-name        | string    | not null
 board_id    | integer   | not null, foreign key (references boards), indexed
 tag_id      | integer   | not null, foreign key (references tags), indexed
 
 ## users
 column name     | data type | details
-----------------|-----------|-----------------------
+----------------A|-----------|-----------------------
 id              | integer   | not null, primary key
 username        | string    | not null, indexed, unique
 password_digest | string    | not null
