@@ -27,5 +27,5 @@ Pin.create(
   title: "test pin",
   url: "https://lyric2life.files.wordpress.com/2013/05/count-of-monte-cristo.jpg",
   description: "not necessary pin description"
-  author_id: 1,
-  board_id: 1)
+  author: User.find(1),
+  board: Board.find(1))
