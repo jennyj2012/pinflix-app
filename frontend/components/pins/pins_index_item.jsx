@@ -11,7 +11,7 @@ var PinsIndexItem = React.createClass({
     var hostname = this.get_domain_from_url(pin.url);
 
     return (
-      <div className="pin-index-item">
+      <div className="index-item">
         <img src={pin.url} />
 
         <div className="pin-summary group">

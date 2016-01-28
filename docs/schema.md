@@ -27,7 +27,7 @@ updated_at  | datetime  | not null
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-body        | string    | not null
+body        | text    | not null
 user_id     | integer   | not null, foreign key (references users), indexed
 pin_id      | integer   | not null, foreign key (references pins), indexed
 created_at  | datetime  | not null

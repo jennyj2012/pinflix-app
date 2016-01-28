@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
 
   has_many :boards
   has_many :pins
+  has_many :comments
 
   validates :username, :email, :password_digest, :session_token, presence: true
   validates :password, length: { minimum: 6, allow_nil: true }
