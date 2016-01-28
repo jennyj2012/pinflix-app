@@ -127,10 +127,17 @@
 
  button:active {
    box-shadow: none;
+   outline: 0;
+ }
+
+ button:focus {
+   box-shadow: none;
+   outline: 0;
  }
 
  button {
   font-size: 14px;
+  cursor: pointer;
  }
 
  .standard-form-button {
@@ -165,6 +172,9 @@
    border: 1px solid #aaa;
  }
 
- .standard-red-button button:hover {
+ .standard-red-button button:active {
+
+ }
+ .standard-red-button button:focus {
 
  }
