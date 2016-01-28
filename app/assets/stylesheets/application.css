@@ -69,8 +69,19 @@
    margin: 10px auto;
  }
 
+ textarea {
+   text-align: left;
+   font-size: 14px;
+   background: #eee;
+   padding: 10px;
+   border: none;
+   border-radius: 5%;
+   color: #aaa;
+   width: 80%;
+   height: 20px;
+ }
+
  input {
-   width: 300px;
    text-align: left;
    font-size: 20px;
    background: #eee;
@@ -78,6 +89,7 @@
    padding: 15px;
    border-radius: 5%;
    color: #aaa;
+   width: 70%;
  }
 
  input:hover {
@@ -91,6 +103,12 @@
 
  input:focus {
    box-shadow: none;
+   outline: 0;
+ }
+
+ input:active {
+   box-shadow: none;
+   outline: 0;
  }
 
  a {
@@ -115,7 +133,7 @@
    font-size: 24px;
  }
 
- .standard-modal {
+ .basic-modal {
   margin: 100px auto;
   position: relative;
   border-radius: 5%;
@@ -138,44 +156,58 @@
  button {
   font-size: 14px;
   cursor: pointer;
+  border: none;
  }
 
- .standard-form-button {
+ .form-style-button {
 
  }
 
- .standard-form-button button {
+ .form-style-button button {
    font-weight: bold;
    padding: 10px;
    border-radius: 10%;
    color: #525252;
  }
 
- .standard-form-button button:hover {
+ .form-style-button button:hover {
    color: #000;
    background: #fff;
  }
 
- .standard-red-button {
-   box-sizing: border-box;
-   text-align: center;
+ .shade-button {
    display: block;
    margin: 10px auto;
-   border-radius: 5%;
  }
 
- .standard-red-button button{
+ .shade-button button {
+   text-align: center;
    padding: 15px;
-   border-radius: 5%;
    color: #fff;
+   border-radius: 5%;
    background-image: linear-gradient(#e3262e, #ab171e);
    border: 1px solid #aaa;
  }
 
 /*Add button highlight*/
- .standard-red-button button:active {
+ .shade-button button:active {
 
  }
- .standard-red-button button:focus {
+ .shade-button button:focus {
+
+ }
+
+ .basic-red-button {
+   box-sizing: border-box;
+   display: block;
+   margin: 10px auto;
+ }
+
+ .basic-red-button button {
+   text-align: center;
+   padding: 15px;
+   border-radius: 5%;
+   color: #fff;
+   background: #bd081c;
 
  }

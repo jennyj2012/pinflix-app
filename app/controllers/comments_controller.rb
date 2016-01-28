@@ -1,9 +1,10 @@
 class CommentsController < ApplicationController
   def index
-    @comments = Comments.all
+    @comments = Comment.all.includes(:author)
   end
 
   def show
+
   end
 
   def create

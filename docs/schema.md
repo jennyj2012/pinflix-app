@@ -28,7 +28,7 @@ column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 body        | text    | not null
-user_id     | integer   | not null, foreign key (references users), indexed
+author_id     | integer   | not null, foreign key (references users), indexed
 pin_id      | integer   | not null, foreign key (references pins), indexed
 created_at  | datetime  | not null
 updated_at  | datetime  | not null

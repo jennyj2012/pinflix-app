@@ -1,5 +1,5 @@
 
-<div class="log-in standard-modal">
+<div class="log-in basic-modal">
   <form action="<%= session_url %>" method="post">
     <h1>Log In to PinFlix</h1>
     <p>PinFlix is a movie discovery web application inspired by Pinterest</p>
@@ -18,9 +18,11 @@
 
     <div class="division"></div>
 
-    <div class="action-links standard-form-button group">
+    <div class="action-links group">
       <a href="<%= new_user_url %>">Sign up now</a>
-      <button>Log In</button>
+      <div class="shade-button">
+        <button>Log In</button>
+      </div>
     </div>
   </form>
 </div>

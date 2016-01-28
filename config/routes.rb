@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   resources :users, only: [:create, :new, :show]
   resource :session, only: [:create, :new, :destroy]
 
-  resources :pins, defaults: { format: :json }, only: [:index, :show, :create, :update]
+  resources :pins, defaults: { format: :json }, only: [:index, :show, :create, :update] 
   resources :comments, defaults: { format: :json }, only: [:index, :show, :create]
+
 
 end

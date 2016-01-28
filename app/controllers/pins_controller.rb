@@ -1,9 +1,10 @@
 class PinsController < ApplicationController
   def index
-    @pins = Pin.all.includes(:author)
+    @pins = Pin.all.includes(:author, :comments)
   end
 
   def show
+    @pins = Pin.all.includes(:comments).find_by_id(params[:pin_id])
   end
 
   def create

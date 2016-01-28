@@ -7,13 +7,6 @@
   width: 600px;
 }
 
-.sign-up-button {
-}
-
-.sign-up-button button {
-  width: 330px;
-}
-
 .log-in-button {
   right: 50px;
   text-align: right;
@@ -29,4 +22,14 @@
 .log-in-button button:hover {
   color: #000;
   background: #fff;
+}
+
+.sign-up input {
+  width: 50%;
+}
+
+.sign-up-button {
+}
+.sign-up-button button{
+  width: 330px;
 }

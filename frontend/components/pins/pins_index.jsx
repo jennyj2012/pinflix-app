@@ -5,21 +5,21 @@ var PinsIndexItem = require('./pins_index_item');
 
 var PinsIndex = React.createClass({
   getInitialState: function (){
-    return {userPins: []};
+    return {allPins: []};
   },
   componentDidMount: function (){
     this.pinListener = PinsStore.addListener(this.__onChange);
-    PinUtil.fetchPins();
+    PinUtil.fetchAllPins();
   },
   componentWillUnMount: function (){
     this.pinListener.remove();
   },
   __onChange: function (){
-    this.setState({ userPins: PinsStore.all() });
+    this.setState({ allPins: PinsStore.all() });
   },
 
   render: function () {
-    var pins = this.state.userPins.map(function (pin) {
+    var pins = this.state.allPins.map(function (pin) {
       return <PinsIndexItem key={pin.id} pin={pin}></PinsIndexItem>;
     });
 

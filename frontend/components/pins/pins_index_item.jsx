@@ -1,4 +1,6 @@
 var React = require('react');
+var CommentsIndex = require('../comments/comments_index');
+var CommentsForm = require('../comments/comments_form');
 
 var PinsIndexItem = React.createClass({
   get_domain_from_url: function (url){
@@ -27,13 +29,18 @@ var PinsIndexItem = React.createClass({
 
           <div className="divison"></div>
 
-        <section>
+        <section className="description">
             {pin.description}
           </section>
 
-          <section>
-            author: {pin.author.username}
+          <section className="author">
+            <a href="#">
+            Author: {pin.author.username}
+            </a>
           </section>
+
+          <CommentsIndex comments={pin.comments} pin={pin}/>
+          <CommentsForm pin={pin}/>
         </div>
 
       </div>

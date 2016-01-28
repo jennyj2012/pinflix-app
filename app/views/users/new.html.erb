@@ -1,7 +1,7 @@
 
-<div class="sign-up standard-modal">
+<div class="sign-up basic-modal">
 
-  <div class="log-in-button standard-form-button">
+  <div class="log-in-button form-style-button">
     <form class="log-in-button-form" action="<%= new_session_url %>" method="get">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <button>Log in</button>
@@ -27,7 +27,7 @@
   </div>
   <p class="errors"><%=flash[:errors].join("<br>") if flash[:errors] %></p>
 
-  <div class="sign-up-button standard-red-button">
+  <div class="sign-up-button shade-button">
     <button>Sign Up</button>
   </div>
 
