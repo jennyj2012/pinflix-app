@@ -1,13 +1,13 @@
 var React = require('react');
 
-var PinsDetail = React.createClass({
+var PinsEdit = React.createClass({
   render: function () {
     var pin = this.props.pin;
     return (
-      <div className="pin-detail">
+      <div className="pin-edit">
       </div>
     );
   }
 });
 
-module.exports = PinsDetail;
+module.exports = PinsEdit;

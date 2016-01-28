@@ -32,7 +32,7 @@ PinFlix is a movie discovery web application inspired by Pinterest built using R
 
 ### Phase 1: User Authentication and User JSON API push to Heroku(1 days)
 
-In Phase 1, I will begin by implementing user signup and authentication (using BCrypt). Create a JSON API to sign up, log in, and log out. Push to Heroku. Create flux architecture for authentication. Create react components, and necessary forms for user authentication. Add a home page users will be redirected to after sign in. 
+In Phase 1, I will begin by implementing user signup and authentication (using BCrypt). Create a JSON API to sign up, log in, and log out. Push to Heroku. Create flux architecture for authentication. Create react components, and necessary forms for user authentication. Add a home page users will be redirected to after sign in.
 
 [Details][phase-one]
 
@@ -54,7 +54,7 @@ Phase 4 is focused on continuing setting up Flux, the React Router, and the Reac
 set up, a Board store will be implemented and a set of actions corresponding to
 the needed CRUD functionality created. Once this is done, I will create React
 views for the Boards `Index`, `IndexItem` and `Form`. At the end of Phase 4,
-Boards can be created, read, edited, and destroyed in the browser. 
+Boards can be created, read, edited, and destroyed in the browser.
 
 [Details][phase-four]
 
@@ -66,7 +66,7 @@ Phase 5 adds organization to the Pins. Comments belong to Pins, and Pins can bel
 
 ### Phase 6: Follow and Unfollow (2 day)
 
-Phase 6 introduces a new feature. Users can follow and unfollow boards, which will affect the pins that are displayed on their home screen. 
+Phase 6 introduces a new feature. Users can follow and unfollow boards, which will affect the pins that are displayed on their home screen.
 
 [Details][phase-six]
 
@@ -91,4 +91,3 @@ the BoardForm).
 [phase-four]: ./docs/phases/phase4.md
 [phase-five]: ./docs/phases/phase5.md
 [phase-six]: ./docs/phases/phase6.md
-

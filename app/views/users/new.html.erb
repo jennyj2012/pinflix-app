@@ -1,12 +1,14 @@
 
-<div class="sign-up">
-  <div class="log-in-button">
+<div class="sign-up standard-modal">
+
+  <div class="log-in-button standard-form-button">
     <form class="log-in-button-form" action="<%= new_session_url %>" method="get">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <button>Log in</button>
     </form>
   </div>
-<form class="sign-up-form" action="<%= users_url %>" method="post">
+
+<form action="<%= users_url %>" method="post">
   <h1>Sign Up for PinFlix</h1>
   <p>Join PinFlix and discover and save movie ideas.</p>
   <p>PinFlix is a Pinterest clone.</p>
@@ -24,8 +26,10 @@
     <input type="password" name="user[password]" id="user_password"></input>
   </div>
   <p class="errors"><%=flash[:errors].join("<br>") if flash[:errors] %></p>
-  <div class="sign-up-button">
+
+  <div class="sign-up-button standard-red-button">
     <button>Sign Up</button>
   </div>
+
 </form>
 </div>

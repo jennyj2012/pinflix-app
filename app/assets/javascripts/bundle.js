@@ -46,7 +46,7 @@
 
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
-	var PinsIndex = __webpack_require__(159);
+	var PinsIndex = __webpack_require__(186);
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	  ReactDOM.render(React.createElement(PinsIndex, null), document.getElementById('root'));
@@ -19648,51 +19648,7 @@
 
 
 /***/ },
-/* 159 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PinUtil = __webpack_require__(160);
-	var PinsStore = __webpack_require__(167);
-	var PinsIndexItem = __webpack_require__(185);
-	
-	var PinsIndex = React.createClass({
-	  displayName: 'PinsIndex',
-	
-	  getInitialState: function () {
-	    return { userPins: [] };
-	  },
-	  componentDidMount: function () {
-	    this.pinListener = PinsStore.addListener(this.__onChange);
-	    PinUtil.fetchPins();
-	  },
-	  componentWillUnMount: function () {
-	    this.pinListener.remove();
-	  },
-	  __onChange: function () {
-	    this.setState({ userPins: PinsStore.all() });
-	  },
-	
-	  render: function () {
-	    var pins = this.state.userPins.map(function (pin) {
-	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin });
-	    });
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'user-page group' },
-	      React.createElement(
-	        'h2',
-	        null,
-	        pins
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = PinsIndex;
-
-/***/ },
+/* 159 */,
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26537,7 +26493,53 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 185 */
+/* 185 */,
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PinUtil = __webpack_require__(160);
+	var PinsStore = __webpack_require__(167);
+	var PinsIndexItem = __webpack_require__(187);
+	
+	var PinsIndex = React.createClass({
+	  displayName: 'PinsIndex',
+	
+	  getInitialState: function () {
+	    return { userPins: [] };
+	  },
+	  componentDidMount: function () {
+	    this.pinListener = PinsStore.addListener(this.__onChange);
+	    PinUtil.fetchPins();
+	  },
+	  componentWillUnMount: function () {
+	    this.pinListener.remove();
+	  },
+	  __onChange: function () {
+	    this.setState({ userPins: PinsStore.all() });
+	  },
+	
+	  render: function () {
+	    var pins = this.state.userPins.map(function (pin) {
+	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin });
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'user-page group' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        pins
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = PinsIndex;
+
+/***/ },
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);

@@ -42,12 +42,13 @@
    color: red;
  }
 
- button:active {
-   box-shadow: none;
- }
-
- input:focus {
-   box-shadow: none;
+ body {
+   text-align: center;
+   background: #eee;
+   margin: auto;
+   font-family: sans-serif;
+   font-size: 12px;
+   font-weight: normal;
  }
 
  img {
@@ -60,4 +61,110 @@
  img:hover {
    cursor: zoom-in;
    background: #000;
+ }
+
+ .input {
+   text-align: center;
+   display: block;
+   margin: 10px auto;
+ }
+
+ input {
+   width: 300px;
+   text-align: left;
+   font-size: 20px;
+   background: #eee;
+   border: 1px solid #aaa;
+   padding: 15px;
+   border-radius: 5%;
+   color: #aaa;
+ }
+
+ input:hover {
+   color: #000;
+   background: #fff;
+ }
+
+ input:required {
+   border: 1px solid red;
+ }
+
+ input:focus {
+   box-shadow: none;
+ }
+
+ a {
+   text-decoration: none;
+   color: #525252;
+   font-weight: bold;
+   font-size: 14px;
+ }
+
+ .divison {
+   border-bottom: 1px solid #ccc;
+   margin: 10px 0;
+   display: block;
+ }
+
+ p {
+   margin: 0;
+   font-size: 12px;
+ }
+
+ h1 {
+   font-size: 24px;
+ }
+
+ .standard-modal {
+  margin: 100px auto;
+  position: relative;
+  border-radius: 5%;
+  box-shadow: 0 0 30px #ccc;
+  display: block;
+  background: #fff;
+  padding: 20px 0;
+ }
+
+ button:active {
+   box-shadow: none;
+ }
+
+ button {
+  font-size: 14px;
+ }
+
+ .standard-form-button {
+
+ }
+
+ .standard-form-button button {
+   font-weight: bold;
+   padding: 10px;
+   border-radius: 10%;
+   color: #525252;
+ }
+
+ .standard-form-button button:hover {
+   color: #000;
+   background: #fff;
+ }
+
+ .standard-red-button {
+   box-sizing: border-box;
+   text-align: center;
+   display: block;
+   margin: 10px auto;
+   border-radius: 5%;
+ }
+
+ .standard-red-button button{
+   padding: 15px;
+   border-radius: 5%;
+   color: #fff;
+   background-image: linear-gradient(#e3262e, #ab171e);
+   border: 1px solid #aaa;
+ }
+
+ .standard-red-button button:hover {
+
  }

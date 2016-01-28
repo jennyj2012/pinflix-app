@@ -1,6 +1,6 @@
 var React = require('react');
-var PinUtil = require('../util/pins_util');
-var PinsStore = require('../stores/pins_store');
+var PinUtil = require('../../util/pins_util');
+var PinsStore = require('../../stores/pins_store');
 var PinsIndexItem = require('./pins_index_item');
 
 var PinsIndex = React.createClass({
