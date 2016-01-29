@@ -1,15 +1,9 @@
 var React = require('react');
 var CommentsIndexItem = require('./comments_index_item');
-// var PinsStore = require('../../stores/pins_store');
 
 var CommentsIndex = React.createClass({
-  //listen for a change in the store
-
 
   render: function () {
-    // this.updatedPin
-    // this.state.
-    // this.pins.comments
     var comments = this.props.comments.map(function (comment) {
       return <CommentsIndexItem key={comment.id} comment={comment}></CommentsIndexItem>;
     });

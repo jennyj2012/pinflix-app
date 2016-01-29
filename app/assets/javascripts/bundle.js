@@ -24011,13 +24011,16 @@
 	  getInitialState: function () {
 	    return { allPins: [] };
 	  },
+	
 	  componentDidMount: function () {
 	    this.pinListener = PinsStore.addListener(this.__onChange);
 	    PinUtil.fetchAllPins();
 	  },
+	
 	  componentWillUnMount: function () {
 	    this.pinListener.remove();
 	  },
+	
 	  __onChange: function () {
 	    this.setState({ allPins: PinsStore.all() });
 	  },
@@ -24453,7 +24456,13 @@
 	};
 	
 	var updatePin = function (pin) {
-	  _pins[pin.id] = pin;
+	  var idx;
+	  for (var i = 0; i < _pins.length; i++) {
+	    if (_pins[i].id === pin.id) {
+	      idx = i;
+	    }
+	  }
+	  _pins[idx] = pin;
 	};
 	
 	PinsStore.all = function () {
@@ -31011,17 +31020,11 @@
 
 	var React = __webpack_require__(1);
 	var CommentsIndexItem = __webpack_require__(234);
-	// var PinsStore = require('../../stores/pins_store');
 	
 	var CommentsIndex = React.createClass({
 	  displayName: 'CommentsIndex',
 	
-	  //listen for a change in the store
-	
 	  render: function () {
-	    // this.updatedPin
-	    // this.state.
-	    // this.pins.comments
 	    var comments = this.props.comments.map(function (comment) {
 	      return React.createElement(CommentsIndexItem, { key: comment.id, comment: comment });
 	    });

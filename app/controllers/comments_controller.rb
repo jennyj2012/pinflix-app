@@ -8,11 +8,12 @@ class CommentsController < ApplicationController
   end
 
   def create
-    comment = Comment.create(comment_params).includes(:author)
-    pin = Pin.find(comment.pin_id)
+    comment = Comment.create(comment_params)
+    @pin = Pin.find(comment.pin_id)
 
     if comment.save
-      render json: pin, include: :comments
+      # render json: pin, include: :comments, include: :author
+      render "pins/show"
     else
       render json: comment, status: :unprocessable_entity
     end

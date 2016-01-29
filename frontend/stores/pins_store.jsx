@@ -10,7 +10,13 @@ var resetPins = function(pins){
 };
 
 var updatePin = function(pin){
-  _pins[pin.id] = pin;
+  var idx;
+  for(var i = 0; i < _pins.length; i++){
+    if(_pins[i].id === pin.id){
+      idx = i;
+    }
+  }
+  _pins[idx] = pin;
 };
 
 PinsStore.all = function () {

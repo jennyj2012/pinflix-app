@@ -7,13 +7,16 @@ var PinsIndex = React.createClass({
   getInitialState: function (){
     return {allPins: []};
   },
+
   componentDidMount: function (){
     this.pinListener = PinsStore.addListener(this.__onChange);
     PinUtil.fetchAllPins();
   },
+
   componentWillUnMount: function (){
     this.pinListener.remove();
   },
+
   __onChange: function (){
     this.setState({ allPins: PinsStore.all() });
   },
