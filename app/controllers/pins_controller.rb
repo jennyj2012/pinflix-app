@@ -4,7 +4,7 @@ class PinsController < ApplicationController
   end
 
   def show
-    @pins = Pin.all.includes(:comments).find_by_id(params[:pin_id])
+    @pin = Pin.find_by_id(params[:pin_id]).includes(:comments)
   end
 
   def create

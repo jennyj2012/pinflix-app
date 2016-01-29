@@ -9,7 +9,7 @@ var resetPins = function(pins){
   _pins = pins.slice();
 };
 
-var resetPin = function(pin){
+var updatePin = function(pin){
   _pins[pin.id] = pin;
 };
 
@@ -28,7 +28,7 @@ PinsStore.__onDispatch = function (payload) {
       PinsStore.__emitChange();
       break;
     case PinsConstants.SINGLE_PIN_RECEIVED:
-      resetPin(payload.pin);
+      updatePin(payload.pin);
       PinsStore.__emitChange();
       break;
     default:

@@ -22,7 +22,6 @@ var PinsIndex = React.createClass({
     var pins = this.state.allPins.map(function (pin) {
       return <PinsIndexItem key={pin.id} pin={pin}></PinsIndexItem>;
     });
-
     return (
       <div className="user-page group">
         <h2>{pins}</h2>

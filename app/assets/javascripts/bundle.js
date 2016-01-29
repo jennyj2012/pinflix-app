@@ -24026,7 +24026,6 @@
 	    var pins = this.state.allPins.map(function (pin) {
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin });
 	    });
-	
 	    return React.createElement(
 	      'div',
 	      { className: 'user-page group' },
@@ -24050,7 +24049,7 @@
 	var PinsUtil = {
 	  fetchAllPins: function () {
 	    $.get({
-	      url: "/pins/",
+	      url: "/pins",
 	      dataType: "json",
 	      success: function (pins) {
 	        PinsActions.receiveAllPins(pins);
@@ -24062,6 +24061,20 @@
 	    $.get({
 	      url: "/pins/" + id,
 	      dataType: "json",
+	      success: function (pin) {
+	        PinsActions.receiveSinglePin(pin);
+	      }
+	    });
+	  },
+	
+	  createPinComment: function (body, pin_id) {
+	    var current_url = document.location.pathname.slice(1);
+	    var author_id = parseInt(current_url.slice(current_url.indexOf("/") + 1));
+	    //refactor author id
+	    $.post({
+	      url: "/comments",
+	      dataType: "json",
+	      data: { comment: { body: body, pin_id: pin_id, author_id: author_id } },
 	      success: function (pin) {
 	        PinsActions.receiveSinglePin(pin);
 	      }
@@ -24439,7 +24452,7 @@
 	  _pins = pins.slice();
 	};
 	
-	var resetPin = function (pin) {
+	var updatePin = function (pin) {
 	  _pins[pin.id] = pin;
 	};
 	
@@ -24458,7 +24471,7 @@
 	      PinsStore.__emitChange();
 	      break;
 	    case PinsConstants.SINGLE_PIN_RECEIVED:
-	      resetPin(payload.pin);
+	      updatePin(payload.pin);
 	      PinsStore.__emitChange();
 	      break;
 	    default:
@@ -30922,7 +30935,7 @@
 
 	var React = __webpack_require__(1);
 	var CommentsIndex = __webpack_require__(233);
-	var CommentsForm = __webpack_require__(236);
+	var CommentsForm = __webpack_require__(235);
 	
 	var PinsIndexItem = React.createClass({
 	  displayName: 'PinsIndexItem',
@@ -30998,33 +31011,12 @@
 
 	var React = __webpack_require__(1);
 	var CommentsIndexItem = __webpack_require__(234);
-	// var PinsUtil = require('../../util/pins_util');
 	// var PinsStore = require('../../stores/pins_store');
 	
 	var CommentsIndex = React.createClass({
 	  displayName: 'CommentsIndex',
 	
-	  // getStateFromStore: function () {
-	  // var updatedPin = PinsStore.find(this.props.pin.id);
-	  //
-	  // return updatedPin;
-	  // },
-	  //
-	  // _onChange: function () {
-	  //   this.setState(this.getStateFromStore());
-	  // },
-	  //
-	  // getInitialState: function () {
-	  //   return this.getStateFromStore();
-	  // },
-	  //
-	  // componentDidMount: function () {
-	  //   this.pinListener = PinsStore.addListener(this._onChange);
-	  // },
-	  //
-	  // componentWillUnmount: function () {
-	  //   this.pinListener.remove();
-	  // },
+	  //listen for a change in the store
 	
 	  render: function () {
 	    // this.updatedPin
@@ -31056,6 +31048,14 @@
 	
 	  render: function () {
 	    var comment = this.props.comment;
+	
+	    var comment_author;
+	    if (comment.author) {
+	      comment_author = comment.author.username;
+	    } else {
+	      comment_author = "anonymous";
+	    }
+	
 	    return React.createElement(
 	      "div",
 	      null,
@@ -31066,7 +31066,7 @@
 	          "a",
 	          { href: "#" },
 	          "Commenter: ",
-	          comment.author.username
+	          comment_author
 	        ),
 	        React.createElement(
 	          "p",
@@ -31081,26 +31081,34 @@
 	module.exports = CommentsIndexItem;
 
 /***/ },
-/* 235 */,
-/* 236 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(237);
+	var LinkedStateMixin = __webpack_require__(236);
+	var PinsUtil = __webpack_require__(207);
+	var PinsStore = __webpack_require__(214);
 	
 	var CommentsForm = React.createClass({
 	  displayName: 'CommentsForm',
 	
 	  mixins: [LinkedStateMixin],
 	  getInitialState: function () {
-	    return { text: "Add a comment..." };
+	    return { body: "Add a comment..." };
 	  },
-	  handleChange: function (e) {
-	    debugger;
-	    this.setState({ text: e.currentTarget.value });
+	
+	  updateBody: function (e) {
+	    this.setState({ body: e.currentTarget.value });
 	  },
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    PinsUtil.createPinComment(this.state.body, this.props.pin.id);
+	    this.setState({ body: "" });
+	  },
+	
 	  render: function () {
 	    var comment = this.props.comment;
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -31114,12 +31122,8 @@
 	        ),
 	        React.createElement(
 	          'form',
-	          { className: 'comment-form' },
-	          React.createElement(
-	            'textarea',
-	            { className: 'comment[body]', id: 'comment_body', handleChange: this.handleChange },
-	            this.state.text
-	          ),
+	          { onSubmit: this.handleSubmit, className: 'comment-form' },
+	          React.createElement('textarea', { className: 'comment[body]', id: 'comment_body', onChange: this.updateBody, value: this.state.body }),
 	          React.createElement(
 	            'div',
 	            { className: 'comment-button basic-red-button' },
@@ -31138,13 +31142,13 @@
 	module.exports = CommentsForm;
 
 /***/ },
-/* 237 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(238);
+	module.exports = __webpack_require__(237);
 
 /***/ },
-/* 238 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31161,8 +31165,8 @@
 	
 	'use strict';
 	
-	var ReactLink = __webpack_require__(239);
-	var ReactStateSetters = __webpack_require__(240);
+	var ReactLink = __webpack_require__(238);
+	var ReactStateSetters = __webpack_require__(239);
 	
 	/**
 	 * A simple mixin around ReactLink.forState().
@@ -31185,7 +31189,7 @@
 	module.exports = LinkedStateMixin;
 
 /***/ },
-/* 239 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31259,7 +31263,7 @@
 	module.exports = ReactLink;
 
 /***/ },
-/* 240 */
+/* 239 */
 /***/ function(module, exports) {
 
 	/**

@@ -1,25 +1,35 @@
 var React = require('react');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
+var PinsUtil = require('../../util/pins_util');
+var PinsStore = require('../../stores/pins_store');
 
 var CommentsForm = React.createClass({
   mixins: [LinkedStateMixin],
   getInitialState: function () {
-    return {text: "Add a comment..."};
+    return {body: "Add a comment..."};
   },
-  handleChange: function(e){
-    debugger
-    this.setState({text: e.currentTarget.value});
+
+  updateBody: function(e){
+    this.setState({body: e.currentTarget.value});
   },
+  handleSubmit: function(e){
+    e.preventDefault();
+    PinsUtil.createPinComment(this.state.body, this.props.pin.id);
+    this.setState({body: ""});
+  },
+
   render: function () {
     var comment = this.props.comment;
+
     return (
       <div>
           <section className="comment">
               <a href="#">
               current user
             </a>
-            <form className="comment-form">
-              <textarea className="comment[body]" id="comment_body" handleChange={this.handleChange}>{this.state.text}</textarea>
+            <form onSubmit={this.handleSubmit} className="comment-form">
+              <textarea className="comment[body]" id="comment_body" onChange={this.updateBody} value={this.state.body}>
+              </textarea>
 
             <div className="comment-button basic-red-button">
               <button>Comment</button>
