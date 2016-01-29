@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
+var History = require('react-router').History;
 
 var UsersForm = require('./components/users/users_form');
 var SessionForm = require('./components/session/session_form');
@@ -28,15 +29,16 @@ var router = (
 );
 
 function requireAuth(nextState, replace, callback) {
-  CurrentUserStore.userHasBeenFetched().then(
-    _redirectIfNotLoggedIn(),
-    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn)
-  );
+  if(CurrentUserStore.userHasBeenFetched()){
+    _redirectIfNotLoggedIn();
+  }else{
+    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn(replace, callback));
+  }
 }
 
-function _redirectIfNotLoggedIn() {
+function _redirectIfNotLoggedIn(replace, callback) {
   if (!CurrentUserStore.isLoggedIn()) {
-     replace({pathname: '/pins'});
+     replace({}, '/session/new');
   }
   callback();
  }
