@@ -50,22 +50,43 @@
 	var Route = __webpack_require__(159).Route;
 	var IndexRoute = __webpack_require__(159).IndexRoute;
 	
-	var PinsIndex = __webpack_require__(206);
-	var CommentsIndex = __webpack_require__(233);
+	var UsersForm = __webpack_require__(206);
+	var SessionForm = __webpack_require__(211);
+	var CurrentUserStore = __webpack_require__(252);
+	var SessionsApiUtil = __webpack_require__(212);
 	
-	// var App = require('./components/app.jsx');
+	var PinsIndex = __webpack_require__(242);
+	var BoardsIndex = __webpack_require__(219);
+	var CommentsIndex = __webpack_require__(248);
 	
-	// var routes = (
-	//   <Route path="/" component={App}>
-	//     <Route path=":pinId" component={PinsIndex}>
-	//       <Route component={CommentsIndex} />
-	//     </Route>
-	//   </Route>
-	// );
-	//
+	var App = __webpack_require__(251);
+	
+	var router = React.createElement(
+	  Router,
+	  null,
+	  React.createElement(
+	    Route,
+	    { path: '/', component: App },
+	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: requireAuth }),
+	    React.createElement(Route, { path: 'session/new', component: SessionForm }),
+	    React.createElement(Route, { path: 'users/new', component: UsersForm }),
+	    React.createElement(Route, { path: 'pins', component: PinsIndex })
+	  )
+	);
+	
+	function requireAuth(nextState, replace, callback) {
+	  CurrentUserStore.userHasBeenFetched().then(_redirectIfNotLoggedIn(), SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn));
+	}
+	
+	function _redirectIfNotLoggedIn() {
+	  if (!CurrentUserStore.isLoggedIn()) {
+	    replace({ pathname: '/pins' });
+	  }
+	  callback();
+	}
 	
 	document.addEventListener("DOMContentLoaded", function () {
-	  ReactDOM.render(React.createElement(PinsIndex, null), document.getElementById('root'));
+	  ReactDOM.render(router, document.getElementById('root'));
 	});
 
 /***/ },
@@ -9325,6 +9346,7 @@
 	 */
 	var EventInterface = {
 	  type: null,
+	  target: null,
 	  // currentTarget is set when dispatching; no use in copying it here
 	  currentTarget: emptyFunction.thatReturnsNull,
 	  eventPhase: null,
@@ -9358,8 +9380,6 @@
 	  this.dispatchConfig = dispatchConfig;
 	  this.dispatchMarker = dispatchMarker;
 	  this.nativeEvent = nativeEvent;
-	  this.target = nativeEventTarget;
-	  this.currentTarget = nativeEventTarget;
 	
 	  var Interface = this.constructor.Interface;
 	  for (var propName in Interface) {
@@ -9370,7 +9390,11 @@
 	    if (normalize) {
 	      this[propName] = normalize(nativeEvent);
 	    } else {
-	      this[propName] = nativeEvent[propName];
+	      if (propName === 'target') {
+	        this.target = nativeEventTarget;
+	      } else {
+	        this[propName] = nativeEvent[propName];
+	      }
 	    }
 	  }
 	
@@ -13219,7 +13243,10 @@
 	      }
 	    });
 	
-	    nativeProps.children = content;
+	    if (content) {
+	      nativeProps.children = content;
+	    }
+	
 	    return nativeProps;
 	  }
 	
@@ -18692,7 +18719,7 @@
 	
 	'use strict';
 	
-	module.exports = '0.14.6';
+	module.exports = '0.14.7';
 
 /***/ },
 /* 147 */
@@ -24001,128 +24028,497 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinUtil = __webpack_require__(207);
-	var PinsStore = __webpack_require__(214);
-	var PinsIndexItem = __webpack_require__(232);
+	var LinkedStateMixin = __webpack_require__(207);
+	var history = __webpack_require__(159).History;
+	// var UsersStore = require('../../stores/users_store');
+	// var UsersApiUtil = require('../../util/users_api_util');
 	
-	var PinsIndex = React.createClass({
-	  displayName: 'PinsIndex',
+	var UserForm = React.createClass({
+	  displayName: 'UserForm',
+	
+	  mixins: [LinkedStateMixin],
 	
 	  getInitialState: function () {
-	    return { allPins: [] };
+	    return { username: "", email: "", password: "" };
 	  },
 	
-	  componentDidMount: function () {
-	    this.pinListener = PinsStore.addListener(this.__onChange);
-	    PinUtil.fetchAllPins();
-	  },
-	
-	  componentWillUnMount: function () {
-	    this.pinListener.remove();
-	  },
-	
-	  __onChange: function () {
-	    this.setState({ allPins: PinsStore.all() });
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    // ---Util.createPinComment(this.state.body, this.props.pin.id);
+	    // --Util url: users/new, type "post"
+	    this.setState({ username: "", email: "", password: "" });
 	  },
 	
 	  render: function () {
-	    var pins = this.state.allPins.map(function (pin) {
-	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin });
-	    });
+	    // <p className="errors">Fill out all data</p>
 	    return React.createElement(
 	      'div',
-	      { className: 'user-page group' },
+	      { className: 'sign-up basic-modal', onSubmit: this.handleSubmit },
 	      React.createElement(
-	        'h2',
-	        null,
-	        pins
+	        'div',
+	        { className: 'log-in-button button-style-link' },
+	        React.createElement(
+	          'a',
+	          { href: '/session/new' },
+	          'Log in'
+	        )
+	      ),
+	      React.createElement(
+	        'form',
+	        { action: '<%= users_url %>', method: 'post' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Sign Up for PinFlix'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Join PinFlix and discover and save movie ideas.'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'PinFlix is a Pinterest clone.'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'text',
+	            name: 'user[username]',
+	            id: 'user_username',
+	            placeholder: 'Username',
+	            valueLink: this.linkState('username') })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'text',
+	            name: 'user[email]',
+	            id: 'user_email',
+	            placeholder: 'Email',
+	            valueLink: this.linkState('email') })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'password',
+	            name: 'user[password]',
+	            id: 'user_password',
+	            placeholder: 'Password',
+	            valueLink: this.linkState('password') })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'sign-up-button shade-button' },
+	          React.createElement(
+	            'button',
+	            null,
+	            'Sign Up'
+	          )
+	        )
 	      )
 	    );
 	  }
 	});
 	
-	module.exports = PinsIndex;
+	module.exports = UserForm;
 
 /***/ },
 /* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PinsActions = __webpack_require__(208);
-	
-	var PinsUtil = {
-	  fetchAllPins: function () {
-	    $.get({
-	      url: "/pins",
-	      dataType: "json",
-	      success: function (pins) {
-	        PinsActions.receiveAllPins(pins);
-	      }
-	    });
-	  },
-	
-	  fetchSinglePin: function (id) {
-	    $.get({
-	      url: "/pins/" + id,
-	      dataType: "json",
-	      success: function (pin) {
-	        PinsActions.receiveSinglePin(pin);
-	      }
-	    });
-	  },
-	
-	  createPinComment: function (body, pin_id) {
-	    var current_url = document.location.pathname.slice(1);
-	    var author_id = parseInt(current_url.slice(current_url.indexOf("/") + 1));
-	    //refactor author id
-	    $.post({
-	      url: "/comments",
-	      dataType: "json",
-	      data: { comment: { body: body, pin_id: pin_id, author_id: author_id } },
-	      success: function (pin) {
-	        PinsActions.receiveSinglePin(pin);
-	      }
-	    });
-	  }
-	
-	};
-	
-	module.exports = PinsUtil;
+	module.exports = __webpack_require__(208);
 
 /***/ },
 /* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(209);
-	var PinsConstants = __webpack_require__(213);
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule LinkedStateMixin
+	 * @typechecks static-only
+	 */
 	
-	var PinsActions = {
-	  receiveAllPins: function (pins) {
-	    Dispatcher.dispatch({
-	      actionType: PinsConstants.ALL_PINS_RECEIVED,
-	      pins: pins
-	    });
-	  },
+	'use strict';
 	
-	  receiveSinglePin: function (pin) {
-	    Dispatcher.dispatch({
-	      actionType: PinsConstants.SINGLE_PIN_RECEIVED,
-	      pin: pin
-	    });
+	var ReactLink = __webpack_require__(209);
+	var ReactStateSetters = __webpack_require__(210);
+	
+	/**
+	 * A simple mixin around ReactLink.forState().
+	 */
+	var LinkedStateMixin = {
+	  /**
+	   * Create a ReactLink that's linked to part of this component's state. The
+	   * ReactLink will have the current value of this.state[key] and will call
+	   * setState() when a change is requested.
+	   *
+	   * @param {string} key state key to update. Note: you may want to use keyOf()
+	   * if you're using Google Closure Compiler advanced mode.
+	   * @return {ReactLink} ReactLink instance linking to the state.
+	   */
+	  linkState: function (key) {
+	    return new ReactLink(this.state[key], ReactStateSetters.createStateKeySetter(this, key));
 	  }
-	
 	};
 	
-	module.exports = PinsActions;
+	module.exports = LinkedStateMixin;
 
 /***/ },
 /* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(210).Dispatcher;
-	module.exports = new Dispatcher();
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactLink
+	 * @typechecks static-only
+	 */
+	
+	'use strict';
+	
+	/**
+	 * ReactLink encapsulates a common pattern in which a component wants to modify
+	 * a prop received from its parent. ReactLink allows the parent to pass down a
+	 * value coupled with a callback that, when invoked, expresses an intent to
+	 * modify that value. For example:
+	 *
+	 * React.createClass({
+	 *   getInitialState: function() {
+	 *     return {value: ''};
+	 *   },
+	 *   render: function() {
+	 *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
+	 *     return <input valueLink={valueLink} />;
+	 *   },
+	 *   _handleValueChange: function(newValue) {
+	 *     this.setState({value: newValue});
+	 *   }
+	 * });
+	 *
+	 * We have provided some sugary mixins to make the creation and
+	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
+	 */
+	
+	var React = __webpack_require__(2);
+	
+	/**
+	 * @param {*} value current value of the link
+	 * @param {function} requestChange callback to request a change
+	 */
+	function ReactLink(value, requestChange) {
+	  this.value = value;
+	  this.requestChange = requestChange;
+	}
+	
+	/**
+	 * Creates a PropType that enforces the ReactLink API and optionally checks the
+	 * type of the value being passed inside the link. Example:
+	 *
+	 * MyComponent.propTypes = {
+	 *   tabIndexLink: ReactLink.PropTypes.link(React.PropTypes.number)
+	 * }
+	 */
+	function createLinkTypeChecker(linkType) {
+	  var shapes = {
+	    value: typeof linkType === 'undefined' ? React.PropTypes.any.isRequired : linkType.isRequired,
+	    requestChange: React.PropTypes.func.isRequired
+	  };
+	  return React.PropTypes.shape(shapes);
+	}
+	
+	ReactLink.PropTypes = {
+	  link: createLinkTypeChecker
+	};
+	
+	module.exports = ReactLink;
 
 /***/ },
 /* 210 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactStateSetters
+	 */
+	
+	'use strict';
+	
+	var ReactStateSetters = {
+	  /**
+	   * Returns a function that calls the provided function, and uses the result
+	   * of that to set the component's state.
+	   *
+	   * @param {ReactCompositeComponent} component
+	   * @param {function} funcReturningState Returned callback uses this to
+	   *                                      determine how to update state.
+	   * @return {function} callback that when invoked uses funcReturningState to
+	   *                    determined the object literal to setState.
+	   */
+	  createStateSetter: function (component, funcReturningState) {
+	    return function (a, b, c, d, e, f) {
+	      var partialState = funcReturningState.call(component, a, b, c, d, e, f);
+	      if (partialState) {
+	        component.setState(partialState);
+	      }
+	    };
+	  },
+	
+	  /**
+	   * Returns a single-argument callback that can be used to update a single
+	   * key in the component's state.
+	   *
+	   * Note: this is memoized function, which makes it inexpensive to call.
+	   *
+	   * @param {ReactCompositeComponent} component
+	   * @param {string} key The key in the state that you should update.
+	   * @return {function} callback of 1 argument which calls setState() with
+	   *                    the provided keyName and callback argument.
+	   */
+	  createStateKeySetter: function (component, key) {
+	    // Memoize the setters.
+	    var cache = component.__keySetters || (component.__keySetters = {});
+	    return cache[key] || (cache[key] = createStateKeySetter(component, key));
+	  }
+	};
+	
+	function createStateKeySetter(component, key) {
+	  // Partial state is allocated outside of the function closure so it can be
+	  // reused with every call, avoiding memory allocation when this function
+	  // is called.
+	  var partialState = {};
+	  return function stateKeySetter(value) {
+	    partialState[key] = value;
+	    component.setState(partialState);
+	  };
+	}
+	
+	ReactStateSetters.Mixin = {
+	  /**
+	   * Returns a function that calls the provided function, and uses the result
+	   * of that to set the component's state.
+	   *
+	   * For example, these statements are equivalent:
+	   *
+	   *   this.setState({x: 1});
+	   *   this.createStateSetter(function(xValue) {
+	   *     return {x: xValue};
+	   *   })(1);
+	   *
+	   * @param {function} funcReturningState Returned callback uses this to
+	   *                                      determine how to update state.
+	   * @return {function} callback that when invoked uses funcReturningState to
+	   *                    determined the object literal to setState.
+	   */
+	  createStateSetter: function (funcReturningState) {
+	    return ReactStateSetters.createStateSetter(this, funcReturningState);
+	  },
+	
+	  /**
+	   * Returns a single-argument callback that can be used to update a single
+	   * key in the component's state.
+	   *
+	   * For example, these statements are equivalent:
+	   *
+	   *   this.setState({x: 1});
+	   *   this.createStateKeySetter('x')(1);
+	   *
+	   * Note: this is memoized function, which makes it inexpensive to call.
+	   *
+	   * @param {string} key The key in the state that you should update.
+	   * @return {function} callback of 1 argument which calls setState() with
+	   *                    the provided keyName and callback argument.
+	   */
+	  createStateKeySetter: function (key) {
+	    return ReactStateSetters.createStateKeySetter(this, key);
+	  }
+	};
+	
+	module.exports = ReactStateSetters;
+
+/***/ },
+/* 211 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var LinkedStateMixin = __webpack_require__(207);
+	var History = __webpack_require__(159).History;
+	var SessionApiUtil = __webpack_require__(212);
+	
+	var SessionForm = React.createClass({
+	  displayName: 'SessionForm',
+	
+	  mixins: [LinkedStateMixin, History],
+	
+	  getInitialState: function () {
+	    return { username: "", password: "" };
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    var credentials = $(e.target).serializeJSON();
+	    SessionApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	    this.setState({ username: "", email: "", password: "" });
+	  },
+	
+	  render: function () {
+	    // <p className="errors">Fill out all data</p>
+	    return React.createElement(
+	      'div',
+	      { className: 'log-in basic-modal', onSubmit: this.handleSubmit },
+	      React.createElement(
+	        'form',
+	        null,
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Log In to PinFlix'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'PinFlix is a movie discovery web application inspired by Pinterest'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', { type: 'text', name: 'user[username]', id: 'user_username', placeholder: 'Username', valueLink: this.linkState('username') })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', { type: 'password', name: 'user[password]', id: 'user_password', placeholder: 'Password', valueLink: this.linkState('password') })
+	        ),
+	        React.createElement('div', { className: 'division' }),
+	        React.createElement(
+	          'div',
+	          { className: 'action-links group' },
+	          React.createElement(
+	            'a',
+	            { href: '<%= new_user_url %>' },
+	            'Sign up now'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'shade-button' },
+	            React.createElement(
+	              'button',
+	              null,
+	              'Log In'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = SessionForm;
+
+/***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CurrentUserActions = __webpack_require__(213);
+	
+	var SessionsApiUtil = {
+	
+	  fetchCurrentUser: function (cb) {
+	    $.ajax({
+	      url: '/session',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (currentUser) {
+	        console.log("fetched current user!");
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        if (cb) {
+	          cb(currentUser);
+	        }
+	      }
+	    });
+	  },
+	
+	  login: function (credentials, success) {
+	    $.ajax({
+	      url: '/session',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: credentials, // {email: "tommy...", password: "14.."}
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        if (success) {
+	          success();
+	        }
+	      }
+	
+	    });
+	  },
+	
+	  logout: function () {
+	    $.ajax({
+	      url: '/session',
+	      type: 'DELETE',
+	      dataType: 'json',
+	      success: function () {
+	        console.log("logged out!");
+	      }
+	    });
+	  }
+	
+	};
+	
+	module.exports = SessionsApiUtil;
+
+/***/ },
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(214);
+	var CurrentUserConstants = __webpack_require__(218);
+	
+	var CurrentUserActions = {
+	  receiveCurrentUser: function (currentUser) {
+	    Dispatcher.dispatch({
+	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  }
+	};
+	
+	module.exports = CurrentUserActions;
+
+/***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(215).Dispatcher;
+	module.exports = new Dispatcher();
+
+/***/ },
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24134,11 +24530,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(211);
+	module.exports.Dispatcher = __webpack_require__(216);
 
 
 /***/ },
-/* 211 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24160,7 +24556,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(212);
+	var invariant = __webpack_require__(217);
 	
 	var _prefix = 'ID_';
 	
@@ -24375,7 +24771,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 212 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24430,68 +24826,183 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 213 */
+/* 218 */
 /***/ function(module, exports) {
 
-	var PinsConstants = {
-	  PINS_RECEIVED: "ALL_PINS_RECEIVED",
-	  SINGLE_PIN_RECEIVED: "SINGLE_PIN_RECEIVED"
+	var CurrentUserConstants = {
+	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER"
 	};
 	
-	module.exports = PinsConstants;
+	module.exports = CurrentUserConstants;
 
 /***/ },
-/* 214 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(215).Store;
-	var Dispatcher = __webpack_require__(209);
-	var PinsConstants = __webpack_require__(213);
-	var PinsStore = new Store(Dispatcher);
+	var React = __webpack_require__(1);
+	var BoardsUtil = __webpack_require__(220);
+	var BoardsStore = __webpack_require__(223);
+	var BoardsIndexItem = __webpack_require__(241);
 	
-	var _pins = {};
+	var BoardsIndex = React.createClass({
+	  displayName: 'BoardsIndex',
 	
-	var resetPins = function (pins) {
-	  _pins = pins.slice();
+	  getInitialState: function () {
+	    return { allBoards: [] };
+	  },
+	
+	  componentDidMount: function () {
+	    this.boardListener = BoardsStore.addListener(this.__onChange);
+	    BoardsUtil.fetchAllBoards();
+	  },
+	
+	  componentWillUnMount: function () {
+	    this.boardListener.remove();
+	  },
+	
+	  __onChange: function () {
+	    this.setState({ allBoards: BoardsStore.all() });
+	  },
+	
+	  render: function () {
+	    var boards = this.state.allBoards.map(function (board) {
+	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'user-board-page group' },
+	      boards
+	    );
+	  }
+	});
+	
+	module.exports = BoardsIndex;
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BoardsActions = __webpack_require__(221);
+	
+	var BoardsUtil = {
+	  fetchAllBoards: function () {
+	    $.get({
+	      url: "/boards",
+	      dataType: "json",
+	      success: function (boards) {
+	        BoardsActions.receiveAllBoards(boards);
+	      },
+	      error: function (xhr, textStatus, errorThrown) {
+	        console.log(errorThrown);
+	      }
+	    });
+	  },
+	
+	  fetchSingleBoard: function (id) {
+	    $.get({
+	      url: "/boards/" + id,
+	      dataType: "json",
+	      success: function (board) {
+	        BoardsActions.receiveSingleBoard(board);
+	      }
+	    });
+	  }
+	
 	};
 	
-	var updatePin = function (pin) {
+	module.exports = BoardsUtil;
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(214);
+	var BoardsConstants = __webpack_require__(222);
+	
+	var BoardsActions = {
+	  receiveAllBoards: function (boards) {
+	    Dispatcher.dispatch({
+	      actionType: BoardsConstants.ALL_BOARDS_RECEIVED,
+	      boards: boards
+	    });
+	  },
+	
+	  receiveSingleBoard: function (board) {
+	    Dispatcher.dispatch({
+	      actionType: BoardsConstants.SINGLE_BOARD_RECEIVED,
+	      board: board
+	    });
+	  }
+	
+	};
+	
+	module.exports = BoardsActions;
+
+/***/ },
+/* 222 */
+/***/ function(module, exports) {
+
+	var BoardsConstants = {
+	  BOARDS_RECEIVED: "ALL_BOARDS_RECEIVED",
+	  SINGLE_BOARD_RECEIVED: "SINGLE_BOARD_RECEIVED"
+	};
+	
+	module.exports = BoardsConstants;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(224).Store;
+	var Dispatcher = __webpack_require__(214);
+	var BoardsConstants = __webpack_require__(222);
+	
+	var BoardsStore = new Store(Dispatcher);
+	
+	var _boards = {};
+	
+	var resetBoards = function (boards) {
+	  _boards = boards;
+	};
+	
+	var updateBoard = function (board) {
 	  var idx;
-	  for (var i = 0; i < _pins.length; i++) {
-	    if (_pins[i].id === pin.id) {
+	  for (var i = 0; i < _boards.length; i++) {
+	    if (_boards[i].id === board.id) {
 	      idx = i;
 	    }
 	  }
-	  _pins[idx] = pin;
+	  _boards[idx] = board;
 	};
 	
-	PinsStore.all = function () {
-	  return _pins.slice();
+	BoardsStore.all = function () {
+	  return _boards.slice();
 	};
 	
-	PinsStore.find = function (id) {
-	  return _pins[id];
+	BoardsStore.find = function (id) {
+	  return _boards[id];
 	};
 	
-	PinsStore.__onDispatch = function (payload) {
+	BoardsStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
-	    case PinsConstants.ALL_PINS_RECEIVED:
-	      resetPins(payload.pins);
-	      PinsStore.__emitChange();
+	    case BoardsConstants.ALL_BOARDS_RECEIVED:
+	
+	      resetBoards(payload.boards);
+	      BoardsStore.__emitChange();
 	      break;
-	    case PinsConstants.SINGLE_PIN_RECEIVED:
-	      updatePin(payload.pin);
-	      PinsStore.__emitChange();
+	    case BoardsConstants.SINGLE_BOARD_RECEIVED:
+	      updateBoard(payload.board);
+	      BoardsStore.__emitChange();
 	      break;
 	    default:
 	      break;
 	  }
 	};
 	
-	module.exports = PinsStore;
+	module.exports = BoardsStore;
 
 /***/ },
-/* 215 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24503,15 +25014,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(216);
-	module.exports.MapStore = __webpack_require__(219);
-	module.exports.Mixin = __webpack_require__(231);
-	module.exports.ReduceStore = __webpack_require__(220);
-	module.exports.Store = __webpack_require__(221);
+	module.exports.Container = __webpack_require__(225);
+	module.exports.MapStore = __webpack_require__(228);
+	module.exports.Mixin = __webpack_require__(240);
+	module.exports.ReduceStore = __webpack_require__(229);
+	module.exports.Store = __webpack_require__(230);
 
 
 /***/ },
-/* 216 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24533,10 +25044,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(217);
+	var FluxStoreGroup = __webpack_require__(226);
 	
-	var invariant = __webpack_require__(212);
-	var shallowEqual = __webpack_require__(218);
+	var invariant = __webpack_require__(217);
+	var shallowEqual = __webpack_require__(227);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -24694,7 +25205,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 217 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24713,7 +25224,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(212);
+	var invariant = __webpack_require__(217);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -24775,7 +25286,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 218 */
+/* 227 */
 /***/ function(module, exports) {
 
 	/**
@@ -24830,7 +25341,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 219 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24851,10 +25362,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(220);
-	var Immutable = __webpack_require__(230);
+	var FluxReduceStore = __webpack_require__(229);
+	var Immutable = __webpack_require__(239);
 	
-	var invariant = __webpack_require__(212);
+	var invariant = __webpack_require__(217);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -24980,7 +25491,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 220 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25001,10 +25512,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(221);
+	var FluxStore = __webpack_require__(230);
 	
-	var abstractMethod = __webpack_require__(229);
-	var invariant = __webpack_require__(212);
+	var abstractMethod = __webpack_require__(238);
+	var invariant = __webpack_require__(217);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -25087,7 +25598,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 221 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25106,11 +25617,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(222);
+	var _require = __webpack_require__(231);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(212);
+	var invariant = __webpack_require__(217);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -25270,7 +25781,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 222 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25283,14 +25794,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(223)
+	  EventEmitter: __webpack_require__(232)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 223 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25309,11 +25820,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(224);
-	var EventSubscriptionVendor = __webpack_require__(226);
+	var EmitterSubscription = __webpack_require__(233);
+	var EventSubscriptionVendor = __webpack_require__(235);
 	
-	var emptyFunction = __webpack_require__(228);
-	var invariant = __webpack_require__(227);
+	var emptyFunction = __webpack_require__(237);
+	var invariant = __webpack_require__(236);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -25487,7 +25998,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 224 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25508,7 +26019,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(225);
+	var EventSubscription = __webpack_require__(234);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -25540,7 +26051,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 225 */
+/* 234 */
 /***/ function(module, exports) {
 
 	/**
@@ -25594,7 +26105,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 226 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25613,7 +26124,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(227);
+	var invariant = __webpack_require__(236);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -25703,7 +26214,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 227 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25759,7 +26270,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 228 */
+/* 237 */
 /***/ function(module, exports) {
 
 	/**
@@ -25802,7 +26313,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 229 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25819,7 +26330,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(212);
+	var invariant = __webpack_require__(217);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -25829,7 +26340,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 230 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30816,7 +31327,7 @@
 	}));
 
 /***/ },
-/* 231 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30833,9 +31344,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(217);
+	var FluxStoreGroup = __webpack_require__(226);
 	
-	var invariant = __webpack_require__(212);
+	var invariant = __webpack_require__(217);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -30939,12 +31450,230 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 232 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndex = __webpack_require__(233);
-	var CommentsForm = __webpack_require__(235);
+	var PinsIndex = __webpack_require__(242);
+	
+	var BoardsIndexItem = React.createClass({
+	  displayName: 'BoardsIndexItem',
+	
+	  render: function () {
+	    var board = this.props.board;
+	    // var pin_thumbs = board.pins.map(function (pin){
+	    //   return <img src={pin.url}/>;
+	    // }).slice(0,4);
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'board-index index-item' },
+	      React.createElement(
+	        'section',
+	        { className: 'title' },
+	        React.createElement(
+	          'figcaption',
+	          null,
+	          board.title
+	        )
+	      ),
+	      React.createElement(
+	        'section',
+	        { className: 'description' },
+	        board.description
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = BoardsIndexItem;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PinUtil = __webpack_require__(243);
+	var PinsStore = __webpack_require__(246);
+	var PinsIndexItem = __webpack_require__(247);
+	
+	var PinsIndex = React.createClass({
+	  displayName: 'PinsIndex',
+	
+	  getInitialState: function () {
+	    return { allPins: [] };
+	  },
+	
+	  componentDidMount: function () {
+	    this.pinListener = PinsStore.addListener(this.__onChange);
+	    PinUtil.fetchAllPins();
+	  },
+	
+	  componentWillUnMount: function () {
+	    this.pinListener.remove();
+	  },
+	
+	  __onChange: function () {
+	    this.setState({ allPins: PinsStore.all() });
+	  },
+	
+	  render: function () {
+	    var pins = this.state.allPins.map(function (pin) {
+	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin });
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'landing-page group' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        pins
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = PinsIndex;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var PinsActions = __webpack_require__(244);
+	
+	var PinsUtil = {
+	  fetchAllPins: function () {
+	    $.get({
+	      url: "/pins",
+	      dataType: "json",
+	      success: function (pins) {
+	        PinsActions.receiveAllPins(pins);
+	      }
+	    });
+	  },
+	
+	  fetchSinglePin: function (id) {
+	    $.get({
+	      url: "/pins/" + id,
+	      dataType: "json",
+	      success: function (pin) {
+	        PinsActions.receiveSinglePin(pin);
+	      }
+	    });
+	  },
+	
+	  createPinComment: function (body, pin_id) {
+	    var current_url = document.location.pathname.slice(1);
+	    var author_id = parseInt(current_url.slice(current_url.indexOf("/") + 1));
+	    //refactor author id
+	    $.post({
+	      url: "/comments",
+	      dataType: "json",
+	      data: { comment: { body: body, pin_id: pin_id, author_id: author_id } },
+	      success: function (pin) {
+	        PinsActions.receiveSinglePin(pin);
+	      }
+	    });
+	  }
+	
+	};
+	
+	module.exports = PinsUtil;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(214);
+	var PinsConstants = __webpack_require__(245);
+	
+	var PinsActions = {
+	  receiveAllPins: function (pins) {
+	    Dispatcher.dispatch({
+	      actionType: PinsConstants.ALL_PINS_RECEIVED,
+	      pins: pins
+	    });
+	  },
+	
+	  receiveSinglePin: function (pin) {
+	    Dispatcher.dispatch({
+	      actionType: PinsConstants.SINGLE_PIN_RECEIVED,
+	      pin: pin
+	    });
+	  }
+	
+	};
+	
+	module.exports = PinsActions;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports) {
+
+	var PinsConstants = {
+	  PINS_RECEIVED: "ALL_PINS_RECEIVED",
+	  SINGLE_PIN_RECEIVED: "SINGLE_PIN_RECEIVED"
+	};
+	
+	module.exports = PinsConstants;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(224).Store;
+	var Dispatcher = __webpack_require__(214);
+	var PinsConstants = __webpack_require__(245);
+	var PinsStore = new Store(Dispatcher);
+	
+	var _pins = {};
+	
+	var resetPins = function (pins) {
+	  _pins = pins;
+	};
+	
+	var updatePin = function (pin) {
+	  var idx;
+	  for (var i = 0; i < _pins.length; i++) {
+	    if (_pins[i].id === pin.id) {
+	      idx = i;
+	    }
+	  }
+	  _pins[idx] = pin;
+	};
+	
+	PinsStore.all = function () {
+	  return _pins.slice();
+	};
+	
+	PinsStore.find = function (id) {
+	  return _pins[id];
+	};
+	
+	PinsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case PinsConstants.ALL_PINS_RECEIVED:
+	      resetPins(payload.pins);
+	      PinsStore.__emitChange();
+	      break;
+	    case PinsConstants.SINGLE_PIN_RECEIVED:
+	      updatePin(payload.pin);
+	      PinsStore.__emitChange();
+	      break;
+	    default:
+	      break;
+	  }
+	};
+	
+	module.exports = PinsStore;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var CommentsIndex = __webpack_require__(248);
+	var CommentsForm = __webpack_require__(250);
 	
 	var PinsIndexItem = React.createClass({
 	  displayName: 'PinsIndexItem',
@@ -31015,11 +31744,11 @@
 	module.exports = PinsIndexItem;
 
 /***/ },
-/* 233 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndexItem = __webpack_require__(234);
+	var CommentsIndexItem = __webpack_require__(249);
 	
 	var CommentsIndex = React.createClass({
 	  displayName: 'CommentsIndex',
@@ -31041,7 +31770,7 @@
 	module.exports = CommentsIndex;
 
 /***/ },
-/* 234 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31084,20 +31813,20 @@
 	module.exports = CommentsIndexItem;
 
 /***/ },
-/* 235 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(236);
-	var PinsUtil = __webpack_require__(207);
-	var PinsStore = __webpack_require__(214);
+	var LinkedStateMixin = __webpack_require__(207);
+	var PinsUtil = __webpack_require__(243);
+	var PinsStore = __webpack_require__(246);
 	
 	var CommentsForm = React.createClass({
 	  displayName: 'CommentsForm',
 	
 	  mixins: [LinkedStateMixin],
 	  getInitialState: function () {
-	    return { body: "Add a comment..." };
+	    return { body: "" };
 	  },
 	
 	  updateBody: function (e) {
@@ -31126,7 +31855,7 @@
 	        React.createElement(
 	          'form',
 	          { onSubmit: this.handleSubmit, className: 'comment-form' },
-	          React.createElement('textarea', { className: 'comment[body]', id: 'comment_body', onChange: this.updateBody, value: this.state.body }),
+	          React.createElement('textarea', { className: 'comment[body]', id: 'comment_body', placeholder: 'Add a comment...', onChange: this.updateBody, value: this.state.body }),
 	          React.createElement(
 	            'div',
 	            { className: 'comment-button basic-red-button' },
@@ -31145,234 +31874,59 @@
 	module.exports = CommentsForm;
 
 /***/ },
-/* 236 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(237);
+	var React = __webpack_require__(1);
+	
+	var App = React.createClass({
+	  displayName: 'App',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.props.children
+	    );
+	  }
+	});
+	
+	module.exports = App;
 
 /***/ },
-/* 237 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule LinkedStateMixin
-	 * @typechecks static-only
-	 */
+	var Store = __webpack_require__(224).Store;
+	var Dispatcher = __webpack_require__(214);
+	var CurrentUserConstants = __webpack_require__(218);
 	
-	'use strict';
+	var CurrentUserStore = new Store(Dispatcher);
 	
-	var ReactLink = __webpack_require__(238);
-	var ReactStateSetters = __webpack_require__(239);
+	var _currentUser = {};
+	var _currentUserHasBeenFetched = false;
 	
-	/**
-	 * A simple mixin around ReactLink.forState().
-	 */
-	var LinkedStateMixin = {
-	  /**
-	   * Create a ReactLink that's linked to part of this component's state. The
-	   * ReactLink will have the current value of this.state[key] and will call
-	   * setState() when a change is requested.
-	   *
-	   * @param {string} key state key to update. Note: you may want to use keyOf()
-	   * if you're using Google Closure Compiler advanced mode.
-	   * @return {ReactLink} ReactLink instance linking to the state.
-	   */
-	  linkState: function (key) {
-	    return new ReactLink(this.state[key], ReactStateSetters.createStateKeySetter(this, key));
+	CurrentUserStore.currentUser = function () {
+	  return $.extend({}, _currentUser);
+	};
+	
+	CurrentUserStore.isLoggedIn = function () {
+	  return !!_currentUser.id;
+	};
+	
+	CurrentUserStore.userHasBeenFetched = function () {
+	  return _currentUserHasBeenFetched;
+	};
+	
+	CurrentUserStore.__onDispatch = function (payload) {
+	  if (payload.actionType === CurrentUserConstants.RECEIVE_CURRENT_USER) {
+	    _currentUserHasBeenFetched = true;
+	    _currentUser = payload.currentUser;
+	    CurrentUserStore.__emitChange();
 	  }
 	};
 	
-	module.exports = LinkedStateMixin;
-
-/***/ },
-/* 238 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactLink
-	 * @typechecks static-only
-	 */
-	
-	'use strict';
-	
-	/**
-	 * ReactLink encapsulates a common pattern in which a component wants to modify
-	 * a prop received from its parent. ReactLink allows the parent to pass down a
-	 * value coupled with a callback that, when invoked, expresses an intent to
-	 * modify that value. For example:
-	 *
-	 * React.createClass({
-	 *   getInitialState: function() {
-	 *     return {value: ''};
-	 *   },
-	 *   render: function() {
-	 *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
-	 *     return <input valueLink={valueLink} />;
-	 *   },
-	 *   _handleValueChange: function(newValue) {
-	 *     this.setState({value: newValue});
-	 *   }
-	 * });
-	 *
-	 * We have provided some sugary mixins to make the creation and
-	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
-	 */
-	
-	var React = __webpack_require__(2);
-	
-	/**
-	 * @param {*} value current value of the link
-	 * @param {function} requestChange callback to request a change
-	 */
-	function ReactLink(value, requestChange) {
-	  this.value = value;
-	  this.requestChange = requestChange;
-	}
-	
-	/**
-	 * Creates a PropType that enforces the ReactLink API and optionally checks the
-	 * type of the value being passed inside the link. Example:
-	 *
-	 * MyComponent.propTypes = {
-	 *   tabIndexLink: ReactLink.PropTypes.link(React.PropTypes.number)
-	 * }
-	 */
-	function createLinkTypeChecker(linkType) {
-	  var shapes = {
-	    value: typeof linkType === 'undefined' ? React.PropTypes.any.isRequired : linkType.isRequired,
-	    requestChange: React.PropTypes.func.isRequired
-	  };
-	  return React.PropTypes.shape(shapes);
-	}
-	
-	ReactLink.PropTypes = {
-	  link: createLinkTypeChecker
-	};
-	
-	module.exports = ReactLink;
-
-/***/ },
-/* 239 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactStateSetters
-	 */
-	
-	'use strict';
-	
-	var ReactStateSetters = {
-	  /**
-	   * Returns a function that calls the provided function, and uses the result
-	   * of that to set the component's state.
-	   *
-	   * @param {ReactCompositeComponent} component
-	   * @param {function} funcReturningState Returned callback uses this to
-	   *                                      determine how to update state.
-	   * @return {function} callback that when invoked uses funcReturningState to
-	   *                    determined the object literal to setState.
-	   */
-	  createStateSetter: function (component, funcReturningState) {
-	    return function (a, b, c, d, e, f) {
-	      var partialState = funcReturningState.call(component, a, b, c, d, e, f);
-	      if (partialState) {
-	        component.setState(partialState);
-	      }
-	    };
-	  },
-	
-	  /**
-	   * Returns a single-argument callback that can be used to update a single
-	   * key in the component's state.
-	   *
-	   * Note: this is memoized function, which makes it inexpensive to call.
-	   *
-	   * @param {ReactCompositeComponent} component
-	   * @param {string} key The key in the state that you should update.
-	   * @return {function} callback of 1 argument which calls setState() with
-	   *                    the provided keyName and callback argument.
-	   */
-	  createStateKeySetter: function (component, key) {
-	    // Memoize the setters.
-	    var cache = component.__keySetters || (component.__keySetters = {});
-	    return cache[key] || (cache[key] = createStateKeySetter(component, key));
-	  }
-	};
-	
-	function createStateKeySetter(component, key) {
-	  // Partial state is allocated outside of the function closure so it can be
-	  // reused with every call, avoiding memory allocation when this function
-	  // is called.
-	  var partialState = {};
-	  return function stateKeySetter(value) {
-	    partialState[key] = value;
-	    component.setState(partialState);
-	  };
-	}
-	
-	ReactStateSetters.Mixin = {
-	  /**
-	   * Returns a function that calls the provided function, and uses the result
-	   * of that to set the component's state.
-	   *
-	   * For example, these statements are equivalent:
-	   *
-	   *   this.setState({x: 1});
-	   *   this.createStateSetter(function(xValue) {
-	   *     return {x: xValue};
-	   *   })(1);
-	   *
-	   * @param {function} funcReturningState Returned callback uses this to
-	   *                                      determine how to update state.
-	   * @return {function} callback that when invoked uses funcReturningState to
-	   *                    determined the object literal to setState.
-	   */
-	  createStateSetter: function (funcReturningState) {
-	    return ReactStateSetters.createStateSetter(this, funcReturningState);
-	  },
-	
-	  /**
-	   * Returns a single-argument callback that can be used to update a single
-	   * key in the component's state.
-	   *
-	   * For example, these statements are equivalent:
-	   *
-	   *   this.setState({x: 1});
-	   *   this.createStateKeySetter('x')(1);
-	   *
-	   * Note: this is memoized function, which makes it inexpensive to call.
-	   *
-	   * @param {string} key The key in the state that you should update.
-	   * @return {function} callback of 1 argument which calls setState() with
-	   *                    the provided keyName and callback argument.
-	   */
-	  createStateKeySetter: function (key) {
-	    return ReactStateSetters.createStateKeySetter(this, key);
-	  }
-	};
-	
-	module.exports = ReactStateSetters;
+	module.exports = CurrentUserStore;
 
 /***/ }
 /******/ ]);

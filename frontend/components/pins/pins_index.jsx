@@ -26,7 +26,7 @@ var PinsIndex = React.createClass({
       return <PinsIndexItem key={pin.id} pin={pin}></PinsIndexItem>;
     });
     return (
-      <div className="user-page group">
+      <div className="landing-page group">
         <h2>{pins}</h2>
       </div>
     );

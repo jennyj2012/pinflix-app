@@ -1,11 +1,10 @@
 
 <div class="sign-up basic-modal">
 
-  <div class="log-in-button form-style-button">
-    <form class="log-in-button-form" action="<%= new_session_url %>" method="get">
-      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-      <button>Log in</button>
-    </form>
+  <div class="log-in-button button-style-link">
+    <div className="log-in-button button-style-link">
+        <a href="/session/new">Log in</a>
+    </div>
   </div>
 
 <form action="<%= users_url %>" method="post">

@@ -6,7 +6,7 @@ var PinsStore = new Store(Dispatcher);
 var _pins = {};
 
 var resetPins = function(pins){
-  _pins = pins.slice();
+  _pins = pins;
 };
 
 var updatePin = function(pin){

@@ -8,8 +8,8 @@
     "postinstall": "./node_modules/.bin/webpack"
   },
   "engines": {
-  "node": "4.1.1",
-  "npm": "2.1.x"
+    "node": "4.1.1",
+    "npm": "2.1.x"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "react": "^0.14.6",
     "react-addons-linked-state-mixin": "^0.14.6",
     "react-dom": "^0.14.6",
+    "react-history": "^1.0.0",
     "react-router": "^1.0.3",
     "webpack": "^1.12.12"
   }

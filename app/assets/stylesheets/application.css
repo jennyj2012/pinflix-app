@@ -159,18 +159,19 @@
   border: none;
  }
 
- .form-style-button {
+ .button-style-link {
 
  }
 
- .form-style-button button {
+ .button-style-link a {
    font-weight: bold;
    padding: 10px;
    border-radius: 10%;
    color: #525252;
+   text-decoration: none;
  }
 
- .form-style-button button:hover {
+ .button-style-link a:hover {
    color: #000;
    background: #fff;
  }

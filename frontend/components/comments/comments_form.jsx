@@ -6,7 +6,7 @@ var PinsStore = require('../../stores/pins_store');
 var CommentsForm = React.createClass({
   mixins: [LinkedStateMixin],
   getInitialState: function () {
-    return {body: "Add a comment..."};
+    return {body: ""};
   },
 
   updateBody: function(e){
@@ -28,7 +28,7 @@ var CommentsForm = React.createClass({
               current user
             </a>
             <form onSubmit={this.handleSubmit} className="comment-form">
-              <textarea className="comment[body]" id="comment_body" onChange={this.updateBody} value={this.state.body}>
+              <textarea className="comment[body]" id="comment_body" placeholder="Add a comment..." onChange={this.updateBody} value={this.state.body}>
               </textarea>
 
             <div className="comment-button basic-red-button">
