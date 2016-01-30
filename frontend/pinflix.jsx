@@ -19,29 +19,30 @@ var App = require('./components/app.jsx');
 
 var router = (
   <Router>
-    <Route path="/" component={App}>
-      <IndexRoute component={PinsIndex} onEnter={requireAuth}/>
-      <Route path="session/new" component={SessionForm} />
-      <Route path="users/new" component={UsersForm} />
-      <Route path="pins" component={PinsIndex} />
+    <Route path="/" component={App} >
+    <IndexRoute component={BoardsIndex} onEnter={requireAuth}/>
+    <Route path="session/new" component={SessionForm} />
+    <Route path="users/new" component={UsersForm} />
+    <Route path="pins" component={PinsIndex}  />
     </Route>
   </Router>
 );
 
 function requireAuth(nextState, replace, callback) {
+
   if(CurrentUserStore.userHasBeenFetched()){
     _redirectIfNotLoggedIn();
   }else{
-    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn(replace, callback));
+    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn());
+  }
+
+  function _redirectIfNotLoggedIn() {
+    if (!CurrentUserStore.isLoggedIn()) {
+       replace({}, '/session/new');
+    }
+    callback();
   }
 }
-
-function _redirectIfNotLoggedIn(replace, callback) {
-  if (!CurrentUserStore.isLoggedIn()) {
-     replace({}, '/session/new');
-  }
-  callback();
- }
 
 
 document.addEventListener("DOMContentLoaded", function () {

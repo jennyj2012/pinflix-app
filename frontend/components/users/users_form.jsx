@@ -25,7 +25,7 @@ var UserForm = React.createClass({
       <div className="sign-up basic-modal" onSubmit={this.handleSubmit}>
 
         <div className="log-in-button button-style-link">
-            <a href="/session/new">Log in</a>
+            <a href="#/session/new">Log in</a>
         </div>
 
       <form action="<%= users_url %>" method="post">

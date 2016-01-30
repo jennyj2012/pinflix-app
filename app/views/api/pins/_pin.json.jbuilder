@@ -6,6 +6,6 @@ end
 
 json.comments do
   json.array! pin.comments do |comment|
-    json.partial! 'comments/comment', comment: comment
+    json.partial! 'api/comments/comment', comment: comment
   end
 end

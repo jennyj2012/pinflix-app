@@ -68,7 +68,7 @@
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
-	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: requireAuth }),
+	    React.createElement(IndexRoute, { component: BoardsIndex, onEnter: requireAuth }),
 	    React.createElement(Route, { path: 'session/new', component: SessionForm }),
 	    React.createElement(Route, { path: 'users/new', component: UsersForm }),
 	    React.createElement(Route, { path: 'pins', component: PinsIndex })
@@ -76,18 +76,19 @@
 	);
 	
 	function requireAuth(nextState, replace, callback) {
+	
 	  if (CurrentUserStore.userHasBeenFetched()) {
 	    _redirectIfNotLoggedIn();
 	  } else {
-	    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn(replace, callback));
+	    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn());
 	  }
-	}
 	
-	function _redirectIfNotLoggedIn(replace, callback) {
-	  if (!CurrentUserStore.isLoggedIn()) {
-	    replace({}, '/session/new');
+	  function _redirectIfNotLoggedIn() {
+	    if (!CurrentUserStore.isLoggedIn()) {
+	      replace({}, '/session/new');
+	    }
+	    callback();
 	  }
-	  callback();
 	}
 	
 	document.addEventListener("DOMContentLoaded", function () {
@@ -24064,7 +24065,7 @@
 	        { className: 'log-in-button button-style-link' },
 	        React.createElement(
 	          'a',
-	          { href: '/session/new' },
+	          { href: '#/session/new' },
 	          'Log in'
 	        )
 	      ),
@@ -24369,12 +24370,19 @@
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
+	
 	var SessionApiUtil = __webpack_require__(212);
+	var CurrentUserStore = __webpack_require__(219);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
 	
 	  mixins: [LinkedStateMixin, History],
+	
+	  componentDidMount: function () {
+	    CurrentUserStore.addListener(this.forceUpdate.bind(this));
+	    SessionApiUtil.fetchCurrentUser();
+	  },
 	
 	  getInitialState: function () {
 	    return { username: "", password: "" };
@@ -24384,9 +24392,8 @@
 	    e.preventDefault();
 	    var credentials = $(e.target).serializeJSON();
 	    SessionApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/");
+	      this.history.pushState({}, "/pins");
 	    }.bind(this));
-	    this.setState({ username: "", email: "", password: "" });
 	  },
 	
 	  render: function () {
@@ -24423,7 +24430,7 @@
 	          { className: 'action-links group' },
 	          React.createElement(
 	            'a',
-	            { href: '<%= new_user_url %>' },
+	            { href: '#/users/new' },
 	            'Sign up now'
 	          ),
 	          React.createElement(
@@ -24453,7 +24460,7 @@
 	
 	  fetchCurrentUser: function (cb) {
 	    $.ajax({
-	      url: '/session',
+	      url: '/api/session',
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (currentUser) {
@@ -24468,10 +24475,10 @@
 	
 	  login: function (credentials, success) {
 	    $.ajax({
-	      url: '/session',
+	      url: '/api/session',
 	      type: 'POST',
 	      dataType: 'json',
-	      data: credentials, // {email: "tommy...", password: "14.."}
+	      data: credentials,
 	      success: function (currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        if (success) {
@@ -24484,7 +24491,7 @@
 	
 	  logout: function () {
 	    $.ajax({
-	      url: '/session',
+	      url: '/api/session',
 	      type: 'DELETE',
 	      dataType: 'json',
 	      success: function () {
@@ -31332,6 +31339,9 @@
 	var PinsStore = __webpack_require__(241);
 	var PinsIndexItem = __webpack_require__(242);
 	
+	var SessionApiUtil = __webpack_require__(212);
+	var CurrentUserStore = __webpack_require__(219);
+	
 	var PinsIndex = React.createClass({
 	  displayName: 'PinsIndex',
 	
@@ -31340,6 +31350,9 @@
 	  },
 	
 	  componentDidMount: function () {
+	    // CurrentUserStore.addListener(this.forceUpdate.bind(this));
+	    // SessionApiUtil.fetchCurrentUser();
+	    debugger;
 	    this.pinListener = PinsStore.addListener(this.__onChange);
 	    PinUtil.fetchAllPins();
 	  },
@@ -31349,23 +31362,26 @@
 	  },
 	
 	  __onChange: function () {
+	    debugger;
 	    this.setState({ allPins: PinsStore.all() });
 	  },
 	
 	  render: function () {
+	    // debugger
+	    // if (!CurrentUserStore.userHasBeenFetched()) {
+	    //   return <p>PLEASE WAIT</p>;
+	    // } else {
+	    debugger;
 	    var pins = this.state.allPins.map(function (pin) {
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin });
 	    });
 	    return React.createElement(
 	      'div',
 	      { className: 'landing-page group' },
-	      React.createElement(
-	        'h2',
-	        null,
-	        pins
-	      )
+	      pins
 	    );
 	  }
+	  // }
 	});
 	
 	module.exports = PinsIndex;
@@ -31379,7 +31395,7 @@
 	var PinsUtil = {
 	  fetchAllPins: function () {
 	    $.get({
-	      url: "/pins",
+	      url: "/api/pins",
 	      dataType: "json",
 	      success: function (pins) {
 	        PinsActions.receiveAllPins(pins);
@@ -31389,7 +31405,7 @@
 	
 	  fetchSinglePin: function (id) {
 	    $.get({
-	      url: "/pins/" + id,
+	      url: "/api/pins/" + id,
 	      dataType: "json",
 	      success: function (pin) {
 	        PinsActions.receiveSinglePin(pin);
@@ -31402,7 +31418,7 @@
 	    var author_id = parseInt(current_url.slice(current_url.indexOf("/") + 1));
 	    //refactor author id
 	    $.post({
-	      url: "/comments",
+	      url: "/api/comments",
 	      dataType: "json",
 	      data: { comment: { body: body, pin_id: pin_id, author_id: author_id } },
 	      success: function (pin) {
@@ -31760,7 +31776,7 @@
 	var BoardsUtil = {
 	  fetchAllBoards: function () {
 	    $.get({
-	      url: "/boards",
+	      url: "/api/boards",
 	      dataType: "json",
 	      success: function (boards) {
 	        BoardsActions.receiveAllBoards(boards);
@@ -31773,7 +31789,7 @@
 	
 	  fetchSingleBoard: function (id) {
 	    $.get({
-	      url: "/boards/" + id,
+	      url: "/api/boards/" + id,
 	      dataType: "json",
 	      success: function (board) {
 	        BoardsActions.receiveSingleBoard(board);
@@ -31918,17 +31934,27 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var SessionApiUtil = __webpack_require__(212);
+	var CurrentUserStore = __webpack_require__(219);
 	
 	var App = React.createClass({
 	  displayName: 'App',
 	
+	  componentDidMount: function () {
+	    CurrentUserStore.addListener(this.forceUpdate.bind(this));
+	    SessionApiUtil.fetchCurrentUser();
+	  },
 	  render: function () {
+	    // if (!CurrentUserStore.userHasBeenFetched()) {
+	    //   return <p>PLEASE WAIT</p>;
+	    // } else {
 	    return React.createElement(
 	      'div',
 	      null,
 	      this.props.children
 	    );
 	  }
+	  // }
 	});
 	
 	module.exports = App;

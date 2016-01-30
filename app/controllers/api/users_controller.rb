@@ -1,4 +1,8 @@
-class UsersController < ApplicationController
+class Api::UsersController < ApplicationController
+  def index
+    @users = User.all
+  end
+
   def new
     @user = User.new
   end
@@ -8,7 +12,7 @@ class UsersController < ApplicationController
 
     if @user.save
       log_in(@user)
-      redirect_to root_url
+      # redirect_to root_url
     else
       # flash.now[:errors] = @user.errors.full_messages
       render :new, status: 422
@@ -18,7 +22,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find_by_id(params[:id])
-  end
+    end
 
 
   def user_params

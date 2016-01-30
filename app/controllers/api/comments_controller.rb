@@ -1,6 +1,6 @@
-class CommentsController < ApplicationController
+class Api::CommentsController < ApplicationController
   before_action :require_logged_in!
-  
+
   def index
     @comments = Comment.all.includes(:author)
   end
@@ -15,7 +15,7 @@ class CommentsController < ApplicationController
 
     if comment.save
       # render json: pin, include: :comments, include: :author
-      render "pins/show"
+      render "api/pins/show"
     else
       render json: comment, status: :unprocessable_entity
     end

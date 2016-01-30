@@ -1,6 +1,6 @@
-class PinsController < ApplicationController
+class Api::PinsController < ApplicationController
   before_action :require_logged_in!
-  
+
   def index
     @pins = Pin.all.includes(:author, :comments)
   end

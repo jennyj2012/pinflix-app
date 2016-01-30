@@ -4,7 +4,7 @@ var SessionsApiUtil = {
 
   fetchCurrentUser: function (cb) {
     $.ajax({
-      url: '/session',
+      url: '/api/session',
       type: 'GET',
       dataType: 'json',
       success: function (currentUser) {
@@ -17,10 +17,10 @@ var SessionsApiUtil = {
 
   login: function (credentials, success) {
     $.ajax({
-      url: '/session',
+      url: '/api/session',
       type: 'POST',
       dataType: 'json',
-      data: credentials, // {email: "tommy...", password: "14.."}
+      data: credentials,
       success: function (currentUser) {
         CurrentUserActions.receiveCurrentUser(currentUser);
         if(success){ success(); }
@@ -32,7 +32,7 @@ var SessionsApiUtil = {
 
   logout: function () {
     $.ajax({
-      url: '/session',
+      url: '/api/session',
       type: 'DELETE',
       dataType: 'json',
       success: function () {

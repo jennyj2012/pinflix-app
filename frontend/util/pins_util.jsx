@@ -3,7 +3,7 @@ var PinsActions = require('../actions/pins_actions');
 var PinsUtil = {
   fetchAllPins: function (){
     $.get({
-      url: "/pins",
+      url: "/api/pins",
       dataType: "json",
       success: function (pins) {
         PinsActions.receiveAllPins(pins);
@@ -13,7 +13,7 @@ var PinsUtil = {
 
   fetchSinglePin: function (id){
     $.get({
-      url: "/pins/" + id,
+      url: "/api/pins/" + id,
       dataType: "json",
       success: function (pin) {
         PinsActions.receiveSinglePin(pin);
@@ -26,7 +26,7 @@ var PinsUtil = {
     var author_id = parseInt(current_url.slice(current_url.indexOf("/")+1));
     //refactor author id
     $.post({
-      url: "/comments",
+      url: "/api/comments",
       dataType: "json",
       data: {comment: {body: body, pin_id: pin_id, author_id: author_id}},
       success: function (pin) {

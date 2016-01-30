@@ -3,7 +3,7 @@ var BoardsActions = require('../actions/boards_actions');
 var BoardsUtil = {
   fetchAllBoards: function (){
     $.get({
-      url: "/boards",
+      url: "/api/boards",
       dataType: "json",
       success: function (boards) {
         BoardsActions.receiveAllBoards(boards);
@@ -16,7 +16,7 @@ var BoardsUtil = {
 
   fetchSingleBoard: function (id){
     $.get({
-      url: "/boards/" + id,
+      url: "/api/boards/" + id,
       dataType: "json",
       success: function (board) {
         BoardsActions.receiveSingleBoard(board);

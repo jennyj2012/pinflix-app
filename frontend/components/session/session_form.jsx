@@ -1,10 +1,17 @@
 var React = require('react');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var History = require('react-router').History;
+
 var SessionApiUtil = require('../../util/session_util');
+var CurrentUserStore = require("../../stores/current_user_store");
 
 var SessionForm = React.createClass({
   mixins: [LinkedStateMixin, History],
+
+  componentDidMount: function (){
+    CurrentUserStore.addListener(this.forceUpdate.bind(this));
+    SessionApiUtil.fetchCurrentUser();
+  },
 
   getInitialState: function () {
     return {username: "", password: ""};
@@ -14,9 +21,8 @@ var SessionForm = React.createClass({
     e.preventDefault();
     var credentials = $(e.target).serializeJSON();
     SessionApiUtil.login(credentials, function () {
-      this.history.pushState({}, "/");
+      this.history.pushState({}, "/pins");
     }.bind(this));
-    this.setState({username: "", email: "", password: ""});
   },
 
   render: function () {
@@ -37,7 +43,7 @@ var SessionForm = React.createClass({
           <div className="division"></div>
 
           <div className="action-links group">
-            <a href="<%= new_user_url %>">Sign up now</a>
+            <a href="#/users/new">Sign up now</a>
             <div className="shade-button">
               <button>Log In</button>
             </div>

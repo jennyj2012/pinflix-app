@@ -25,12 +25,14 @@ class ApplicationController < ActionController::Base
   end
 
   def require_logged_in!
-    # re-render component
-    redirect_to new_session_url unless signed_in?
+    unless logged_in?
+     render json: ["Must be signed in."]
+   end
   end
 
   def require_signed_out!
-    # re-render component
-    redirect_to user_url(current_user) if signed_in?
+    if logged_in?
+     render json: ["Must be signed out."]
+   end
   end
 end
