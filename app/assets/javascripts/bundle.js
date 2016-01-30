@@ -68,15 +68,14 @@
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
-	    React.createElement(IndexRoute, { component: BoardsIndex, onEnter: requireAuth }),
+	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: requireAuth }),
 	    React.createElement(Route, { path: 'session/new', component: SessionForm }),
-	    React.createElement(Route, { path: 'users/new', component: UsersForm }),
-	    React.createElement(Route, { path: 'pins', component: PinsIndex })
+	    React.createElement(Route, { path: 'users/new', component: UsersForm })
 	  )
 	);
 	
 	function requireAuth(nextState, replace, callback) {
-	
+	  debugger;
 	  if (CurrentUserStore.userHasBeenFetched()) {
 	    _redirectIfNotLoggedIn();
 	  } else {
@@ -24379,10 +24378,7 @@
 	
 	  mixins: [LinkedStateMixin, History],
 	
-	  componentDidMount: function () {
-	    CurrentUserStore.addListener(this.forceUpdate.bind(this));
-	    SessionApiUtil.fetchCurrentUser();
-	  },
+	  componentDidMount: function () {},
 	
 	  getInitialState: function () {
 	    return { username: "", password: "" };
@@ -24392,7 +24388,7 @@
 	    e.preventDefault();
 	    var credentials = $(e.target).serializeJSON();
 	    SessionApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/pins");
+	      this.history.pushState({}, "/");
 	    }.bind(this));
 	  },
 	
@@ -31350,9 +31346,7 @@
 	  },
 	
 	  componentDidMount: function () {
-	    // CurrentUserStore.addListener(this.forceUpdate.bind(this));
-	    // SessionApiUtil.fetchCurrentUser();
-	    debugger;
+	
 	    this.pinListener = PinsStore.addListener(this.__onChange);
 	    PinUtil.fetchAllPins();
 	  },
@@ -31362,16 +31356,11 @@
 	  },
 	
 	  __onChange: function () {
-	    debugger;
 	    this.setState({ allPins: PinsStore.all() });
 	  },
 	
 	  render: function () {
-	    // debugger
-	    // if (!CurrentUserStore.userHasBeenFetched()) {
-	    //   return <p>PLEASE WAIT</p>;
-	    // } else {
-	    debugger;
+	
 	    var pins = this.state.allPins.map(function (pin) {
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin });
 	    });
@@ -31381,7 +31370,7 @@
 	      pins
 	    );
 	  }
-	  // }
+	
 	});
 	
 	module.exports = PinsIndex;
@@ -31945,16 +31934,13 @@
 	    SessionApiUtil.fetchCurrentUser();
 	  },
 	  render: function () {
-	    // if (!CurrentUserStore.userHasBeenFetched()) {
-	    //   return <p>PLEASE WAIT</p>;
-	    // } else {
 	    return React.createElement(
 	      'div',
 	      null,
 	      this.props.children
 	    );
 	  }
-	  // }
+	
 	});
 	
 	module.exports = App;

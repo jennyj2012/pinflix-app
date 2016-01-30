@@ -12,9 +12,7 @@ var PinsIndex = React.createClass({
   },
 
   componentDidMount: function (){
-    // CurrentUserStore.addListener(this.forceUpdate.bind(this));
-    // SessionApiUtil.fetchCurrentUser();
-    debugger
+
     this.pinListener = PinsStore.addListener(this.__onChange);
     PinUtil.fetchAllPins();
   },
@@ -24,16 +22,11 @@ var PinsIndex = React.createClass({
   },
 
   __onChange: function (){
-    debugger
     this.setState({ allPins: PinsStore.all() });
   },
 
   render: function () {
-    // debugger
-    // if (!CurrentUserStore.userHasBeenFetched()) {
-    //   return <p>PLEASE WAIT</p>;
-    // } else {
-    debugger
+
     var pins = this.state.allPins.map(function (pin) {
       return <PinsIndexItem key={pin.id} pin={pin}></PinsIndexItem>;
     });
@@ -43,7 +36,7 @@ var PinsIndex = React.createClass({
       </div>
     );
   }
-// }
+
 });
 
 module.exports = PinsIndex;

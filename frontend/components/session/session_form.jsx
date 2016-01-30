@@ -9,8 +9,7 @@ var SessionForm = React.createClass({
   mixins: [LinkedStateMixin, History],
 
   componentDidMount: function (){
-    CurrentUserStore.addListener(this.forceUpdate.bind(this));
-    SessionApiUtil.fetchCurrentUser();
+
   },
 
   getInitialState: function () {
@@ -21,7 +20,7 @@ var SessionForm = React.createClass({
     e.preventDefault();
     var credentials = $(e.target).serializeJSON();
     SessionApiUtil.login(credentials, function () {
-      this.history.pushState({}, "/pins");
+      this.history.pushState({}, "/");
     }.bind(this));
   },
 

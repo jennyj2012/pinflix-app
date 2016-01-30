@@ -9,16 +9,13 @@ var App = React.createClass({
     SessionApiUtil.fetchCurrentUser();
   },
   render: function () {
-    // if (!CurrentUserStore.userHasBeenFetched()) {
-    //   return <p>PLEASE WAIT</p>;
-    // } else {
-      return(
-        <div>
-          { this.props.children }
-        </div>
-      );
-    }
-  // }
+    return(
+      <div>
+        { this.props.children }
+      </div>
+    );
+  }
+
 });
 
 module.exports = App;

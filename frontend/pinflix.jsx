@@ -19,20 +19,19 @@ var App = require('./components/app.jsx');
 
 var router = (
   <Router>
-    <Route path="/" component={App} >
-    <IndexRoute component={BoardsIndex} onEnter={requireAuth}/>
-    <Route path="session/new" component={SessionForm} />
-    <Route path="users/new" component={UsersForm} />
-    <Route path="pins" component={PinsIndex}  />
+    <Route path="/" component={App}>
+      <IndexRoute component={PinsIndex} onEnter={requireAuth}/>
+      <Route path="session/new" component={SessionForm} />
+      <Route path="users/new" component={UsersForm} />
     </Route>
   </Router>
 );
 
 function requireAuth(nextState, replace, callback) {
-
+  debugger
   if(CurrentUserStore.userHasBeenFetched()){
     _redirectIfNotLoggedIn();
-  }else{
+  } else {
     SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn());
   }
 
