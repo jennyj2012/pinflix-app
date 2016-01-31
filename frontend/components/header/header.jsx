@@ -8,13 +8,15 @@ var Header = React.createClass({
   mixins: [History],
 
   getInitialState: function () {
-    return {
-      currentUser: {}
-    };
+    return { currentUser: {} };
   },
 
   componentDidMount: function () {
-    CurrentUserStore.addListener(this._onChange);
+    this.headerListener = CurrentUserStore.addListener(this._onChange);
+  },
+
+  componentWillUnMount: function () {
+    this.headerListener.remove();
   },
 
   _onChange: function () {
@@ -29,27 +31,22 @@ var Header = React.createClass({
   },
 
    render: function () {
-     var fetched, logged;
-     if (CurrentUserStore.userHasBeenFetched()){
-       fetched = "true";
-     }else {
-       fetched = "false";
-     }
-     if (CurrentUserStore.isLoggedIn()){
-       logged = "true";
-     }else {
-       logged = "false";
-     }
-     
+
     return(
-      <div>
-        <h2> Header Userfetched? {fetched}  Header UserLoggedIn? {logged}</h2>
-        <div  className="header group">
-          <SearchBar/>
+      <div  className="header group">
+
+        <SearchBar/>
+
+        <div className="user-menu group">
+          <div className="button-style-link user-link" >
+            <a href='#/boards'>{this.state.currentUser.username}</a>
+          </div>
+
           <div className="logout basic-red-button">
             <button onClick={this.logout}>Log Out</button>
           </div>
         </div>
+
       </div>
     );
   }

@@ -20,6 +20,14 @@ var SessionForm = React.createClass({
     }.bind(this));
   },
 
+  handleGuest: function(e) {
+    e.preventDefault();
+    var credentials = {user: {username: "guest", password: "pinflixguest"} };
+    SessionApiUtil.login(credentials, function () {
+      this.history.pushState({}, "/");
+    }.bind(this));
+  },
+
   render: function () {
     // <p className="errors">Fill out all data</p>
 
@@ -39,7 +47,12 @@ var SessionForm = React.createClass({
           <div className="division"></div>
 
           <div className="action-links group">
-            <a href="#/users/new">Sign up now</a>
+            <div className="guest-and-link">
+              <a href="#/users/new">Sign up now</a>
+              <div className="guest-sign-in shade-button">
+                <button onClick={this.handleGuest}>Guest Sign In</button>
+              </div>
+            </div>
             <div className="shade-button">
               <button>Log In</button>
             </div>

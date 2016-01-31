@@ -52,15 +52,15 @@
 	var History = __webpack_require__(159).History;
 	
 	var UsersForm = __webpack_require__(206);
-	var SessionForm = __webpack_require__(211);
-	var CurrentUserStore = __webpack_require__(219);
-	var SessionsApiUtil = __webpack_require__(212);
+	var SessionForm = __webpack_require__(219);
+	var CurrentUserStore = __webpack_require__(220);
+	var SessionsApiUtil = __webpack_require__(211);
 	
-	var PinsIndex = __webpack_require__(237);
-	var BoardsIndex = __webpack_require__(246);
-	var CommentsIndex = __webpack_require__(243);
+	var PinsIndex = __webpack_require__(238);
+	var BoardsIndex = __webpack_require__(247);
+	var CommentsIndex = __webpack_require__(244);
 	
-	var App = __webpack_require__(252);
+	var App = __webpack_require__(253);
 	
 	function _ensureLoggedOut(nextState, replace, callback) {
 	  if (CurrentUserStore.userHasBeenFetched()) {
@@ -24052,14 +24052,14 @@
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
-	var history = __webpack_require__(159).History;
-	// var UsersStore = require('../../stores/users_store');
-	// var UsersApiUtil = require('../../util/users_api_util');
+	var History = __webpack_require__(159).History;
+	var SessionApiUtil = __webpack_require__(211);
+	var UsersApiUtil = __webpack_require__(218);
 	
 	var UserForm = React.createClass({
 	  displayName: 'UserForm',
 	
-	  mixins: [LinkedStateMixin],
+	  mixins: [LinkedStateMixin, History],
 	
 	  getInitialState: function () {
 	    return { username: "", email: "", password: "" };
@@ -24067,9 +24067,18 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    // ---Util.createPinComment(this.state.body, this.props.pin.id);
-	    // --Util url: users/new, type "post"
-	    this.setState({ username: "", email: "", password: "" });
+	    var credentials = $(e.target).serializeJSON();
+	    UsersApiUtil.createUser(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  handleGuest: function (e) {
+	    e.preventDefault();
+	    var credentials = { user: { username: "test", password: "testing" } };
+	    SessionApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
 	  },
 	
 	  render: function () {
@@ -24141,6 +24150,15 @@
 	            'button',
 	            null,
 	            'Sign Up'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'sign-up-button shade-button' },
+	          React.createElement(
+	            'button',
+	            { onClick: this.handleGuest },
+	            'Guest Sign In'
 	          )
 	        )
 	      )
@@ -24384,90 +24402,7 @@
 /* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
-	var History = __webpack_require__(159).History;
-	
-	var SessionApiUtil = __webpack_require__(212);
-	var CurrentUserStore = __webpack_require__(219);
-	
-	var SessionForm = React.createClass({
-	  displayName: 'SessionForm',
-	
-	  mixins: [LinkedStateMixin, History],
-	
-	  getInitialState: function () {
-	    return { username: "", password: "" };
-	  },
-	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	    var credentials = $(e.target).serializeJSON();
-	    SessionApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
-	  },
-	
-	  render: function () {
-	    // <p className="errors">Fill out all data</p>
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'log-in basic-modal', onSubmit: this.handleSubmit },
-	      React.createElement(
-	        'form',
-	        null,
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Log In to PinFlix'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'PinFlix is a movie discovery web application inspired by Pinterest'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'input' },
-	          React.createElement('input', { type: 'text', name: 'user[username]', id: 'user_username', placeholder: 'Username', valueLink: this.linkState('username') })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'input' },
-	          React.createElement('input', { type: 'password', name: 'user[password]', id: 'user_password', placeholder: 'Password', valueLink: this.linkState('password') })
-	        ),
-	        React.createElement('div', { className: 'division' }),
-	        React.createElement(
-	          'div',
-	          { className: 'action-links group' },
-	          React.createElement(
-	            'a',
-	            { href: '#/users/new' },
-	            'Sign up now'
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'shade-button' },
-	            React.createElement(
-	              'button',
-	              null,
-	              'Log In'
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = SessionForm;
-
-/***/ },
-/* 212 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var CurrentUserActions = __webpack_require__(213);
+	var CurrentUserActions = __webpack_require__(212);
 	
 	var SessionsApiUtil = {
 	
@@ -24522,11 +24457,11 @@
 	module.exports = SessionsApiUtil;
 
 /***/ },
-/* 213 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(214);
-	var CurrentUserConstants = __webpack_require__(218);
+	var Dispatcher = __webpack_require__(213);
+	var CurrentUserConstants = __webpack_require__(217);
 	
 	var CurrentUserActions = {
 	  receiveCurrentUser: function (currentUser) {
@@ -24547,14 +24482,14 @@
 	module.exports = CurrentUserActions;
 
 /***/ },
-/* 214 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(215).Dispatcher;
+	var Dispatcher = __webpack_require__(214).Dispatcher;
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 215 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24566,11 +24501,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(216);
+	module.exports.Dispatcher = __webpack_require__(215);
 
 
 /***/ },
-/* 216 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24592,7 +24527,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(217);
+	var invariant = __webpack_require__(216);
 	
 	var _prefix = 'ID_';
 	
@@ -24807,7 +24742,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 217 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24862,7 +24797,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 218 */
+/* 217 */
 /***/ function(module, exports) {
 
 	var CurrentUserConstants = {
@@ -24873,12 +24808,143 @@
 	module.exports = CurrentUserConstants;
 
 /***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CurrentUserActions = __webpack_require__(212);
+	
+	var UsersApiUtil = {
+	
+	  createUser: function (credentials, callback) {
+	    $.ajax({
+	      url: '/api/users',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: credentials,
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        if (callback) {
+	          callback();
+	        }
+	      }
+	    });
+	  }
+	
+	};
+	
+	module.exports = UsersApiUtil;
+
+/***/ },
 /* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(220).Store;
-	var Dispatcher = __webpack_require__(214);
-	var CurrentUserConstants = __webpack_require__(218);
+	var React = __webpack_require__(1);
+	var LinkedStateMixin = __webpack_require__(207);
+	var History = __webpack_require__(159).History;
+	
+	var SessionApiUtil = __webpack_require__(211);
+	var CurrentUserStore = __webpack_require__(220);
+	
+	var SessionForm = React.createClass({
+	  displayName: 'SessionForm',
+	
+	  mixins: [LinkedStateMixin, History],
+	
+	  getInitialState: function () {
+	    return { username: "", password: "" };
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    var credentials = $(e.target).serializeJSON();
+	    SessionApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  handleGuest: function (e) {
+	    e.preventDefault();
+	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
+	    SessionApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	    // <p className="errors">Fill out all data</p>
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'log-in basic-modal', onSubmit: this.handleSubmit },
+	      React.createElement(
+	        'form',
+	        null,
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Log In to PinFlix'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'PinFlix is a movie discovery web application inspired by Pinterest'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', { type: 'text', name: 'user[username]', id: 'user_username', placeholder: 'Username', valueLink: this.linkState('username') })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', { type: 'password', name: 'user[password]', id: 'user_password', placeholder: 'Password', valueLink: this.linkState('password') })
+	        ),
+	        React.createElement('div', { className: 'division' }),
+	        React.createElement(
+	          'div',
+	          { className: 'action-links group' },
+	          React.createElement(
+	            'div',
+	            { className: 'guest-and-link' },
+	            React.createElement(
+	              'a',
+	              { href: '#/users/new' },
+	              'Sign up now'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'guest-sign-in shade-button' },
+	              React.createElement(
+	                'button',
+	                { onClick: this.handleGuest },
+	                'Guest Sign In'
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'shade-button' },
+	            React.createElement(
+	              'button',
+	              null,
+	              'Log In'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = SessionForm;
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(221).Store;
+	var Dispatcher = __webpack_require__(213);
+	var CurrentUserConstants = __webpack_require__(217);
 	
 	var CurrentUserStore = new Store(Dispatcher);
 	
@@ -24913,7 +24979,7 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24925,15 +24991,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(221);
-	module.exports.MapStore = __webpack_require__(224);
-	module.exports.Mixin = __webpack_require__(236);
-	module.exports.ReduceStore = __webpack_require__(225);
-	module.exports.Store = __webpack_require__(226);
+	module.exports.Container = __webpack_require__(222);
+	module.exports.MapStore = __webpack_require__(225);
+	module.exports.Mixin = __webpack_require__(237);
+	module.exports.ReduceStore = __webpack_require__(226);
+	module.exports.Store = __webpack_require__(227);
 
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24955,10 +25021,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(222);
+	var FluxStoreGroup = __webpack_require__(223);
 	
-	var invariant = __webpack_require__(217);
-	var shallowEqual = __webpack_require__(223);
+	var invariant = __webpack_require__(216);
+	var shallowEqual = __webpack_require__(224);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25116,7 +25182,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25135,7 +25201,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(217);
+	var invariant = __webpack_require__(216);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -25197,7 +25263,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports) {
 
 	/**
@@ -25252,7 +25318,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25273,10 +25339,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(225);
-	var Immutable = __webpack_require__(235);
+	var FluxReduceStore = __webpack_require__(226);
+	var Immutable = __webpack_require__(236);
 	
-	var invariant = __webpack_require__(217);
+	var invariant = __webpack_require__(216);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -25402,7 +25468,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25423,10 +25489,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(226);
+	var FluxStore = __webpack_require__(227);
 	
-	var abstractMethod = __webpack_require__(234);
-	var invariant = __webpack_require__(217);
+	var abstractMethod = __webpack_require__(235);
+	var invariant = __webpack_require__(216);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -25509,7 +25575,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25528,11 +25594,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(227);
+	var _require = __webpack_require__(228);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(217);
+	var invariant = __webpack_require__(216);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -25692,7 +25758,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25705,14 +25771,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(228)
+	  EventEmitter: __webpack_require__(229)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25731,11 +25797,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(229);
-	var EventSubscriptionVendor = __webpack_require__(231);
+	var EmitterSubscription = __webpack_require__(230);
+	var EventSubscriptionVendor = __webpack_require__(232);
 	
-	var emptyFunction = __webpack_require__(233);
-	var invariant = __webpack_require__(232);
+	var emptyFunction = __webpack_require__(234);
+	var invariant = __webpack_require__(233);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -25909,7 +25975,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25930,7 +25996,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(230);
+	var EventSubscription = __webpack_require__(231);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -25962,7 +26028,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports) {
 
 	/**
@@ -26016,7 +26082,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26035,7 +26101,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(232);
+	var invariant = __webpack_require__(233);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -26125,7 +26191,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26181,7 +26247,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 233 */
+/* 234 */
 /***/ function(module, exports) {
 
 	/**
@@ -26224,7 +26290,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26241,7 +26307,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(217);
+	var invariant = __webpack_require__(216);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -26251,7 +26317,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31238,7 +31304,7 @@
 	}));
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31255,9 +31321,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(222);
+	var FluxStoreGroup = __webpack_require__(223);
 	
-	var invariant = __webpack_require__(217);
+	var invariant = __webpack_require__(216);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -31361,15 +31427,15 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinUtil = __webpack_require__(238);
-	var PinsStore = __webpack_require__(241);
-	var PinsIndexItem = __webpack_require__(242);
+	var PinUtil = __webpack_require__(239);
+	var PinsStore = __webpack_require__(242);
+	var PinsIndexItem = __webpack_require__(243);
 	
-	var CurrentUserStore = __webpack_require__(219);
+	var CurrentUserStore = __webpack_require__(220);
 	
 	var PinsIndex = React.createClass({
 	  displayName: 'PinsIndex',
@@ -31408,10 +31474,10 @@
 	module.exports = PinsIndex;
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PinsActions = __webpack_require__(239);
+	var PinsActions = __webpack_require__(240);
 	
 	var PinsUtil = {
 	  fetchAllPins: function () {
@@ -31453,11 +31519,11 @@
 	module.exports = PinsUtil;
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(214);
-	var PinsConstants = __webpack_require__(240);
+	var Dispatcher = __webpack_require__(213);
+	var PinsConstants = __webpack_require__(241);
 	
 	var PinsActions = {
 	  receiveAllPins: function (pins) {
@@ -31479,7 +31545,7 @@
 	module.exports = PinsActions;
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports) {
 
 	var PinsConstants = {
@@ -31490,12 +31556,12 @@
 	module.exports = PinsConstants;
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(220).Store;
-	var Dispatcher = __webpack_require__(214);
-	var PinsConstants = __webpack_require__(240);
+	var Store = __webpack_require__(221).Store;
+	var Dispatcher = __webpack_require__(213);
+	var PinsConstants = __webpack_require__(241);
 	var PinsStore = new Store(Dispatcher);
 	
 	var _pins = {};
@@ -31540,12 +31606,12 @@
 	module.exports = PinsStore;
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndex = __webpack_require__(243);
-	var CommentsForm = __webpack_require__(245);
+	var CommentsIndex = __webpack_require__(244);
+	var CommentsForm = __webpack_require__(246);
 	
 	var PinsIndexItem = React.createClass({
 	  displayName: 'PinsIndexItem',
@@ -31616,11 +31682,11 @@
 	module.exports = PinsIndexItem;
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndexItem = __webpack_require__(244);
+	var CommentsIndexItem = __webpack_require__(245);
 	
 	var CommentsIndex = React.createClass({
 	  displayName: 'CommentsIndex',
@@ -31642,7 +31708,7 @@
 	module.exports = CommentsIndex;
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31685,13 +31751,13 @@
 	module.exports = CommentsIndexItem;
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
-	var PinsUtil = __webpack_require__(238);
-	var PinsStore = __webpack_require__(241);
+	var PinsUtil = __webpack_require__(239);
+	var PinsStore = __webpack_require__(242);
 	
 	var CommentsForm = React.createClass({
 	  displayName: 'CommentsForm',
@@ -31746,13 +31812,13 @@
 	module.exports = CommentsForm;
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(247);
-	var BoardsStore = __webpack_require__(250);
-	var BoardsIndexItem = __webpack_require__(251);
+	var BoardsUtil = __webpack_require__(248);
+	var BoardsStore = __webpack_require__(251);
+	var BoardsIndexItem = __webpack_require__(252);
 	
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
@@ -31789,10 +31855,10 @@
 	module.exports = BoardsIndex;
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var BoardsActions = __webpack_require__(248);
+	var BoardsActions = __webpack_require__(249);
 	
 	var BoardsUtil = {
 	  fetchAllBoards: function () {
@@ -31823,11 +31889,11 @@
 	module.exports = BoardsUtil;
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(214);
-	var BoardsConstants = __webpack_require__(249);
+	var Dispatcher = __webpack_require__(213);
+	var BoardsConstants = __webpack_require__(250);
 	
 	var BoardsActions = {
 	  receiveAllBoards: function (boards) {
@@ -31849,7 +31915,7 @@
 	module.exports = BoardsActions;
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports) {
 
 	var BoardsConstants = {
@@ -31860,12 +31926,12 @@
 	module.exports = BoardsConstants;
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(220).Store;
-	var Dispatcher = __webpack_require__(214);
-	var BoardsConstants = __webpack_require__(249);
+	var Store = __webpack_require__(221).Store;
+	var Dispatcher = __webpack_require__(213);
+	var BoardsConstants = __webpack_require__(250);
 	
 	var BoardsStore = new Store(Dispatcher);
 	
@@ -31912,11 +31978,11 @@
 	module.exports = BoardsStore;
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinsIndex = __webpack_require__(237);
+	var PinsIndex = __webpack_require__(238);
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
@@ -31951,12 +32017,12 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SessionApiUtil = __webpack_require__(212);
-	var CurrentUserStore = __webpack_require__(219);
+	var SessionApiUtil = __webpack_require__(211);
+	var CurrentUserStore = __webpack_require__(220);
 	var Header = __webpack_require__(254);
 	
 	var App = React.createClass({
@@ -31968,28 +32034,10 @@
 	  },
 	
 	  render: function () {
-	    var fetched, logged;
-	    if (CurrentUserStore.userHasBeenFetched()) {
-	      fetched = "true";
-	    } else {
-	      fetched = "false";
-	    }
-	    if (CurrentUserStore.isLoggedIn()) {
-	      logged = "true";
-	    } else {
-	      logged = "false";
-	    }
+	
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'h2',
-	        null,
-	        ' App Userfetched? ',
-	        fetched,
-	        '  App UserLoggedIn? ',
-	        logged
-	      ),
 	      React.createElement(Header, null),
 	      this.props.children
 	    );
@@ -32000,14 +32048,13 @@
 	module.exports = App;
 
 /***/ },
-/* 253 */,
 /* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CurrentUserStore = __webpack_require__(219);
+	var CurrentUserStore = __webpack_require__(220);
 	var SearchBar = __webpack_require__(255);
-	var SessionApiUtil = __webpack_require__(212);
+	var SessionApiUtil = __webpack_require__(211);
 	var History = __webpack_require__(159).History;
 	
 	var Header = React.createClass({
@@ -32016,13 +32063,15 @@
 	  mixins: [History],
 	
 	  getInitialState: function () {
-	    return {
-	      currentUser: {}
-	    };
+	    return { currentUser: {} };
 	  },
 	
 	  componentDidMount: function () {
-	    CurrentUserStore.addListener(this._onChange);
+	    this.headerListener = CurrentUserStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnMount: function () {
+	    this.headerListener.remove();
 	  },
 	
 	  _onChange: function () {
@@ -32037,33 +32086,23 @@
 	  },
 	
 	  render: function () {
-	    var fetched, logged;
-	    if (CurrentUserStore.userHasBeenFetched()) {
-	      fetched = "true";
-	    } else {
-	      fetched = "false";
-	    }
-	    if (CurrentUserStore.isLoggedIn()) {
-	      logged = "true";
-	    } else {
-	      logged = "false";
-	    }
 	
 	    return React.createElement(
 	      'div',
-	      null,
-	      React.createElement(
-	        'h2',
-	        null,
-	        ' Header Userfetched? ',
-	        fetched,
-	        '  Header UserLoggedIn? ',
-	        logged
-	      ),
+	      { className: 'header group' },
+	      React.createElement(SearchBar, null),
 	      React.createElement(
 	        'div',
-	        { className: 'header group' },
-	        React.createElement(SearchBar, null),
+	        { className: 'user-menu group' },
+	        React.createElement(
+	          'div',
+	          { className: 'button-style-link user-link' },
+	          React.createElement(
+	            'a',
+	            { href: '#/boards' },
+	            this.state.currentUser.username
+	          )
+	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'logout basic-red-button' },
@@ -32086,26 +32125,28 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var LinkedStateMixin = __webpack_require__(207);
 	
 	var Search = React.createClass({
-	  displayName: "Search",
+	  displayName: 'Search',
+	
+	  mixins: [LinkedStateMixin],
 	
 	  getInitialState: function () {
-	    return {
-	      currentUser: {}
-	    };
+	    return { searchBar: {} };
 	  },
 	
 	  render: function () {
 	
 	    return React.createElement(
-	      "div",
-	      { className: "search" },
+	      'div',
+	      { className: 'search group' },
 	      React.createElement(
-	        "h2",
+	        'h2',
 	        null,
-	        "searchbar"
-	      )
+	        'searchbar'
+	      ),
+	      React.createElement('input', { type: 'text' })
 	    );
 	  }
 	

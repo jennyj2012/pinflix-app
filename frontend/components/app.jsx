@@ -11,20 +11,9 @@ var App = React.createClass({
   },
 
   render: function () {
-    var fetched, logged;
-    if (CurrentUserStore.userHasBeenFetched()){
-      fetched = "true";
-    }else {
-      fetched = "false";
-    }
-    if (CurrentUserStore.isLoggedIn()){
-      logged = "true";
-    }else {
-      logged = "false";
-    }
+
     return(
       <div>
-        <h2> App Userfetched? {fetched}  App UserLoggedIn? {logged}</h2>
         <Header/>
         { this.props.children }
       </div>

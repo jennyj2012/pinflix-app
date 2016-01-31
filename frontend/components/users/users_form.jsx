@@ -1,22 +1,31 @@
 var React = require('react');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
-var history = require('react-router').History;
-// var UsersStore = require('../../stores/users_store');
-// var UsersApiUtil = require('../../util/users_api_util');
+var History = require('react-router').History;
+var SessionApiUtil = require('../../util/session_util');
+var UsersApiUtil = require('../../util/users_util');
 
 
 var UserForm = React.createClass({
-  mixins: [LinkedStateMixin],
+  mixins: [LinkedStateMixin, History],
 
   getInitialState: function () {
     return {username: "", email: "", password: ""};
   },
 
-  handleSubmit: function(e){
+  handleSubmit: function(e) {
     e.preventDefault();
-    // ---Util.createPinComment(this.state.body, this.props.pin.id);
-    // --Util url: users/new, type "post"
-    this.setState({username: "", email: "", password: ""});
+    var credentials = $(e.target).serializeJSON();
+    UsersApiUtil.createUser(credentials, function () {
+      this.history.pushState({}, "/");
+    }.bind(this));
+  },
+
+  handleGuest: function(e) {
+    e.preventDefault();
+    var credentials = {user: {username: "test", password: "testing"} };
+    SessionApiUtil.login(credentials, function () {
+      this.history.pushState({}, "/");
+    }.bind(this));
   },
 
   render: function () {
@@ -63,6 +72,10 @@ var UserForm = React.createClass({
 
         <div className="sign-up-button shade-button">
           <button>Sign Up</button>
+        </div>
+
+        <div className="sign-up-button shade-button">
+          <button onClick={this.handleGuest}>Guest Sign In</button>
         </div>
 
       </form>

@@ -12,17 +12,16 @@ class Api::UsersController < ApplicationController
 
     if @user.save
       log_in(@user)
-      # redirect_to root_url
+      render "api/users/show"
     else
-      # flash.now[:errors] = @user.errors.full_messages
-      render :new, status: 422
+      render json: ["Can't create user"], status: 422
     end
 
   end
 
   def show
     @user = User.find_by_id(params[:id])
-    end
+  end
 
 
   def user_params
