@@ -8,10 +8,6 @@ var CurrentUserStore = require("../../stores/current_user_store");
 var SessionForm = React.createClass({
   mixins: [LinkedStateMixin, History],
 
-  componentDidMount: function (){
-
-  },
-
   getInitialState: function () {
     return {username: "", password: ""};
   },
@@ -26,6 +22,7 @@ var SessionForm = React.createClass({
 
   render: function () {
     // <p className="errors">Fill out all data</p>
+
     return (
       <div className="log-in basic-modal" onSubmit={this.handleSubmit}>
         <form>

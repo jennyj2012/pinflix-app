@@ -7,6 +7,13 @@ var CurrentUserActions = {
       actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
       currentUser: currentUser
     });
+  },
+
+  removeCurrentUser: function (currentUser) {
+    Dispatcher.dispatch({
+      actionType: CurrentUserConstants.REMOVE_CURRENT_USER,
+      currentUser: currentUser
+    });
   }
 };
 

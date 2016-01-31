@@ -19,14 +19,18 @@ class Api::SessionsController < ApplicationController
     if @user
       log_in(@user)
       render "api/users/show"
-
     else
       render json: ["Wrong email/password combo!"], status: 401
     end
   end
 
   def destroy
-    sign_out
-    # redirect_to new_session_url
+    if current_user
+      sign_out
+      @user = current_user
+      render "api/users/show"
+    else
+      render json: {}
+    end
   end
 end

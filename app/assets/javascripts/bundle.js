@@ -62,33 +62,51 @@
 	
 	var App = __webpack_require__(252);
 	
-	var router = React.createElement(
-	  Router,
-	  null,
-	  React.createElement(
-	    Route,
-	    { path: '/', component: App },
-	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: requireAuth }),
-	    React.createElement(Route, { path: 'session/new', component: SessionForm }),
-	    React.createElement(Route, { path: 'users/new', component: UsersForm })
-	  )
-	);
+	function _ensureLoggedOut(nextState, replace, callback) {
+	  if (CurrentUserStore.userHasBeenFetched()) {
+	    _redirectIfLoggedIn();
+	  } else {
+	    SessionsApiUtil.fetchCurrentUser(_redirectIfLoggedIn);
+	  }
 	
-	function requireAuth(nextState, replace, callback) {
-	  debugger;
+	  function _redirectIfLoggedIn() {
+	    if (CurrentUserStore.isLoggedIn()) {
+	      replace({}, '/');
+	    }
+	    callback();
+	  }
+	}
+	
+	function _ensureLoggedIn(nextState, replace, callback) {
+	
 	  if (CurrentUserStore.userHasBeenFetched()) {
 	    _redirectIfNotLoggedIn();
 	  } else {
-	    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn());
+	
+	    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
 	  }
 	
 	  function _redirectIfNotLoggedIn() {
+	
 	    if (!CurrentUserStore.isLoggedIn()) {
 	      replace({}, '/session/new');
 	    }
 	    callback();
 	  }
 	}
+	
+	var router = React.createElement(
+	  Router,
+	  null,
+	  React.createElement(Route, { path: 'session/new', component: SessionForm, onEnter: _ensureLoggedOut }),
+	  React.createElement(Route, { path: 'users/new', component: UsersForm }),
+	  React.createElement(
+	    Route,
+	    { path: '/', component: App },
+	    React.createElement(Route, { path: 'boards', component: BoardsIndex }),
+	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: _ensureLoggedIn })
+	  )
+	);
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	  ReactDOM.render(router, document.getElementById('root'));
@@ -24378,8 +24396,6 @@
 	
 	  mixins: [LinkedStateMixin, History],
 	
-	  componentDidMount: function () {},
-	
 	  getInitialState: function () {
 	    return { username: "", password: "" };
 	  },
@@ -24394,6 +24410,7 @@
 	
 	  render: function () {
 	    // <p className="errors">Fill out all data</p>
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'log-in basic-modal', onSubmit: this.handleSubmit },
@@ -24454,22 +24471,23 @@
 	
 	var SessionsApiUtil = {
 	
-	  fetchCurrentUser: function (cb) {
+	  fetchCurrentUser: function (callback) {
+	
 	    $.ajax({
 	      url: '/api/session',
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (currentUser) {
-	        console.log("fetched current user!");
+	        console.log("fetched current user from controller: " + currentUser.username);
 	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        if (cb) {
-	          cb(currentUser);
+	        if (callback) {
+	          callback(currentUser);
 	        }
 	      }
 	    });
 	  },
 	
-	  login: function (credentials, success) {
+	  login: function (credentials, callback) {
 	    $.ajax({
 	      url: '/api/session',
 	      type: 'POST',
@@ -24477,21 +24495,24 @@
 	      data: credentials,
 	      success: function (currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        if (success) {
-	          success();
+	        if (callback) {
+	          callback();
 	        }
 	      }
-	
 	    });
 	  },
 	
-	  logout: function () {
+	  logout: function (callback) {
 	    $.ajax({
 	      url: '/api/session',
 	      type: 'DELETE',
 	      dataType: 'json',
-	      success: function () {
-	        console.log("logged out!");
+	      success: function (currentUser) {
+	        console.log("removed current user from controller: " + currentUser.username);
+	        CurrentUserActions.removeCurrentUser(currentUser);
+	        if (callback) {
+	          callback();
+	        }
 	      }
 	    });
 	  }
@@ -24511,6 +24532,13 @@
 	  receiveCurrentUser: function (currentUser) {
 	    Dispatcher.dispatch({
 	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  },
+	
+	  removeCurrentUser: function (currentUser) {
+	    Dispatcher.dispatch({
+	      actionType: CurrentUserConstants.REMOVE_CURRENT_USER,
 	      currentUser: currentUser
 	    });
 	  }
@@ -24838,7 +24866,8 @@
 /***/ function(module, exports) {
 
 	var CurrentUserConstants = {
-	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER"
+	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER",
+	  REMOVE_CURRENT_USER: "REMOVE_CURRENT_USER"
 	};
 	
 	module.exports = CurrentUserConstants;
@@ -24872,6 +24901,11 @@
 	  if (payload.actionType === CurrentUserConstants.RECEIVE_CURRENT_USER) {
 	    _currentUserHasBeenFetched = true;
 	    _currentUser = payload.currentUser;
+	    // debugger
+	    CurrentUserStore.__emitChange();
+	  } else if (payload.actionType === CurrentUserConstants.REMOVE_CURRENT_USER) {
+	    _currentUserHasBeenFetched = false;
+	    _currentUser = {};
 	    CurrentUserStore.__emitChange();
 	  }
 	};
@@ -31335,7 +31369,6 @@
 	var PinsStore = __webpack_require__(241);
 	var PinsIndexItem = __webpack_require__(242);
 	
-	var SessionApiUtil = __webpack_require__(212);
 	var CurrentUserStore = __webpack_require__(219);
 	
 	var PinsIndex = React.createClass({
@@ -31346,7 +31379,6 @@
 	  },
 	
 	  componentDidMount: function () {
-	
 	    this.pinListener = PinsStore.addListener(this.__onChange);
 	    PinUtil.fetchAllPins();
 	  },
@@ -31925,18 +31957,40 @@
 	var React = __webpack_require__(1);
 	var SessionApiUtil = __webpack_require__(212);
 	var CurrentUserStore = __webpack_require__(219);
+	var Header = __webpack_require__(254);
 	
 	var App = React.createClass({
 	  displayName: 'App',
 	
 	  componentDidMount: function () {
-	    CurrentUserStore.addListener(this.forceUpdate.bind(this));
+	    this.current_user_listener = CurrentUserStore.addListener(this.forceUpdate.bind(this));
 	    SessionApiUtil.fetchCurrentUser();
 	  },
+	
 	  render: function () {
+	    var fetched, logged;
+	    if (CurrentUserStore.userHasBeenFetched()) {
+	      fetched = "true";
+	    } else {
+	      fetched = "false";
+	    }
+	    if (CurrentUserStore.isLoggedIn()) {
+	      logged = "true";
+	    } else {
+	      logged = "false";
+	    }
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        ' App Userfetched? ',
+	        fetched,
+	        '  App UserLoggedIn? ',
+	        logged
+	      ),
+	      React.createElement(Header, null),
 	      this.props.children
 	    );
 	  }
@@ -31944,6 +31998,120 @@
 	});
 	
 	module.exports = App;
+
+/***/ },
+/* 253 */,
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var CurrentUserStore = __webpack_require__(219);
+	var SearchBar = __webpack_require__(255);
+	var SessionApiUtil = __webpack_require__(212);
+	var History = __webpack_require__(159).History;
+	
+	var Header = React.createClass({
+	  displayName: 'Header',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return {
+	      currentUser: {}
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    CurrentUserStore.addListener(this._onChange);
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	  },
+	
+	  logout: function (e) {
+	    e.preventDefault();
+	    SessionApiUtil.logout(function () {
+	      this.history.pushState({}, "/session/new");
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	    var fetched, logged;
+	    if (CurrentUserStore.userHasBeenFetched()) {
+	      fetched = "true";
+	    } else {
+	      fetched = "false";
+	    }
+	    if (CurrentUserStore.isLoggedIn()) {
+	      logged = "true";
+	    } else {
+	      logged = "false";
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        ' Header Userfetched? ',
+	        fetched,
+	        '  Header UserLoggedIn? ',
+	        logged
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'header group' },
+	        React.createElement(SearchBar, null),
+	        React.createElement(
+	          'div',
+	          { className: 'logout basic-red-button' },
+	          React.createElement(
+	            'button',
+	            { onClick: this.logout },
+	            'Log Out'
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Header;
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Search = React.createClass({
+	  displayName: "Search",
+	
+	  getInitialState: function () {
+	    return {
+	      currentUser: {}
+	    };
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      "div",
+	      { className: "search" },
+	      React.createElement(
+	        "h2",
+	        null,
+	        "searchbar"
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Search;
 
 /***/ }
 /******/ ]);

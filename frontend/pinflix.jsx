@@ -17,31 +17,49 @@ var CommentsIndex = require('./components/comments/comments_index');
 var App = require('./components/app.jsx');
 
 
-var router = (
-  <Router>
-    <Route path="/" component={App}>
-      <IndexRoute component={PinsIndex} onEnter={requireAuth}/>
-      <Route path="session/new" component={SessionForm} />
-      <Route path="users/new" component={UsersForm} />
-    </Route>
-  </Router>
-);
+function _ensureLoggedOut(nextState, replace, callback) {
+  if(CurrentUserStore.userHasBeenFetched()){
+    _redirectIfLoggedIn();
+  } else {
+    SessionsApiUtil.fetchCurrentUser(_redirectIfLoggedIn);
+  }
 
-function requireAuth(nextState, replace, callback) {
-  debugger
+  function _redirectIfLoggedIn() {
+    if (CurrentUserStore.isLoggedIn()) {
+       replace({}, '/');
+    }
+    callback();
+  }
+}
+
+function _ensureLoggedIn(nextState, replace, callback) {
+
   if(CurrentUserStore.userHasBeenFetched()){
     _redirectIfNotLoggedIn();
   } else {
-    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn());
+
+    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
   }
 
   function _redirectIfNotLoggedIn() {
+
     if (!CurrentUserStore.isLoggedIn()) {
        replace({}, '/session/new');
     }
     callback();
   }
 }
+
+var router = (
+  <Router>
+    <Route path="session/new" component={SessionForm} onEnter={_ensureLoggedOut} />
+    <Route path="users/new" component={UsersForm} />
+    <Route path="/" component={App} >
+      <Route path="boards" component={BoardsIndex} />
+      <IndexRoute component={PinsIndex} onEnter={_ensureLoggedIn}/>
+    </Route>
+  </Router>
+);
 
 
 document.addEventListener("DOMContentLoaded", function () {

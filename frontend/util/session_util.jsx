@@ -2,20 +2,21 @@ var CurrentUserActions = require("./../actions/current_user_actions");
 
 var SessionsApiUtil = {
 
-  fetchCurrentUser: function (cb) {
+  fetchCurrentUser: function (callback) {
+
     $.ajax({
       url: '/api/session',
       type: 'GET',
       dataType: 'json',
       success: function (currentUser) {
-        console.log("fetched current user!");
+        console.log("fetched current user from controller: " + currentUser.username);
         CurrentUserActions.receiveCurrentUser(currentUser);
-          if(cb){ cb(currentUser); }
+          if(callback){ callback(currentUser); }
       }
     });
   },
 
-  login: function (credentials, success) {
+  login: function (credentials, callback) {
     $.ajax({
       url: '/api/session',
       type: 'POST',
@@ -23,20 +24,20 @@ var SessionsApiUtil = {
       data: credentials,
       success: function (currentUser) {
         CurrentUserActions.receiveCurrentUser(currentUser);
-        if(success){ success(); }
-
+        if(callback){ callback(); }
       }
-
     });
   },
 
-  logout: function () {
+  logout: function (callback) {
     $.ajax({
       url: '/api/session',
       type: 'DELETE',
       dataType: 'json',
-      success: function () {
-        console.log("logged out!");
+      success: function (currentUser) {
+        console.log("removed current user from controller: " + currentUser.username);
+        CurrentUserActions.removeCurrentUser(currentUser);
+        if(callback){ callback(); }
       }
     });
   }
