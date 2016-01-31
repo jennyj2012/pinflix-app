@@ -103,8 +103,8 @@
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
-	    React.createElement(Route, { path: 'boards', component: BoardsIndex }),
-	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: _ensureLoggedIn })
+	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: _ensureLoggedIn }),
+	    React.createElement(Route, { path: 'boards', component: BoardsIndex })
 	  )
 	);
 	
@@ -24088,7 +24088,7 @@
 	      { className: 'sign-up basic-modal', onSubmit: this.handleSubmit },
 	      React.createElement(
 	        'div',
-	        { className: 'log-in-button button-style-link' },
+	        { className: 'log-in-button user-menu' },
 	        React.createElement(
 	          'a',
 	          { href: '#/session/new' },
@@ -31844,6 +31844,7 @@
 	    var boards = this.state.allBoards.map(function (board) {
 	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
 	    });
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'user-board-page group' },
@@ -32090,26 +32091,36 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'header group' },
-	      React.createElement(SearchBar, null),
 	      React.createElement(
 	        'div',
-	        { className: 'user-menu group' },
+	        { className: 'header-center' },
 	        React.createElement(
 	          'div',
-	          { className: 'button-style-link user-link' },
-	          React.createElement(
-	            'a',
-	            { href: '#/boards' },
-	            this.state.currentUser.username
-	          )
+	          { className: 'header-left' },
+	          React.createElement('div', { className: 'logo' }),
+	          React.createElement(SearchBar, null),
+	          React.createElement('div', { className: 'tags' })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'logout basic-red-button' },
+	          { className: 'header-right' },
 	          React.createElement(
-	            'button',
-	            { onClick: this.logout },
-	            'Log Out'
+	            'div',
+	            { className: 'user-menu user-link' },
+	            React.createElement(
+	              'a',
+	              { href: '#/boards' },
+	              this.state.currentUser.username
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'logout basic-red-button' },
+	            React.createElement(
+	              'button',
+	              { onClick: this.logout },
+	              'Log Out'
+	            )
 	          )
 	        )
 	      )
@@ -32141,12 +32152,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'search group' },
-	      React.createElement(
-	        'h2',
-	        null,
-	        'searchbar'
-	      ),
-	      React.createElement('input', { type: 'text' })
+	      React.createElement('input', { type: 'text', placeholder: 'search' })
 	    );
 	  }
 	

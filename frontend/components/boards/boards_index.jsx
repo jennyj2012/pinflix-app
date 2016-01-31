@@ -25,6 +25,7 @@ var BoardsIndex = React.createClass({
     var boards = this.state.allBoards.map(function (board) {
       return <BoardsIndexItem key={board.id} board={board}></BoardsIndexItem>;
     });
+
     return (
       <div className="user-board-page group">
         {boards}

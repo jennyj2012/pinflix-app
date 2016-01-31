@@ -55,8 +55,8 @@ var router = (
     <Route path="session/new" component={SessionForm} onEnter={_ensureLoggedOut} />
     <Route path="users/new" component={UsersForm} />
     <Route path="/" component={App} >
-      <Route path="boards" component={BoardsIndex} />
       <IndexRoute component={PinsIndex} onEnter={_ensureLoggedIn}/>
+      <Route path="boards" component={BoardsIndex} />
     </Route>
   </Router>
 );

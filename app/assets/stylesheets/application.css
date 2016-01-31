@@ -142,7 +142,155 @@
   background: #fff;
   padding: 20px 0;
  }
+/* ------------------HEADER--------------------- */
+.header{
+  display: block;
+  overflow: visible;
+  position: fixed;
+  z-index: 680;
+  background-color: #fff;
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
+  height: 54px;
+  -webkit-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+  width: 100%;
+  margin: 0 auto;
+}
 
+
+.header-center{
+  width: 1000px;
+  max-width: 1249px;
+  min-width: 1000px;
+  padding-top: 10px;
+  display: block;
+  height: 29px;
+}
+
+.header-left{
+  float: none;
+  margin-left: 7px;
+  margin-right: 243px;
+  padding-right: 14px;
+  width: auto;
+}
+.header-right{
+  float: right;
+  margin-right: 7px;
+  width: auto;
+}
+
+.search {
+  height: 32px;
+  vertical-align: middle;
+  margin-right: 46px;
+  float: left;
+  background: transparent;
+  border: 0;
+  width: 100%;
+
+}
+ .search input {
+  overflow: hidden;
+  border-top: 1px solid #dfdfdf;
+  /*padding: 15px 21px 15px 27px;*/
+  background-color: #f3f3f3;
+  background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f5f5f5));
+  background: -webkit-linear-gradient(#f0f0f0, #f5f5f5);
+  background: linear-gradient(#f0f0f0, #f5f5f5);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 3px;
+  border: 1px solid #d6d3ce;
+  -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.12) inset;
+  box-shadow: 0 0 3px rgba(0,0,0,0.12) inset;
+  /*color: #333;*/
+  font-size: 14px;
+  /*padding: 7px;*/
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #a7a7a7;
+  font-size: 16px;
+  font-weight: 600;
+  height: 32px;
+  line-height: 20px;
+  padding: 6px 0 6px 4px;
+ }
+
+
+ .user-menu {
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   background-color: #fafafa;
+   background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f5f5f5));
+   background: -webkit-linear-gradient(#fff, #f5f5f5);
+   background: linear-gradient(#fff, #f5f5f5);
+   -webkit-font-smoothing: subpixel-antialiased;
+   -moz-osx-font-smoothing: auto;
+   background-color: #f5f5f5;
+   border: 1px solid #d4d4d4;
+   border-radius: 6px 0 0 6px;
+   -webkit-box-sizing: border-box;
+   box-sizing: border-box;
+   color: #818181;
+   cursor: pointer;
+   height: 34px;
+   outline: none;
+   padding: 0;
+   position: relative;
+   text-align: left;
+   width: 195px;
+   z-index: 104;
+ }
+
+ .user-link {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 32px;
+  padding: 0 0 0 6px;
+ }
+
+ .user-menu a:hover {
+   color: #000;
+   background: #fff;
+ }
+
+.logout {
+  float: right;
+  height: 34px;
+  position: relative;
+}
+.logout button{
+  background-color: #fafafa;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f5f5f5));
+  background: -webkit-linear-gradient(#fff, #f5f5f5);
+  background: linear-gradient(#fff, #f5f5f5);
+  border-color: #d4d4d4;
+  border-radius: 0 6px 6px 0;
+  height: 34px;
+  padding: 2px 0 0;
+  position: relative;
+  width: 42px;
+  z-index: 104;
+  border: 1px solid #ccc;
+  color: #5f5f5f;
+  cursor: pointer;
+  font-weight: bold;
+  text-shadow: 0 1px #fff;
+  white-space: nowrap;
+  -webkit-appearance: button;
+}
+
+/* ------------------BUTTONS--------------------- */
  button:active {
    box-shadow: none;
    outline: 0;
@@ -157,24 +305,11 @@
   font-size: 14px;
   cursor: pointer;
   border: none;
+  border-radius: 3px;
+  outline: none;
+  line-height: normal;
  }
 
- .button-style-link {
-
- }
-
- .button-style-link a {
-   font-weight: bold;
-   padding: 10px;
-   border-radius: 10%;
-   color: #525252;
-   text-decoration: none;
- }
-
- .button-style-link a:hover {
-   color: #000;
-   background: #fff;
- }
 
  .shade-button {
    display: block;

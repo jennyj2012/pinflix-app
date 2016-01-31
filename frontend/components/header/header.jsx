@@ -34,19 +34,23 @@ var Header = React.createClass({
 
     return(
       <div  className="header group">
-
-        <SearchBar/>
-
-        <div className="user-menu group">
-          <div className="button-style-link user-link" >
-            <a href='#/boards'>{this.state.currentUser.username}</a>
+        <div className ="header-center">
+          <div  className="header-left">
+            <div className="logo"></div>
+            <SearchBar/>
+            <div className="tags"></div>
           </div>
 
-          <div className="logout basic-red-button">
-            <button onClick={this.logout}>Log Out</button>
+          <div className="header-right">
+            <div className="user-menu user-link" >
+              <a href='#/boards'>{this.state.currentUser.username}</a>
+            </div>
+
+            <div className="logout basic-red-button">
+              <button onClick={this.logout}>Log Out</button>
+            </div>
           </div>
         </div>
-
       </div>
     );
   }

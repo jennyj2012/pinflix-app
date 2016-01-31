@@ -12,8 +12,7 @@ var Search = React.createClass({
 
     return(
       <div className="search group">
-      <h2>searchbar</h2>
-      <input type="text"/>
+      <input type="text" placeholder="search"/>
       </div>
     );
   }
