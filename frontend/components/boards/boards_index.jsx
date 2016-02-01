@@ -29,6 +29,11 @@ var BoardsIndex = React.createClass({
 
     return (
       <div className="user-board-page group">
+        <div className="new-create-link">
+        <a href='#/boards/new'>
+          Add Board
+        </a>
+        </div>
         {boards}
       </div>
     );

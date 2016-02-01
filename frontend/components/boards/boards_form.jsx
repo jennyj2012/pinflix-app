@@ -1,5 +1,5 @@
 var React = require('react');
-var CurrentUserStore = require('./../stores/current_user_store');
+var CurrentUserStore = require('../../stores/current_user_store');
 
 var BoardsForm = React.createClass({
 

@@ -45,7 +45,7 @@ var PinsForm = React.createClass({
     return (
       <div className="new-pin">
         <form className="pin-form" onSubmit={this.handleSubmit}>
-
+            <h2> Create a Pin </h2>
             <img className="preview-image" src={this.state.imageUrl}/>
 
             <div className="input">

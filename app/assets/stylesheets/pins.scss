@@ -2,15 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.index-item {
-  width: 236px;
-  margin: auto 5px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 30px #ccc;
-  border: 1px solid #ccc;
-  float:left;
-}
 
 .pin-summary {
   text-align: left;
@@ -18,8 +9,7 @@
 }
 
 .pin-summary figcaption {
-  font-size: 14px;
-  font-weight: bold;
+
 }
 
 .pin-summary a {
@@ -28,4 +18,8 @@
 .pin-summary section {
   font-size: 12px;
   margin: 10px;
+}
+
+.pin-image {
+  cursor: zoom-in;
 }

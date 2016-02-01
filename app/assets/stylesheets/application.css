@@ -15,7 +15,9 @@
  */
 
 /*RESET*/
- body h1 p li ul form input button div section img figcaption a{
+ body
+ h1 p ul li a form input button div span
+ section img figcaption {
    margin: 0;
    border: 0;
    padding: 0;
@@ -59,7 +61,6 @@
  }
 
  img:hover {
-   cursor: zoom-in;
    background: #000;
  }
 
@@ -143,6 +144,15 @@
   padding: 20px 0;
  }
 
+ ul {
+   padding: 0;
+   list-style: none;
+ }
+
+ figcaption {
+   font-size: 14px;
+   font-weight: bold;
+ }
 
 /* ------------------BUTTONS--------------------- */
  button:active {
@@ -217,15 +227,8 @@
 
  .content {
    display:block;
-   padding-top:64px; /*move content below header*/
+   padding-top: 64px; /*move content below header*/
    position: relative;
-   width: 1000px;
+   width: 100%;
    margin: 0 auto;
  }
-
-.landing-page{
-
-}
-.user-board-page{
-
-}

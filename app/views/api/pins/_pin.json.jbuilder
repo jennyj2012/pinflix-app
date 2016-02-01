@@ -4,8 +4,10 @@ json.author do
   json.extract! pin.author, :username
 end
 
+# json.image do
+#   json.extract! pin.image
+# end
+
 json.comments do
-  json.array! pin.comments do |comment|
-    json.partial! 'api/comments/comment', comment: comment
-  end
+  json.partial! 'api/comments/comment', collection: @comments, as: :comment
 end

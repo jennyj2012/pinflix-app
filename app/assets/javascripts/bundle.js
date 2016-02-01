@@ -57,9 +57,13 @@
 	var SessionsApiUtil = __webpack_require__(211);
 	
 	var PinsIndex = __webpack_require__(238);
-	var BoardsIndex = __webpack_require__(247);
-	var CommentsIndex = __webpack_require__(244);
 	var PinsForm = __webpack_require__(253);
+	
+	var BoardsIndex = __webpack_require__(247);
+	var BoardsForm = __webpack_require__(257);
+	var BoardsDetail = __webpack_require__(259);
+	
+	var CommentsIndex = __webpack_require__(244);
 	
 	var App = __webpack_require__(254);
 	
@@ -106,6 +110,8 @@
 	    { path: '/', component: App },
 	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'boards', component: BoardsIndex }),
+	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),
+	    React.createElement(Route, { path: 'boards/detail', component: BoardsDetail }),
 	    React.createElement(Route, { path: 'pins/new', component: PinsForm })
 	  )
 	);
@@ -31651,7 +31657,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'index-item' },
-	      React.createElement('img', { src: pin.url }),
+	      React.createElement('img', { className: 'pin-image', src: pin.url }),
 	      React.createElement(
 	        'div',
 	        { className: 'pin-summary group' },
@@ -31876,6 +31882,15 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'user-board-page group' },
+	      React.createElement(
+	        'div',
+	        { className: 'new-create-link' },
+	        React.createElement(
+	          'a',
+	          { href: '#/boards/new' },
+	          'Add Board'
+	        )
+	      ),
 	      boards
 	    );
 	  }
@@ -32011,33 +32026,69 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinsIndex = __webpack_require__(238);
 	
 	var BoardsIndexItem = React.createClass({
-	  displayName: 'BoardsIndexItem',
+	  displayName: "BoardsIndexItem",
+	
+	  redirect: function (e) {},
 	
 	  render: function () {
 	    var board = this.props.board;
-	    // var pin_thumbs = board.pins.map(function (pin){
-	    //   return <img src={pin.url}/>;
-	    // }).slice(0,4);
-	    debugger;
+	    var pin_thumbs = [];
+	
+	    for (var i = 0; i < 4; i++) {
+	      var thumb;
+	
+	      if (typeof board.pins[i] === "undefined") {
+	        thumb = React.createElement("div", null);
+	      } else {
+	        thumb = React.createElement("img", { src: board.pins[i].url });
+	      }
+	
+	      pin_thumbs.push(React.createElement(
+	        "li",
+	        { className: "pin-thumb", key: i },
+	        thumb
+	      ));
+	    }
+	
 	    return React.createElement(
-	      'div',
-	      { className: 'board-index index-item' },
+	      "div",
+	      { className: "board-index index-item" },
 	      React.createElement(
-	        'section',
-	        { className: 'title' },
+	        "a",
+	        { href: "#/boards/detail" },
 	        React.createElement(
-	          'figcaption',
-	          null,
-	          board.title
+	          "div",
+	          { className: "board-detail-link" },
+	          React.createElement(
+	            "section",
+	            { className: "title" },
+	            React.createElement(
+	              "figcaption",
+	              null,
+	              board.title
+	            )
+	          ),
+	          React.createElement(
+	            "section",
+	            null,
+	            React.createElement(
+	              "ul",
+	              { className: "pin-thumbs group" },
+	              pin_thumbs
+	            )
+	          )
 	        )
 	      ),
 	      React.createElement(
-	        'section',
-	        { className: 'description' },
-	        board.description
+	        "div",
+	        { className: "edit-board-button" },
+	        React.createElement(
+	          "button",
+	          null,
+	          "Edit"
+	        )
 	      )
 	    );
 	  }
@@ -32100,6 +32151,11 @@
 	      React.createElement(
 	        'form',
 	        { className: 'pin-form', onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'h2',
+	          null,
+	          ' Create a Pin '
+	        ),
 	        React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
 	        React.createElement(
 	          'div',
@@ -32283,6 +32339,72 @@
 	});
 	
 	module.exports = Search;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var CurrentUserStore = __webpack_require__(220);
+	
+	var BoardsForm = React.createClass({
+	  displayName: 'BoardsForm',
+	
+	  getInitialState: function () {
+	    return {
+	      currentUser: {}
+	    };
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        'new_board'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = BoardsForm;
+
+/***/ },
+/* 258 */,
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PinsIndex = __webpack_require__(238);
+	
+	var BoardsIndexItem = React.createClass({
+	  displayName: 'BoardsIndexItem',
+	
+	  render: function () {
+	    var board = this.props.board;
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'board-index index-item group' },
+	      React.createElement(
+	        'div',
+	        { className: 'new-create-link' },
+	        React.createElement(
+	          'a',
+	          { href: '#/pins/new' },
+	          'Add Pin'
+	        )
+	      ),
+	      React.createElement(PinsIndex, null)
+	    );
+	  }
+	});
+	
+	module.exports = BoardsIndexItem;
 
 /***/ }
 /******/ ]);

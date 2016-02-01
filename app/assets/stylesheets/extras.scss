@@ -1,0 +1,54 @@
+.index-item {
+  width: 236px;
+  margin: auto 5px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 30px #ccc;
+  border: 1px solid #ccc;
+  float:left;
+}
+
+.new-create-link a{
+  width: 236px;
+  height: 307px;
+  margin: auto 5px;
+  background: #bbb;
+  border-radius: 10px;
+  box-shadow: 0 0 30px #ccc;
+  border: 3px dashed #ccc;
+  float:left;
+  cursor: pointer;
+}
+
+
+.preview-image {
+  width: 236px;
+  min-height: 200px;
+  border: 3px dashed #ccc;
+}
+
+.pin-thumbs {
+  margin: 0 auto;
+
+}
+
+.pin-thumb:first-child img,
+.pin-thumb:first-child div{
+  width: 216px;
+  height: 146px;
+  margin: auto;
+}
+
+.pin-thumb img,
+.pin-thumb div {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #ccc;
+  margin: auto;
+  border-radius: 5%;
+}
+
+.pin-thumb {
+  float: left;
+  margin: 3px;
+}

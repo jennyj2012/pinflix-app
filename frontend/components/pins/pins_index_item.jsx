@@ -14,10 +14,10 @@ var PinsIndexItem = React.createClass({
 
     return (
       <div className="index-item">
-        <img src={pin.url} />
+        <img className="pin-image" src={pin.url} />
 
         <div className="pin-summary group">
-          <section>
+          <section >
             <p>from:
             <a href={pin.url}> {hostname}</a>
            </p>

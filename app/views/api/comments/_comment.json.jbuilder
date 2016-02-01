@@ -5,5 +5,5 @@ json.extract! comment, :id, :body, :author
 # end
 
 json.pin do
-  json.extract! comment.pin, :id, :title
+  json.partial! 'api/pins/pin', commenbt.pin
 end
