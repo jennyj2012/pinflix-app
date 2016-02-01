@@ -48,26 +48,25 @@ var UserForm = React.createClass({
             name="user[username]"
             id="user_username"
             placeholder="Username"
-            valueLink={this.linkState('username')}>
-          </input>
+            valueLink={this.linkState('username')}/>
         </div>
+
         <div className="input">
           <input
             type="text"
             name="user[email]"
             id="user_email"
             placeholder="Email"
-            valueLink={this.linkState('email')}>
-          </input>
+            valueLink={this.linkState('email')}/>
         </div>
+
         <div className="input">
           <input
             type="password"
             name="user[password]"
             id="user_password"
             placeholder="Password"
-            valueLink={this.linkState('password')}>
-          </input>
+            valueLink={this.linkState('password')}/>
         </div>
 
         <div className="sign-up-button shade-button">

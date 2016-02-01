@@ -52,3 +52,6 @@ bower.json
 .byebug_history
 
 node_modules
+
+# Ignore application configuration
+/config/application.yml

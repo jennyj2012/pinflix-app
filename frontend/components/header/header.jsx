@@ -1,8 +1,9 @@
 var React = require('react');
+var History = require('react-router').History;
 var CurrentUserStore = require('../../stores/current_user_store');
+
 var SearchBar = require('./search');
 var SessionApiUtil = require('../../util/session_util');
-var History = require('react-router').History;
 
 var Header = React.createClass({
   mixins: [History],

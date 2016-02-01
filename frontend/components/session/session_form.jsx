@@ -38,10 +38,21 @@ var SessionForm = React.createClass({
           <p>PinFlix is a movie discovery web application inspired by Pinterest</p>
 
           <div className="input">
-            <input type="text" name="user[username]" id="user_username" placeholder="Username" valueLink={this.linkState('username')}></input>
+            <input
+              type="text"
+              name="user[username]"
+              id="user_username"
+              placeholder="Username"
+              valueLink={this.linkState('username')}/>
           </div>
+
           <div className="input">
-            <input type="password" name="user[password]" id="user_password" placeholder="Password" valueLink={this.linkState('password')}></input>
+            <input
+              type="password"
+              name="user[password]"
+              id="user_password"
+              placeholder="Password"
+              valueLink={this.linkState('password')}/>
           </div>
 
           <div className="division"></div>

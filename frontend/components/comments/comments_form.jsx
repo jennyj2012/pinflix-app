@@ -1,21 +1,25 @@
 var React = require('react');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
+
 var PinsUtil = require('../../util/pins_util');
 var PinsStore = require('../../stores/pins_store');
 
 var CommentsForm = React.createClass({
   mixins: [LinkedStateMixin],
   getInitialState: function () {
-    return {body: ""};
+    return {body: "", currentUser: {}};
   },
 
   updateBody: function(e){
     this.setState({body: e.currentTarget.value});
   },
+
   handleSubmit: function(e){
     e.preventDefault();
-    PinsUtil.createPinComment(this.state.body, this.props.pin.id);
-    this.setState({body: ""});
+    PinsUtil.createPinComment({
+      body: this.state.body,
+      pin_id: this.props.pin.id
+    });
   },
 
   render: function () {

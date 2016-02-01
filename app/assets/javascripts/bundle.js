@@ -59,8 +59,9 @@
 	var PinsIndex = __webpack_require__(238);
 	var BoardsIndex = __webpack_require__(247);
 	var CommentsIndex = __webpack_require__(244);
+	var PinsForm = __webpack_require__(253);
 	
-	var App = __webpack_require__(253);
+	var App = __webpack_require__(254);
 	
 	function _ensureLoggedOut(nextState, replace, callback) {
 	  if (CurrentUserStore.userHasBeenFetched()) {
@@ -104,7 +105,8 @@
 	    Route,
 	    { path: '/', component: App },
 	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: _ensureLoggedIn }),
-	    React.createElement(Route, { path: 'boards', component: BoardsIndex })
+	    React.createElement(Route, { path: 'boards', component: BoardsIndex }),
+	    React.createElement(Route, { path: 'pins/new', component: PinsForm })
 	  )
 	);
 	
@@ -24892,12 +24894,22 @@
 	        React.createElement(
 	          'div',
 	          { className: 'input' },
-	          React.createElement('input', { type: 'text', name: 'user[username]', id: 'user_username', placeholder: 'Username', valueLink: this.linkState('username') })
+	          React.createElement('input', {
+	            type: 'text',
+	            name: 'user[username]',
+	            id: 'user_username',
+	            placeholder: 'Username',
+	            valueLink: this.linkState('username') })
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'input' },
-	          React.createElement('input', { type: 'password', name: 'user[password]', id: 'user_password', placeholder: 'Password', valueLink: this.linkState('password') })
+	          React.createElement('input', {
+	            type: 'password',
+	            name: 'user[password]',
+	            id: 'user_password',
+	            placeholder: 'Password',
+	            valueLink: this.linkState('password') })
 	        ),
 	        React.createElement('div', { className: 'division' }),
 	        React.createElement(
@@ -31431,7 +31443,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinUtil = __webpack_require__(239);
+	var PinsUtil = __webpack_require__(239);
 	var PinsStore = __webpack_require__(242);
 	var PinsIndexItem = __webpack_require__(243);
 	
@@ -31446,7 +31458,7 @@
 	
 	  componentDidMount: function () {
 	    this.pinListener = PinsStore.addListener(this.__onChange);
-	    PinUtil.fetchAllPins();
+	    PinsUtil.fetchAllPins();
 	  },
 	
 	  componentWillUnMount: function () {
@@ -31500,14 +31512,25 @@
 	    });
 	  },
 	
-	  createPinComment: function (body, pin_id) {
-	    var current_url = document.location.pathname.slice(1);
-	    var author_id = parseInt(current_url.slice(current_url.indexOf("/") + 1));
-	    //refactor author id
+	  createPin: function (formData, callback) {
+	    $.post({
+	      url: "/api/pins/",
+	      dataType: "json",
+	      processData: false,
+	      contentType: false,
+	      data: formData,
+	      success: function (pin) {
+	        PinsActions.receiveSinglePin(pin);
+	        callback && callback();
+	      }
+	    });
+	  },
+	
+	  createPinComment: function (comment) {
 	    $.post({
 	      url: "/api/comments",
 	      dataType: "json",
-	      data: { comment: { body: body, pin_id: pin_id, author_id: author_id } },
+	      data: { comment: comment },
 	      success: function (pin) {
 	        PinsActions.receiveSinglePin(pin);
 	      }
@@ -31756,6 +31779,7 @@
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
+	
 	var PinsUtil = __webpack_require__(239);
 	var PinsStore = __webpack_require__(242);
 	
@@ -31764,16 +31788,19 @@
 	
 	  mixins: [LinkedStateMixin],
 	  getInitialState: function () {
-	    return { body: "" };
+	    return { body: "", currentUser: {} };
 	  },
 	
 	  updateBody: function (e) {
 	    this.setState({ body: e.currentTarget.value });
 	  },
+	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    PinsUtil.createPinComment(this.state.body, this.props.pin.id);
-	    this.setState({ body: "" });
+	    PinsUtil.createPinComment({
+	      body: this.state.body,
+	      pin_id: this.props.pin.id
+	    });
 	  },
 	
 	  render: function () {
@@ -32022,9 +32049,100 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var LinkedStateMixin = __webpack_require__(207);
+	var PinsUtil = __webpack_require__(239);
+	var History = __webpack_require__(159).History;
+	
+	var PinsForm = React.createClass({
+	  displayName: 'PinsForm',
+	
+	  mixins: [LinkedStateMixin, History],
+	
+	  getInitialState: function () {
+	    return { title: "", imageFile: null, imageUrl: "" };
+	  },
+	
+	  changeFile: function (e) {
+	    var reader = new FileReader();
+	    var file = e.currentTarget.files[0];
+	
+	    reader.onloadend = function () {
+	      this.setState({ imageFile: file, imageUrl: reader.result });
+	    }.bind(this);
+	
+	    if (file) {
+	      reader.readAsDataURL(file); // will trigger a load end event when it completes, and invoke reader.onloadend
+	    } else {
+	        this.setState({ imageFile: null, imageUrl: "" });
+	      }
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var formData = new FormData();
+	
+	    formData.append("pin[title]", this.state.title);
+	    formData.append("pin[image]", this.state.imageFile);
+	    formData.append("pin[board_id]", 1);
+	    formData.append("pin[url]", "temp-url");
+	
+	    PinsUtil.createPin(formData, function () {
+	      this.history.pushState({}, "/boards");
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'new-pin' },
+	      React.createElement(
+	        'form',
+	        { className: 'pin-form', onSubmit: this.handleSubmit },
+	        React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'text',
+	            className: 'pin[title]',
+	            id: 'pin_title',
+	            placeholder: 'Caption',
+	            valueLink: this.linkState('title') })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'file',
+	            className: 'pin[file]',
+	            id: 'pin_file',
+	            onChange: this.changeFile })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'basic-red-button' },
+	          React.createElement(
+	            'button',
+	            null,
+	            'Next'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = PinsForm;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
 	var SessionApiUtil = __webpack_require__(211);
 	var CurrentUserStore = __webpack_require__(220);
-	var Header = __webpack_require__(254);
+	var Header = __webpack_require__(255);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -32049,14 +32167,15 @@
 	module.exports = App;
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CurrentUserStore = __webpack_require__(220);
-	var SearchBar = __webpack_require__(255);
-	var SessionApiUtil = __webpack_require__(211);
 	var History = __webpack_require__(159).History;
+	var CurrentUserStore = __webpack_require__(220);
+	
+	var SearchBar = __webpack_require__(256);
+	var SessionApiUtil = __webpack_require__(211);
 	
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -32132,7 +32251,7 @@
 	module.exports = Header;
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);

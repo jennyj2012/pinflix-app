@@ -21,14 +21,25 @@ var PinsUtil = {
     });
   },
 
-  createPinComment: function (body, pin_id){
-    var current_url = document.location.pathname.slice(1);
-    var author_id = parseInt(current_url.slice(current_url.indexOf("/")+1));
-    //refactor author id
+  createPin: function (formData, callback){
+    $.post({
+      url: "/api/pins/",
+      dataType: "json",
+      processData: false,
+      contentType: false,
+      data: formData,
+      success: function (pin) {
+        PinsActions.receiveSinglePin(pin);
+        callback && callback();
+      }
+    });
+  },
+
+  createPinComment: function (comment){
     $.post({
       url: "/api/comments",
       dataType: "json",
-      data: {comment: {body: body, pin_id: pin_id, author_id: author_id}},
+      data: {comment: comment},
       success: function (pin) {
         PinsActions.receiveSinglePin(pin);
       }
