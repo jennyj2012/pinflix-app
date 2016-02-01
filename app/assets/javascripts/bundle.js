@@ -24090,7 +24090,7 @@
 	      { className: 'sign-up basic-modal', onSubmit: this.handleSubmit },
 	      React.createElement(
 	        'div',
-	        { className: 'log-in-button user-menu' },
+	        { className: 'log-in-button button-style-link' },
 	        React.createElement(
 	          'a',
 	          { href: '#/session/new' },
@@ -31868,6 +31868,7 @@
 	  },
 	
 	  render: function () {
+	
 	    var boards = this.state.allBoards.map(function (board) {
 	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
 	    });
@@ -32020,7 +32021,7 @@
 	    // var pin_thumbs = board.pins.map(function (pin){
 	    //   return <img src={pin.url}/>;
 	    // }).slice(0,4);
-	
+	    debugger;
 	    return React.createElement(
 	      'div',
 	      { className: 'board-index index-item' },
@@ -32158,7 +32159,11 @@
 	      'div',
 	      null,
 	      React.createElement(Header, null),
-	      this.props.children
+	      React.createElement(
+	        'div',
+	        { className: 'content group' },
+	        this.props.children
+	      )
 	    );
 	  }
 	
@@ -32209,7 +32214,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'header' },
+	      { className: 'header group' },
 	      React.createElement(
 	        'div',
 	        { className: 'header-center group' },

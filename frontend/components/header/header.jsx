@@ -34,7 +34,7 @@ var Header = React.createClass({
    render: function () {
 
     return(
-      <div className="header">
+      <div className="header group">
         <div className ="header-center group">
           <div className="header-left">
             <div className="logo"></div>

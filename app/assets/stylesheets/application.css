@@ -214,3 +214,18 @@
    color: #000;
    background: #fff;
  }
+
+ .content {
+   display:block;
+   padding-top:64px; /*move content below header*/
+   position: relative;
+   width: 1000px;
+   margin: 0 auto;
+ }
+
+.landing-page{
+
+}
+.user-board-page{
+
+}

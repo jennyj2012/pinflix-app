@@ -1,9 +1,17 @@
 // Place all the styles related to the Boards controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.user-board-page{
+  display:block;
+  padding-top:64px; /*move content below header*/
+  height: auto;
+  width: 100%;
+}
+
 .index-item {
+  margin: 0 auto 14px;
   width: 236px;
-  margin: auto 5px;
+  // margin: auto 5px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 0 30px #ccc;

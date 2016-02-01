@@ -8,7 +8,7 @@ var BoardsIndexItem = React.createClass({
     // var pin_thumbs = board.pins.map(function (pin){
     //   return <img src={pin.url}/>;
     // }).slice(0,4);
-
+debugger
     return (
       <div className="board-index index-item">
         <section className="title">
