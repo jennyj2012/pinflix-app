@@ -12,6 +12,7 @@ var SessionsApiUtil = require('./util/session_util');
 
 var PinsIndex = require('./components/pins/pins_index');
 var PinsForm = require('./components/pins/pins_form');
+var PinsDetail = require('./components/pins/pins_detail');
 
 var BoardsIndex = require('./components/boards/boards_index');
 var BoardsForm = require('./components/boards/boards_form');
@@ -63,8 +64,9 @@ var router = (
       <IndexRoute component={PinsIndex} onEnter={_ensureLoggedIn}/>
       <Route path="boards" component={BoardsIndex} />
       <Route path="boards/new" component={BoardsForm} />
-      <Route path="boards/detail" component={BoardsDetail} />
+      <Route path="boards/:board_id" component={BoardsDetail} />
       <Route path="pins/new" component={PinsForm} />
+      <Route path="pins/detail" component={PinsDetail} />
     </Route>
   </Router>
 );

@@ -2,11 +2,11 @@ class Api::BoardsController < ApplicationController
   before_action :require_logged_in!
 
   def index
-    @boards = Board.all
+    @boards = Board.all.includes(:pins)
   end
 
   def show
-    @board = Board.find_by_id(params[:board_id])
+    @board = Board.includes(:pins).find_by_id(params[:id])
   end
 
   def create

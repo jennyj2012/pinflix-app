@@ -30,7 +30,7 @@ var PinsUtil = {
       data: formData,
       success: function (pin) {
         PinsActions.receiveSinglePin(pin);
-        callback && callback();
+        if(callback) { callback(pin.id); }
       }
     });
   },

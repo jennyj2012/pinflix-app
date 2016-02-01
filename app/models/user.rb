@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   after_initialize :ensure_session_token;
 
   has_many :boards
-  has_many :pins
+  has_many :pins, class_name: "Pin", foreign_key: :author_id
   has_many :comments
 
   validates :username, :email, :password_digest, :session_token, presence: true

@@ -29,7 +29,7 @@ var PinsIndex = React.createClass({
       return <PinsIndexItem key={pin.id} pin={pin}></PinsIndexItem>;
     });
     return (
-      <div className="landing-page group">
+      <div d="masonry-container" className="landing-page transitions-enabled infinite-scroll clearfix">
         {pins}
       </div>
     );

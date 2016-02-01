@@ -57,15 +57,16 @@
 	var SessionsApiUtil = __webpack_require__(211);
 	
 	var PinsIndex = __webpack_require__(238);
-	var PinsForm = __webpack_require__(253);
+	var PinsForm = __webpack_require__(247);
+	var PinsDetail = __webpack_require__(253);
 	
-	var BoardsIndex = __webpack_require__(247);
+	var BoardsIndex = __webpack_require__(255);
 	var BoardsForm = __webpack_require__(257);
-	var BoardsDetail = __webpack_require__(259);
+	var BoardsDetail = __webpack_require__(258);
 	
 	var CommentsIndex = __webpack_require__(244);
 	
-	var App = __webpack_require__(254);
+	var App = __webpack_require__(259);
 	
 	function _ensureLoggedOut(nextState, replace, callback) {
 	  if (CurrentUserStore.userHasBeenFetched()) {
@@ -111,8 +112,9 @@
 	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: _ensureLoggedIn }),
 	    React.createElement(Route, { path: 'boards', component: BoardsIndex }),
 	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),
-	    React.createElement(Route, { path: 'boards/detail', component: BoardsDetail }),
-	    React.createElement(Route, { path: 'pins/new', component: PinsForm })
+	    React.createElement(Route, { path: 'boards/:board_id', component: BoardsDetail }),
+	    React.createElement(Route, { path: 'pins/new', component: PinsForm }),
+	    React.createElement(Route, { path: 'pins/detail', component: PinsDetail })
 	  )
 	);
 	
@@ -31482,7 +31484,7 @@
 	    });
 	    return React.createElement(
 	      'div',
-	      { className: 'landing-page group' },
+	      { d: 'masonry-container', className: 'landing-page transitions-enabled infinite-scroll clearfix' },
 	      pins
 	    );
 	  }
@@ -31527,7 +31529,9 @@
 	      data: formData,
 	      success: function (pin) {
 	        PinsActions.receiveSinglePin(pin);
-	        callback && callback();
+	        if (callback) {
+	          callback(pin.id);
+	        }
 	      }
 	    });
 	  },
@@ -31593,7 +31597,7 @@
 	var PinsConstants = __webpack_require__(241);
 	var PinsStore = new Store(Dispatcher);
 	
-	var _pins = {};
+	var _pins = [];
 	
 	var resetPins = function (pins) {
 	  _pins = pins;
@@ -31614,7 +31618,13 @@
 	};
 	
 	PinsStore.find = function (id) {
-	  return _pins[id];
+	  var idx;
+	  for (var i = 0; i < _pins.length; i++) {
+	    if (_pins[i].id === pin.id) {
+	      idx = i;
+	    }
+	  }
+	  return _pins[idx];
 	};
 	
 	PinsStore.__onDispatch = function (payload) {
@@ -31652,12 +31662,24 @@
 	  },
 	  render: function () {
 	    var pin = this.props.pin;
-	    var hostname = this.get_domain_from_url(pin.url);
+	
+	    var hostname;
+	    var image_url;
+	    //if file uploaded
+	    if (pin.image.url != "pinflix_logo.gif") {
+	      image_url = pin.image.url;
+	      hostname = pin.author.username;
+	    }
+	    //if url uploaded
+	    else {
+	        image_url = pin.url;
+	        hostname = this.get_domain_from_url(pin.url);
+	      }
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'index-item' },
-	      React.createElement('img', { className: 'pin-image', src: pin.url }),
+	      React.createElement('img', { className: 'pin-image', src: image_url }),
 	      React.createElement(
 	        'div',
 	        { className: 'pin-summary group' },
@@ -31670,7 +31692,7 @@
 	            'from:',
 	            React.createElement(
 	              'a',
-	              { href: pin.url },
+	              { href: image_url },
 	              ' ',
 	              hostname
 	            )
@@ -31849,12 +31871,99 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(248);
-	var BoardsStore = __webpack_require__(251);
-	var BoardsIndexItem = __webpack_require__(252);
+	var LinkedStateMixin = __webpack_require__(207);
+	var PinsUtil = __webpack_require__(239);
+	var PinsActionForm = __webpack_require__(248);
+	var History = __webpack_require__(159).History;
 	
-	var BoardsIndex = React.createClass({
-	  displayName: 'BoardsIndex',
+	var PinsForm = React.createClass({
+	  displayName: 'PinsForm',
+	
+	  mixins: [LinkedStateMixin, History],
+	
+	  getInitialState: function () {
+	    return { title: "", imageFile: null, imageUrl: "" };
+	  },
+	
+	  changeFile: function (e) {
+	    var reader = new FileReader();
+	    var file = e.currentTarget.files[0];
+	
+	    reader.onloadend = function () {
+	      this.setState({ imageFile: file, imageUrl: reader.result });
+	    }.bind(this);
+	
+	    if (file) {
+	      reader.readAsDataURL(file); // will trigger a load end event when it completes, and invoke reader.onloadend
+	    } else {
+	        this.setState({ imageFile: null, imageUrl: "" });
+	      }
+	  },
+	
+	  handleSubmit: function (board_id, e) {
+	    e.preventDefault();
+	
+	    var formData = new FormData();
+	    formData.append("pin[title]", this.state.title);
+	    formData.append("pin[image]", this.state.imageFile);
+	    formData.append("pin[url]", "pinterest.com");
+	    formData.append("pin[board_id]", board_id);
+	
+	    PinsUtil.createPin(formData, function (pin_id) {
+	      this.history.pushState({}, "/pins/detail");
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'new-pin' },
+	      React.createElement(
+	        'form',
+	        { className: 'pin-form' },
+	        React.createElement(
+	          'h2',
+	          null,
+	          ' Create a Pin '
+	        ),
+	        React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'text',
+	            className: 'pin[title]',
+	            id: 'pin_title',
+	            placeholder: 'Caption',
+	            valueLink: this.linkState('title') })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'file',
+	            className: 'pin[file]',
+	            id: 'pin_file',
+	            onChange: this.changeFile })
+	        ),
+	        React.createElement(PinsActionForm, { preview: this.state.imageUrl, handleSubmit: this.handleSubmit })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = PinsForm;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var BoardsStore = __webpack_require__(249);
+	var BoardsUtil = __webpack_require__(251);
+	
+	var PinActionForm = React.createClass({
+	  displayName: 'PinActionForm',
 	
 	  getInitialState: function () {
 	    return { allBoards: [] };
@@ -31874,35 +31983,132 @@
 	  },
 	
 	  render: function () {
+	    var preview_image = this.props.preview;
+	    var handleSubmit = this.props.handleSubmit;
 	
 	    var boards = this.state.allBoards.map(function (board) {
-	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
+	      return React.createElement(
+	        'li',
+	        { className: 'board-list-item group', key: board.id },
+	        React.createElement(
+	          'figcaption',
+	          null,
+	          board.title
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'board-pin-button hidden-button small-red-button', onClick: this.handleSubmit },
+	          React.createElement(
+	            'button',
+	            { onClick: handleSubmit.bind(null, board.id) },
+	            'Pin It'
+	          )
+	        )
+	      );
 	    });
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'user-board-page group' },
+	      { className: 'pin-action-form group' },
 	      React.createElement(
 	        'div',
-	        { className: 'new-create-link' },
-	        React.createElement(
-	          'a',
-	          { href: '#/boards/new' },
-	          'Add Board'
-	        )
+	        { className: 'pin-action-left' },
+	        React.createElement('img', { className: 'preview-image', src: preview_image })
 	      ),
-	      boards
+	      React.createElement(
+	        'div',
+	        { className: 'pin-action-right' },
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Pick a board'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'board-list' },
+	          boards
+	        )
+	      )
 	    );
 	  }
+	
 	});
 	
-	module.exports = BoardsIndex;
+	module.exports = PinActionForm;
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var BoardsActions = __webpack_require__(249);
+	var Store = __webpack_require__(221).Store;
+	var Dispatcher = __webpack_require__(213);
+	var BoardsConstants = __webpack_require__(250);
+	
+	var BoardsStore = new Store(Dispatcher);
+	
+	var _boards = [];
+	
+	var resetBoards = function (boards) {
+	  _boards = boards;
+	};
+	
+	var updateBoard = function (board) {
+	  var idx;
+	  for (var i = 0; i < _boards.length; i++) {
+	    if (_boards[i].id === board.id) {
+	      idx = i;
+	    }
+	  }
+	  _boards[idx] = board;
+	};
+	
+	BoardsStore.all = function () {
+	  return _boards.slice();
+	};
+	
+	BoardsStore.find = function (id) {
+	  var idx;
+	  for (var i = 0; i < _boards.length; i++) {
+	    if (_boards[i].id === id) {
+	      idx = i;
+	    }
+	  }
+	  return _boards[idx];
+	};
+	
+	BoardsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case BoardsConstants.ALL_BOARDS_RECEIVED:
+	      resetBoards(payload.boards);
+	      BoardsStore.__emitChange();
+	      break;
+	    case BoardsConstants.SINGLE_BOARD_RECEIVED:
+	      updateBoard(payload.board);
+	      BoardsStore.__emitChange();
+	      break;
+	    default:
+	      break;
+	  }
+	};
+	
+	module.exports = BoardsStore;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports) {
+
+	var BoardsConstants = {
+	  ALL_BOARDS_RECEIVED: "ALL_BOARDS_RECEIVED",
+	  SINGLE_BOARD_RECEIVED: "SINGLE_BOARD_RECEIVED"
+	};
+	
+	module.exports = BoardsConstants;
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var BoardsActions = __webpack_require__(252);
 	
 	var BoardsUtil = {
 	  fetchAllBoards: function () {
@@ -31933,7 +32139,7 @@
 	module.exports = BoardsUtil;
 
 /***/ },
-/* 249 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(213);
@@ -31959,70 +32165,95 @@
 	module.exports = BoardsActions;
 
 /***/ },
-/* 250 */
-/***/ function(module, exports) {
-
-	var BoardsConstants = {
-	  BOARDS_RECEIVED: "ALL_BOARDS_RECEIVED",
-	  SINGLE_BOARD_RECEIVED: "SINGLE_BOARD_RECEIVED"
-	};
-	
-	module.exports = BoardsConstants;
-
-/***/ },
-/* 251 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(221).Store;
-	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(250);
+	var React = __webpack_require__(1);
+	var PinsEdit = __webpack_require__(254);
 	
-	var BoardsStore = new Store(Dispatcher);
+	var PinsDetail = React.createClass({
+	  displayName: 'PinsDetail',
 	
-	var _boards = {};
-	
-	var resetBoards = function (boards) {
-	  _boards = boards;
-	};
-	
-	var updateBoard = function (board) {
-	  var idx;
-	  for (var i = 0; i < _boards.length; i++) {
-	    if (_boards[i].id === board.id) {
-	      idx = i;
-	    }
+	  render: function () {
+	    var pin = this.props.pin;
+	    return React.createElement('div', { className: 'pin-detail' });
 	  }
-	  _boards[idx] = board;
-	};
+	});
 	
-	BoardsStore.all = function () {
-	  return _boards.slice();
-	};
-	
-	BoardsStore.find = function (id) {
-	  return _boards[id];
-	};
-	
-	BoardsStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case BoardsConstants.ALL_BOARDS_RECEIVED:
-	
-	      resetBoards(payload.boards);
-	      BoardsStore.__emitChange();
-	      break;
-	    case BoardsConstants.SINGLE_BOARD_RECEIVED:
-	      updateBoard(payload.board);
-	      BoardsStore.__emitChange();
-	      break;
-	    default:
-	      break;
-	  }
-	};
-	
-	module.exports = BoardsStore;
+	module.exports = PinsDetail;
 
 /***/ },
-/* 252 */
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var PinsEdit = React.createClass({
+	  displayName: "PinsEdit",
+	
+	  render: function () {
+	    var pin = this.props.pin;
+	    return React.createElement("div", { className: "pin-edit" });
+	  }
+	});
+	
+	module.exports = PinsEdit;
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var BoardsUtil = __webpack_require__(251);
+	var BoardsStore = __webpack_require__(249);
+	var BoardsIndexItem = __webpack_require__(256);
+	
+	var BoardsIndex = React.createClass({
+	  displayName: 'BoardsIndex',
+	
+	  getInitialState: function () {
+	    return { allBoards: [] };
+	  },
+	
+	  componentDidMount: function () {
+	    this.boardListener = BoardsStore.addListener(this.__onChange);
+	    BoardsUtil.fetchAllBoards();
+	  },
+	
+	  componentWillUnMount: function () {
+	    this.boardListener.remove();
+	  },
+	
+	  __onChange: function () {
+	    this.setState({ allBoards: BoardsStore.all() });
+	  },
+	
+	  render: function () {
+	    var boards = this.state.allBoards.map(function (board) {
+	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'user-board-page group' },
+	      React.createElement(
+	        'div',
+	        { className: 'new-create-link' },
+	        React.createElement(
+	          'a',
+	          { href: '#/boards/new' },
+	          'Add Board'
+	        )
+	      ),
+	      boards
+	    );
+	  }
+	});
+	
+	module.exports = BoardsIndex;
+
+/***/ },
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32034,6 +32265,7 @@
 	
 	  render: function () {
 	    var board = this.props.board;
+	    var boardLink = "#/boards/" + board.id;
 	    var pin_thumbs = [];
 	
 	    for (var i = 0; i < 4; i++) {
@@ -32054,10 +32286,10 @@
 	
 	    return React.createElement(
 	      "div",
-	      { className: "board-index index-item" },
+	      { className: "board-index-item index-item" },
 	      React.createElement(
 	        "a",
-	        { href: "#/boards/detail" },
+	        { href: boardLink },
 	        React.createElement(
 	          "div",
 	          { className: "board-detail-link" },
@@ -32097,109 +32329,110 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 253 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
-	var PinsUtil = __webpack_require__(239);
-	var History = __webpack_require__(159).History;
+	var CurrentUserStore = __webpack_require__(220);
 	
-	var PinsForm = React.createClass({
-	  displayName: 'PinsForm',
-	
-	  mixins: [LinkedStateMixin, History],
+	var BoardsForm = React.createClass({
+	  displayName: 'BoardsForm',
 	
 	  getInitialState: function () {
-	    return { title: "", imageFile: null, imageUrl: "" };
-	  },
-	
-	  changeFile: function (e) {
-	    var reader = new FileReader();
-	    var file = e.currentTarget.files[0];
-	
-	    reader.onloadend = function () {
-	      this.setState({ imageFile: file, imageUrl: reader.result });
-	    }.bind(this);
-	
-	    if (file) {
-	      reader.readAsDataURL(file); // will trigger a load end event when it completes, and invoke reader.onloadend
-	    } else {
-	        this.setState({ imageFile: null, imageUrl: "" });
-	      }
-	  },
-	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	
-	    var formData = new FormData();
-	
-	    formData.append("pin[title]", this.state.title);
-	    formData.append("pin[image]", this.state.imageFile);
-	    formData.append("pin[board_id]", 1);
-	    formData.append("pin[url]", "temp-url");
-	
-	    PinsUtil.createPin(formData, function () {
-	      this.history.pushState({}, "/boards");
-	    }.bind(this));
+	    return {
+	      currentUser: {}
+	    };
 	  },
 	
 	  render: function () {
+	
 	    return React.createElement(
 	      'div',
-	      { className: 'new-pin' },
+	      null,
 	      React.createElement(
-	        'form',
-	        { className: 'pin-form', onSubmit: this.handleSubmit },
+	        'h2',
+	        null,
+	        'new_board'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = BoardsForm;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PinsIndex = __webpack_require__(238);
+	var BoardsUtil = __webpack_require__(251);
+	var BoardsStore = __webpack_require__(249);
+	var PinsIndexItem = __webpack_require__(243);
+	
+	var BoardsIndexItem = React.createClass({
+	  displayName: 'BoardsIndexItem',
+	
+	  getInitialState: function () {
+	    return { board: {} };
+	  },
+	
+	  componentDidMount: function () {
+	    this.boardDetailListener = BoardsStore.addListener(this.__onChange);
+	    BoardsUtil.fetchSingleBoard(this.props.params.board_id);
+	  },
+	
+	  componentWillUnMount: function () {
+	    this.boardDetailListener.remove();
+	  },
+	
+	  __onChange: function () {
+	    var board_id = parseInt(this.props.params.board_id);
+	    var currentBoard = BoardsStore.find(board_id);
+	    this.setState({ board: currentBoard });
+	  },
+	
+	  render: function () {
+	    var board = this.state.board;
+	    var pins = [];
+	
+	    if (typeof board.pins !== "undefined") {
+	      pins = board.pins.map(function (pin) {
+	        return React.createElement(PinsIndexItem, { key: pin.id, pin: pin });
+	      });
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'board-index index-item group' },
+	      React.createElement(
+	        'div',
+	        { className: 'new-create-link' },
 	        React.createElement(
-	          'h2',
-	          null,
-	          ' Create a Pin '
-	        ),
-	        React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
-	        React.createElement(
-	          'div',
-	          { className: 'input' },
-	          React.createElement('input', {
-	            type: 'text',
-	            className: 'pin[title]',
-	            id: 'pin_title',
-	            placeholder: 'Caption',
-	            valueLink: this.linkState('title') })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'input' },
-	          React.createElement('input', {
-	            type: 'file',
-	            className: 'pin[file]',
-	            id: 'pin_file',
-	            onChange: this.changeFile })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'basic-red-button' },
-	          React.createElement(
-	            'button',
-	            null,
-	            'Next'
-	          )
+	          'a',
+	          { href: '#/pins/new' },
+	          'Add Pin'
 	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { d: 'masonry-container', className: 'landing-page transitions-enabled infinite-scroll clearfix' },
+	        pins
 	      )
 	    );
 	  }
 	});
 	
-	module.exports = PinsForm;
+	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 254 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var SessionApiUtil = __webpack_require__(211);
 	var CurrentUserStore = __webpack_require__(220);
-	var Header = __webpack_require__(255);
+	var Header = __webpack_require__(260);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -32228,14 +32461,14 @@
 	module.exports = App;
 
 /***/ },
-/* 255 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
 	var CurrentUserStore = __webpack_require__(220);
 	
-	var SearchBar = __webpack_require__(256);
+	var SearchBar = __webpack_require__(261);
 	var SessionApiUtil = __webpack_require__(211);
 	
 	var Header = React.createClass({
@@ -32312,7 +32545,7 @@
 	module.exports = Header;
 
 /***/ },
-/* 256 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32339,72 +32572,6 @@
 	});
 	
 	module.exports = Search;
-
-/***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var CurrentUserStore = __webpack_require__(220);
-	
-	var BoardsForm = React.createClass({
-	  displayName: 'BoardsForm',
-	
-	  getInitialState: function () {
-	    return {
-	      currentUser: {}
-	    };
-	  },
-	
-	  render: function () {
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h2',
-	        null,
-	        'new_board'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = BoardsForm;
-
-/***/ },
-/* 258 */,
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PinsIndex = __webpack_require__(238);
-	
-	var BoardsIndexItem = React.createClass({
-	  displayName: 'BoardsIndexItem',
-	
-	  render: function () {
-	    var board = this.props.board;
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'board-index index-item group' },
-	      React.createElement(
-	        'div',
-	        { className: 'new-create-link' },
-	        React.createElement(
-	          'a',
-	          { href: '#/pins/new' },
-	          'Add Pin'
-	        )
-	      ),
-	      React.createElement(PinsIndex, null)
-	    );
-	  }
-	});
-	
-	module.exports = BoardsIndexItem;
 
 /***/ }
 /******/ ]);

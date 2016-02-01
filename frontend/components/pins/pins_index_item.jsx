@@ -10,16 +10,28 @@ var PinsIndexItem = React.createClass({
   },
   render: function () {
     var pin = this.props.pin;
-    var hostname = this.get_domain_from_url(pin.url);
+
+    var hostname;
+    var image_url;
+    //if file uploaded
+    if(pin.image.url != "pinflix_logo.gif"){
+      image_url = pin.image.url;
+      hostname = pin.author.username;
+    }
+    //if url uploaded
+    else {
+      image_url = pin.url;
+      hostname = this.get_domain_from_url(pin.url);
+    }
 
     return (
       <div className="index-item">
-        <img className="pin-image" src={pin.url} />
+        <img className="pin-image" src={image_url} />
 
         <div className="pin-summary group">
           <section >
             <p>from:
-            <a href={pin.url}> {hostname}</a>
+            <a href={image_url}> {hostname}</a>
            </p>
           </section>
 

@@ -4,9 +4,9 @@ json.author do
   json.extract! pin.author, :username
 end
 
-# json.image do
-#   json.extract! pin.image
-# end
+json.image do
+  json.extract! pin.image, :url
+end
 
 json.comments do
   json.partial! 'api/comments/comment', collection: @comments, as: :comment

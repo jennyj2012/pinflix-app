@@ -23,3 +23,46 @@
 .pin-image {
   cursor: zoom-in;
 }
+
+.pin-action-form {
+  width: 660px;
+  background: #fff;
+  margin: auto;
+}
+
+.pin-action-form div {
+  float: left;
+  margin: auto;
+}
+
+.pin-action-left {
+  width: 320px;
+  margin: auto;
+}
+
+.pin-action-right {
+  width: 320px;
+  text-align: center;
+  margin: auto;
+}
+
+.board-list-item {
+  border: 1px solid #ccc;
+  padding: 5px;
+  height: 34px;
+
+}
+
+.board-list-item figcaption {
+  text-align: left;
+  float: left;
+  height: 100%;
+}
+
+.board-list-item:hover .hidden-button {
+  display: block;
+}
+
+.board-pin-button {
+  float: right;
+}

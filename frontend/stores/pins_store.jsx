@@ -3,7 +3,7 @@ var Dispatcher = require('../dispatcher/dispatcher');
 var PinsConstants = require('../constants/pins_constants');
 var PinsStore = new Store(Dispatcher);
 
-var _pins = {};
+var _pins = [];
 
 var resetPins = function(pins){
   _pins = pins;
@@ -24,7 +24,13 @@ PinsStore.all = function () {
 };
 
 PinsStore.find = function (id) {
-  return _pins[id];
+  var idx;
+  for(var i = 0; i < _pins.length; i++){
+    if(_pins[i].id === pin.id){
+      idx = i;
+    }
+  }
+  return _pins[idx];
 };
 
 PinsStore.__onDispatch = function (payload) {

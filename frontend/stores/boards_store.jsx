@@ -4,7 +4,7 @@ var BoardsConstants = require('../constants/boards_constants');
 
 var BoardsStore = new Store(Dispatcher);
 
-var _boards = {};
+var _boards = [];
 
 var resetBoards = function(boards){
   _boards = boards;
@@ -25,13 +25,18 @@ BoardsStore.all = function () {
 };
 
 BoardsStore.find = function (id) {
-  return _boards[id];
+  var idx;
+  for(var i = 0; i < _boards.length; i++){
+    if(_boards[i].id === id){
+      idx = i;
+    }
+  }
+  return _boards[idx];
 };
 
 BoardsStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case BoardsConstants.ALL_BOARDS_RECEIVED:
-
       resetBoards(payload.boards);
       BoardsStore.__emitChange();
       break;
