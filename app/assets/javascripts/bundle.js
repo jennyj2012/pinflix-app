@@ -32209,10 +32209,10 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'header group' },
+	      { className: 'header' },
 	      React.createElement(
 	        'div',
-	        { className: 'header-center' },
+	        { className: 'header-center group' },
 	        React.createElement(
 	          'div',
 	          { className: 'header-left' },
@@ -32222,7 +32222,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'header-right' },
+	          { className: 'header-right group' },
 	          React.createElement(
 	            'div',
 	            { className: 'user-menu user-link' },
@@ -32234,7 +32234,7 @@
 	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'logout basic-red-button' },
+	            { className: 'logout' },
 	            React.createElement(
 	              'button',
 	              { onClick: this.logout },
