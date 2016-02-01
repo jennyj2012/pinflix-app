@@ -33,7 +33,7 @@ var UserForm = React.createClass({
     return (
       <div className="sign-up basic-modal" onSubmit={this.handleSubmit}>
 
-        <div className="log-in-button user-menu">
+        <div className="log-in-button button-style-link">
             <a href="#/session/new">Log in</a>
         </div>
 

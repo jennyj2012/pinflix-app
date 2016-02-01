@@ -201,3 +201,16 @@
    background: #bd081c;
 
  }
+
+ .button-style-link a {
+   font-weight: bold;
+   padding: 10px;
+   border-radius: 10%;
+   color: #525252;
+   text-decoration: none;
+ }
+
+ .button-style-link a:hover{
+   color: #000;
+   background: #fff;
+ }
