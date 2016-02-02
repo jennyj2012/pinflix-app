@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+#css styling pinterest-look infinitescroll gem
 gem 'masonry-rails'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -25,6 +26,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+#file upload and security gems
 gem 'paperclip'
 gem 'aws-sdk', '~> 1.6'
 gem 'figaro'
@@ -34,6 +36,10 @@ gem 'figaro'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+#search gems
+gem 'pg_search'
+gem 'kaminari'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

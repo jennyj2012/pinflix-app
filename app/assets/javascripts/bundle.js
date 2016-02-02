@@ -31978,13 +31978,17 @@
 	  mixins: [LinkedStateMixin, History],
 	
 	  getInitialState: function () {
-	    return { title: "", imageFile: null, imageUrl: "" };
+	    var pin = this.props.pin;
+	    if (typeof pin === "undefined") {
+	      return { title: "", imageFile: null, imageUrl: "" };
+	    } else {
+	      return { title: pin.title, imageFile: pin.image, imageUrl: "" };
+	    }
 	  },
 	
 	  changeFile: function (e) {
 	    var reader = new FileReader();
 	    var file = e.currentTarget.files[0];
-	
 	    reader.onloadend = function () {
 	      this.setState({ imageFile: file, imageUrl: reader.result });
 	    }.bind(this);
@@ -31998,7 +32002,6 @@
 	
 	  handleSubmit: function (board_id, e) {
 	    e.preventDefault();
-	
 	    var formData = new FormData();
 	    formData.append("pin[title]", this.state.title);
 	    formData.append("pin[image]", this.state.imageFile);
@@ -32011,6 +32014,7 @@
 	  },
 	
 	  render: function () {
+	    debugger;
 	    return React.createElement(
 	      'div',
 	      { className: 'new-pin' },
@@ -32033,7 +32037,7 @@
 	              type: 'text',
 	              className: 'pin[title]',
 	              id: 'pin_title',
-	              placeholder: 'Caption',
+	              placeholder: 'Movie Title or Caption',
 	              valueLink: this.linkState('title') })
 	          ),
 	          React.createElement(
@@ -32626,6 +32630,7 @@
 	
 	  render: function () {
 	
+	    // <img src={'pinflix_logo.gif'}/>
 	    return React.createElement(
 	      'div',
 	      { className: 'header group' },
@@ -32638,11 +32643,7 @@
 	          React.createElement(
 	            'div',
 	            null,
-	            React.createElement(
-	              'a',
-	              { href: '#/', className: 'logo' },
-	              React.createElement('img', { src: 'pinflix_logo.png' })
-	            )
+	            React.createElement('a', { href: '#/', className: 'logo' })
 	          ),
 	          React.createElement(SearchBar, null),
 	          React.createElement(

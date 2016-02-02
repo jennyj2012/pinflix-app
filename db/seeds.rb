@@ -182,7 +182,7 @@ comment_11 = Comment.create(
   author: user_2,
   pin: pin_10)
 comment_12 = Comment.create(
-  body: "Arushi Loves this one",
+  body: "Aarushi Loves this one",
   author: user_2,
   pin: pin_11)
 comment_13 = Comment.create(

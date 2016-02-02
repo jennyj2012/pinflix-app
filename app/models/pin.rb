@@ -6,7 +6,7 @@ class Pin < ActiveRecord::Base
   validates :title, :url, :author, :board, presence: true
   validates :title, length: { maximum: 140 }
 
-  has_attached_file :image, default_url: "pinflix_logo.gif"
-  validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
+  # has_attached_file :image, default_url: "pinflix_logo.gif"
+  # validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 
 end

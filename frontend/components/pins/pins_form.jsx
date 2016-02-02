@@ -9,13 +9,17 @@ var PinsForm = React.createClass({
   mixins: [LinkedStateMixin, History],
 
   getInitialState: function() {
-    return { title: "", imageFile: null, imageUrl: "" };
+    var pin = this.props.pin;
+    if(typeof pin === "undefined"){
+      return { title: "", imageFile: null, imageUrl: "" };
+    } else {
+      return { title: pin.title, imageFile: pin.image, imageUrl: "" };
+    }
   },
 
   changeFile: function(e) {
     var reader = new FileReader();
     var file = e.currentTarget.files[0];
-
     reader.onloadend = function () {
       this.setState({imageFile: file, imageUrl: reader.result});
     }.bind(this);
@@ -29,7 +33,6 @@ var PinsForm = React.createClass({
 
   handleSubmit: function(board_id, e) {
     e.preventDefault();
-
     var formData = new FormData();
     formData.append("pin[title]", this.state.title);
     formData.append("pin[image]", this.state.imageFile);
@@ -43,6 +46,7 @@ var PinsForm = React.createClass({
   },
 
   render: function () {
+    debugger
     return (
       <div className="new-pin">
         <form className="pin-form group">
@@ -55,7 +59,7 @@ var PinsForm = React.createClass({
                 type="text"
                 className="pin[title]"
                 id="pin_title"
-                placeholder="Caption"
+                placeholder="Movie Title or Caption"
                 valueLink={this.linkState('title')} />
             </div>
 

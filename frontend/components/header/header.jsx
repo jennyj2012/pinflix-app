@@ -33,7 +33,6 @@ var Header = React.createClass({
 
    render: function () {
 
-
     return(
       <div className="header group">
         <div className ="header-center group">
@@ -41,7 +40,8 @@ var Header = React.createClass({
           <div className="header-left group">
             <div>
               <a href="#/" className="logo">
-                <img src={'pinflix_logo.png'}/>
+
+                <img src={window.pinflix.logo}/>
               </a>
             </div>
 

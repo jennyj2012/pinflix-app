@@ -8,6 +8,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <script type="text/javascript">
+    window.pinflix = {logo: "<%= asset_path('pinflix_logo.gif') %>" }
+  </script>
 
 <%= yield %>
 
