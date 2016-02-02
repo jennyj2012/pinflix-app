@@ -147,56 +147,56 @@ comment_4 = Comment.create(
 comment_5 = Comment.create(
   body: "Never watching this again",
   author: user_2,
-  pin: pin_3)
+  pin: pin_4)
 comment_6 = Comment.create(
   body: "You've got to watch this",
   author: user_2,
-  pin: pin_3)
+  pin: pin_5)
 comment_7 = Comment.create(
   body: "I love the scene at 21:18",
   author: user_2,
-  pin: pin_3)
+  pin: pin_6)
 comment_8 = Comment.create(
   body: "I totally disagree",
   author: user_2,
-  pin: pin_3)
+  pin: pin_7)
 comment_9 = Comment.create(
   body: "This actor is so funny!",
   author: user_2,
-  pin: pin_3)
+  pin: pin_8)
 comment_10 = Comment.create(
   body: "I still need to watch this.",
   author: user_2,
-  pin: pin_3)
+  pin: pin_9)
 comment_11 = Comment.create(
   body: "I've heard so much about this",
   author: user_2,
-  pin: pin_3)
+  pin: pin_10)
 comment_12 = Comment.create(
   body: "Arushi Loves this one",
   author: user_2,
-  pin: pin_3)
+  pin: pin_11)
 comment_13 = Comment.create(
   body: "My mom loves this actor",
   author: user_2,
-  pin: pin_3)
+  pin: pin_12)
 comment_14 = Comment.create(
   body: "I've got to get those girl's shoes",
   author: user_2,
-  pin: pin_3)
+  pin: pin_13)
 comment_15 = Comment.create(
   body: "I'm going to buy the DVD",
   author: user_2,
-  pin: pin_3)
+  pin: pin_14)
 comment_16 = Comment.create(
   body: "Hilarious!",
   author: user_2,
-  pin: pin_3)
+  pin: pin_15)
 comment_17 = Comment.create(
   body: "One day I will watch this",
   author: user_2,
-  pin: pin_3)
+  pin: pin_13)
 comment_18 = Comment.create(
   body: "I love the actress! So classic.",
   author: user_2,
-  pin: pin_3)
+  pin: pin_15)
