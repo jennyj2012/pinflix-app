@@ -11,16 +11,16 @@ var PinsIndexItem = React.createClass({
   render: function () {
     var pin = this.props.pin;
     var comments;
-    if(this.props.showComments === true){
+    // if(this.props.showComments === true){
       comments = (
         <div>
           <CommentsIndex comments={pin.comments} pin={pin}/>
           <CommentsForm pin={pin}/>
         </div>
       );
-    } else {
-      comments = [];
-    }
+    // } else {
+    //   comments = [];
+    // }
 
 
     var hostname;

@@ -27,7 +27,9 @@ var BoardsIndexItem = React.createClass({
   __onChange: function (){
     var boardId = parseInt(this.props.params.board_id);
     var currentBoard = BoardsStore.find(boardId);
-    this.setState({ board: currentBoard, boardPins: currentBoard.pins });
+    var currentPins = PinsStore.findByBoardId(boardId);
+    debugger
+    this.setState({ board: currentBoard, boardPins: currentPins });
   },
 
   render: function () {
@@ -38,7 +40,7 @@ var BoardsIndexItem = React.createClass({
       board_pins = [];
     } else {
       board_pins = this.state.boardPins.map(function (pin) {
-          return <PinsIndexItem key={pin.id} pin={pin} showComments={false} />;
+          return <PinsIndexItem key={pin.id} pin={pin} showComments={true} />;
         });
     }
 

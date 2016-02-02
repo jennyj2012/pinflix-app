@@ -9,6 +9,12 @@ var resetPins = function(pins){
   _pins = pins;
 };
 
+PinsStore.findByBoardId = function (id) {
+  return _pins.filter(function (pin) {
+    return pin.board_id === id;
+  });
+};
+
 var updatePin = function(pin){
   var idx;
   for(var i = 0; i < _pins.length; i++){

@@ -57,14 +57,14 @@
 	var SessionsApiUtil = __webpack_require__(211);
 	
 	var PinsIndex = __webpack_require__(238);
-	var PinsForm = __webpack_require__(247);
+	var PinsForm = __webpack_require__(248);
 	var PinsDetail = __webpack_require__(253);
 	
 	var BoardsIndex = __webpack_require__(255);
 	var BoardsForm = __webpack_require__(257);
 	var BoardsDetail = __webpack_require__(258);
 	
-	var CommentsIndex = __webpack_require__(244);
+	var CommentsIndex = __webpack_require__(245);
 	
 	var App = __webpack_require__(259);
 	
@@ -31450,8 +31450,8 @@
 
 	var React = __webpack_require__(1);
 	var PinsUtil = __webpack_require__(239);
-	var PinsStore = __webpack_require__(242);
-	var PinsIndexItem = __webpack_require__(243);
+	var PinsStore = __webpack_require__(243);
+	var PinsIndexItem = __webpack_require__(244);
 	
 	var CurrentUserStore = __webpack_require__(220);
 	
@@ -31556,7 +31556,7 @@
 
 	var Dispatcher = __webpack_require__(213);
 	var PinsConstants = __webpack_require__(241);
-	var BoardsConstants = __webpack_require__(250);
+	var BoardsConstants = __webpack_require__(242);
 	
 	var PinsActions = {
 	  receiveAllPins: function (pins) {
@@ -31590,6 +31590,17 @@
 
 /***/ },
 /* 242 */
+/***/ function(module, exports) {
+
+	var BoardsConstants = {
+	  ALL_BOARDS_RECEIVED: "ALL_BOARDS_RECEIVED",
+	  SINGLE_BOARD_RECEIVED: "SINGLE_BOARD_RECEIVED"
+	};
+	
+	module.exports = BoardsConstants;
+
+/***/ },
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(221).Store;
@@ -31601,6 +31612,12 @@
 	
 	var resetPins = function (pins) {
 	  _pins = pins;
+	};
+	
+	PinsStore.findByBoardId = function (id) {
+	  return _pins.filter(function (pin) {
+	    return pin.board_id === id;
+	  });
 	};
 	
 	var updatePin = function (pin) {
@@ -31645,12 +31662,12 @@
 	module.exports = PinsStore;
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndex = __webpack_require__(244);
-	var CommentsForm = __webpack_require__(246);
+	var CommentsIndex = __webpack_require__(245);
+	var CommentsForm = __webpack_require__(247);
 	
 	var PinsIndexItem = React.createClass({
 	  displayName: 'PinsIndexItem',
@@ -31663,16 +31680,16 @@
 	  render: function () {
 	    var pin = this.props.pin;
 	    var comments;
-	    if (this.props.showComments === true) {
-	      comments = React.createElement(
-	        'div',
-	        null,
-	        React.createElement(CommentsIndex, { comments: pin.comments, pin: pin }),
-	        React.createElement(CommentsForm, { pin: pin })
-	      );
-	    } else {
-	      comments = [];
-	    }
+	    // if(this.props.showComments === true){
+	    comments = React.createElement(
+	      'div',
+	      null,
+	      React.createElement(CommentsIndex, { comments: pin.comments, pin: pin }),
+	      React.createElement(CommentsForm, { pin: pin })
+	    );
+	    // } else {
+	    //   comments = [];
+	    // }
 	
 	    var hostname;
 	    var image_url;
@@ -31744,11 +31761,11 @@
 	module.exports = PinsIndexItem;
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndexItem = __webpack_require__(245);
+	var CommentsIndexItem = __webpack_require__(246);
 	
 	var CommentsIndex = React.createClass({
 	  displayName: 'CommentsIndex',
@@ -31770,7 +31787,7 @@
 	module.exports = CommentsIndex;
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31813,14 +31830,14 @@
 	module.exports = CommentsIndexItem;
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	
 	var PinsUtil = __webpack_require__(239);
-	var PinsStore = __webpack_require__(242);
+	var PinsStore = __webpack_require__(243);
 	
 	var CommentsForm = React.createClass({
 	  displayName: 'CommentsForm',
@@ -31879,13 +31896,13 @@
 	module.exports = CommentsForm;
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var PinsUtil = __webpack_require__(239);
-	var PinsActionForm = __webpack_require__(248);
+	var PinsActionForm = __webpack_require__(249);
 	var History = __webpack_require__(159).History;
 	
 	var PinsForm = React.createClass({
@@ -31975,11 +31992,11 @@
 	module.exports = PinsForm;
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsStore = __webpack_require__(249);
+	var BoardsStore = __webpack_require__(250);
 	var BoardsUtil = __webpack_require__(251);
 	
 	var PinActionForm = React.createClass({
@@ -32057,12 +32074,12 @@
 	module.exports = PinActionForm;
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(221).Store;
 	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(250);
+	var BoardsConstants = __webpack_require__(242);
 	
 	var BoardsStore = new Store(Dispatcher);
 	
@@ -32114,17 +32131,6 @@
 	module.exports = BoardsStore;
 
 /***/ },
-/* 250 */
-/***/ function(module, exports) {
-
-	var BoardsConstants = {
-	  ALL_BOARDS_RECEIVED: "ALL_BOARDS_RECEIVED",
-	  SINGLE_BOARD_RECEIVED: "SINGLE_BOARD_RECEIVED"
-	};
-	
-	module.exports = BoardsConstants;
-
-/***/ },
 /* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32163,7 +32169,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(250);
+	var BoardsConstants = __webpack_require__(242);
 	
 	var BoardsActions = {
 	  receiveAllBoards: function (boards) {
@@ -32225,7 +32231,7 @@
 
 	var React = __webpack_require__(1);
 	var BoardsUtil = __webpack_require__(251);
-	var BoardsStore = __webpack_require__(249);
+	var BoardsStore = __webpack_require__(250);
 	var BoardsIndexItem = __webpack_require__(256);
 	
 	var BoardsIndex = React.createClass({
@@ -32375,11 +32381,11 @@
 
 	var React = __webpack_require__(1);
 	var BoardsUtil = __webpack_require__(251);
-	var BoardsStore = __webpack_require__(249);
-	var PinsIndexItem = __webpack_require__(243);
+	var BoardsStore = __webpack_require__(250);
+	var PinsIndexItem = __webpack_require__(244);
 	
 	var PinsUtil = __webpack_require__(239);
-	var PinsStore = __webpack_require__(242);
+	var PinsStore = __webpack_require__(243);
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
@@ -32404,7 +32410,9 @@
 	  __onChange: function () {
 	    var boardId = parseInt(this.props.params.board_id);
 	    var currentBoard = BoardsStore.find(boardId);
-	    this.setState({ board: currentBoard, boardPins: currentBoard.pins });
+	    var currentPins = PinsStore.findByBoardId(boardId);
+	    debugger;
+	    this.setState({ board: currentBoard, boardPins: currentPins });
 	  },
 	
 	  render: function () {
@@ -32415,7 +32423,7 @@
 	      board_pins = [];
 	    } else {
 	      board_pins = this.state.boardPins.map(function (pin) {
-	        return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: false });
+	        return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
 	      });
 	    }
 	
