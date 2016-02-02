@@ -55,73 +55,73 @@ pin_3 = Pin.create(
   board: board_1)
 pin_4 = Pin.create(
   title: "Charlie Chaplin",
-  url: "https://s3.amazonaws.com/pinflix-dev/charlie-chaplin-392926_1920.jpg",
+  url: "http://ia.media-imdb.com/images/M/MV5BNDcwMDc0ODAzOF5BMl5BanBnXkFtZTgwNTY2OTI1MDE@._V1_UX214_CR0,0,214,317_AL_.jpg",
   description: "Spoiler: Old time comedy. No sound",
   author: user_2,
   board: board_3)
 pin_5 = Pin.create(
   title: "Train Explosion",
-  url: "https://s3.amazonaws.com/pinflix-dev/explosion-886855_1280.jpg",
+  url: "http://i.telegraph.co.uk/multimedia/archive/01209/Latvia_train4_1209761i.jpg",
   description: "Spoiler: No one survives",
   author: user_2,
   board: board_4)
 pin_6 = Pin.create(
   title: "Bollywood",
-  url: "https://s3.amazonaws.com/pinflix-dev/indian-622358_1920.jpg",
+  url: "http://www.curryculture.co.uk/wp-content/uploads/Bollywood-Dancing.jpg",
   description: "Spoiler: Musical. Guy gets the girl.",
   author: user_2,
   board: board_4)
 pin_7 = Pin.create(
   title: "Creepy Woman",
-  url: "https://s3.amazonaws.com/pinflix-dev/woman-1081873_1920.jpg",
+  url: "http://cdn.collider.com/wp-content/uploads/2015/11/wonder-woman-movie-gal-gadot.jpg",
   description: "Spoiler: Woman is evil",
   author: user_2,
   board: board_2)
 pin_8 = Pin.create(
   title: "Creepy Tree",
-  url: "https://s3.amazonaws.com/pinflix-dev/tree-407256_1920.jpg",
+  url: "http://img10.deviantart.net/ce9d/i/2006/007/7/b/s_s__creepy_tree___1_by_shudder_stock.jpg",
   description: "Spoiler: Someone died at this tree",
   author: user_2,
   board: board_2)
 pin_9 = Pin.create(
   title: "Marylin Monroe",
-  url: "https://s3.amazonaws.com/pinflix-dev/marilyn-monroe-392933_1920.jpg",
+  url: "http://www.rantchic.com/wp-content/uploads/2014/08/Marilyn-Monroe-pics6.jpg",
   description: "Spoiler: Lovable and timeless comedy",
   author: user_2,
   board: board_3)
 pin_10 = Pin.create(
   title: "Cary Grant",
-  url: "https://s3.amazonaws.com/pinflix-dev/cary-grant-392916_1280.jpg",
+  url: "http://www.doctormacro.com/Images/Grant,%20Cary/Annex/Annex%20-%20Grant,%20Cary%20(Only%20Angels%20Have%20Wings)_01.jpg",
   description: "Spoiler: You will lose your girlfriend",
   author: user_2,
   board: board_3)
 pin_11 = Pin.create(
   title: "Brad Pitt",
-  url: "https://s3.amazonaws.com/pinflix-dev/brad-pitt-164880_1280.jpg",
+  url: "http://ia.media-imdb.com/images/M/MV5BMjIwNTYzMzE1M15BMl5BanBnXkFtZTcwOTE5Mzg3OA@@._V1_UY1200_CR88,0,630,1200_AL_.jpg",
   description: "Spoiler: Not really Brad Pitt",
   author: user_2,
   board: board_4)
 pin_12 = Pin.create(
   title: "Lone Cowboy",
-  url: "https://s3.amazonaws.com/pinflix-dev/man-1139066_1920.jpg",
+  url: "http://ecx.images-amazon.com/images/I/51XYVSG97HL._SY445_.jpg",
   description: "Spoiler: Strong Language. Lots of horses",
   author: user_2,
   board: board_3)
 pin_13 = Pin.create(
   title: "Airship",
-  url: "https://s3.amazonaws.com/pinflix-dev/airship-1140366_1280.jpg",
+  url: "http://images-cdn.moviepilot.com/images/c_fill,h_610,w_811/t_mp_quality/eu9emattw0qvjlgnkisv/5-hayao-miyazaki-movies-you-have-to-see-before-you-die-527013.jpg",
   description: "Spoiler: Super Fantasy",
   author: user_2,
   board: board_4)
 pin_14 = Pin.create(
   title: "Fancy Party",
-  url: "https://s3.amazonaws.com/pinflix-dev/ingrid-bergman-392913_1280.jpg",
+  url: "http://ecx.images-amazon.com/images/I/51Pe5lnA-ZL.jpg",
   description: "Spoiler: Existential. Still don't know what it's about.",
   author: user_2,
   board: board_3)
 pin_15 = Pin.create(
   title: "Ballet",
-  url: "https://s3.amazonaws.com/pinflix-dev/ballet-437990_1920.jpg",
+  url: "http://media.kics.com.au/-vb2boy4B0-DRYcMyhWhnA_medium.jpg",
   description: "Spoiler: Thought provoking struggles of a ballerina who turns evil.",
   author: user_2,
   board: board_2)
