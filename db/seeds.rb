@@ -200,5 +200,3 @@ comment_18 = Comment.create(
   body: "I love the actress! So classic.",
   author: user_2,
   pin: pin_3)
-Status API Training Shop Blog About Pricing
-© 2016 GitHub, Inc. Terms Privacy Security Contact Help
