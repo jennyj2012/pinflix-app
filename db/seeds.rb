@@ -14,7 +14,7 @@ user_1 = User.create!(
 user_2 = User.create!(
   username: "guest",
   email: "guest@gmail.com",
-  password: "beourguest")
+  password: "pinflixguest")
 
 Board.destroy_all
 board_1 = Board.create!(
