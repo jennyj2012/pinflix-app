@@ -30,7 +30,8 @@ var PinsIndex = React.createClass({
       });
 
     return (
-      <div id="masonry-container" className="landing-page transitions-enabled infinite-scroll clearfix">
+      <div className="landing-page grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+
         {pins}
       </div>
     );

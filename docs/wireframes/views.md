@@ -1,0 +1,7 @@
+![WireFrame Image](wireframe_images/pinflix_wireframes.001.jpeg)
+![WireFrame Image](wireframe_images/pinflix_wireframes.002.jpeg)
+![WireFrame Image](wireframe_images/pinflix_wireframes.003.jpeg)
+![WireFrame Image](wireframe_images/pinflix_wireframes.004.jpeg)
+![WireFrame Image](wireframe_images/pinflix_wireframes.005.jpeg)
+![WireFrame Image](wireframe_images/pinflix_wireframes.006.jpeg)
+![WireFrame Image](wireframe_images/pinflix_wireframes.007.jpeg)

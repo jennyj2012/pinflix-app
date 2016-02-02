@@ -38,7 +38,7 @@ var PinsIndexItem = React.createClass({
     }
 
     return (
-      <div className="index-item">
+      <div className="index-item grid-item">
         <img className="pin-image" src={image_url} />
 
         <div className="pin-summary group">

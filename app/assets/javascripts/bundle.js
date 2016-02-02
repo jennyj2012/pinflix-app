@@ -31483,7 +31483,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { id: 'masonry-container', className: 'landing-page transitions-enabled infinite-scroll clearfix' },
+	      { className: 'landing-page grid', 'data-masonry': '{ "itemSelector": ".grid-item", "columnWidth": 200 }' },
 	      pins
 	    );
 	  }
@@ -31690,7 +31690,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'index-item' },
+	      { className: 'index-item grid-item' },
 	      React.createElement('img', { className: 'pin-image', src: image_url }),
 	      React.createElement(
 	        'div',
