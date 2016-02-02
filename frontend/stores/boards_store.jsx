@@ -10,6 +10,10 @@ var resetBoards = function(boards){
   _boards = boards;
 };
 
+var addBoard = function(board){
+  _boards.push(board);
+};
+
 var updateBoard = function(board){
   var idx;
   for(var i = 0; i < _boards.length; i++){
@@ -17,7 +21,11 @@ var updateBoard = function(board){
       idx = i;
     }
   }
-  _boards[idx] = board;
+  if(typeof idx === "undefined"){
+    addBoard(board);
+  } else {
+    _boards[idx] = board;
+  }
 };
 
 BoardsStore.all = function () {

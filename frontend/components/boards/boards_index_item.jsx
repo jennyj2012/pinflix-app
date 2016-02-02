@@ -7,13 +7,13 @@ var BoardsIndexItem = React.createClass({
 
   handleClick: function (e) {
     e.preventDefault();
-    this.history.pushState({}, "/boards/"+ this.props.board.id)
+    this.history.pushState({}, "/boards/"+ this.props.board.id);
   },
+
 
   render: function () {
     var board = this.props.board;
-    // var boardLink = "#/boards/" + board.id;
-    var pin_thumbs = [];
+    var pinThumbs = [];
 
     for(var i = 0; i < 4; i++){
       var thumb;
@@ -24,7 +24,7 @@ var BoardsIndexItem = React.createClass({
         thumb = <img src={board.pins[i].url}/>;
       }
 
-      pin_thumbs.push(
+      pinThumbs.push(
         <li className="pin-thumb" key={i}>
           {thumb}
         </li>
@@ -40,7 +40,7 @@ var BoardsIndexItem = React.createClass({
 
             <section>
               <ul className="pin-thumbs group">
-                {pin_thumbs}
+                {pinThumbs}
               </ul>
             </section>
           </div>

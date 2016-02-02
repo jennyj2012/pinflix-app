@@ -28,7 +28,6 @@ var BoardsIndexItem = React.createClass({
     var boardId = parseInt(this.props.params.board_id);
     var currentBoard = BoardsStore.find(boardId);
     var currentPins = PinsStore.findByBoardId(boardId);
-    debugger
     this.setState({ board: currentBoard, boardPins: currentPins });
   },
 

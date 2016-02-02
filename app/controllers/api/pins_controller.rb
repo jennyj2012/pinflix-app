@@ -6,12 +6,12 @@ class Api::PinsController < ApplicationController
   end
 
   def show
-    @pin = Pin.find_by_id(params[:pin_id]).includes(:author, :comments)
+    @pin = Pin.includes(:author, :comments).find_by_id(params[:id])
   end
 
   def create
     @pin = current_user.pins.new(pin_params)
-    
+
     if @pin.save
       render "api/pins/show"
     else

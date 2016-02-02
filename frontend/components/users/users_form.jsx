@@ -22,7 +22,8 @@ var UserForm = React.createClass({
 
   handleGuest: function(e) {
     e.preventDefault();
-    var credentials = {user: {username: "test", password: "testing"} };
+    var credentials = {user: {username: "guest", password: "pinflixguest"} };
+    this.setState(credentials);
     SessionApiUtil.login(credentials, function () {
       this.history.pushState({}, "/");
     }.bind(this));

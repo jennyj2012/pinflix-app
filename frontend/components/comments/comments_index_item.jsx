@@ -6,18 +6,18 @@ var CommentsIndexItem = React.createClass({
   render: function () {
     var comment = this.props.comment;
 
-    var comment_author;
+    var commentAuthor;
     if (comment.author){
-      comment_author = comment.author.username;
+      commentAuthor = comment.author.username;
     }else {
-      comment_author = "anonymous";
+      commentAuthor = "anonymous";
     }
 
     return (
       <div>
           <section className="comment">
             <a href="#">
-            Commenter: {comment_author}
+            Commenter: {commentAuthor}
             </a>
             <p>{comment.body}</p>
           </section>

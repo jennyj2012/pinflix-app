@@ -59,7 +59,7 @@
   height: 100%;
 }
 
-.board-list-item:hover .hidden-button {
+.board-list-item:hover .hidden{
   display: block;
 }
 
@@ -73,4 +73,34 @@
 
 .pin-form-right {
   float:right;
+}
+
+.pin-it-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.pin-image-link {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.pin-image-link:hover .hidden {
+  display: block;
+}
+
+.pinitem:hover .hidden {
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: .1;
 }

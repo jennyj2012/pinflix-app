@@ -26,7 +26,7 @@ var PinsIndex = React.createClass({
   render: function () {
 
     var pins = this.state.allPins.map(function (pin) {
-        return <PinsIndexItem key={pin.id} pin={pin} showComments={true}/>;
+        return <PinsIndexItem key={pin.id} pin={pin} showComments={false}/>;
       });
 
     return (

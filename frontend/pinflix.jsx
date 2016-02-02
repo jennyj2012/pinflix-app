@@ -66,7 +66,7 @@ var router = (
       <Route path="boards/new" component={BoardsForm} />
       <Route path="boards/:board_id" component={BoardsDetail} />
       <Route path="pins/new" component={PinsForm} />
-      <Route path="pins/detail" component={PinsDetail} />
+      <Route path="pins/:pin_id" component={PinsDetail} />
     </Route>
   </Router>
 );

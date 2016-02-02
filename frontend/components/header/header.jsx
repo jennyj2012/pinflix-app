@@ -33,13 +33,25 @@ var Header = React.createClass({
 
    render: function () {
 
+
     return(
       <div className="header group">
         <div className ="header-center group">
-          <div className="header-left">
-            <div className="logo"></div>
 
-            <div className="tags"></div>
+          <div className="header-left group">
+            <div>
+              <a href="#/" className="logo">
+                <img src={'pinflix_logo.png'}/>
+              </a>
+            </div>
+
+              <SearchBar/>
+            <div className="search-button">
+              <i className="fa fa-search"></i>
+            </div>
+            <div className="tags">
+
+            </div>
           </div>
 
           <div className="header-right group">

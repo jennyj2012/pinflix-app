@@ -114,7 +114,7 @@
 	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),
 	    React.createElement(Route, { path: 'boards/:board_id', component: BoardsDetail }),
 	    React.createElement(Route, { path: 'pins/new', component: PinsForm }),
-	    React.createElement(Route, { path: 'pins/detail', component: PinsDetail })
+	    React.createElement(Route, { path: 'pins/:pin_id', component: PinsDetail })
 	  )
 	);
 	
@@ -24085,7 +24085,8 @@
 	
 	  handleGuest: function (e) {
 	    e.preventDefault();
-	    var credentials = { user: { username: "test", password: "testing" } };
+	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
+	    this.setState(credentials);
 	    SessionApiUtil.login(credentials, function () {
 	      this.history.pushState({}, "/");
 	    }.bind(this));
@@ -24874,6 +24875,7 @@
 	  handleGuest: function (e) {
 	    e.preventDefault();
 	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
+	    this.setState(credentials);
 	    SessionApiUtil.login(credentials, function () {
 	      this.history.pushState({}, "/");
 	    }.bind(this));
@@ -31478,7 +31480,7 @@
 	  render: function () {
 	
 	    var pins = this.state.allPins.map(function (pin) {
-	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
+	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: false });
 	    });
 	
 	    return React.createElement(
@@ -31614,6 +31616,10 @@
 	  _pins = pins;
 	};
 	
+	var addPin = function (pin) {
+	  _pins.push(pin);
+	};
+	
 	PinsStore.findByBoardId = function (id) {
 	  return _pins.filter(function (pin) {
 	    return pin.board_id === id;
@@ -31627,7 +31633,12 @@
 	      idx = i;
 	    }
 	  }
-	  _pins[idx] = pin;
+	
+	  if (typeof idx === "undefined") {
+	    addPin(pin);
+	  } else {
+	    _pins[idx] = pin;
+	  }
 	};
 	
 	PinsStore.all = function () {
@@ -31637,7 +31648,7 @@
 	PinsStore.find = function (id) {
 	  var idx;
 	  for (var i = 0; i < _pins.length; i++) {
-	    if (_pins[i].id === pin.id) {
+	    if (_pins[i].id === id) {
 	      idx = i;
 	    }
 	  }
@@ -31668,47 +31679,90 @@
 	var React = __webpack_require__(1);
 	var CommentsIndex = __webpack_require__(245);
 	var CommentsForm = __webpack_require__(247);
+	var History = __webpack_require__(159).History;
 	
 	var PinsIndexItem = React.createClass({
 	  displayName: 'PinsIndexItem',
+	
+	  mixins: [History],
 	
 	  get_domain_from_url: function (url) {
 	    var a = document.createElement('a');
 	    a.setAttribute('href', url);
 	    return a.hostname;
 	  },
+	
+	  pinIt: function (e) {
+	    //send info to pin form to prepopulate.
+	    debugger;
+	    e.preventDefault();
+	    // var formData = new FormData();
+	    // formData.append("pin[title]", this.state.title);
+	    // formData.append("pin[image]", this.state.imageFile);
+	    // formData.append("pin[url]", "pinterest.com");
+	    // formData.append("pin[board_id]", board_id);
+	    //
+	    // PinsUtil.createPin(formData, function (pin_id) {
+	    //   this.history.pushState({}, "/boards");
+	    // }.bind(this));
+	  },
+	  showPinDetails: function (e) {
+	    this.history.pushState({}, "/pins/" + this.props.pin.id);
+	  },
+	
 	  render: function () {
 	    var pin = this.props.pin;
+	    var pinLink = "#/pins/" + pin.id;
 	    var comments;
-	    // if(this.props.showComments === true){
-	    comments = React.createElement(
-	      'div',
-	      null,
-	      React.createElement(CommentsIndex, { comments: pin.comments, pin: pin }),
-	      React.createElement(CommentsForm, { pin: pin })
-	    );
-	    // } else {
-	    //   comments = [];
-	    // }
+	    var pinAuthor = "anonymous";
+	
+	    if (typeof pin.author !== "undefined") {
+	      pinAuthor = pin.author.username;
+	    }
+	
+	    if (this.props.showComments === true) {
+	      comments = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(CommentsIndex, { comments: pin.comments, pin: pin }),
+	        React.createElement(CommentsForm, { pin: pin })
+	      );
+	    } else {
+	      comments = [];
+	    }
 	
 	    var hostname;
-	    var image_url;
+	    var imageURL;
 	
 	    //if file uploaded
 	    if (pin.url === "pinterest.com") {
-	      image_url = pin.image_url;
-	      hostname = pin.author.username;
+	      imageURL = pin.image_url;
+	      hostname = pinAuthor;
 	    }
 	    //if url uploaded
 	    else {
-	        image_url = pin.url;
+	        imageURL = pin.url;
 	        hostname = this.get_domain_from_url(pin.url);
 	      }
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'index-item grid-item' },
-	      React.createElement('img', { className: 'pin-image', src: image_url }),
+	      { className: 'index-item pin-item' },
+	      React.createElement(
+	        'div',
+	        { className: 'pin-image-link', href: pinLink },
+	        React.createElement('div', { className: 'overlay hidden', onClick: this.showPinDetails }),
+	        React.createElement(
+	          'div',
+	          { className: 'pin-it-button hidden small-red-button' },
+	          React.createElement(
+	            'button',
+	            { onClick: this.pinIt },
+	            'Pin It'
+	          )
+	        ),
+	        React.createElement('img', { className: 'pin-image', src: imageURL })
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'pin-summary group' },
@@ -31721,7 +31775,7 @@
 	            'from:',
 	            React.createElement(
 	              'a',
-	              { href: image_url },
+	              { href: imageURL },
 	              ' ',
 	              hostname
 	            )
@@ -31749,7 +31803,7 @@
 	            'a',
 	            { href: '#' },
 	            'Author: ',
-	            pin.author.username
+	            pinAuthor
 	          )
 	        ),
 	        comments
@@ -31798,11 +31852,11 @@
 	  render: function () {
 	    var comment = this.props.comment;
 	
-	    var comment_author;
+	    var commentAuthor;
 	    if (comment.author) {
-	      comment_author = comment.author.username;
+	      commentAuthor = comment.author.username;
 	    } else {
-	      comment_author = "anonymous";
+	      commentAuthor = "anonymous";
 	    }
 	
 	    return React.createElement(
@@ -31815,7 +31869,7 @@
 	          "a",
 	          { href: "#" },
 	          "Commenter: ",
-	          comment_author
+	          commentAuthor
 	        ),
 	        React.createElement(
 	          "p",
@@ -31835,6 +31889,7 @@
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
+	var CurrentUserStore = __webpack_require__(220);
 	
 	var PinsUtil = __webpack_require__(239);
 	var PinsStore = __webpack_require__(243);
@@ -31847,17 +31902,29 @@
 	    return { body: "", currentUser: {} };
 	  },
 	
+	  componentDidMount: function () {
+	    this.userListener = CurrentUserStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnMount: function () {
+	    this.userListener.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	  },
+	
 	  updateBody: function (e) {
 	    this.setState({ body: e.currentTarget.value });
 	  },
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
+	
 	    PinsUtil.createPinComment({
 	      body: this.state.body,
 	      pin_id: this.props.pin.id
 	    });
-	    this.setState({ body: "" });
 	  },
 	
 	  render: function () {
@@ -31872,7 +31939,7 @@
 	        React.createElement(
 	          'a',
 	          { href: '#' },
-	          'current user'
+	          this.state.currentUser.username
 	        ),
 	        React.createElement(
 	          'form',
@@ -32089,6 +32156,10 @@
 	  _boards = boards;
 	};
 	
+	var addBoard = function (board) {
+	  _boards.push(board);
+	};
+	
 	var updateBoard = function (board) {
 	  var idx;
 	  for (var i = 0; i < _boards.length; i++) {
@@ -32096,7 +32167,11 @@
 	      idx = i;
 	    }
 	  }
-	  _boards[idx] = board;
+	  if (typeof idx === "undefined") {
+	    addBoard(board);
+	  } else {
+	    _boards[idx] = board;
+	  }
 	};
 	
 	BoardsStore.all = function () {
@@ -32196,13 +32271,45 @@
 
 	var React = __webpack_require__(1);
 	var PinsEdit = __webpack_require__(254);
+	var PinsIndexItem = __webpack_require__(244);
+	
+	var PinsUtil = __webpack_require__(239);
+	var PinsStore = __webpack_require__(243);
 	
 	var PinsDetail = React.createClass({
 	  displayName: 'PinsDetail',
 	
+	  getInitialState: function () {
+	    return { pin: {} };
+	  },
+	
+	  componentDidMount: function () {
+	    this.pinListener = PinsStore.addListener(this.__onChange);
+	    PinsUtil.fetchSinglePin(this.props.params.pin_id);
+	  },
+	
+	  componentWillUnMount: function () {
+	    this.pinListener.remove();
+	  },
+	
+	  __onChange: function () {
+	    var pinId = parseInt(this.props.params.pin_id);
+	    this.setState({ pin: PinsStore.find(pinId) });
+	  },
+	
 	  render: function () {
-	    var pin = this.props.pin;
-	    return React.createElement('div', { className: 'pin-detail' });
+	    var pin = this.state.pin;
+	    var pinComponent = [];
+	
+	    if (typeof pin.id !== "undefined") {
+	      pinComponent = React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'pin-detail' },
+	      pinComponent
+	    );
 	  }
 	});
 	
@@ -32259,14 +32366,18 @@
 	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
 	    });
 	
-	    // <a href='#/boards/new'>
-	    //   Add Board
-	    // </a>
-	
 	    return React.createElement(
 	      'div',
 	      { className: 'user-board-page group' },
-	      React.createElement('div', { className: 'new-create-link' }),
+	      React.createElement(
+	        'div',
+	        { className: 'new-create-link' },
+	        React.createElement(
+	          'a',
+	          { href: '#/boards/new' },
+	          'Add Board'
+	        )
+	      ),
 	      boards
 	    );
 	  }
@@ -32293,8 +32404,7 @@
 	
 	  render: function () {
 	    var board = this.props.board;
-	    // var boardLink = "#/boards/" + board.id;
-	    var pin_thumbs = [];
+	    var pinThumbs = [];
 	
 	    for (var i = 0; i < 4; i++) {
 	      var thumb;
@@ -32305,7 +32415,7 @@
 	        thumb = React.createElement('img', { src: board.pins[i].url });
 	      }
 	
-	      pin_thumbs.push(React.createElement(
+	      pinThumbs.push(React.createElement(
 	        'li',
 	        { className: 'pin-thumb', key: i },
 	        thumb
@@ -32333,7 +32443,7 @@
 	          React.createElement(
 	            'ul',
 	            { className: 'pin-thumbs group' },
-	            pin_thumbs
+	            pinThumbs
 	          )
 	        )
 	      ),
@@ -32411,7 +32521,6 @@
 	    var boardId = parseInt(this.props.params.board_id);
 	    var currentBoard = BoardsStore.find(boardId);
 	    var currentPins = PinsStore.findByBoardId(boardId);
-	    debugger;
 	    this.setState({ board: currentBoard, boardPins: currentPins });
 	  },
 	
@@ -32534,8 +32643,22 @@
 	        { className: 'header-center group' },
 	        React.createElement(
 	          'div',
-	          { className: 'header-left' },
-	          React.createElement('div', { className: 'logo' }),
+	          { className: 'header-left group' },
+	          React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	              'a',
+	              { href: '#/', className: 'logo' },
+	              React.createElement('img', { src: 'pinflix_logo.png' })
+	            )
+	          ),
+	          React.createElement(SearchBar, null),
+	          React.createElement(
+	            'div',
+	            { className: 'search-button' },
+	            React.createElement('i', { className: 'fa fa-search' })
+	          ),
 	          React.createElement('div', { className: 'tags' })
 	        ),
 	        React.createElement(

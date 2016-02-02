@@ -9,6 +9,10 @@ var resetPins = function(pins){
   _pins = pins;
 };
 
+var addPin = function(pin){
+  _pins.push(pin);
+};
+
 PinsStore.findByBoardId = function (id) {
   return _pins.filter(function (pin) {
     return pin.board_id === id;
@@ -22,7 +26,12 @@ var updatePin = function(pin){
       idx = i;
     }
   }
-  _pins[idx] = pin;
+
+  if(typeof idx === "undefined"){
+    addPin(pin);
+  } else {
+    _pins[idx] = pin;
+  }
 };
 
 PinsStore.all = function () {
@@ -32,7 +41,7 @@ PinsStore.all = function () {
 PinsStore.find = function (id) {
   var idx;
   for(var i = 0; i < _pins.length; i++){
-    if(_pins[i].id === pin.id){
+    if(_pins[i].id === id){
       idx = i;
     }
   }
