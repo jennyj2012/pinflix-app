@@ -5,7 +5,7 @@ json.author do
 end
 
 json.image_url asset_path(pin.image.url)
-
+  
 json.comments do
   json.partial! 'api/comments/comment', collection: pin.comments, as: :comment
 end

@@ -67,10 +67,6 @@
    border-top-right-radius: 10px;
  }
 
- img:hover {
-   background: #000;
- }
-
  .input {
    text-align: center;
    display: block;

@@ -32016,10 +32016,10 @@
 	      { className: 'new-pin' },
 	      React.createElement(
 	        'form',
-	        { className: 'pin-form' },
+	        { className: 'pin-form group' },
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'pin-form-left' },
 	          React.createElement(
 	            'h2',
 	            null,
@@ -32093,7 +32093,7 @@
 	    var boards = this.state.allBoards.map(function (board) {
 	      return React.createElement(
 	        'li',
-	        { className: 'board-list-item group', key: board.id },
+	        { className: 'pin-board-list-item group', key: board.id },
 	        React.createElement(
 	          'figcaption',
 	          null,
@@ -32101,7 +32101,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'board-pin-button hidden-button small-red-button', onClick: this.handleSubmit },
+	          { className: 'pin-to-board-button hidden-button small-red-button', onClick: this.handleSubmit },
 	          React.createElement(
 	            'button',
 	            { onClick: handleSubmit.bind(null, board.id) },
@@ -32113,25 +32113,16 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'pin-action-form group' },
+	      { className: 'pin-form-right' },
 	      React.createElement(
-	        'div',
-	        { className: 'pin-action-left' },
-	        React.createElement('img', { className: 'preview-image', src: preview_image })
+	        'h2',
+	        null,
+	        'Pick a board'
 	      ),
 	      React.createElement(
-	        'div',
-	        { className: 'pin-action-right' },
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Pick a board'
-	        ),
-	        React.createElement(
-	          'ul',
-	          { className: 'board-list' },
-	          boards
-	        )
+	        'ul',
+	        { className: 'pin-board-list' },
+	        boards
 	      )
 	    );
 	  }

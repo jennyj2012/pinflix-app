@@ -125,7 +125,16 @@ pin_15 = Pin.create(
   description: "Spoiler: Thought provoking struggles of a ballerina who turns evil.",
   author: user_2,
   board: board_2)
-
+pin_16 = Pin.new(
+  title: "Buster Keaton",
+  url: "pinterest.com",
+  description: "Buster Keaton URL upload!",
+  author: user_2,
+  board: board_3)
+  pin_16.image = URI.parse("http://www.movingimagesource.us/images/articles/electric-house-20111201-145328-large.jpg").open
+  pin_16.image_file_name = "buster_keaton.jpg"
+  pin_16.image_content_type = "image/jpg"
+  pin_16.save!
 
 Comment.destroy_all
 comment_1 = Comment.create(

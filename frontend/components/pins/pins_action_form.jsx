@@ -27,9 +27,9 @@ var PinActionForm = React.createClass({
 
     var boards = this.state.allBoards.map(function (board) {
       return (
-        <li className="board-list-item group" key={board.id}>
+        <li className="pin-board-list-item group" key={board.id}>
           <figcaption>{board.title}</figcaption>
-          <div className="board-pin-button hidden-button small-red-button" onClick={this.handleSubmit}>
+          <div className="pin-to-board-button hidden-button small-red-button" onClick={this.handleSubmit}>
             <button onClick={handleSubmit.bind(null, board.id)}>Pin It</button>
           </div>
         </li>
@@ -37,16 +37,11 @@ var PinActionForm = React.createClass({
     });
 
     return(
-      <div className="pin-action-form group">
-        <div className="pin-action-left">
-          <img className="preview-image" src={preview_image}/>
-        </div>
-        <div className="pin-action-right">
-          <h2>Pick a board</h2>
-          <ul className="board-list">
-            {boards}
-          </ul>
-        </div>
+      <div className="pin-form-right">
+        <h2>Pick a board</h2>
+        <ul className="pin-board-list">
+          {boards}
+        </ul>
       </div>
     );
   }

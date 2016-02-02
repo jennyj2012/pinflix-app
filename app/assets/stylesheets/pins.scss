@@ -24,46 +24,45 @@
   cursor: zoom-in;
 }
 
-.pin-action-form {
+.new-pin {
+  width: 100%;
+  display: block;
+}
+
+.pin-form {
   width: 660px;
   background: #fff;
   margin: auto;
 }
 
-.pin-action-form div {
+.pin-form-left {
+  width: 330px;
   float: left;
-  margin: auto;
 }
 
-.pin-action-left {
-  width: 320px;
-  margin: auto;
+.pin-form-right {
+  width: 330px;
+  float: left;
 }
 
-.pin-action-right {
-  width: 320px;
-  text-align: center;
-  margin: auto;
-}
-
-.board-list-item {
+.pin-board-list-item {
   border: 1px solid #ccc;
   padding: 5px;
   height: 34px;
 
 }
 
-.board-list-item figcaption {
+.pin-board-list-item figcaption {
   text-align: left;
   float: left;
   height: 100%;
 }
 
-.board-list-item:hover .hidden{
+.pin-board-list-item:hover .hidden{
   display: block;
 }
 
-.board-pin-button {
+.pin-to-board-button {
   float: right;
 }
 

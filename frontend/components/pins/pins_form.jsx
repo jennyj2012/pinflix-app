@@ -45,8 +45,8 @@ var PinsForm = React.createClass({
   render: function () {
     return (
       <div className="new-pin">
-        <form className="pin-form">
-          <div>
+        <form className="pin-form group">
+          <div className="pin-form-left">
             <h2> Create a Pin </h2>
             <img className="preview-image" src={this.state.imageUrl}/>
 
