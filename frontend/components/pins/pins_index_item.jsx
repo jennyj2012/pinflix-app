@@ -10,12 +10,25 @@ var PinsIndexItem = React.createClass({
   },
   render: function () {
     var pin = this.props.pin;
+    var comments;
+    if(this.props.showComments === true){
+      comments = (
+        <div>
+          <CommentsIndex comments={pin.comments} pin={pin}/>
+          <CommentsForm pin={pin}/>
+        </div>
+      );
+    } else {
+      comments = [];
+    }
+
 
     var hostname;
     var image_url;
+
     //if file uploaded
-    if(pin.image.url != "pinflix_logo.gif"){
-      image_url = pin.image.url;
+    if(pin.url === "pinterest.com"){
+      image_url = pin.image_url;
       hostname = pin.author.username;
     }
     //if url uploaded
@@ -51,8 +64,7 @@ var PinsIndexItem = React.createClass({
             </a>
           </section>
 
-          <CommentsIndex comments={pin.comments} pin={pin}/>
-          <CommentsForm pin={pin}/>
+          {comments}
         </div>
 
       </div>

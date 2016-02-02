@@ -3,9 +3,9 @@ class User < ActiveRecord::Base
 
   after_initialize :ensure_session_token;
 
-  has_many :boards
+  has_many :boards, class_name: "Board", foreign_key: :author_id
   has_many :pins, class_name: "Pin", foreign_key: :author_id
-  has_many :comments
+  has_many :comments, class_name: "Comment", foreign_key: :author_id
 
   validates :username, :email, :password_digest, :session_token, presence: true
   validates :password, length: { minimum: 6, allow_nil: true }

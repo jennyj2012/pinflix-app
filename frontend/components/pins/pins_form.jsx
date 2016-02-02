@@ -37,7 +37,7 @@ var PinsForm = React.createClass({
     formData.append("pin[board_id]", board_id);
 
     PinsUtil.createPin(formData, function (pin_id) {
-      this.history.pushState({}, "/pins/detail");
+      this.history.pushState({}, "/boards");
     }.bind(this));
 
   },
@@ -46,6 +46,7 @@ var PinsForm = React.createClass({
     return (
       <div className="new-pin">
         <form className="pin-form">
+          <div>
             <h2> Create a Pin </h2>
             <img className="preview-image" src={this.state.imageUrl}/>
 
@@ -65,9 +66,10 @@ var PinsForm = React.createClass({
                 id="pin_file"
                 onChange={this.changeFile} />
             </div>
-
-
-            <PinsActionForm preview={this.state.imageUrl} handleSubmit={this.handleSubmit}/>
+          </div>
+            <div>
+              <PinsActionForm preview={this.state.imageUrl} handleSubmit={this.handleSubmit}/>
+            </div>
         </form>
       </div>
     );

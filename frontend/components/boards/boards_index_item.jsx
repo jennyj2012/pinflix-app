@@ -1,13 +1,18 @@
 var React = require('react');
+var History = require('react-router').History;
+
 
 var BoardsIndexItem = React.createClass({
-  redirect: function (e){
+  mixins: [History],
 
+  handleClick: function (e) {
+    e.preventDefault();
+    this.history.pushState({}, "/boards/"+ this.props.board.id)
   },
 
   render: function () {
     var board = this.props.board;
-    var boardLink = "#/boards/" + board.id;
+    // var boardLink = "#/boards/" + board.id;
     var pin_thumbs = [];
 
     for(var i = 0; i < 4; i++){
@@ -27,8 +32,7 @@ var BoardsIndexItem = React.createClass({
     }
 
     return (
-      <div className="board-index-item index-item">
-        <a href={boardLink}>
+      <div className="board-index-item index-item" onClick={this.handleClick}>
           <div className="board-detail-link">
             <section className="title">
               <figcaption>{board.title}</figcaption>
@@ -40,10 +44,8 @@ var BoardsIndexItem = React.createClass({
               </ul>
             </section>
           </div>
-        </a>
 
         <div className="edit-board-button">
-          <button>Edit</button>
         </div>
       </div>
     );

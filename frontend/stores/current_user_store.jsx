@@ -23,7 +23,6 @@ CurrentUserStore.__onDispatch = function (payload) {
   if (payload.actionType === CurrentUserConstants.RECEIVE_CURRENT_USER) {
     _currentUserHasBeenFetched = true;
     _currentUser = payload.currentUser;
-    // debugger
     CurrentUserStore.__emitChange();
   }
   else if (payload.actionType === CurrentUserConstants.REMOVE_CURRENT_USER) {

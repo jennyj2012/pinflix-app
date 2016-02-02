@@ -26,10 +26,11 @@ var PinsIndex = React.createClass({
   render: function () {
 
     var pins = this.state.allPins.map(function (pin) {
-      return <PinsIndexItem key={pin.id} pin={pin}></PinsIndexItem>;
-    });
+        return <PinsIndexItem key={pin.id} pin={pin} showComments={true}/>;
+      });
+
     return (
-      <div d="masonry-container" className="landing-page transitions-enabled infinite-scroll clearfix">
+      <div id="masonry-container" className="landing-page transitions-enabled infinite-scroll clearfix">
         {pins}
       </div>
     );

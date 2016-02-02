@@ -10,12 +10,10 @@ class Api::CommentsController < ApplicationController
   end
 
   def create
-    comment = Comment.new(comment_params)
-    comment.author_id = current_user.id
-    @pin = Pin.find(comment.pin_id)
+    comment = current_user.comments.new(comment_params)
 
     if comment.save
-      # render json: pin, include: :comments, include: :author
+      @pin = Pin.includes(:comments).find(comment.pin_id)
       render "api/pins/show"
     else
       render json: comment, status: :unprocessable_entity

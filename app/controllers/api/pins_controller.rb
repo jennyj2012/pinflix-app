@@ -11,10 +11,8 @@ class Api::PinsController < ApplicationController
 
   def create
     @pin = current_user.pins.new(pin_params)
-    @pin.board = Board.first
-
+    
     if @pin.save
-      # render json: pin, include: :comments, include: :author
       render "api/pins/show"
     else
       render json: @pin, status: :unprocessable_entity

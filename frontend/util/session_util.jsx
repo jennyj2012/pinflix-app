@@ -9,7 +9,6 @@ var SessionsApiUtil = {
       type: 'GET',
       dataType: 'json',
       success: function (currentUser) {
-        console.log("fetched current user from controller: " + currentUser.username);
         CurrentUserActions.receiveCurrentUser(currentUser);
           if(callback){ callback(currentUser); }
       }

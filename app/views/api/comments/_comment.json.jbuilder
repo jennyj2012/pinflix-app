@@ -1,9 +1,10 @@
-json.extract! comment, :id, :body, :author
+json.extract! comment, :id, :body
 
-# json.author do
-#   json.extract! comment.author, :username
-# end
 
-json.pin do
-  json.partial! 'api/pins/pin', commenbt.pin
+json.author do
+  json.partial! 'api/users/user', user: comment.author
 end
+
+# json.pin do
+#   json.partial! 'api/pins/pin', pin: comment.pin
+# end

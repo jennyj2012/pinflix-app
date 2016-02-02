@@ -20,6 +20,7 @@ var CommentsForm = React.createClass({
       body: this.state.body,
       pin_id: this.props.pin.id
     });
+    this.setState({body: ""})
   },
 
   render: function () {

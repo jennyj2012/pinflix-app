@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatcher/dispatcher');
 var PinsConstants = require('../constants/pins_constants');
+var BoardsConstants = require('../constants/boards_constants');
 
 var PinsActions = {
   receiveAllPins: function(pins){

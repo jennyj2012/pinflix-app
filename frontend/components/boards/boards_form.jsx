@@ -4,9 +4,8 @@ var CurrentUserStore = require('../../stores/current_user_store');
 var BoardsForm = React.createClass({
 
   getInitialState: function () {
-    return {
-      currentUser: {}
-    };
+    return ({
+    });
   },
 
    render: function () {
