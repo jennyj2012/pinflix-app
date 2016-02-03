@@ -155,8 +155,8 @@ var PinsForm = React.createClass({
     formData.append("pin[board_id]", board_id);
 
     formData.append("pin[upload]", this.state.imageFile);
-    formData.append("pin[httpUrl]", this.state.httpUrl);
-    formData.append("pin[prevPin]", this.pin.photo);
+    formData.append("pin[http_url", URI.parse(this.state.httpUrl));
+    formData.append("pin[prev_pin]", this.pin.photo);
 
 
     //upon creation call success callback in PinsUtil.

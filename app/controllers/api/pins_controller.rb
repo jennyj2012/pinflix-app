@@ -11,18 +11,24 @@ class Api::PinsController < ApplicationController
 
   def create
     #create photo
+    photo = Photo.new()
 
-    # if prevPin given
-
-    # else if url given
-
-    # else if file uploaded
-
+    if Pin.find(prev_pin.id) # if prevPin given
+      photo = prev_pin.photo
+    elsif !http_url.empty?   # else if url given
+      photo.image = http_url
+    elsif !upload.empty? # else if file uploaded
+      photo.image =
     #else default
 
+    photo.save!
+
+    @pin = current_user.pins.new(
+    title: title,
+    description: description
+    )
 
 
-    @pin = current_user.pins.new(pin_params)
 
     if @pin.save
       render "api/pins/show"
@@ -37,7 +43,7 @@ class Api::PinsController < ApplicationController
   private
   def pin_params
     params.require(:pin).permit(
-    :title, :upload, :prevPin, :http_url, :description, :board_id
+    :title, :upload, :prev_pin, :http_url, :description, :board_id
     )
   end
 end
