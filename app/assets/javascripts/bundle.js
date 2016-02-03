@@ -108,8 +108,8 @@
 	  React.createElement(Route, { path: 'users/new', component: UsersForm }),
 	  React.createElement(
 	    Route,
-	    { path: '/', component: App },
-	    React.createElement(IndexRoute, { component: PinsIndex, onEnter: _ensureLoggedIn }),
+	    { path: '/', component: App, onEnter: _ensureLoggedIn },
+	    React.createElement(IndexRoute, { component: PinsIndex }),
 	    React.createElement(Route, { path: 'boards', component: BoardsIndex }),
 	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),
 	    React.createElement(Route, { path: 'boards/:board_id', component: BoardsDetail }),
@@ -31686,25 +31686,16 @@
 	
 	  mixins: [History],
 	
-	  get_domain_from_url: function (url) {
-	    var a = document.createElement('a');
-	    a.setAttribute('href', url);
-	    return a.hostname;
-	  },
+	  // get_domain_from_url: function (url){
+	  //   var a = document.createElement('a');
+	  //   a.setAttribute('href', url);
+	  //   return a.hostname;
+	  // },
 	
 	  pinIt: function (e) {
 	    //send info to pin form to prepopulate.
-	    debugger;
 	    e.preventDefault();
-	    // var formData = new FormData();
-	    // formData.append("pin[title]", this.state.title);
-	    // formData.append("pin[image]", this.state.imageFile);
-	    // formData.append("pin[url]", "pinterest.com");
-	    // formData.append("pin[board_id]", board_id);
-	    //
-	    // PinsUtil.createPin(formData, function (pin_id) {
-	    //   this.history.pushState({}, "/boards");
-	    // }.bind(this));
+	    this.history.pushState({}, "/pins/new", this.props.pin.id);
 	  },
 	  showPinDetails: function (e) {
 	    this.history.pushState({}, "/pins/" + this.props.pin.id);
@@ -31713,8 +31704,10 @@
 	  render: function () {
 	    var pin = this.props.pin;
 	    var pinLink = "#/pins/" + pin.id;
-	    var comments;
 	    var pinAuthor = "anonymous";
+	    var comments;
+	    var imageURL = pin.photo.image_url;
+	    // var hostname;
 	
 	    if (typeof pin.author !== "undefined") {
 	      pinAuthor = pin.author.username;
@@ -31730,20 +31723,6 @@
 	    } else {
 	      comments = [];
 	    }
-	
-	    var hostname;
-	    var imageURL;
-	
-	    //if file uploaded
-	    if (pin.url === "pinterest.com") {
-	      imageURL = pin.image_url;
-	      hostname = pinAuthor;
-	    }
-	    //if url uploaded
-	    else {
-	        imageURL = pin.url;
-	        hostname = this.get_domain_from_url(pin.url);
-	      }
 	
 	    return React.createElement(
 	      'div',
@@ -31766,21 +31745,6 @@
 	      React.createElement(
 	        'div',
 	        { className: 'pin-summary group' },
-	        React.createElement(
-	          'section',
-	          null,
-	          React.createElement(
-	            'p',
-	            null,
-	            'from:',
-	            React.createElement(
-	              'a',
-	              { href: imageURL },
-	              ' ',
-	              hostname
-	            )
-	          )
-	        ),
 	        React.createElement(
 	          'section',
 	          { className: 'title' },
@@ -31944,7 +31908,12 @@
 	        React.createElement(
 	          'form',
 	          { onSubmit: this.handleSubmit, className: 'comment-form' },
-	          React.createElement('textarea', { className: 'comment[body]', id: 'comment_body', placeholder: 'Add a comment...', onChange: this.updateBody, value: this.state.body }),
+	          React.createElement('textarea', {
+	            className: 'comment[body]',
+	            id: 'comment_body',
+	            placeholder: 'Add a comment...',
+	            onChange: this.updateBody,
+	            value: this.state.body }),
 	          React.createElement(
 	            'div',
 	            { className: 'comment-button basic-red-button' },
@@ -31968,9 +31937,11 @@
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
-	var PinsUtil = __webpack_require__(239);
-	var PinsActionForm = __webpack_require__(249);
 	var History = __webpack_require__(159).History;
+	
+	var PinsUtil = __webpack_require__(239);
+	var PinsStore = __webpack_require__(243);
+	var PinFormBoardItem = __webpack_require__(249);
 	
 	var PinsForm = React.createClass({
 	  displayName: 'PinsForm',
@@ -31978,15 +31949,32 @@
 	  mixins: [LinkedStateMixin, History],
 	
 	  getInitialState: function () {
-	    var pin = this.props.pin;
-	    if (typeof pin === "undefined") {
-	      return { title: "", imageFile: null, imageUrl: "" };
-	    } else {
-	      return { title: pin.title, imageFile: pin.image, imageUrl: "" };
+	    return {
+	      title: "",
+	      description: "",
+	      photoId: false,
+	      pin: {},
+	      httpUrl: "",
+	      imageFile: null,
+	      imageUrl: "" };
+	  },
+	
+	  componentDidMount: function () {
+	    this.pin = _pinId();
+	    if (typeof this.pin !== "undefined") {
+	      PinsUtil.fetchSinglePins(this.pin);
+	      var prevPin = PinsStore.find(this.pin);
+	      this.setState({
+	        photoId: true,
+	        pin: prevPin,
+	        title: prevPin.title,
+	        description: prevPin.description });
 	    }
 	  },
 	
 	  changeFile: function (e) {
+	    this.setState({ httpUrl: "" });
+	
 	    var reader = new FileReader();
 	    var file = e.currentTarget.files[0];
 	    reader.onloadend = function () {
@@ -32000,21 +31988,44 @@
 	      }
 	  },
 	
-	  handleSubmit: function (board_id, e) {
-	    e.preventDefault();
-	    var formData = new FormData();
-	    formData.append("pin[title]", this.state.title);
-	    formData.append("pin[image]", this.state.imageFile);
-	    formData.append("pin[url]", "pinterest.com");
-	    formData.append("pin[board_id]", board_id);
+	  changeUrl: function (e) {
+	    this.setState({ imageFile: null, imageUrl: "", httpUrl: e.currentTarget.value });
+	  },
 	
-	    PinsUtil.createPin(formData, function (pin_id) {
-	      this.history.pushState({}, "/boards");
-	    }.bind(this));
+	  updateDescription: function (e) {
+	    this.setState({ description: e.currentTarget.value });
+	  },
+	
+	  _pinId: function () {
+	    var pinId;
+	    debugger;
+	    if (this.location.query !== "" || this.location.query !== "undefined") {
+	      pinId = parseInt(this.props.location.query);
+	    } else {
+	      pinId = undefined;
+	    }
+	    return pinId;
 	  },
 	
 	  render: function () {
-	    debugger;
+	    var imageDisplay;
+	    var pin = this.state.pin;
+	
+	    //show prevPin photo only
+	    if (this.state.photoId) {
+	      imageDisplay = React.createElement('img', { className: 'preview-image', src: pin.photo.image_url });
+	    }
+	    //else show url or file buttons - reset views based on input in focus
+	    else {
+	        if (this.state.imageUrl !== "") {
+	          imageDisplay = React.createElement('img', { className: 'preview-image', src: this.state.imageUrl });
+	        } else if (this.state.httpUrl !== "") {
+	          imageDisplay = React.createElement('img', { className: 'preview-image', src: this.state.httpUrl });
+	        } else {
+	          imageDisplay = React.createElement('div', { className: 'preview-image' });
+	        }
+	      }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'new-pin' },
@@ -32029,7 +32040,7 @@
 	            null,
 	            ' Create a Pin '
 	          ),
-	          React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
+	          imageDisplay,
 	          React.createElement(
 	            'div',
 	            { className: 'input' },
@@ -32040,24 +32051,63 @@
 	              placeholder: 'Movie Title or Caption',
 	              valueLink: this.linkState('title') })
 	          ),
+	          React.createElement('textarea', {
+	            className: 'pin[description]',
+	            id: 'pin_description',
+	            placeholder: 'Add a description',
+	            onChange: this.updateDescription,
+	            value: this.state.description }),
 	          React.createElement(
 	            'div',
-	            { className: 'input' },
+	            { className: 'input pin-file-input' },
 	            React.createElement('input', {
 	              type: 'file',
 	              className: 'pin[file]',
 	              id: 'pin_file',
 	              onChange: this.changeFile })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'input pin-url-input' },
+	            React.createElement(
+	              'label',
+	              null,
+	              'URL: '
+	            ),
+	            React.createElement('input', {
+	              type: 'text',
+	              className: 'pin[http_url]',
+	              id: 'pin_http_url',
+	              value: this.state.httpUrl,
+	              onChange: this.changeUrl })
 	          )
 	        ),
 	        React.createElement(
 	          'div',
 	          null,
-	          React.createElement(PinsActionForm, { preview: this.state.imageUrl, handleSubmit: this.handleSubmit })
+	          React.createElement(PinFormBoardItem, { handleSubmit: this.handleSubmit })
 	        )
 	      )
 	    );
+	  },
+	
+	  handleSubmit: function (board_id, e) {
+	    e.preventDefault();
+	    var formData = new FormData();
+	    formData.append("pin[title]", this.state.title);
+	    formData.append("pin[description]", this.state.description);
+	    formData.append("pin[board_id]", board_id);
+	
+	    formData.append("pin[upload]", this.state.imageFile);
+	    formData.append("pin[httpUrl]", this.state.httpUrl);
+	    formData.append("pin[prevPin]", this.pin.photo);
+	
+	    //upon creation call success callback in PinsUtil.
+	    PinsUtil.createPin(formData, function (pin_id) {
+	      this.history.pushState({}, "/pins/" + pin_id);
+	    }.bind(this));
 	  }
+	
 	});
 	
 	module.exports = PinsForm;
@@ -32070,8 +32120,8 @@
 	var BoardsStore = __webpack_require__(250);
 	var BoardsUtil = __webpack_require__(251);
 	
-	var PinActionForm = React.createClass({
-	  displayName: 'PinActionForm',
+	var PinFormBoardItem = React.createClass({
+	  displayName: 'PinFormBoardItem',
 	
 	  getInitialState: function () {
 	    return { allBoards: [] };
@@ -32091,7 +32141,6 @@
 	  },
 	
 	  render: function () {
-	    var preview_image = this.props.preview;
 	    var handleSubmit = this.props.handleSubmit;
 	
 	    var boards = this.state.allBoards.map(function (board) {
@@ -32133,7 +32182,7 @@
 	
 	});
 	
-	module.exports = PinActionForm;
+	module.exports = PinFormBoardItem;
 
 /***/ },
 /* 250 */
@@ -32629,8 +32678,6 @@
 	  },
 	
 	  render: function () {
-	
-	    // <img src={'pinflix_logo.gif'}/>
 	    return React.createElement(
 	      'div',
 	      { className: 'header group' },
@@ -32643,7 +32690,11 @@
 	          React.createElement(
 	            'div',
 	            null,
-	            React.createElement('a', { href: '#/', className: 'logo' })
+	            React.createElement(
+	              'a',
+	              { href: '#/', className: 'logo' },
+	              React.createElement('img', { src: window.pinflix.logo })
+	            )
 	          ),
 	          React.createElement(SearchBar, null),
 	          React.createElement(

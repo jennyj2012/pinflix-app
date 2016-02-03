@@ -2,14 +2,26 @@ class Api::PinsController < ApplicationController
   before_action :require_logged_in!
 
   def index
-    @pins = Pin.all.includes(:author, :comments)
+    @pins = Pin.all.includes(:author, :comments, :photo)
   end
 
   def show
-    @pin = Pin.includes(:author, :comments).find_by_id(params[:id])
+    @pin = Pin.includes(:author, :comments, :photo).find_by_id(params[:id])
   end
 
   def create
+    #create photo
+
+    # if prevPin given
+
+    # else if url given
+
+    # else if file uploaded
+
+    #else default
+
+
+
     @pin = current_user.pins.new(pin_params)
 
     if @pin.save
@@ -24,6 +36,8 @@ class Api::PinsController < ApplicationController
 
   private
   def pin_params
-    params.require(:pin).permit(:title, :image, :url, :description, :board_id)
+    params.require(:pin).permit(
+    :title, :upload, :prevPin, :http_url, :description, :board_id
+    )
   end
 end

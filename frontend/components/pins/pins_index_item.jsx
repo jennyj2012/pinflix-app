@@ -7,25 +7,16 @@ var History = require('react-router').History;
 var PinsIndexItem = React.createClass({
   mixins: [History],
 
-  get_domain_from_url: function (url){
-    var a = document.createElement('a');
-    a.setAttribute('href', url);
-    return a.hostname;
-  },
+  // get_domain_from_url: function (url){
+  //   var a = document.createElement('a');
+  //   a.setAttribute('href', url);
+  //   return a.hostname;
+  // },
 
   pinIt: function(e) {
     //send info to pin form to prepopulate.
-    debugger
     e.preventDefault();
-    // var formData = new FormData();
-    // formData.append("pin[title]", this.state.title);
-    // formData.append("pin[image]", this.state.imageFile);
-    // formData.append("pin[url]", "pinterest.com");
-    // formData.append("pin[board_id]", board_id);
-    //
-    // PinsUtil.createPin(formData, function (pin_id) {
-    //   this.history.pushState({}, "/boards");
-    // }.bind(this));
+    this.history.pushState({}, "/pins/new", this.props.pin.id);
 
   },
   showPinDetails: function(e) {
@@ -35,13 +26,14 @@ var PinsIndexItem = React.createClass({
   render: function () {
     var pin = this.props.pin;
     var pinLink= "#/pins/"+ pin.id;
-    var comments;
     var pinAuthor = "anonymous";
+    var comments;
+    var imageURL = pin.photo.image_url;
+    // var hostname;
 
     if(typeof pin.author !== "undefined"){
       pinAuthor = pin.author.username;
     }
-
 
     if(this.props.showComments === true){
       comments = (
@@ -52,20 +44,6 @@ var PinsIndexItem = React.createClass({
       );
     } else {
       comments = [];
-    }
-
-    var hostname;
-    var imageURL;
-
-    //if file uploaded
-    if(pin.url === "pinterest.com"){
-      imageURL = pin.image_url;
-      hostname = pinAuthor;
-    }
-    //if url uploaded
-    else {
-      imageURL = pin.url;
-      hostname = this.get_domain_from_url(pin.url);
     }
 
     return (
@@ -82,11 +60,6 @@ var PinsIndexItem = React.createClass({
         </div>
 
         <div className="pin-summary group">
-          <section >
-            <p>from:
-            <a href={imageURL}> {hostname}</a>
-           </p>
-          </section>
 
           <section className="title">
             <figcaption>{pin.title}</figcaption>

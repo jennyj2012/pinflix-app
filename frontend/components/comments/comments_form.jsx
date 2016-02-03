@@ -47,8 +47,12 @@ var CommentsForm = React.createClass({
                 {this.state.currentUser.username}
               </a>
             <form onSubmit={this.handleSubmit} className="comment-form">
-              <textarea className="comment[body]" id="comment_body" placeholder="Add a comment..." onChange={this.updateBody} value={this.state.body}>
-              </textarea>
+              <textarea
+                className="comment[body]"
+                id="comment_body"
+                placeholder="Add a comment..."
+                onChange={this.updateBody}
+                value={this.state.body}></textarea>
 
             <div className="comment-button basic-red-button">
               <button>Comment</button>

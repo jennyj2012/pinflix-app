@@ -32,7 +32,6 @@ var Header = React.createClass({
   },
 
    render: function () {
-
     return(
       <div className="header group">
         <div className ="header-center group">

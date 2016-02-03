@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
     resources :pins,
       only: [:index, :show, :create, :update]
+    resources :photos,
+      only: [:index, :show]
     resources :boards,
       only: [:index, :show, :create, :update, :destroy]
     resources :comments,

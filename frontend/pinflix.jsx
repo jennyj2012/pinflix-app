@@ -60,8 +60,8 @@ var router = (
   <Router>
     <Route path="session/new" component={SessionForm} onEnter={_ensureLoggedOut} />
     <Route path="users/new" component={UsersForm} />
-    <Route path="/" component={App} >
-      <IndexRoute component={PinsIndex} onEnter={_ensureLoggedIn}/>
+    <Route path="/" component={App} onEnter={_ensureLoggedIn}>
+      <IndexRoute component={PinsIndex} />
       <Route path="boards" component={BoardsIndex} />
       <Route path="boards/new" component={BoardsForm} />
       <Route path="boards/:board_id" component={BoardsDetail} />

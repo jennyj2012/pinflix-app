@@ -2,7 +2,7 @@ var React = require('react');
 var BoardsStore = require('../../stores/boards_store');
 var BoardsUtil = require('../../util/boards_util');
 
-var PinActionForm = React.createClass({
+var PinFormBoardItem = React.createClass({
 
   getInitialState: function () {
     return {allBoards: [] };
@@ -22,7 +22,6 @@ var PinActionForm = React.createClass({
   },
 
   render: function () {
-    var preview_image = this.props.preview;
     var handleSubmit = this.props.handleSubmit;
 
     var boards = this.state.allBoards.map(function (board) {
@@ -46,6 +45,7 @@ var PinActionForm = React.createClass({
     );
   }
 
+
 });
 
-module.exports = PinActionForm;
+module.exports = PinFormBoardItem;
