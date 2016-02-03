@@ -10,27 +10,29 @@ class Api::PinsController < ApplicationController
   end
 
   def create
+    debugger
+    board = current_user.boards.find(board_id)
+    @pin = board.pins.new(pin_params)
+
     #create photo
-    # photo = Photo.new()
+    photo = Photo.new()
     #
-    # if Pin.find(prev_pin.id) # if prevPin given
-    #   photo = prev_pin.photo
-    # elsif !http_url.empty?   # else if url given
-    #   photo.image = http_url
-    # elsif !upload.empty? # else if file uploaded
-    #   photo.image =
+    debugger
+    if prev_photo_id
+      Pin.find(prev_photo_id) # if prevPin given
+      photo = Photo.find(prev_photo_id)
+    elsif http_url
+      photo.image = URI.parse(http_url)
+    # URI.parse
+    elsif imageFile
+      photo.image = imageFile;
     # #else default
-    # end
-    # photo.save!
-
-    @pin = current_user.pins.new(
-    title: title,
-    description: description
-    )
-
-
+    end
+    photo.save!
+    @pin.photo = photo
 
     if @pin.save
+      debugger
       render "api/pins/show"
     else
       render json: @pin, status: :unprocessable_entity
@@ -42,8 +44,26 @@ class Api::PinsController < ApplicationController
 
   private
   def pin_params
-    params.require(:pin).permit(
-    :title, :upload, :prev_pin, :http_url, :description, :board_id
-    )
+    params.require(:pin).permit(:title, :description)
+  end
+
+  def board_id
+    params.require(:pin).permit(:board_id)
+    params[:pin][:board_id]
+  end
+
+  def imageFile
+    params.require(:pin).permit(:imageFile)
+    params[:pin][:imageFile]
+  end
+
+  def prev_photo_id
+    params.require(:pin).permit(:prev_photo_id)
+    params[:pin][:prev_photo_id]
+  end
+
+  def http_url
+    params.require(:pin).permit(:http_url)
+    params[:pin][:http_url]
   end
 end

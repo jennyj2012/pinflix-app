@@ -62,10 +62,11 @@ var router = (
     <Route path="users/new" component={UsersForm} />
     <Route path="/" component={App} onEnter={_ensureLoggedIn}>
       <IndexRoute component={PinsIndex} />
-      <Route path="boards" component={BoardsIndex} />
       <Route path="boards/new" component={BoardsForm} />
+      <Route path="users/:user_id" component={BoardsIndex} />
       <Route path="boards/:board_id" component={BoardsDetail} />
       <Route path="pins/new" component={PinsForm} />
+      <Route path="pins/new/:pin_id" component={PinsForm} />
       <Route path="pins/:pin_id" component={PinsDetail} />
     </Route>
   </Router>

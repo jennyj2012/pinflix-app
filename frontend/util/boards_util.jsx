@@ -15,6 +15,7 @@ var BoardsUtil = {
   },
 
   fetchSingleBoard: function (id){
+    debugger
     $.get({
       url: "/api/boards/" + id,
       dataType: "json",

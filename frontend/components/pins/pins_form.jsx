@@ -10,83 +10,147 @@ var PinsForm = React.createClass({
   mixins: [LinkedStateMixin, History],
 
   getInitialState: function() {
+    debugger
     return {
       title: "",
       description: "",
       photoId: false,
       pin: { },
       httpUrl: "",
+      upload: false,
       imageFile: null,
-      imageUrl: "" };
+      imageUrl: ""
+    };
   },
 
   componentDidMount: function (){
-    this.pin = _pinId();
-    if(typeof this.pin !== "undefined"){
-      PinsUtil.fetchSinglePins(this.pin);
-      var prevPin = PinsStore.find(this.pin);
+    debugger
+    if(typeof this.props.params.pin_id !== "undefined"){
+      this.pinListener = PinsStore.addListener(this.__onChange);
+      PinsUtil.fetchSinglePin(this.props.params.pin_id);
+    }
+  },
+  //
+  // componentWillReceiveProps: function(nextProps) {
+  //   // debugger
+  //   // this.setState({ });
+  // },
+
+  componentWillUnMount: function (){
+    if(typeof this.props.params.pin_id !== "undefined"){
+      this.pinListener.remove();
+    }
+  },
+
+  __onChange: function (){
+    var prevPinId = parseInt(this.props.params.pin_id);
+    if(typeof prevPinId !== "undefined"){
+      var prevPin = PinsStore.find(prevPinId);
+
       this.setState({
         photoId: true,
         pin: prevPin,
         title: prevPin.title,
-        description: prevPin.description });
+        description: prevPin.description
+      });
     }
+  },
+  resetURL: function (e){
+    this.setState({httpUrl: "", upload: true});
   },
 
   changeFile: function(e) {
-    this.setState({httpUrl: ""});
-
+    this.event = e;
     var reader = new FileReader();
-    var file = e.currentTarget.files[0];
+    file = e.currentTarget.files[0];
     reader.onloadend = function () {
-      this.setState({imageFile: file, imageUrl: reader.result});
+      this.setState({
+        imageFile: file,
+        imageUrl: reader.result,
+        upload: true
+      });
     }.bind(this);
 
     if (file) {
       reader.readAsDataURL(file); // will trigger a load end event when it completes, and invoke reader.onloadend
+
     } else {
-      this.setState({imageFile: null, imageUrl: ""});
+      this.setState({upload: false, imageFile: null, imageUrl: ""});
     }
   },
 
   changeUrl: function(e){
-    this.setState({imageFile: null, imageUrl: "", httpUrl: e.currentTarget.value });
+    this.setState({ httpUrl: e.currentTarget.value, upload: false });
   },
 
   updateDescription: function(e){
     this.setState({description: e.currentTarget.value});
   },
 
-  _pinId: function () {
-    var pinId;
-    debugger
-    if(this.location.query !== "" || this.location.query !== "undefined"){
-      pinId = parseInt(this.props.location.query);
-    } else {
-      pinId = undefined;
-    }
-    return pinId;
-  },
-
   render: function () {
+debugger
     var imageDisplay;
     var pin = this.state.pin;
+    var filename;
+
+    // ******************************
+    // FILE INPUT FILENAME SWAP (imageFile.name)
+    // ******************************
+    // if(this.state.upload && typeof this.state.imageFile !== "undefined"){
+    //   filename = this.state.imageFile.name;
+    // } else {
+      filename = "Filename assignment works";
+    // }
+
+    // ******************************
+    // INPUT ITEMS
+    // ******************************
+
+    var inputItems = (
+      <div>
+        <div className="input pin-file-input" onClick={this.resetURL} >
+
+        <input
+          type="file"
+          className="pin[file]"
+          id="pin_file"
+          onChange={this.changeFile}
+          />
+        </div>
+
+
+      <div className="input pin-url-input" >
+        <input
+          type="text"
+          className="pin[http_url]"
+          id="pin_http_url"
+          value={this.state.httpUrl}
+          onChange={this.changeUrl}
+          placeholder="URL" />
+      </div>
+    </div>
+    );
+
+    // ******************************
+    // IMAGE PREVIEW SWAP
+    // ******************************
 
     //show prevPin photo only
     if (this.state.photoId) {
       imageDisplay = (
         <img className="preview-image" src={pin.photo.image_url}/>
       );
+      inputItems = [];
     }
     //else show url or file buttons - reset views based on input in focus
     else {
-      if (this.state.imageUrl !== "") {
+      if (this.state.httpUrl !== "") {
+      imageDisplay = (
+        <img className="preview-image" src={this.state.httpUrl}/>
+      );
+    } else if (this.state.upload) {
         imageDisplay = (
           <img className="preview-image" src={this.state.imageUrl}/>
-        );
-      } else if (this.state.httpUrl !== "") {
-        imageDisplay = (
-          <img className="preview-image" src={this.state.httpUrl}/>
         );
       } else {
         imageDisplay = (
@@ -94,6 +158,10 @@ var PinsForm = React.createClass({
         );
       }
     }
+
+    // ******************************
+    // RETURN
+    // ******************************
 
     return (
       <div className="new-pin">
@@ -119,24 +187,7 @@ var PinsForm = React.createClass({
               onChange={this.updateDescription}
               value={this.state.description}></textarea>
 
-
-            <div className="input pin-file-input">
-            <input
-              type="file"
-              className="pin[file]"
-              id="pin_file"
-              onChange={this.changeFile} />
-            </div>
-
-          <div className="input pin-url-input">
-            <label>URL: </label>
-            <input
-              type="text"
-              className="pin[http_url]"
-              id="pin_http_url"
-              value={this.state.httpUrl}
-              onChange={this.changeUrl} />
-          </div>
+          {inputItems}
 
           </div>
             <div>
@@ -148,17 +199,24 @@ var PinsForm = React.createClass({
   },
 
   handleSubmit: function(board_id, e) {
+    // debugger
     e.preventDefault();
     var formData = new FormData();
     formData.append("pin[title]", this.state.title);
     formData.append("pin[description]", this.state.description);
     formData.append("pin[board_id]", board_id);
 
-    formData.append("pin[upload]", this.state.imageFile);
-    formData.append("pin[http_url", URI.parse(this.state.httpUrl));
-    formData.append("pin[prev_pin]", this.pin.photo);
+    if(this.state.upload) {
+      formData.append("pin[imageFile]", this.state.imageFile);
+    }
 
+    if(this.state.httpUrl !== "") {
+      formData.append("pin[http_url]", this.state.httpUrl);
+    }
 
+    if(typeof this.state.pin.id !== "undefined") {
+      formData.append("pin[prev_photo_id]", this.state.pin.photo.id);
+    }
     //upon creation call success callback in PinsUtil.
     PinsUtil.createPin(formData, function (pin_id) {
       this.history.pushState({}, "/pins/" + pin_id);

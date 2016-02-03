@@ -18,7 +18,8 @@ var BoardsIndex = React.createClass({
   },
 
   __onChange: function (){
-    this.setState({ allBoards: BoardsStore.all() });
+    var userId = parseInt(this.props.params.user_id);
+    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
   },
 
   render: function () {

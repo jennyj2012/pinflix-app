@@ -42,6 +42,12 @@ BoardsStore.find = function (id) {
   return _boards[idx];
 };
 
+BoardsStore.findByUserId = function (id) {
+  return _boards.filter(function (board) {
+    return board.author_id === id;
+  });
+};
+
 BoardsStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case BoardsConstants.ALL_BOARDS_RECEIVED:

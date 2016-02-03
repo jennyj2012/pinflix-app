@@ -16,6 +16,7 @@ var PinsIndexItem = React.createClass({
   pinIt: function(e) {
     //send info to pin form to prepopulate.
     e.preventDefault();
+    // {pinId: this.props.pin.id}
     this.history.pushState({}, "/pins/new", this.props.pin.id);
 
   },

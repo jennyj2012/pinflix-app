@@ -32,13 +32,22 @@ var Header = React.createClass({
   },
 
    render: function () {
+    var user = this.state.currentUser;
+    var userBoards;
+
+    if(user){
+      userBoards = "#/users/"+ user.id;
+    } else {
+      userBoards = "/";
+    }
+
     return(
       <div className="header group">
         <div className ="header-center group">
 
           <div className="header-left group">
             <div>
-              <a href="#/" className="logo">
+              <a href="/" className="logo">
 
                 <img src={window.pinflix.logo}/>
               </a>
@@ -55,7 +64,7 @@ var Header = React.createClass({
 
           <div className="header-right group">
             <div className="user-menu user-link" >
-              <a href='#/boards'>{this.state.currentUser.username}</a>
+              <a href={userBoards}>{this.state.currentUser.username}</a>
             </div>
 
             <div className="logout">

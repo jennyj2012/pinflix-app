@@ -21,7 +21,7 @@ var BoardsIndexItem = React.createClass({
       if(typeof board.pins[i] === "undefined"){
         thumb= <div></div>;
       } else {
-        thumb = <img src={board.pins[i].url}/>;
+        thumb = <img src={board.pins[i].photo.image_url}/>;
       }
 
       pinThumbs.push(

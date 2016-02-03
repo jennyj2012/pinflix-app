@@ -13,12 +13,6 @@ var addPin = function(pin){
   _pins.push(pin);
 };
 
-PinsStore.findByBoardId = function (id) {
-  return _pins.filter(function (pin) {
-    return pin.board_id === id;
-  });
-};
-
 var updatePin = function(pin){
   var idx;
   for(var i = 0; i < _pins.length; i++){
@@ -46,6 +40,12 @@ PinsStore.find = function (id) {
     }
   }
   return _pins[idx];
+};
+
+PinsStore.findByBoardId = function (id) {
+  return _pins.filter(function (pin) {
+    return pin.board_id === id;
+  });
 };
 
 PinsStore.__onDispatch = function (payload) {

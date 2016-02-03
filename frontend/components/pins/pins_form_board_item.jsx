@@ -1,24 +1,32 @@
 var React = require('react');
 var BoardsStore = require('../../stores/boards_store');
 var BoardsUtil = require('../../util/boards_util');
-
+var CurrentUserStore = require('../../stores/current_user_store');
+var SessionApiUtil = require('../../util/session_util');
 var PinFormBoardItem = React.createClass({
 
   getInitialState: function () {
-    return {allBoards: [] };
+    return {allBoards: [], currentUser: {} };
   },
 
   componentDidMount: function () {
+    this.userListener = CurrentUserStore.addListener(this._userChange);
     this.boardListener = BoardsStore.addListener(this.__onChange);
     BoardsUtil.fetchAllBoards();
   },
 
   componentWillUnMount: function () {
+    this.userListener.remove();
     this.boardListener.remove();
   },
 
+  _userChange: function () {
+   this.setState({ currentUser: CurrentUserStore.currentUser() });
+ },
+
   __onChange: function () {
-    this.setState({ allBoards: BoardsStore.all() });
+    var userId = this.state.currentUser.id;
+    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
   },
 
   render: function () {

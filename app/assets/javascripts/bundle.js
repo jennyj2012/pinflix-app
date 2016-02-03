@@ -110,10 +110,11 @@
 	    Route,
 	    { path: '/', component: App, onEnter: _ensureLoggedIn },
 	    React.createElement(IndexRoute, { component: PinsIndex }),
-	    React.createElement(Route, { path: 'boards', component: BoardsIndex }),
 	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),
+	    React.createElement(Route, { path: 'users/:user_id', component: BoardsIndex }),
 	    React.createElement(Route, { path: 'boards/:board_id', component: BoardsDetail }),
 	    React.createElement(Route, { path: 'pins/new', component: PinsForm }),
+	    React.createElement(Route, { path: 'pins/new/:pin_id', component: PinsForm }),
 	    React.createElement(Route, { path: 'pins/:pin_id', component: PinsDetail })
 	  )
 	);
@@ -31620,12 +31621,6 @@
 	  _pins.push(pin);
 	};
 	
-	PinsStore.findByBoardId = function (id) {
-	  return _pins.filter(function (pin) {
-	    return pin.board_id === id;
-	  });
-	};
-	
 	var updatePin = function (pin) {
 	  var idx;
 	  for (var i = 0; i < _pins.length; i++) {
@@ -31653,6 +31648,12 @@
 	    }
 	  }
 	  return _pins[idx];
+	};
+	
+	PinsStore.findByBoardId = function (id) {
+	  return _pins.filter(function (pin) {
+	    return pin.board_id === id;
+	  });
 	};
 	
 	PinsStore.__onDispatch = function (payload) {
@@ -31695,6 +31696,7 @@
 	  pinIt: function (e) {
 	    //send info to pin form to prepopulate.
 	    e.preventDefault();
+	    // {pinId: this.props.pin.id}
 	    this.history.pushState({}, "/pins/new", this.props.pin.id);
 	  },
 	  showPinDetails: function (e) {
@@ -31702,6 +31704,7 @@
 	  },
 	
 	  render: function () {
+	    debugger;
 	    var pin = this.props.pin;
 	    var pinLink = "#/pins/" + pin.id;
 	    var pinAuthor = "anonymous";
@@ -31949,82 +31952,150 @@
 	  mixins: [LinkedStateMixin, History],
 	
 	  getInitialState: function () {
+	    debugger;
 	    return {
 	      title: "",
 	      description: "",
 	      photoId: false,
 	      pin: {},
 	      httpUrl: "",
+	      upload: false,
 	      imageFile: null,
-	      imageUrl: "" };
+	      imageUrl: ""
+	    };
 	  },
 	
 	  componentDidMount: function () {
-	    this.pin = _pinId();
-	    if (typeof this.pin !== "undefined") {
-	      PinsUtil.fetchSinglePins(this.pin);
-	      var prevPin = PinsStore.find(this.pin);
+	    debugger;
+	    if (typeof this.props.params.pin_id !== "undefined") {
+	      this.pinListener = PinsStore.addListener(this.__onChange);
+	      PinsUtil.fetchSinglePin(this.props.params.pin_id);
+	    }
+	  },
+	  //
+	  // componentWillReceiveProps: function(nextProps) {
+	  //   // debugger
+	  //   // this.setState({ });
+	  // },
+	
+	  componentWillUnMount: function () {
+	    if (typeof this.props.params.pin_id !== "undefined") {
+	      this.pinListener.remove();
+	    }
+	  },
+	
+	  __onChange: function () {
+	    var prevPinId = parseInt(this.props.params.pin_id);
+	    if (typeof prevPinId !== "undefined") {
+	      var prevPin = PinsStore.find(prevPinId);
+	
 	      this.setState({
 	        photoId: true,
 	        pin: prevPin,
 	        title: prevPin.title,
-	        description: prevPin.description });
+	        description: prevPin.description
+	      });
 	    }
+	  },
+	  resetURL: function (e) {
+	    this.setState({ httpUrl: "", upload: true });
 	  },
 	
 	  changeFile: function (e) {
-	    this.setState({ httpUrl: "" });
-	
+	    this.event = e;
 	    var reader = new FileReader();
-	    var file = e.currentTarget.files[0];
+	    file = e.currentTarget.files[0];
 	    reader.onloadend = function () {
-	      this.setState({ imageFile: file, imageUrl: reader.result });
+	      this.setState({
+	        imageFile: file,
+	        imageUrl: reader.result,
+	        upload: true
+	      });
 	    }.bind(this);
 	
 	    if (file) {
 	      reader.readAsDataURL(file); // will trigger a load end event when it completes, and invoke reader.onloadend
 	    } else {
-	        this.setState({ imageFile: null, imageUrl: "" });
+	        this.setState({ upload: false, imageFile: null, imageUrl: "" });
 	      }
 	  },
 	
 	  changeUrl: function (e) {
-	    this.setState({ imageFile: null, imageUrl: "", httpUrl: e.currentTarget.value });
+	    this.setState({ httpUrl: e.currentTarget.value, upload: false });
 	  },
 	
 	  updateDescription: function (e) {
 	    this.setState({ description: e.currentTarget.value });
 	  },
 	
-	  _pinId: function () {
-	    var pinId;
-	    debugger;
-	    if (this.location.query !== "" || this.location.query !== "undefined") {
-	      pinId = parseInt(this.props.location.query);
-	    } else {
-	      pinId = undefined;
-	    }
-	    return pinId;
-	  },
-	
 	  render: function () {
+	    debugger;
 	    var imageDisplay;
 	    var pin = this.state.pin;
+	    var filename;
+	
+	    // ******************************
+	    // FILE INPUT FILENAME SWAP (imageFile.name)
+	    // ******************************
+	    // if(this.state.upload && typeof this.state.imageFile !== "undefined"){
+	    //   filename = this.state.imageFile.name;
+	    // } else {
+	    filename = "Filename assignment works";
+	    // }
+	
+	    // ******************************
+	    // INPUT ITEMS
+	    // ******************************
+	
+	    var inputItems = React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'input pin-file-input', onClick: this.resetURL },
+	        React.createElement('input', {
+	          type: 'file',
+	          className: 'pin[file]',
+	          id: 'pin_file',
+	          onChange: this.changeFile
+	        })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'input pin-url-input' },
+	        React.createElement('input', {
+	          type: 'text',
+	          className: 'pin[http_url]',
+	          id: 'pin_http_url',
+	          value: this.state.httpUrl,
+	          onChange: this.changeUrl,
+	          placeholder: 'URL' })
+	      )
+	    );
+	
+	    // ******************************
+	    // IMAGE PREVIEW SWAP
+	    // ******************************
 	
 	    //show prevPin photo only
 	    if (this.state.photoId) {
 	      imageDisplay = React.createElement('img', { className: 'preview-image', src: pin.photo.image_url });
+	      inputItems = [];
 	    }
 	    //else show url or file buttons - reset views based on input in focus
 	    else {
-	        if (this.state.imageUrl !== "") {
-	          imageDisplay = React.createElement('img', { className: 'preview-image', src: this.state.imageUrl });
-	        } else if (this.state.httpUrl !== "") {
+	        if (this.state.httpUrl !== "") {
 	          imageDisplay = React.createElement('img', { className: 'preview-image', src: this.state.httpUrl });
+	        } else if (this.state.upload) {
+	          imageDisplay = React.createElement('img', { className: 'preview-image', src: this.state.imageUrl });
 	        } else {
 	          imageDisplay = React.createElement('div', { className: 'preview-image' });
 	        }
 	      }
+	
+	    // ******************************
+	    // RETURN
+	    // ******************************
 	
 	    return React.createElement(
 	      'div',
@@ -32057,30 +32128,7 @@
 	            placeholder: 'Add a description',
 	            onChange: this.updateDescription,
 	            value: this.state.description }),
-	          React.createElement(
-	            'div',
-	            { className: 'input pin-file-input' },
-	            React.createElement('input', {
-	              type: 'file',
-	              className: 'pin[file]',
-	              id: 'pin_file',
-	              onChange: this.changeFile })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'input pin-url-input' },
-	            React.createElement(
-	              'label',
-	              null,
-	              'URL: '
-	            ),
-	            React.createElement('input', {
-	              type: 'text',
-	              className: 'pin[http_url]',
-	              id: 'pin_http_url',
-	              value: this.state.httpUrl,
-	              onChange: this.changeUrl })
-	          )
+	          inputItems
 	        ),
 	        React.createElement(
 	          'div',
@@ -32092,16 +32140,24 @@
 	  },
 	
 	  handleSubmit: function (board_id, e) {
+	    // debugger
 	    e.preventDefault();
 	    var formData = new FormData();
 	    formData.append("pin[title]", this.state.title);
 	    formData.append("pin[description]", this.state.description);
 	    formData.append("pin[board_id]", board_id);
 	
-	    formData.append("pin[upload]", this.state.imageFile);
-	    formData.append("pin[http_url", URI.parse(this.state.httpUrl));
-	    formData.append("pin[prev_pin]", this.pin.photo);
+	    if (this.state.upload) {
+	      formData.append("pin[imageFile]", this.state.imageFile);
+	    }
 	
+	    if (this.state.httpUrl !== "") {
+	      formData.append("pin[http_url]", this.state.httpUrl);
+	    }
+	
+	    if (typeof this.state.pin.id !== "undefined") {
+	      formData.append("pin[prev_photo_id]", this.state.pin.photo.id);
+	    }
 	    //upon creation call success callback in PinsUtil.
 	    PinsUtil.createPin(formData, function (pin_id) {
 	      this.history.pushState({}, "/pins/" + pin_id);
@@ -32119,25 +32175,33 @@
 	var React = __webpack_require__(1);
 	var BoardsStore = __webpack_require__(250);
 	var BoardsUtil = __webpack_require__(251);
-	
+	var CurrentUserStore = __webpack_require__(220);
+	var SessionApiUtil = __webpack_require__(211);
 	var PinFormBoardItem = React.createClass({
 	  displayName: 'PinFormBoardItem',
 	
 	  getInitialState: function () {
-	    return { allBoards: [] };
+	    return { allBoards: [], currentUser: {} };
 	  },
 	
 	  componentDidMount: function () {
+	    this.userListener = CurrentUserStore.addListener(this._userChange);
 	    this.boardListener = BoardsStore.addListener(this.__onChange);
 	    BoardsUtil.fetchAllBoards();
 	  },
 	
 	  componentWillUnMount: function () {
+	    this.userListener.remove();
 	    this.boardListener.remove();
 	  },
 	
+	  _userChange: function () {
+	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	  },
+	
 	  __onChange: function () {
-	    this.setState({ allBoards: BoardsStore.all() });
+	    var userId = this.state.currentUser.id;
+	    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
 	  },
 	
 	  render: function () {
@@ -32232,6 +32296,12 @@
 	  return _boards[idx];
 	};
 	
+	BoardsStore.findByUserId = function (id) {
+	  return _boards.filter(function (board) {
+	    return board.author_id === id;
+	  });
+	};
+	
 	BoardsStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case BoardsConstants.ALL_BOARDS_RECEIVED:
@@ -32270,6 +32340,7 @@
 	  },
 	
 	  fetchSingleBoard: function (id) {
+	    debugger;
 	    $.get({
 	      url: "/api/boards/" + id,
 	      dataType: "json",
@@ -32402,7 +32473,8 @@
 	  },
 	
 	  __onChange: function () {
-	    this.setState({ allBoards: BoardsStore.all() });
+	    var userId = parseInt(this.props.params.user_id);
+	    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
 	  },
 	
 	  render: function () {
@@ -32456,7 +32528,7 @@
 	      if (typeof board.pins[i] === "undefined") {
 	        thumb = React.createElement('div', null);
 	      } else {
-	        thumb = React.createElement('img', { src: board.pins[i].url });
+	        thumb = React.createElement('img', { src: board.pins[i].photo.image_url });
 	      }
 	
 	      pinThumbs.push(React.createElement(
@@ -32678,6 +32750,15 @@
 	  },
 	
 	  render: function () {
+	    var user = this.state.currentUser;
+	    var userBoards;
+	
+	    if (user) {
+	      userBoards = "#/users/" + user.id;
+	    } else {
+	      userBoards = "/";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'header group' },
@@ -32692,7 +32773,7 @@
 	            null,
 	            React.createElement(
 	              'a',
-	              { href: '#/', className: 'logo' },
+	              { href: '/', className: 'logo' },
 	              React.createElement('img', { src: window.pinflix.logo })
 	            )
 	          ),
@@ -32712,7 +32793,7 @@
 	            { className: 'user-menu user-link' },
 	            React.createElement(
 	              'a',
-	              { href: '#/boards' },
+	              { href: userBoards },
 	              this.state.currentUser.username
 	            )
 	          ),

@@ -34,6 +34,7 @@ board_4 = Board.create!(
   author: user_2,
   description: "Movies for when I'm down")
 #
+Photo.destroy_all
 Pin.destroy_all
 # pin_1 = Pin.create(
 #   title: "Counte of Monte Cristo",
