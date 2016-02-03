@@ -11,17 +11,17 @@ class Api::PinsController < ApplicationController
 
   def create
     #create photo
-    photo = Photo.new()
-
-    if Pin.find(prev_pin.id) # if prevPin given
-      photo = prev_pin.photo
-    elsif !http_url.empty?   # else if url given
-      photo.image = http_url
-    elsif !upload.empty? # else if file uploaded
-      photo.image =
-    #else default
-
-    photo.save!
+    # photo = Photo.new()
+    #
+    # if Pin.find(prev_pin.id) # if prevPin given
+    #   photo = prev_pin.photo
+    # elsif !http_url.empty?   # else if url given
+    #   photo.image = http_url
+    # elsif !upload.empty? # else if file uploaded
+    #   photo.image =
+    # #else default
+    # end
+    # photo.save!
 
     @pin = current_user.pins.new(
     title: title,
