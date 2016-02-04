@@ -3,6 +3,13 @@ var BoardsUtil = require('../../util/boards_util');
 var BoardsStore = require('../../stores/boards_store');
 var BoardsIndexItem = require('./boards_index_item');
 var UsersUtil = require('../../util/users_util');
+var Masonry = require('react-masonry-component')(React);
+var masonryOptions = {
+  transitionDuration: '0.2s',
+  itemSelector: '.pin',
+  columnWidth: '.pin',
+  isResizable: true
+};
 
 var BoardsIndex = React.createClass({
   getInitialState: function (){
@@ -41,13 +48,15 @@ var BoardsIndex = React.createClass({
 
     return (
       <div className="user-board-page group">
-        <div className="new-create-link">
-          <a href='#/boards/new'>
-            Add Board
-          </a>
-        </div>
+        <Masonry className="masonry-container transitions-enabled infinite-scroll centered clearfix">
+          <div className="new-create-link">
+            <a href='#/boards/new'>
+              Add Board
+            </a>
+          </div>
 
-        {boards}
+          {boards}
+        </Masonry>
       </div>
     );
   }

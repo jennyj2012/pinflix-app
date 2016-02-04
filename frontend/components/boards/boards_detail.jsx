@@ -6,6 +6,14 @@ var PinsIndexItem = require('../pins/pins_index_item');
 var PinsUtil = require('../../util/pins_util');
 var PinsStore = require('../../stores/pins_store');
 
+var Masonry = require('react-masonry-component')(React);
+var masonryOptions = {
+  transitionDuration: '0.2s',
+  itemSelector: '.pin',
+  columnWidth: '.pin',
+  isResizable: true
+};
+
 var BoardsIndexItem = React.createClass({
   getInitialState: function (){
     return {board: {}, boardPins: []};
@@ -56,6 +64,8 @@ var BoardsIndexItem = React.createClass({
 
     return (
       <div className="board-index index-item group">
+        <Masonry className="masonry-container transitions-enabled infinite-scroll centered clearfix">
+
       <h2>{board_title}</h2>
         <div className="new-create-link">
         <a href='#/pins/new'>
@@ -66,6 +76,7 @@ var BoardsIndexItem = React.createClass({
         <div id="masonry-container" className="landing-page">
           {board_pins}
         </div>
+      </Masonry>
 
       </div>
     );

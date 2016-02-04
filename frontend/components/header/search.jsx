@@ -13,6 +13,9 @@ var Search = React.createClass({
     return(
       <div className="search group">
       <input type="text" placeholder="search"/>
+        <div className="search-button">
+          <i className="fa fa-search"></i>
+        </div>
       </div>
     );
   }

@@ -54,9 +54,7 @@ var Header = React.createClass({
             </div>
 
               <SearchBar/>
-            <div className="search-button">
-              <i className="fa fa-search"></i>
-            </div>
+
             <div className="tags">
 
             </div>

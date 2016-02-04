@@ -4,6 +4,13 @@ var PinsStore = require('../../stores/pins_store');
 var PinsIndexItem = require('./pins_index_item');
 
 var CurrentUserStore = require("../../stores/current_user_store");
+var Masonry = require('react-masonry-component')(React);
+var masonryOptions = {
+  transitionDuration: '0.2s',
+  itemSelector: '.pin',
+  columnWidth: '.pin',
+  isResizable: true
+};
 
 var PinsIndex = React.createClass({
   getInitialState: function (){
@@ -27,12 +34,13 @@ var PinsIndex = React.createClass({
 
     var pins = this.state.allPins.map(function (pin) {
         return <PinsIndexItem key={pin.id} pin={pin} showComments={false}/>;
-      });
+    });
 
     return (
-      <div className="landing-page grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
-
+      <div className="landing-page">
+        <Masonry className="masonry-container transitions-enabled infinite-scroll centered clearfix">
         {pins}
+        </Masonry>
       </div>
     );
   }
