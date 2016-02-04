@@ -19,13 +19,24 @@ var BoardsIndexItem = React.createClass({
     PinsUtil.fetchAllPins();
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    var boardId = parseInt(nextProps.params.board_id);
+    BoardsUtil.fetchSingleBoard(this.__onChange(boardId));
+  },
+
   componentWillUnMount: function (){
     this.boardDetailListener.remove();
     this.pinListener.remove();
   },
 
-  __onChange: function (){
-    var boardId = parseInt(this.props.params.board_id);
+  __onChange: function (id){
+    var boardId;
+    if(id){
+      boardId = id;
+    } else {
+      boardId = parseInt(this.props.params.board_id);
+    }
+
     var currentBoard = BoardsStore.find(boardId);
     var currentPins = PinsStore.findByBoardId(boardId);
     this.setState({ board: currentBoard, boardPins: currentPins });
@@ -33,25 +44,26 @@ var BoardsIndexItem = React.createClass({
 
   render: function () {
     var board = this.state.board;
-    var board_pins;
+    var board_title = "Unknown Board";
 
-    if(typeof board.pins === "undefined"){
-      board_pins = [];
-    } else {
-      board_pins = this.state.boardPins.map(function (pin) {
-          return <PinsIndexItem key={pin.id} pin={pin} showComments={true} />;
-        });
+    if(typeof board.title !== "undefined"){
+      board_title = board.title;
     }
+
+    var board_pins = this.state.boardPins.map(function (pin) {
+        return <PinsIndexItem key={pin.id} pin={pin} showComments={true} />;
+      });
 
     return (
       <div className="board-index index-item group">
+      <h2>{board_title}</h2>
         <div className="new-create-link">
         <a href='#/pins/new'>
           Add Pin
         </a>
         </div>
 
-        <div id="masonry-container" className="landing-page transitions-enabled infinite-scroll clearfix">
+        <div id="masonry-container" className="landing-page">
           {board_pins}
         </div>
 

@@ -15,12 +15,23 @@ var PinsDetail = React.createClass({
     PinsUtil.fetchSinglePin(this.props.params.pin_id);
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    var pinId = parseInt(nextProps.params.pin_id);
+    PinsUtil.fetchSinglePin(this.__onChange(pinId));
+
+  },
+
   componentWillUnMount: function (){
     this.pinListener.remove();
   },
 
-  __onChange: function (){
-    var pinId = parseInt(this.props.params.pin_id);
+  __onChange: function (id){
+    var pinId;
+    if(id){
+      pinId = id;
+    } else {
+      pinId = parseInt(this.props.params.pin_id);
+    }
     this.setState({ pin: PinsStore.find(pinId) });
   },
 

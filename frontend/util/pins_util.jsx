@@ -11,12 +11,13 @@ var PinsUtil = {
     });
   },
 
-  fetchSinglePin: function (id){
+  fetchSinglePin: function (id, callback){
     $.get({
       url: "/api/pins/" + id,
       dataType: "json",
       success: function (pin) {
         PinsActions.receiveSinglePin(pin);
+        if(callback){ callback(); }
       }
     });
   },

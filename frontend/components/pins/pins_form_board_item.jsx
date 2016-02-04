@@ -2,7 +2,6 @@ var React = require('react');
 var BoardsStore = require('../../stores/boards_store');
 var BoardsUtil = require('../../util/boards_util');
 var CurrentUserStore = require('../../stores/current_user_store');
-var SessionApiUtil = require('../../util/session_util');
 var PinFormBoardItem = React.createClass({
 
   getInitialState: function () {

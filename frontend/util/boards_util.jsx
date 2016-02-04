@@ -14,13 +14,13 @@ var BoardsUtil = {
     });
   },
 
-  fetchSingleBoard: function (id){
-    debugger
+  fetchSingleBoard: function (id, callback){
     $.get({
       url: "/api/boards/" + id,
       dataType: "json",
       success: function (board) {
         BoardsActions.receiveSingleBoard(board);
+        if(callback){ callback(); }
       }
     });
   },

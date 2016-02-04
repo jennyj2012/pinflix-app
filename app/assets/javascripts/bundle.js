@@ -24839,6 +24839,20 @@
 	        }
 	      }
 	    });
+	  },
+	
+	  fetchSingleUser: function (id, callback) {
+	    $.ajax({
+	      url: '/api/users/',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (user) {
+	        UserActions.receiveSingleUser(user);
+	        if (callback) {
+	          callback();
+	        }
+	      }
+	    });
 	  }
 	
 	};
@@ -31512,12 +31526,15 @@
 	    });
 	  },
 	
-	  fetchSinglePin: function (id) {
+	  fetchSinglePin: function (id, callback) {
 	    $.get({
 	      url: "/api/pins/" + id,
 	      dataType: "json",
 	      success: function (pin) {
 	        PinsActions.receiveSinglePin(pin);
+	        if (callback) {
+	          callback();
+	        }
 	      }
 	    });
 	  },
@@ -32163,7 +32180,6 @@
 	var BoardsStore = __webpack_require__(250);
 	var BoardsUtil = __webpack_require__(251);
 	var CurrentUserStore = __webpack_require__(220);
-	var SessionApiUtil = __webpack_require__(211);
 	var PinFormBoardItem = React.createClass({
 	  displayName: 'PinFormBoardItem',
 	
@@ -32327,13 +32343,15 @@
 	    });
 	  },
 	
-	  fetchSingleBoard: function (id) {
-	    debugger;
+	  fetchSingleBoard: function (id, callback) {
 	    $.get({
 	      url: "/api/boards/" + id,
 	      dataType: "json",
 	      success: function (board) {
 	        BoardsActions.receiveSingleBoard(board);
+	        if (callback) {
+	          callback();
+	        }
 	      }
 	    });
 	  }
@@ -32391,12 +32409,22 @@
 	    PinsUtil.fetchSinglePin(this.props.params.pin_id);
 	  },
 	
+	  componentWillReceiveProps: function (nextProps) {
+	    var pinId = parseInt(nextProps.params.pin_id);
+	    PinsUtil.fetchSinglePin(this.__onChange(pinId));
+	  },
+	
 	  componentWillUnMount: function () {
 	    this.pinListener.remove();
 	  },
 	
-	  __onChange: function () {
-	    var pinId = parseInt(this.props.params.pin_id);
+	  __onChange: function (id) {
+	    var pinId;
+	    if (id) {
+	      pinId = id;
+	    } else {
+	      pinId = parseInt(this.props.params.pin_id);
+	    }
 	    this.setState({ pin: PinsStore.find(pinId) });
 	  },
 	
@@ -32443,6 +32471,7 @@
 	var BoardsUtil = __webpack_require__(251);
 	var BoardsStore = __webpack_require__(250);
 	var BoardsIndexItem = __webpack_require__(256);
+	var UsersUtil = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../users_util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
@@ -32456,12 +32485,22 @@
 	    BoardsUtil.fetchAllBoards();
 	  },
 	
+	  componentWillReceiveProps: function (nextProps) {
+	    var userId = parseInt(nextProps.params.user_id);
+	    UsersUtil.fetchSingleUser(this.__onChange(userId));
+	  },
+	
 	  componentWillUnMount: function () {
 	    this.boardListener.remove();
 	  },
 	
-	  __onChange: function () {
-	    var userId = parseInt(this.props.params.user_id);
+	  __onChange: function (id) {
+	    var userId;
+	    if (id) {
+	      userId = id;
+	    } else {
+	      userId = parseInt(this.props.params.user_id);
+	    }
 	    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
 	  },
 	
@@ -32616,13 +32655,24 @@
 	    PinsUtil.fetchAllPins();
 	  },
 	
+	  componentWillReceiveProps: function (nextProps) {
+	    var boardId = parseInt(nextProps.params.board_id);
+	    BoardsUtil.fetchSingleBoard(this.__onChange(boardId));
+	  },
+	
 	  componentWillUnMount: function () {
 	    this.boardDetailListener.remove();
 	    this.pinListener.remove();
 	  },
 	
-	  __onChange: function () {
-	    var boardId = parseInt(this.props.params.board_id);
+	  __onChange: function (id) {
+	    var boardId;
+	    if (id) {
+	      boardId = id;
+	    } else {
+	      boardId = parseInt(this.props.params.board_id);
+	    }
+	
 	    var currentBoard = BoardsStore.find(boardId);
 	    var currentPins = PinsStore.findByBoardId(boardId);
 	    this.setState({ board: currentBoard, boardPins: currentPins });
@@ -32630,19 +32680,24 @@
 	
 	  render: function () {
 	    var board = this.state.board;
-	    var board_pins;
+	    var board_title = "Unknown Board";
 	
-	    if (typeof board.pins === "undefined") {
-	      board_pins = [];
-	    } else {
-	      board_pins = this.state.boardPins.map(function (pin) {
-	        return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
-	      });
+	    if (typeof board.title !== "undefined") {
+	      board_title = board.title;
 	    }
+	
+	    var board_pins = this.state.boardPins.map(function (pin) {
+	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
+	    });
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'board-index index-item group' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        board_title
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'new-create-link' },
@@ -32654,7 +32709,7 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { id: 'masonry-container', className: 'landing-page transitions-enabled infinite-scroll clearfix' },
+	        { id: 'masonry-container', className: 'landing-page' },
 	        board_pins
 	      )
 	    );

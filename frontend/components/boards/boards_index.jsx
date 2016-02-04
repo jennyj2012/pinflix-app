@@ -2,6 +2,7 @@ var React = require('react');
 var BoardsUtil = require('../../util/boards_util');
 var BoardsStore = require('../../stores/boards_store');
 var BoardsIndexItem = require('./boards_index_item');
+var UsersUtil = require('../../users_util');
 
 var BoardsIndex = React.createClass({
   getInitialState: function (){
@@ -13,12 +14,22 @@ var BoardsIndex = React.createClass({
     BoardsUtil.fetchAllBoards();
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    var userId = parseInt(nextProps.params.user_id);
+    UsersUtil.fetchSingleUser(this.__onChange(userId));
+  },
+
   componentWillUnMount: function (){
     this.boardListener.remove();
   },
 
-  __onChange: function (){
-    var userId = parseInt(this.props.params.user_id);
+  __onChange: function (id){
+    var userId;
+    if(id){
+      userId = id;
+    } else {
+      userId = parseInt(this.props.params.user_id);
+    }
     this.setState({ allBoards: BoardsStore.findByUserId(userId) });
   },
 
