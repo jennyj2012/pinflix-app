@@ -43,9 +43,10 @@ BoardsStore.find = function (id) {
 };
 
 BoardsStore.findByUserId = function (id) {
-  return _boards.filter(function (board) {
+  var boards = _boards.filter(function (board) {
     return board.author_id === id;
   });
+  return boards;
 };
 
 BoardsStore.__onDispatch = function (payload) {

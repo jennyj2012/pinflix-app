@@ -10,7 +10,6 @@ var PinFormBoardItem = React.createClass({
   },
 
   componentDidMount: function () {
-    this.userListener = CurrentUserStore.addListener(this._userChange);
     this.boardListener = BoardsStore.addListener(this.__onChange);
     BoardsUtil.fetchAllBoards();
   },
@@ -21,15 +20,16 @@ var PinFormBoardItem = React.createClass({
   },
 
   _userChange: function () {
-   this.setState({ currentUser: CurrentUserStore.currentUser() });
+   this.setState({ currentUser: user });
  },
 
   __onChange: function () {
-    var userId = this.state.currentUser.id;
+    var userId = CurrentUserStore.currentUser().id;
     this.setState({ allBoards: BoardsStore.findByUserId(userId) });
   },
 
   render: function () {
+
     var handleSubmit = this.props.handleSubmit;
 
     var boards = this.state.allBoards.map(function (board) {

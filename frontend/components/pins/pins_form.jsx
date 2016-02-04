@@ -10,7 +10,6 @@ var PinsForm = React.createClass({
   mixins: [LinkedStateMixin, History],
 
   getInitialState: function() {
-    debugger
     return {
       title: "",
       description: "",
@@ -24,7 +23,6 @@ var PinsForm = React.createClass({
   },
 
   componentDidMount: function (){
-    debugger
     if(typeof this.props.params.pin_id !== "undefined"){
       this.pinListener = PinsStore.addListener(this.__onChange);
       PinsUtil.fetchSinglePin(this.props.params.pin_id);
@@ -88,19 +86,9 @@ var PinsForm = React.createClass({
   },
 
   render: function () {
-debugger
     var imageDisplay;
     var pin = this.state.pin;
     var filename;
-
-    // ******************************
-    // FILE INPUT FILENAME SWAP (imageFile.name)
-    // ******************************
-    // if(this.state.upload && typeof this.state.imageFile !== "undefined"){
-    //   filename = this.state.imageFile.name;
-    // } else {
-      filename = "Filename assignment works";
-    // }
 
     // ******************************
     // INPUT ITEMS

@@ -31697,14 +31697,13 @@
 	    //send info to pin form to prepopulate.
 	    e.preventDefault();
 	    // {pinId: this.props.pin.id}
-	    this.history.pushState({}, "/pins/new", this.props.pin.id);
+	    this.history.pushState({}, "/pins/new/" + this.props.pin.id);
 	  },
 	  showPinDetails: function (e) {
 	    this.history.pushState({}, "/pins/" + this.props.pin.id);
 	  },
 	
 	  render: function () {
-	    debugger;
 	    var pin = this.props.pin;
 	    var pinLink = "#/pins/" + pin.id;
 	    var pinAuthor = "anonymous";
@@ -31952,7 +31951,6 @@
 	  mixins: [LinkedStateMixin, History],
 	
 	  getInitialState: function () {
-	    debugger;
 	    return {
 	      title: "",
 	      description: "",
@@ -31966,7 +31964,6 @@
 	  },
 	
 	  componentDidMount: function () {
-	    debugger;
 	    if (typeof this.props.params.pin_id !== "undefined") {
 	      this.pinListener = PinsStore.addListener(this.__onChange);
 	      PinsUtil.fetchSinglePin(this.props.params.pin_id);
@@ -32029,19 +32026,9 @@
 	  },
 	
 	  render: function () {
-	    debugger;
 	    var imageDisplay;
 	    var pin = this.state.pin;
 	    var filename;
-	
-	    // ******************************
-	    // FILE INPUT FILENAME SWAP (imageFile.name)
-	    // ******************************
-	    // if(this.state.upload && typeof this.state.imageFile !== "undefined"){
-	    //   filename = this.state.imageFile.name;
-	    // } else {
-	    filename = "Filename assignment works";
-	    // }
 	
 	    // ******************************
 	    // INPUT ITEMS
@@ -32185,7 +32172,6 @@
 	  },
 	
 	  componentDidMount: function () {
-	    this.userListener = CurrentUserStore.addListener(this._userChange);
 	    this.boardListener = BoardsStore.addListener(this.__onChange);
 	    BoardsUtil.fetchAllBoards();
 	  },
@@ -32196,15 +32182,16 @@
 	  },
 	
 	  _userChange: function () {
-	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	    this.setState({ currentUser: user });
 	  },
 	
 	  __onChange: function () {
-	    var userId = this.state.currentUser.id;
+	    var userId = CurrentUserStore.currentUser().id;
 	    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
 	  },
 	
 	  render: function () {
+	
 	    var handleSubmit = this.props.handleSubmit;
 	
 	    var boards = this.state.allBoards.map(function (board) {
@@ -32297,9 +32284,10 @@
 	};
 	
 	BoardsStore.findByUserId = function (id) {
-	  return _boards.filter(function (board) {
+	  var boards = _boards.filter(function (board) {
 	    return board.author_id === id;
 	  });
+	  return boards;
 	};
 	
 	BoardsStore.__onDispatch = function (payload) {
