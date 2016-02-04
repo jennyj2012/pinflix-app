@@ -24820,40 +24820,45 @@
 
 /***/ },
 /* 218 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	// var CurrentUserActions = require("./../actions/current_user_actions");
-	//
-	// var UsersApiUtil = {
-	//
-	//   createUser: function (credentials, callback) {
-	//     $.ajax({
-	//       url: '/api/users',
-	//       type: 'POST',
-	//       dataType: 'json',
-	//       data: credentials,
-	//       success: function (currentUser) {
-	//         CurrentUserActions.receiveCurrentUser(currentUser);
-	//         if(callback){ callback(); }
-	//       }
-	//     });
-	//   },
-	//
-	//   fetchSingleUser: function (id, callback) {
-	//     $.ajax({
-	//       url: '/api/users/',
-	//       type: 'GET',
-	//       dataType: 'json',
-	//       success: function (user) {
-	//         UserActions.receiveSingleUser(user);
-	//           if(callback){ callback(user.id); }
-	//       }
-	//     });
-	//   },
-	//
-	// };
-	//
-	// module.exports = UsersApiUtil;
+	var CurrentUserActions = __webpack_require__(212);
+	var UserActions = __webpack_require__(262);
+	
+	var UsersApiUtil = {
+	
+	  createUser: function (credentials, callback) {
+	    $.ajax({
+	      url: '/api/users',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: credentials,
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        if (callback) {
+	          callback();
+	        }
+	      }
+	    });
+	  },
+	
+	  fetchSingleUser: function (id, callback) {
+	    $.ajax({
+	      url: '/api/users/' + id,
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (user) {
+	        UserActions.receiveSingleUser(user);
+	        if (callback) {
+	          callback(user.id);
+	        }
+	      }
+	    });
+	  }
+	
+	};
+	
+	module.exports = UsersApiUtil;
 
 /***/ },
 /* 219 */
@@ -32491,7 +32496,7 @@
 	var BoardsUtil = __webpack_require__(251);
 	var BoardsStore = __webpack_require__(250);
 	var BoardsIndexItem = __webpack_require__(256);
-	// var UsersUtil = require('../../users_util');
+	var UsersUtil = __webpack_require__(218);
 	
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
@@ -32507,7 +32512,7 @@
 	
 	  componentWillReceiveProps: function (nextProps) {
 	    var userId = parseInt(nextProps.params.user_id);
-	    // UsersUtil.fetchSingleUser(this.__onChange);
+	    UsersUtil.fetchSingleUser(userId, this.__onChange);
 	  },
 	
 	  componentWillUnMount: function () {
@@ -32906,6 +32911,25 @@
 	});
 	
 	module.exports = Search;
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(213);
+	var UserConstants = __webpack_require__(217);
+	
+	var UserActions = {
+	  receiveSingleUser: function (user) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.RECEIVE_SINGLE_USER,
+	      user: user
+	    });
+	  }
+	
+	};
+	
+	module.exports = UserActions;
 
 /***/ }
 /******/ ]);
