@@ -17,5 +17,6 @@ Rails.application.routes.draw do
     resources :comments,
       only: [:index, :show, :create]
 
+    get "search", to: "utils#search"
   end
 end

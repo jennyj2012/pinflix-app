@@ -29,7 +29,7 @@
   display: block;
 }
 
-.pin-form {
+.form {
   width: 660px;
   background: #fff;
   margin: auto;
@@ -42,7 +42,7 @@
 
 .pin-form-right {
   width: 330px;
-  float: left;
+  float: right;
 }
 
 .pin-board-list-item {
@@ -64,14 +64,6 @@
 
 .pin-to-board-button {
   float: right;
-}
-
-.pin-form-left {
-  width: 330px;
-}
-
-.pin-form-right {
-  float:right;
 }
 
 .pin-it-button {

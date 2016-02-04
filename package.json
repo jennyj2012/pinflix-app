@@ -20,11 +20,15 @@
     "babel-preset-react": "^6.3.13",
     "flux": "^2.1.1",
     "history": "^1.17.0",
+    "imports-loader": "^0.6.5",
     "react": "^0.14.6",
     "react-addons-linked-state-mixin": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-history": "^1.0.0",
+    "react-masonry-component": "^3.0.0",
     "react-router": "^1.0.3",
-    "webpack": "^1.12.12"
+    "webpack": "^1.12.12",
+    "imagesloaded": "^4.0.0",
+    "masonry-layout": "^3.3.2"
   }
 }

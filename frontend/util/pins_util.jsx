@@ -12,6 +12,7 @@ var PinsUtil = {
   },
 
   fetchSinglePin: function (id, callback){
+
     $.get({
       url: "/api/pins/" + id,
       dataType: "json",

@@ -1,5 +1,8 @@
 class Pin < ActiveRecord::Base
-  has_many :comments
+  include PgSearch
+  multisearchable :against => [:title, :description]
+
+  has_many :comments, dependent: :destroy
   belongs_to :board
   belongs_to :photo
   has_one :author, through: :board, source: :author

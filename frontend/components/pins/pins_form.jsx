@@ -179,7 +179,7 @@ var PinsForm = React.createClass({
 
     return (
       <div className="new-pin">
-        <form className="pin-form group">
+        <form className="form group">
 
           <div className="pin-form-left">
             <h2> Create a Pin </h2>

@@ -24,13 +24,6 @@ var Header = React.createClass({
    this.setState({currentUser: CurrentUserStore.currentUser()});
  },
 
-  logout: function (e){
-    e.preventDefault();
-    SessionApiUtil.logout( function () {
-      this.history.pushState({}, "/session/new");
-    }.bind(this));
-  },
-
    render: function () {
     var user = this.state.currentUser;
     var userBoards;
@@ -42,13 +35,12 @@ var Header = React.createClass({
     }
 
     return(
-      <div className="header group">
+      <div className="header">
         <div className ="header-center group">
 
           <div className="header-left group">
             <div>
               <a href="/" className="logo">
-
                 <img src={window.pinflix.logo}/>
               </a>
             </div>
@@ -72,6 +64,13 @@ var Header = React.createClass({
         </div>
       </div>
     );
+  },
+
+  logout: function (e){
+    e.preventDefault();
+    SessionApiUtil.logout( function () {
+      this.history.pushState({}, "/session/new");
+    }.bind(this));
   }
 
 });

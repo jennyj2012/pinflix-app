@@ -12,31 +12,37 @@
 
 .header-center{
   margin: 0 auto;
-  min-width: 700px;
   padding: 10px;
   display: block;
-}
-
-.header-left{
-  float: left;
-  width: 70%;
+  min-width: 700px;
+  width: 100%;
 }
 
 .header-right{
   float: right;
+  width: 265px;
+  position: relative;
+}
 
+.header-left{
+  float: left;
+  // min-width: 600px;
+  height: 32px;
+  position: relative;
+  margin-right: 6px;
+  width: 100%;
 }
 
 .search {
-  height: 32px;
   vertical-align: middle;
   float: left;
   background: transparent;
   border: 0;
   width: 70%;
+  position: relative;
 }
 
- .search input {
+.search-bar input {
   overflow: hidden;
   border-top: 1px solid #dfdfdf;
   background-color: #f3f3f3;
@@ -44,7 +50,6 @@
   background: -webkit-linear-gradient(#f0f0f0, #f5f5f5);
   background: linear-gradient(#f0f0f0, #f5f5f5);
   box-sizing: border-box;
-  width: 100%;
   border-radius: 0px;
   border: 1px solid #d6d3ce;
   -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.12) inset;
@@ -59,18 +64,62 @@
   height: 32px;
   line-height: 20px;
   padding: 6px 0 6px 4px;
+  width: 100%;
+}
+
+.search-bar {
   float: left;
- }
+  width: 100%;
+  padding: 0;
+}
 
- .search-button {
-   width: 42px;
-   height: 30px;
-   border: 1px solid #ccc;
-   background: #fff;
-   float:left;
- }
+.search-button {
+  position: absolute;
+  right: 0;
+  width: 42px;
+  height: 30px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
 
- .user-menu {
+.search-results {
+  margin: 0 auto;
+  position: absolute;
+  width: 100%;
+  height: 200px;
+  background: white;
+  opacity: .8;
+  overflow: scroll;
+}
+
+.search-results ul{
+  text-align: left;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+}
+
+.search-results li {
+  padding: 5px 0 5px 10px;
+  text-align: left;
+  font-weight: normal;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-results span {
+  text-align: right;
+}
+
+.search-bar:active .search-results,
+.search-bar:focus .search-results,
+.search-bar:hover .search-results {
+  display: block;
+}
+
+.user-menu {
    float: left;
 
    -webkit-font-smoothing: antialiased;
@@ -95,8 +144,8 @@
    width: 195px;
  }
 
- .user-link {
-   float: left;
+.user-link {
+  float: left;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   white-space: nowrap; //cut off name if it's too long
@@ -108,7 +157,7 @@
   font-weight: 600;
   line-height: 32px;
   padding: 0 0 0 6px;
- }
+}
 
  .user-menu a {
    display: block;

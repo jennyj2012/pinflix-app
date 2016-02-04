@@ -5,7 +5,7 @@ var InfoBox = React.createClass({
 
   getInitialState: function () {
     return {
-      currentUser: {}
+      test: {}
     };
   },
 
@@ -13,7 +13,7 @@ var InfoBox = React.createClass({
 
     return(
       <div>
-      <h2>searchbar</h2>
+      <h2>Hi</h2>
       </div>
     );
   }

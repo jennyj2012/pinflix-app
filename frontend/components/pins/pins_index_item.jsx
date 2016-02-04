@@ -13,17 +13,6 @@ var PinsIndexItem = React.createClass({
   //   return a.hostname;
   // },
 
-  pinIt: function(e) {
-    //send info to pin form to prepopulate.
-    e.preventDefault();
-    // {pinId: this.props.pin.id}
-    this.history.pushState({}, "/pins/new/" + this.props.pin.id);
-
-  },
-  showPinDetails: function(e) {
-    this.history.pushState({}, "/pins/" + this.props.pin.id);
-  },
-
   render: function () {
     var pin = this.props.pin;
     var pinLink= "#/pins/"+ pin.id;
@@ -83,7 +72,18 @@ var PinsIndexItem = React.createClass({
 
       </div>
     );
-  }
+  },
+
+  pinIt: function(e) {
+    //send info to pin form to prepopulate.
+    e.preventDefault();
+    this.history.pushState({}, "/pins/new/" + this.props.pin.id);
+
+  },
+
+  showPinDetails: function(e) {
+    this.history.pushState({}, "/pins/" + this.props.pin.id);
+  },
 });
 
 module.exports = PinsIndexItem;

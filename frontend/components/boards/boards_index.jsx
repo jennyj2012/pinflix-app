@@ -1,19 +1,14 @@
 var React = require('react');
+var UserStore = require('../../stores/boards_store');
 var BoardsUtil = require('../../util/boards_util');
-var BoardsStore = require('../../stores/boards_store');
+var BoardsStore = require('../../stores/users_store');
 var BoardsIndexItem = require('./boards_index_item');
 var UsersUtil = require('../../util/users_util');
-var Masonry = require('react-masonry-component')(React);
-var masonryOptions = {
-  transitionDuration: '0.2s',
-  itemSelector: '.pin',
-  columnWidth: '.pin',
-  isResizable: true
-};
+
 
 var BoardsIndex = React.createClass({
   getInitialState: function (){
-    return {allBoards: []};
+    return {allBoards: [], user: {}};
   },
 
   componentDidMount: function (){
@@ -37,7 +32,9 @@ var BoardsIndex = React.createClass({
     } else {
       userId = parseInt(this.props.params.user_id);
     }
-    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
+    this.setState({
+      allBoards: BoardsStore.findByUserId(userId),
+      user: UserStore.find(userId)});
   },
 
   render: function () {
@@ -45,10 +42,14 @@ var BoardsIndex = React.createClass({
       return <BoardsIndexItem key={board.id} board={board}></BoardsIndexItem>;
     });
 
+    var user = "anonymous";
+    if(typeof this.state.user !== "undefined"){
+      user = this.state.user.username;
+    }
 
     return (
       <div className="user-board-page group">
-        <Masonry className="masonry-container transitions-enabled infinite-scroll centered clearfix">
+        <h2>{user}</h2>
           <div className="new-create-link">
             <a href='#/boards/new'>
               Add Board
@@ -56,7 +57,6 @@ var BoardsIndex = React.createClass({
           </div>
 
           {boards}
-        </Masonry>
       </div>
     );
   }

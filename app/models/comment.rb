@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  include PgSearch
+  multisearchable :against => [:body]
   belongs_to :pin
   belongs_to :author, class_name: "User", foreign_key: :author_id
 

@@ -8,6 +8,12 @@ var UserActions = {
       user: user
     });
   },
+  removeSingleUser: function (user) {
+    Dispatcher.dispatch({
+      actionType: UserConstants.REMOVE_SINGLE_USER,
+      user: user
+    });
+  },
 
 };
 

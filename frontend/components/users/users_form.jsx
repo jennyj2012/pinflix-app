@@ -12,23 +12,6 @@ var UserForm = React.createClass({
     return {username: "", email: "", password: ""};
   },
 
-  handleSubmit: function(e) {
-    e.preventDefault();
-    var credentials = $(e.target).serializeJSON();
-    UsersApiUtil.createUser(credentials, function () {
-      this.history.pushState({}, "/");
-    }.bind(this));
-  },
-
-  handleGuest: function(e) {
-    e.preventDefault();
-    var credentials = {user: {username: "guest", password: "pinflixguest"} };
-    this.setState(credentials);
-    SessionApiUtil.login(credentials, function () {
-      this.history.pushState({}, "/");
-    }.bind(this));
-  },
-
   render: function () {
     // <p className="errors">Fill out all data</p>
     return (
@@ -81,6 +64,23 @@ var UserForm = React.createClass({
       </form>
       </div>
     );
+  },
+
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var credentials = $(e.target).serializeJSON();
+    UsersApiUtil.createUser(credentials, function () {
+      this.history.pushState({}, "/");
+    }.bind(this));
+  },
+
+  handleGuest: function(e) {
+    e.preventDefault();
+    var credentials = {user: {username: "guest", password: "pinflixguest"} };
+    this.setState(credentials);
+    SessionApiUtil.login(credentials, function () {
+      this.history.pushState({}, "/");
+    }.bind(this));
   }
 });
 

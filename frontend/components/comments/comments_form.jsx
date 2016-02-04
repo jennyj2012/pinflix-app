@@ -27,16 +27,6 @@ var CommentsForm = React.createClass({
     this.setState({body: e.currentTarget.value});
   },
 
-  handleSubmit: function(e){
-    e.preventDefault();
-
-    PinsUtil.createPinComment({
-      body: this.state.body,
-      pin_id: this.props.pin.id
-    });
-
-  },
-
   render: function () {
     var comment = this.props.comment;
 
@@ -61,6 +51,15 @@ var CommentsForm = React.createClass({
           </section>
       </div>
     );
+  },
+  
+  handleSubmit: function(e){
+    e.preventDefault();
+
+    PinsUtil.createPinComment({
+      body: this.state.body,
+      pin_id: this.props.pin.id
+    });
   }
 });
 

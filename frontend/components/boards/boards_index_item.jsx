@@ -5,12 +5,6 @@ var History = require('react-router').History;
 var BoardsIndexItem = React.createClass({
   mixins: [History],
 
-  handleClick: function (e) {
-    e.preventDefault();
-    this.history.pushState({}, "/boards/"+ this.props.board.id);
-  },
-
-
   render: function () {
     var board = this.props.board;
     var pinThumbs = [];
@@ -32,8 +26,8 @@ var BoardsIndexItem = React.createClass({
     }
 
     return (
-      <div className="board-index-item index-item" onClick={this.handleClick}>
-          <div className="board-detail-link">
+      <div className="board-index-item index-item" >
+          <div className="board-detail-link" onClick={this.handleClick}>
             <section className="title">
               <figcaption>{board.title}</figcaption>
             </section>
@@ -46,10 +40,17 @@ var BoardsIndexItem = React.createClass({
           </div>
 
         <div className="edit-board-button">
+            <a href={"#/boards/edit/" + this.props.board.id}>Edit</a>
         </div>
       </div>
     );
+  },
+
+  handleClick: function (e) {
+    e.preventDefault();
+    this.history.pushState({}, "/boards/"+ this.props.board.id);
   }
+
 });
 
 module.exports = BoardsIndexItem;

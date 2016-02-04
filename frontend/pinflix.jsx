@@ -16,6 +16,7 @@ var PinsDetail = require('./components/pins/pins_detail');
 
 var BoardsIndex = require('./components/boards/boards_index');
 var BoardsForm = require('./components/boards/boards_form');
+var BoardsEdit = require('./components/boards/boards_edit');
 var BoardsDetail = require('./components/boards/boards_detail');
 
 var CommentsIndex = require('./components/comments/comments_index');
@@ -62,9 +63,10 @@ var router = (
     <Route path="users/new" component={UsersForm} />
     <Route path="/" component={App} onEnter={_ensureLoggedIn}>
       <IndexRoute component={PinsIndex} />
-      <Route path="boards/new" component={BoardsForm} />
       <Route path="users/:user_id" component={BoardsIndex} />
+      <Route path="boards/new" component={BoardsForm} />
       <Route path="boards/:board_id" component={BoardsDetail} />
+      <Route path="boards/edit/:board_id" component={BoardsEdit} />
       <Route path="pins/new" component={PinsForm} />
       <Route path="pins/new/:pin_id" component={PinsForm} />
       <Route path="pins/:pin_id" component={PinsDetail} />

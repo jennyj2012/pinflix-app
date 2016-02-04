@@ -10,14 +10,12 @@ class Api::PinsController < ApplicationController
   end
 
   def create
-    debugger
     board = current_user.boards.find(board_id)
     @pin = board.pins.new(pin_params)
 
     #create photo
     photo = Photo.new()
     #
-    debugger
     if prev_photo_id
       Pin.find(prev_photo_id) # if prevPin given
       photo = Photo.find(prev_photo_id)
@@ -32,7 +30,6 @@ class Api::PinsController < ApplicationController
     @pin.photo = photo
 
     if @pin.save
-      debugger
       render "api/pins/show"
     else
       render json: @pin, status: :unprocessable_entity

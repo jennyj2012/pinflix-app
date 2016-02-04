@@ -6,13 +6,6 @@ var PinsIndexItem = require('../pins/pins_index_item');
 var PinsUtil = require('../../util/pins_util');
 var PinsStore = require('../../stores/pins_store');
 
-var Masonry = require('react-masonry-component')(React);
-var masonryOptions = {
-  transitionDuration: '0.2s',
-  itemSelector: '.pin',
-  columnWidth: '.pin',
-  isResizable: true
-};
 
 var BoardsIndexItem = React.createClass({
   getInitialState: function (){
@@ -53,9 +46,19 @@ var BoardsIndexItem = React.createClass({
   render: function () {
     var board = this.state.board;
     var board_title = "Unknown Board";
+    var board_description = "";
+    var board_author = "anonymous";
 
     if(typeof board.title !== "undefined"){
       board_title = board.title;
+    }
+
+    if(typeof board.description !== "undefined"){
+      board_description = board.description;
+    }
+
+    if(typeof board.author !== "undefined" && typeof board.author.username !== "undefined"){
+      board_author = board.author.username;
     }
 
     var board_pins = this.state.boardPins.map(function (pin) {
@@ -63,20 +66,21 @@ var BoardsIndexItem = React.createClass({
       });
 
     return (
-      <div className="board-index index-item group">
-        <Masonry className="masonry-container transitions-enabled infinite-scroll centered clearfix">
+      <div className="board-index">
+        <h2>{board_title}</h2>
+        <h4>{board_description}</h4>
+        <h4>{board_author}</h4>
+        <div className="index-item group">
+          <div className="new-create-link">
+          <a href='#/pins/new'>
+            Add Pin
+          </a>
+          </div>
 
-      <h2>{board_title}</h2>
-        <div className="new-create-link">
-        <a href='#/pins/new'>
-          Add Pin
-        </a>
+          <div className="landing-page">
+            {board_pins}
+          </div>
         </div>
-
-        <div id="masonry-container" className="landing-page">
-          {board_pins}
-        </div>
-      </Masonry>
 
       </div>
     );

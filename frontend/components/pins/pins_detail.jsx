@@ -1,5 +1,4 @@
 var React = require('react');
-var PinsEdit = require('./pins_edit');
 var PinsIndexItem = require('./pins_index_item');
 
 var PinsUtil = require('../../util/pins_util');
@@ -18,7 +17,6 @@ var PinsDetail = React.createClass({
   componentWillReceiveProps: function(nextProps) {
     var pinId = parseInt(nextProps.params.pin_id);
     PinsUtil.fetchSinglePin(pinId, this.__onChange);
-
   },
 
   componentWillUnMount: function (){

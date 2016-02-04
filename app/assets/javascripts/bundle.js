@@ -57,16 +57,17 @@
 	var SessionsApiUtil = __webpack_require__(211);
 	
 	var PinsIndex = __webpack_require__(239);
-	var PinsForm = __webpack_require__(263);
-	var PinsDetail = __webpack_require__(268);
+	var PinsForm = __webpack_require__(262);
+	var PinsDetail = __webpack_require__(267);
 	
-	var BoardsIndex = __webpack_require__(270);
-	var BoardsForm = __webpack_require__(272);
-	var BoardsDetail = __webpack_require__(273);
+	var BoardsIndex = __webpack_require__(268);
+	var BoardsForm = __webpack_require__(270);
+	var BoardsEdit = __webpack_require__(271);
+	var BoardsDetail = __webpack_require__(272);
 	
 	var CommentsIndex = __webpack_require__(246);
 	
-	var App = __webpack_require__(274);
+	var App = __webpack_require__(273);
 	
 	function _ensureLoggedOut(nextState, replace, callback) {
 	  if (CurrentUserStore.userHasBeenFetched()) {
@@ -110,9 +111,10 @@
 	    Route,
 	    { path: '/', component: App, onEnter: _ensureLoggedIn },
 	    React.createElement(IndexRoute, { component: PinsIndex }),
-	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),
 	    React.createElement(Route, { path: 'users/:user_id', component: BoardsIndex }),
+	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),
 	    React.createElement(Route, { path: 'boards/:board_id', component: BoardsDetail }),
+	    React.createElement(Route, { path: 'boards/edit/:board_id', component: BoardsEdit }),
 	    React.createElement(Route, { path: 'pins/new', component: PinsForm }),
 	    React.createElement(Route, { path: 'pins/new/:pin_id', component: PinsForm }),
 	    React.createElement(Route, { path: 'pins/:pin_id', component: PinsDetail })
@@ -24076,23 +24078,6 @@
 	    return { username: "", email: "", password: "" };
 	  },
 	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	    var credentials = $(e.target).serializeJSON();
-	    UsersApiUtil.createUser(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
-	  },
-	
-	  handleGuest: function (e) {
-	    e.preventDefault();
-	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
-	    this.setState(credentials);
-	    SessionApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
-	  },
-	
 	  render: function () {
 	    // <p className="errors">Fill out all data</p>
 	    return React.createElement(
@@ -24175,6 +24160,23 @@
 	        )
 	      )
 	    );
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    var credentials = $(e.target).serializeJSON();
+	    UsersApiUtil.createUser(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  handleGuest: function (e) {
+	    e.preventDefault();
+	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
+	    this.setState(credentials);
+	    SessionApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
 	  }
 	});
 	
@@ -24873,6 +24875,12 @@
 	      actionType: UserConstants.RECEIVE_SINGLE_USER,
 	      user: user
 	    });
+	  },
+	  removeSingleUser: function (user) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.REMOVE_SINGLE_USER,
+	      user: user
+	    });
 	  }
 	
 	};
@@ -24897,23 +24905,6 @@
 	
 	  getInitialState: function () {
 	    return { username: "", password: "" };
-	  },
-	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	    var credentials = $(e.target).serializeJSON();
-	    SessionApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
-	  },
-	
-	  handleGuest: function (e) {
-	    e.preventDefault();
-	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
-	    this.setState(credentials);
-	    SessionApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
 	  },
 	
 	  render: function () {
@@ -24989,7 +24980,25 @@
 	        )
 	      )
 	    );
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    var credentials = $(e.target).serializeJSON();
+	    SessionApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  handleGuest: function (e) {
+	    e.preventDefault();
+	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
+	    this.setState(credentials);
+	    SessionApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
 	  }
+	
 	});
 	
 	module.exports = SessionForm;
@@ -31489,12 +31498,9 @@
 	var PinsIndexItem = __webpack_require__(245);
 	
 	var CurrentUserStore = __webpack_require__(221);
-	var Masonry = __webpack_require__(249)(React);
+	var Masonry = __webpack_require__(249);
 	var masonryOptions = {
-	  transitionDuration: '0.2s',
-	  itemSelector: '.pin',
-	  columnWidth: '.pin',
-	  isResizable: true
+	  transitionDuration: '0'
 	};
 	
 	var PinsIndex = React.createClass({
@@ -31528,7 +31534,12 @@
 	      { className: 'landing-page' },
 	      React.createElement(
 	        Masonry,
-	        { className: 'masonry-container transitions-enabled infinite-scroll centered clearfix' },
+	        {
+	          className: 'my-gallery-class' // default ''
+	          , elementType: 'ul' // default 'div'
+	          , options: masonryOptions // default {}
+	          , disableImagesLoaded: false // default false
+	        },
 	        pins
 	      )
 	    );
@@ -31556,6 +31567,7 @@
 	  },
 	
 	  fetchSinglePin: function (id, callback) {
+	
 	    $.get({
 	      url: "/api/pins/" + id,
 	      dataType: "json",
@@ -31739,16 +31751,6 @@
 	  //   return a.hostname;
 	  // },
 	
-	  pinIt: function (e) {
-	    //send info to pin form to prepopulate.
-	    e.preventDefault();
-	    // {pinId: this.props.pin.id}
-	    this.history.pushState({}, "/pins/new/" + this.props.pin.id);
-	  },
-	  showPinDetails: function (e) {
-	    this.history.pushState({}, "/pins/" + this.props.pin.id);
-	  },
-	
 	  render: function () {
 	    var pin = this.props.pin;
 	    var pinLink = "#/pins/" + pin.id;
@@ -31821,6 +31823,16 @@
 	        comments
 	      )
 	    );
+	  },
+	
+	  pinIt: function (e) {
+	    //send info to pin form to prepopulate.
+	    e.preventDefault();
+	    this.history.pushState({}, "/pins/new/" + this.props.pin.id);
+	  },
+	
+	  showPinDetails: function (e) {
+	    this.history.pushState({}, "/pins/" + this.props.pin.id);
 	  }
 	});
 	
@@ -31930,15 +31942,6 @@
 	    this.setState({ body: e.currentTarget.value });
 	  },
 	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	
-	    PinsUtil.createPinComment({
-	      body: this.state.body,
-	      pin_id: this.props.pin.id
-	    });
-	  },
-	
 	  render: function () {
 	    var comment = this.props.comment;
 	
@@ -31974,6 +31977,15 @@
 	        )
 	      )
 	    );
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    PinsUtil.createPinComment({
+	      body: this.state.body,
+	      pin_id: this.props.pin.id
+	    });
 	  }
 	});
 	
@@ -31983,232 +31995,257 @@
 /* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
 	var isBrowser = (typeof window !== 'undefined');
 	var Masonry = isBrowser ? window.Masonry || __webpack_require__(250) : null;
 	var imagesloaded = isBrowser ? __webpack_require__(260) : null;
+	var React = __webpack_require__(1);
 	var refName = 'masonryContainer';
 	
-	function MasonryComponent(React) {
-	    return React.createClass({
-	        masonry: false,
-	
-	        domChildren: [],
-	
-	        displayName: 'MasonryComponent',
-	
-	        propTypes: {
-	            disableImagesLoaded: React.PropTypes.bool,
-	            options: React.PropTypes.object
-	        },
-	
-	        getDefaultProps: function() {
-	            return {
-	                disableImagesLoaded: false,
-	                options: {},
-	                className: '',
-	                elementType: 'div'
-	            };
-	        },
-	
-	        initializeMasonry: function(force) {
-	            if (!this.masonry || force) {
-	                this.masonry = new Masonry(
-	                    this.refs[refName],
-	                    this.props.options
-	                );
-	
-	                this.domChildren = this.getNewDomChildren();
-	            }
-	        },
-	
-	        getNewDomChildren: function() {
-	            var node = this.refs[refName];
-	            var children = this.props.options.itemSelector ? node.querySelectorAll(this.props.options.itemSelector) : node.children;
-	            return Array.prototype.slice.call(children);
-	        },
-	
-	        diffDomChildren: function() {
-	            var oldChildren = this.domChildren.filter(function(element) {
-	                /*
-	                 * take only elements attached to DOM
-	                 * (aka the parent is the masonry container, not null)
-	                 */
-	                return !!element.parentNode;
-	            });
-	
-	            var newChildren = this.getNewDomChildren();
-	
-	            var removed = oldChildren.filter(function(oldChild) {
-	                return !~newChildren.indexOf(oldChild);
-	            });
-	
-	            var domDiff = newChildren.filter(function(newChild) {
-	                return !~oldChildren.indexOf(newChild);
-	            });
-	
-	            var beginningIndex = 0;
-	
-	            // get everything added to the beginning of the DOMNode list
-	            var prepended = domDiff.filter(function(newChild, i) {
-	                var prepend = (beginningIndex === newChildren.indexOf(newChild));
-	
-	                if (prepend) {
-	                    // increase the index
-	                    beginningIndex++;
-	                }
-	
-	                return prepend;
-	            });
-	
-	            // we assume that everything else is appended
-	            var appended = domDiff.filter(function(el) {
-	                return prepended.indexOf(el) === -1;
-	            });
-	
-	            /*
-	             * otherwise we reverse it because so we're going through the list picking off the items that
-	             * have been added at the end of the list. this complex logic is preserved in case it needs to be
-	             * invoked 
-	             * 
-	             * var endingIndex = newChildren.length - 1;
-	             * 
-	             * domDiff.reverse().filter(function(newChild, i){
-	             *     var append = endingIndex == newChildren.indexOf(newChild);
-	             *     
-	             *     if (append) {
-	             *         endingIndex--;
-	             *     }
-	             *     
-	             *     return append;
-	             * });
-	             */
-	
-	            // get everything added to the end of the DOMNode list
-	            var moved = [];
-	
-	            if (removed.length === 0) {
-	                moved = oldChildren.filter(function(child, index) {
-	                    return index !== newChildren.indexOf(child);
-	                });
-	            }
-	
-	            this.domChildren = newChildren;
-	
-	            return {
-	                old: oldChildren,
-	                new: newChildren,
-	                removed: removed,
-	                appended: appended,
-	                prepended: prepended,
-	                moved: moved
-	            };
-	        },
-	
-	        performLayout: function() {
-	            var diff = this.diffDomChildren();
-	
-	            if (diff.removed.length > 0) {
-	                this.masonry.remove(diff.removed);
-	                this.masonry.reloadItems();
-	            }
-	
-	            if (diff.appended.length > 0) {
-	                this.masonry.appended(diff.appended);
-	                this.masonry.reloadItems();
-	            }
-	
-	            if (diff.prepended.length > 0) {
-	                this.masonry.prepended(diff.prepended);
-	            }
-	
-	            if (diff.moved.length > 0) {
-	                this.masonry.reloadItems();
-	            }
-	
-	            this.masonry.layout();
-	        },
-	
-	        imagesLoaded: function() {
-	            if (this.props.disableImagesLoaded) return;
-	
-	            imagesloaded(
-	                this.refs[refName],
-	                function(instance) {
-	                    this.masonry.layout();
-	                }.bind(this)
-	            );
-	        },
-	
-	        componentDidMount: function() {
-	            this.initializeMasonry();
-	            this.imagesLoaded();
-	        },
-	
-	        componentDidUpdate: function() {
-	            this.performLayout();
-	            this.imagesLoaded();
-	        },
-	
-	        componentWillReceiveProps: function() {
-	            this._timer = setTimeout(function() {
-	                this.masonry.reloadItems();
-	                this.isMounted && this.isMounted() && this.forceUpdate();
-	            }.bind(this), 0);
-	        },
-	
-	        componentWillUnmount: function() {
-	            clearTimeout(this._timer);
-	        },
-	
-	        render: function() {
-	            return React.createElement(this.props.elementType, {
-	                className: this.props.className,
-	                ref: refName
-	            }, this.props.children);
+	function extend() {
+	    var result = {};
+	    for (var i = 0; i < arguments.length; i++) {
+	        var keys = Object.keys(arguments[i]);
+	        for (var j = 0; j < keys.length; j++) {
+	            result[keys[j]] = arguments[i][keys[j]];
 	        }
-	    })
+	    }
+	    return result;
 	}
 	
+	
+	var MasonryComponent = React.createClass({
+	    masonry: false,
+	
+	    domChildren: [],
+	
+	    displayName: 'MasonryComponent',
+	
+	    propTypes: {
+	        disableImagesLoaded: React.PropTypes.bool,
+	        options: React.PropTypes.object
+	    },
+	
+	    getDefaultProps: function() {
+	        return {
+	            disableImagesLoaded: false,
+	            options: {},
+	            className: '',
+	            elementType: 'div'
+	        };
+	    },
+	
+	    initializeMasonry: function(force) {
+	        if (!this.masonry || force) {
+	            this.masonry = new Masonry(
+	                this.refs[refName],
+	                this.props.options
+	            );
+	
+	            this.domChildren = this.getNewDomChildren();
+	        }
+	    },
+	
+	    getNewDomChildren: function() {
+	        var node = this.refs[refName];
+	        var children = this.props.options.itemSelector ? node.querySelectorAll(this.props.options.itemSelector) : node.children;
+	        return Array.prototype.slice.call(children);
+	    },
+	
+	    diffDomChildren: function() {
+	        var oldChildren = this.domChildren.filter(function(element) {
+	            /*
+	             * take only elements attached to DOM
+	             * (aka the parent is the masonry container, not null)
+	             */
+	            return !!element.parentNode;
+	        });
+	
+	        var newChildren = this.getNewDomChildren();
+	
+	        var removed = oldChildren.filter(function(oldChild) {
+	            return !~newChildren.indexOf(oldChild);
+	        });
+	
+	        var domDiff = newChildren.filter(function(newChild) {
+	            return !~oldChildren.indexOf(newChild);
+	        });
+	
+	        var beginningIndex = 0;
+	
+	        // get everything added to the beginning of the DOMNode list
+	        var prepended = domDiff.filter(function(newChild, i) {
+	            var prepend = (beginningIndex === newChildren.indexOf(newChild));
+	
+	            if (prepend) {
+	                // increase the index
+	                beginningIndex++;
+	            }
+	
+	            return prepend;
+	        });
+	
+	        // we assume that everything else is appended
+	        var appended = domDiff.filter(function(el) {
+	            return prepended.indexOf(el) === -1;
+	        });
+	
+	        /*
+	         * otherwise we reverse it because so we're going through the list picking off the items that
+	         * have been added at the end of the list. this complex logic is preserved in case it needs to be
+	         * invoked
+	         *
+	         * var endingIndex = newChildren.length - 1;
+	         *
+	         * domDiff.reverse().filter(function(newChild, i){
+	         *     var append = endingIndex == newChildren.indexOf(newChild);
+	         *
+	         *     if (append) {
+	         *         endingIndex--;
+	         *     }
+	         *
+	         *     return append;
+	         * });
+	         */
+	
+	        // get everything added to the end of the DOMNode list
+	        var moved = [];
+	
+	        if (removed.length === 0) {
+	            moved = oldChildren.filter(function(child, index) {
+	                return index !== newChildren.indexOf(child);
+	            });
+	        }
+	
+	        this.domChildren = newChildren;
+	
+	        return {
+	            old: oldChildren,
+	            new: newChildren,
+	            removed: removed,
+	            appended: appended,
+	            prepended: prepended,
+	            moved: moved
+	        };
+	    },
+	
+	    performLayout: function() {
+	        var diff = this.diffDomChildren();
+	
+	        if (diff.removed.length > 0) {
+	            this.masonry.remove(diff.removed);
+	            this.masonry.reloadItems();
+	        }
+	
+	        if (diff.appended.length > 0) {
+	            this.masonry.appended(diff.appended);
+	            this.masonry.reloadItems();
+	        }
+	
+	        if (diff.prepended.length > 0) {
+	            this.masonry.prepended(diff.prepended);
+	        }
+	
+	        if (diff.moved.length > 0) {
+	            this.masonry.reloadItems();
+	        }
+	
+	        this.masonry.layout();
+	    },
+	
+	    imagesLoaded: function() {
+	        if (this.props.disableImagesLoaded) return;
+	
+	        imagesloaded(
+	            this.refs[refName],
+	            function(instance) {
+	                this.masonry.layout();
+	            }.bind(this)
+	        );
+	    },
+	
+	    componentDidMount: function() {
+	        this.initializeMasonry();
+	        this.imagesLoaded();
+	    },
+	
+	    componentDidUpdate: function() {
+	        this.performLayout();
+	        this.imagesLoaded();
+	    },
+	
+	    componentWillReceiveProps: function() {
+	        this._timer = setTimeout(function() {
+	            this.masonry.reloadItems();
+	            this.isMounted && this.isMounted() && this.forceUpdate();
+	        }.bind(this), 0);
+	    },
+	
+	    componentWillUnmount: function() {
+	        clearTimeout(this._timer);
+	    },
+	
+	    render: function() {
+	        return React.createElement(this.props.elementType, extend(this.props, {ref: refName}), this.props.children);
+	    }
+	});
+	
 	module.exports = MasonryComponent;
-
+	
+	}.call(window));
 
 /***/ },
 /* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
 	/*!
-	 * Masonry v3.1.5
+	 * Masonry v3.3.2
 	 * Cascading grid layout library
 	 * http://masonry.desandro.com
 	 * MIT License
 	 * by David DeSandro
 	 */
 	
-	( function( window ) {
+	( function( window, factory ) {
+	  'use strict';
+	  // universal module definition
+	  if ( typeof define === 'function' && define.amd ) {
+	    // AMD
+	    define( [
+	        'outlayer/outlayer',
+	        'get-size/get-size',
+	        'fizzy-ui-utils/utils'
+	      ],
+	      factory );
+	  } else if ( true ) {
+	    // CommonJS
+	    module.exports = factory(
+	      __webpack_require__(251),
+	      __webpack_require__(254),
+	      __webpack_require__(256)
+	    );
+	  } else {
+	    // browser global
+	    window.Masonry = factory(
+	      window.Outlayer,
+	      window.getSize,
+	      window.fizzyUIUtils
+	    );
+	  }
+	
+	}( window, function factory( Outlayer, getSize, utils ) {
+	
 	'use strict';
-	
-	if (!window) return;
-	
-	// -------------------------- helpers -------------------------- //
-	
-	var indexOf = Array.prototype.indexOf ?
-	  function( items, value ) {
-	    return items.indexOf( value );
-	  } :
-	  function ( items, value ) {
-	    for ( var i=0, len = items.length; i < len; i++ ) {
-	      var item = items[i];
-	      if ( item === value ) {
-	        return i;
-	      }
-	    }
-	    return -1;
-	  };
 	
 	// -------------------------- masonryDefinition -------------------------- //
 	
-	// used for AMD definition and requires
-	function masonryDefinition( Outlayer, getSize ) {
 	  // create an Outlayer layout class
 	  var Masonry = Outlayer.create('masonry');
 	
@@ -32240,10 +32277,17 @@
 	        this.containerWidth;
 	    }
 	
-	    this.columnWidth += this.gutter;
+	    var columnWidth = this.columnWidth += this.gutter;
 	
-	    this.cols = Math.floor( ( this.containerWidth + this.gutter ) / this.columnWidth );
-	    this.cols = Math.max( this.cols, 1 );
+	    // calculate columns
+	    var containerWidth = this.containerWidth + this.gutter;
+	    var cols = containerWidth / columnWidth;
+	    // fix rounding errors, typically with gutters
+	    var excess = columnWidth - containerWidth % columnWidth;
+	    // if overshoot is less than a pixel, round up, otherwise floor it
+	    var mathMethod = excess && excess < 1 ? 'round' : 'floor';
+	    cols = Math[ mathMethod ]( cols );
+	    this.cols = Math.max( cols, 1 );
 	  };
 	
 	  Masonry.prototype.getContainerWidth = function() {
@@ -32267,7 +32311,7 @@
 	    var colGroup = this._getColGroup( colSpan );
 	    // get the minimum Y value from the columns
 	    var minimumY = Math.min.apply( Math, colGroup );
-	    var shortColIndex = indexOf( colGroup, minimumY );
+	    var shortColIndex = utils.indexOf( colGroup, minimumY );
 	
 	    // position the brick
 	    var position = {
@@ -32362,127 +32406,72 @@
 	  };
 	
 	  return Masonry;
-	}
 	
-	// -------------------------- transport -------------------------- //
-	if (true) {
-	  module.exports = masonryDefinition(
-	    __webpack_require__(251),
-	    __webpack_require__(256)
-	  );
-	} else if ( typeof define === 'function' && define.amd ) {
-	  // AMD
-	  define( [
-	      'outlayer/outlayer',
-	      'get-size/get-size'
-	    ],
-	    masonryDefinition );
-	} else {
-	  // browser global
-	  window.Masonry = masonryDefinition(
-	    window.Outlayer,
-	    window.getSize
-	  );
-	}
+	}));
 	
-	})( typeof window !== 'undefined' ? window : null );
-
+	}.call(window));
 
 /***/ },
 /* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
 	/*!
-	 * Outlayer v1.2.0
+	 * Outlayer v1.4.2
 	 * the brains and guts of a layout library
 	 * MIT license
 	 */
 	
-	( function( window ) {
-	'use strict';
+	( function( window, factory ) {
+	  'use strict';
+	  // universal module definition
 	
-	if (!window) return;
+	  if ( typeof define == 'function' && define.amd ) {
+	    // AMD
+	    define( [
+	        'eventie/eventie',
+	        'eventEmitter/EventEmitter',
+	        'get-size/get-size',
+	        'fizzy-ui-utils/utils',
+	        './item'
+	      ],
+	      function( eventie, EventEmitter, getSize, utils, Item ) {
+	        return factory( window, eventie, EventEmitter, getSize, utils, Item);
+	      }
+	    );
+	  } else if ( true ) {
+	    // CommonJS
+	    module.exports = factory(
+	      window,
+	      __webpack_require__(252),
+	      __webpack_require__(253),
+	      __webpack_require__(254),
+	      __webpack_require__(256),
+	      __webpack_require__(259)
+	    );
+	  } else {
+	    // browser global
+	    window.Outlayer = factory(
+	      window,
+	      window.eventie,
+	      window.EventEmitter,
+	      window.getSize,
+	      window.fizzyUIUtils,
+	      window.Outlayer.Item
+	    );
+	  }
+	
+	}( window, function factory( window, eventie, EventEmitter, getSize, utils, Item ) {
+	'use strict';
 	
 	// ----- vars ----- //
 	
-	var document = window.document;
 	var console = window.console;
 	var jQuery = window.jQuery;
-	
 	var noop = function() {};
-	
-	// -------------------------- helpers -------------------------- //
-	
-	// extend objects
-	function extend( a, b ) {
-	  for ( var prop in b ) {
-	    a[ prop ] = b[ prop ];
-	  }
-	  return a;
-	}
-	
-	
-	var objToString = Object.prototype.toString;
-	function isArray( obj ) {
-	  return objToString.call( obj ) === '[object Array]';
-	}
-	
-	// turn element or nodeList into an array
-	function makeArray( obj ) {
-	  var ary = [];
-	  if ( isArray( obj ) ) {
-	    // use object if already an array
-	    ary = obj;
-	  } else if ( obj && typeof obj.length === 'number' ) {
-	    // convert nodeList to array
-	    for ( var i=0, len = obj.length; i < len; i++ ) {
-	      ary.push( obj[i] );
-	    }
-	  } else {
-	    // array of single index
-	    ary.push( obj );
-	  }
-	  return ary;
-	}
-	
-	// http://stackoverflow.com/a/384380/182183
-	var isElement = ( typeof HTMLElement === 'function' || typeof HTMLElement === 'object' ) ?
-	  function isElementDOM2( obj ) {
-	    return obj instanceof HTMLElement;
-	  } :
-	  function isElementQuirky( obj ) {
-	    return obj && typeof obj === 'object' &&
-	      obj.nodeType === 1 && typeof obj.nodeName === 'string';
-	  };
-	
-	// index of helper cause IE8
-	var indexOf = Array.prototype.indexOf ? function( ary, obj ) {
-	    return ary.indexOf( obj );
-	  } : function( ary, obj ) {
-	    for ( var i=0, len = ary.length; i < len; i++ ) {
-	      if ( ary[i] === obj ) {
-	        return i;
-	      }
-	    }
-	    return -1;
-	  };
-	
-	function removeFrom( obj, ary ) {
-	  var index = indexOf( ary, obj );
-	  if ( index !== -1 ) {
-	    ary.splice( index, 1 );
-	  }
-	}
-	
-	// http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/
-	function toDashed( str ) {
-	  return str.replace( /(.)([A-Z])/g, function( match, $1, $2 ) {
-	    return $1 + '-' + $2;
-	  }).toLowerCase();
-	}
-	
-	
-	function outlayerDefinition( eventie, docReady, EventEmitter, getSize, matchesSelector, Item ) {
 	
 	// -------------------------- Outlayer -------------------------- //
 	
@@ -32498,23 +32487,22 @@
 	 * @constructor
 	 */
 	function Outlayer( element, options ) {
-	  // use element as selector string
-	  if ( typeof element === 'string' ) {
-	    element = document.querySelector( element );
-	  }
-	
-	  // bail out if not proper element
-	  if ( !element || !isElement( element ) ) {
+	  var queryElement = utils.getQueryElement( element );
+	  if ( !queryElement ) {
 	    if ( console ) {
-	      console.error( 'Bad ' + this.constructor.namespace + ' element: ' + element );
+	      console.error( 'Bad element for ' + this.constructor.namespace +
+	        ': ' + ( queryElement || element ) );
 	    }
 	    return;
 	  }
-	
-	  this.element = element;
+	  this.element = queryElement;
+	  // add jQuery
+	  if ( jQuery ) {
+	    this.$element = jQuery( this.element );
+	  }
 	
 	  // options
-	  this.options = extend( {}, this.constructor.defaults );
+	  this.options = utils.extend( {}, this.constructor.defaults );
 	  this.option( options );
 	
 	  // add id for Outlayer.getFromElement
@@ -32557,14 +32545,14 @@
 	};
 	
 	// inherit EventEmitter
-	extend( Outlayer.prototype, EventEmitter.prototype );
+	utils.extend( Outlayer.prototype, EventEmitter.prototype );
 	
 	/**
 	 * set options
 	 * @param {Object} opts
 	 */
 	Outlayer.prototype.option = function( opts ) {
-	  extend( this.options, opts );
+	  utils.extend( this.options, opts );
 	};
 	
 	Outlayer.prototype._create = function() {
@@ -32574,7 +32562,7 @@
 	  this.stamps = [];
 	  this.stamp( this.options.stamp );
 	  // set container style
-	  extend( this.element.style, this.options.containerStyle );
+	  utils.extend( this.element.style, this.options.containerStyle );
 	
 	  // bind resize method
 	  if ( this.options.isResizeBound ) {
@@ -32616,35 +32604,7 @@
 	 * @returns {Array} items - item elements
 	 */
 	Outlayer.prototype._filterFindItemElements = function( elems ) {
-	  // make array of elems
-	  elems = makeArray( elems );
-	  var itemSelector = this.options.itemSelector;
-	  var itemElems = [];
-	
-	  for ( var i=0, len = elems.length; i < len; i++ ) {
-	    var elem = elems[i];
-	    // check that elem is an actual element
-	    if ( !isElement( elem ) ) {
-	      continue;
-	    }
-	    // filter & find items if we have an item selector
-	    if ( itemSelector ) {
-	      // filter siblings
-	      if ( matchesSelector( elem, itemSelector ) ) {
-	        itemElems.push( elem );
-	      }
-	      // find children
-	      var childElems = elem.querySelectorAll( itemSelector );
-	      // concat childElems to filterFound array
-	      for ( var j=0, jLen = childElems.length; j < jLen; j++ ) {
-	        itemElems.push( childElems[j] );
-	      }
-	    } else {
-	      itemElems.push( elem );
-	    }
-	  }
-	
-	  return itemElems;
+	  return utils.filterFindElements( elems, this.options.itemSelector );
 	};
 	
 	/**
@@ -32712,7 +32672,7 @@
 	    // use option as an element
 	    if ( typeof option === 'string' ) {
 	      elem = this.element.querySelector( option );
-	    } else if ( isElement( option ) ) {
+	    } else if ( utils.isElement( option ) ) {
 	      elem = option;
 	    }
 	    // use size of element, if element
@@ -32755,19 +32715,12 @@
 	 * @param {Boolean} isInstant
 	 */
 	Outlayer.prototype._layoutItems = function( items, isInstant ) {
-	  var _this = this;
-	  function onItemsLayout() {
-	    _this.emitEvent( 'layoutComplete', [ _this, items ] );
-	  }
+	  this._emitCompleteOnItems( 'layout', items );
 	
 	  if ( !items || !items.length ) {
 	    // no items, emit event with empty array
-	    onItemsLayout();
 	    return;
 	  }
-	
-	  // emit layoutComplete when done
-	  this._itemsOn( items, 'layout', onItemsLayout );
 	
 	  var queue = [];
 	
@@ -32875,27 +32828,60 @@
 	};
 	
 	/**
-	 * trigger a callback for a collection of items events
-	 * @param {Array} items - Outlayer.Items
+	 * emit eventComplete on a collection of items events
 	 * @param {String} eventName
-	 * @param {Function} callback
+	 * @param {Array} items - Outlayer.Items
 	 */
-	Outlayer.prototype._itemsOn = function( items, eventName, callback ) {
-	  var doneCount = 0;
-	  var count = items.length;
-	  // event callback
+	Outlayer.prototype._emitCompleteOnItems = function( eventName, items ) {
 	  var _this = this;
+	  function onComplete() {
+	    _this.dispatchEvent( eventName + 'Complete', null, [ items ] );
+	  }
+	
+	  var count = items.length;
+	  if ( !items || !count ) {
+	    onComplete();
+	    return;
+	  }
+	
+	  var doneCount = 0;
 	  function tick() {
 	    doneCount++;
 	    if ( doneCount === count ) {
-	      callback.call( _this );
+	      onComplete();
 	    }
-	    return true; // bind once
 	  }
+	
 	  // bind callback
 	  for ( var i=0, len = items.length; i < len; i++ ) {
 	    var item = items[i];
-	    item.on( eventName, tick );
+	    item.once( eventName, tick );
+	  }
+	};
+	
+	/**
+	 * emits events via eventEmitter and jQuery events
+	 * @param {String} type - name of event
+	 * @param {Event} event - original event
+	 * @param {Array} args - extra arguments
+	 */
+	Outlayer.prototype.dispatchEvent = function( type, event, args ) {
+	  // add original event to arguments
+	  var emitArgs = event ? [ event ].concat( args ) : args;
+	  this.emitEvent( type, emitArgs );
+	
+	  if ( jQuery ) {
+	    // set this.$element
+	    this.$element = this.$element || jQuery( this.element );
+	    if ( event ) {
+	      // create jQuery event
+	      var $event = jQuery.Event( event );
+	      $event.type = type;
+	      this.$element.trigger( $event, args );
+	    } else {
+	      // just trigger with type if no event available
+	      this.$element.trigger( type, args );
+	    }
 	  }
 	};
 	
@@ -32956,7 +32942,7 @@
 	  for ( var i=0, len = elems.length; i < len; i++ ) {
 	    var elem = elems[i];
 	    // filter out removed stamp elements
-	    removeFrom( elem, this.stamps );
+	    utils.removeFrom( this.stamps, elem );
 	    this.unignore( elem );
 	  }
 	
@@ -32975,7 +32961,7 @@
 	  if ( typeof elems === 'string' ) {
 	    elems = this.element.querySelectorAll( elems );
 	  }
-	  elems = makeArray( elems );
+	  elems = utils.makeArray( elems );
 	  return elems;
 	};
 	
@@ -33159,11 +33145,10 @@
 	 * @param {Array of Outlayer.Items} items
 	 */
 	Outlayer.prototype.reveal = function( items ) {
+	  this._emitCompleteOnItems( 'reveal', items );
+	
 	  var len = items && items.length;
-	  if ( !len ) {
-	    return;
-	  }
-	  for ( var i=0; i < len; i++ ) {
+	  for ( var i=0; len && i < len; i++ ) {
 	    var item = items[i];
 	    item.reveal();
 	  }
@@ -33174,14 +33159,31 @@
 	 * @param {Array of Outlayer.Items} items
 	 */
 	Outlayer.prototype.hide = function( items ) {
+	  this._emitCompleteOnItems( 'hide', items );
+	
 	  var len = items && items.length;
-	  if ( !len ) {
-	    return;
-	  }
-	  for ( var i=0; i < len; i++ ) {
+	  for ( var i=0; len && i < len; i++ ) {
 	    var item = items[i];
 	    item.hide();
 	  }
+	};
+	
+	/**
+	 * reveal item elements
+	 * @param {Array}, {Element}, {NodeList} items
+	 */
+	Outlayer.prototype.revealItemElements = function( elems ) {
+	  var items = this.getItems( elems );
+	  this.reveal( items );
+	};
+	
+	/**
+	 * hide item elements
+	 * @param {Array}, {Element}, {NodeList} items
+	 */
+	Outlayer.prototype.hideItemElements = function( elems ) {
+	  var items = this.getItems( elems );
+	  this.hide( items );
 	};
 	
 	/**
@@ -33207,9 +33209,7 @@
 	 * @returns {Array} items - Outlayer.Items
 	 */
 	Outlayer.prototype.getItems = function( elems ) {
-	  if ( !elems || !elems.length ) {
-	    return;
-	  }
+	  elems = utils.makeArray( elems );
 	  var items = [];
 	  for ( var i=0, len = elems.length; i < len; i++ ) {
 	    var elem = elems[i];
@@ -33227,23 +33227,20 @@
 	 * @param {Array or NodeList or Element} elems
 	 */
 	Outlayer.prototype.remove = function( elems ) {
-	  elems = makeArray( elems );
-	
 	  var removeItems = this.getItems( elems );
+	
+	  this._emitCompleteOnItems( 'remove', removeItems );
+	
 	  // bail if no items to remove
 	  if ( !removeItems || !removeItems.length ) {
 	    return;
 	  }
 	
-	  this._itemsOn( removeItems, 'remove', function() {
-	    this.emitEvent( 'removeComplete', [ this, removeItems ] );
-	  });
-	
 	  for ( var i=0, len = removeItems.length; i < len; i++ ) {
 	    var item = removeItems[i];
 	    item.remove();
 	    // remove item from collection
-	    removeFrom( item, this.items );
+	    utils.removeFrom( this.items, item );
 	  }
 	};
 	
@@ -33264,6 +33261,8 @@
 	
 	  this.unbindResize();
 	
+	  var id = this.element.outlayerGUID;
+	  delete instances[ id ]; // remove reference to instance by id
 	  delete this.element.outlayerGUID;
 	  // remove data for jQuery
 	  if ( jQuery ) {
@@ -33280,6 +33279,7 @@
 	 * @returns {Outlayer}
 	 */
 	Outlayer.data = function( elem ) {
+	  elem = utils.getQueryElement( elem );
 	  var id = elem && elem.outlayerGUID;
 	  return id && instances[ id ];
 	};
@@ -33300,14 +33300,14 @@
 	  if ( Object.create ) {
 	    Layout.prototype = Object.create( Outlayer.prototype );
 	  } else {
-	    extend( Layout.prototype, Outlayer.prototype );
+	    utils.extend( Layout.prototype, Outlayer.prototype );
 	  }
 	  // set contructor, used for namespace and Item
 	  Layout.prototype.constructor = Layout;
 	
-	  Layout.defaults = extend( {}, Outlayer.defaults );
+	  Layout.defaults = utils.extend( {}, Outlayer.defaults );
 	  // apply new options
-	  extend( Layout.defaults, options );
+	  utils.extend( Layout.defaults, options );
 	  // keep prototype.settings for backwards compatibility (Packery v1.2.0)
 	  Layout.prototype.settings = {};
 	
@@ -33324,38 +33324,7 @@
 	
 	  // -------------------------- declarative -------------------------- //
 	
-	  /**
-	   * allow user to initialize Outlayer via .js-namespace class
-	   * options are parsed from data-namespace-option attribute
-	   */
-	  docReady( function() {
-	    var dashedNamespace = toDashed( namespace );
-	    var elems = document.querySelectorAll( '.js-' + dashedNamespace );
-	    var dataAttr = 'data-' + dashedNamespace + '-options';
-	
-	    for ( var i=0, len = elems.length; i < len; i++ ) {
-	      var elem = elems[i];
-	      var attr = elem.getAttribute( dataAttr );
-	      var options;
-	      try {
-	        options = attr && JSON.parse( attr );
-	      } catch ( error ) {
-	        // log error, do not initialize
-	        if ( console ) {
-	          console.error( 'Error parsing ' + dataAttr + ' on ' +
-	            elem.nodeName.toLowerCase() + ( elem.id ? '#' + elem.id : '' ) + ': ' +
-	            error );
-	        }
-	        continue;
-	      }
-	      // initialize
-	      var instance = new Layout( elem, options );
-	      // make available via $().data('layoutname')
-	      if ( jQuery ) {
-	        jQuery.data( elem, namespace, instance );
-	      }
-	    }
-	  });
+	  utils.htmlInit( Layout, namespace );
 	
 	  // -------------------------- jQuery bridge -------------------------- //
 	
@@ -33374,51 +33343,21 @@
 	
 	return Outlayer;
 	
-	}
+	}));
 	
-	// -------------------------- transport -------------------------- //
-	if (true) {
-	  // CommonJS
-	  module.exports = outlayerDefinition(
-	    __webpack_require__(252),
-	    __webpack_require__(253),
-	    __webpack_require__(255),
-	    __webpack_require__(256),
-	    __webpack_require__(258),
-	    __webpack_require__(259)
-	  );
-	} else if ( typeof define === 'function' && define.amd ) {
-	  // AMD
-	  define( [
-	      'eventie/eventie',
-	      'doc-ready/doc-ready',
-	      'eventEmitter/EventEmitter',
-	      'get-size/get-size',
-	      'matches-selector/matches-selector',
-	      './item'
-	    ],
-	    outlayerDefinition );
-	} else {
-	  // browser global
-	  window.Outlayer = outlayerDefinition(
-	    window.eventie,
-	    window.docReady,
-	    window.EventEmitter,
-	    window.getSize,
-	    window.matchesSelector,
-	    window.Outlayer.Item
-	  );
-	}
 	
-	})( typeof window !== 'undefined' ? window : null );
-
+	}.call(window));
 
 /***/ },
 /* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
 	/*!
-	 * eventie v1.0.5
+	 * eventie v1.0.6
 	 * event binding helper
 	 *   eventie.bind( elem, 'click', myFn )
 	 *   eventie.unbind( elem, 'click', myFn )
@@ -33429,9 +33368,8 @@
 	/*global define: false, module: false */
 	
 	( function( window ) {
-	'use strict';
 	
-	if (!window) return;
+	'use strict';
 	
 	var docElem = document.documentElement;
 	
@@ -33487,1908 +33425,31 @@
 	};
 	
 	// ----- module definition ----- //
-	if ( true ) {
-	  // CommonJS
-	  module.exports = eventie;
-	} else if ( typeof define === 'function' && define.amd ) {
+	
+	if ( typeof define === 'function' && define.amd ) {
 	  // AMD
 	  define( eventie );
+	} else if ( true ) {
+	  // CommonJS
+	  module.exports = eventie;
 	} else {
 	  // browser global
 	  window.eventie = eventie;
-	}
-	
-	})( typeof window !== 'undefined' ? window : null );
-
-
-/***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*!
-	 * docReady v1.0.3
-	 * Cross browser DOMContentLoaded event emitter
-	 * MIT license
-	 */
-	
-	/*jshint browser: true, strict: true, undef: true, unused: true*/
-	/*global define: false, require: false, module: false */
-	
-	( function( window ) {
-	'use strict';
-	
-	if (!window) return;
-	
-	var document = window.document;
-	// collection of functions to be triggered on ready
-	var queue = [];
-	
-	function docReady( fn ) {
-	  // throw out non-functions
-	  if ( typeof fn !== 'function' ) {
-	    return;
-	  }
-	
-	  if ( docReady.isReady ) {
-	    // ready now, hit it
-	    fn();
-	  } else {
-	    // queue function when ready
-	    queue.push( fn );
-	  }
-	}
-	
-	docReady.isReady = false;
-	
-	// triggered on various doc ready events
-	function init( event ) {
-	  // bail if IE8 document is not ready just yet
-	  var isIE8NotReady = event.type === 'readystatechange' && document.readyState !== 'complete';
-	  if ( docReady.isReady || isIE8NotReady ) {
-	    return;
-	  }
-	  docReady.isReady = true;
-	
-	  // process queue
-	  for ( var i=0, len = queue.length; i < len; i++ ) {
-	    var fn = queue[i];
-	    fn();
-	  }
-	}
-	
-	function defineDocReady( eventie ) {
-	  eventie.bind( document, 'DOMContentLoaded', init );
-	  eventie.bind( document, 'readystatechange', init );
-	  eventie.bind( window, 'load', init );
-	
-	  return docReady;
-	}
-	
-	// transport
-	if ( true ) {
-	  module.exports = defineDocReady( __webpack_require__(254) );
-	} else if ( typeof define === 'function' && define.amd ) {
-	  // AMD
-	  // if RequireJS, then doc is already ready
-	  docReady.isReady = typeof requirejs === 'function';
-	  define( [ 'eventie/eventie' ], defineDocReady );
-	} else {
-	  // browser global
-	  window.docReady = defineDocReady( window.eventie );
-	}
-	
-	})( typeof window !== 'undefined' ? window : null );
-
-
-/***/ },
-/* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*!
-	 * eventie v1.0.5
-	 * event binding helper
-	 *   eventie.bind( elem, 'click', myFn )
-	 *   eventie.unbind( elem, 'click', myFn )
-	 * MIT license
-	 */
-	
-	/*jshint browser: true, undef: true, unused: true */
-	/*global define: false, module: false */
-	
-	( function( window ) {
-	'use strict';
-	
-	if (!window) return;
-	
-	var docElem = document.documentElement;
-	
-	var bind = function() {};
-	
-	function getIEEvent( obj ) {
-	  var event = window.event;
-	  // add event.target
-	  event.target = event.target || event.srcElement || obj;
-	  return event;
-	}
-	
-	if ( docElem.addEventListener ) {
-	  bind = function( obj, type, fn ) {
-	    obj.addEventListener( type, fn, false );
-	  };
-	} else if ( docElem.attachEvent ) {
-	  bind = function( obj, type, fn ) {
-	    obj[ type + fn ] = fn.handleEvent ?
-	      function() {
-	        var event = getIEEvent( obj );
-	        fn.handleEvent.call( fn, event );
-	      } :
-	      function() {
-	        var event = getIEEvent( obj );
-	        fn.call( obj, event );
-	      };
-	    obj.attachEvent( "on" + type, obj[ type + fn ] );
-	  };
-	}
-	
-	var unbind = function() {};
-	
-	if ( docElem.removeEventListener ) {
-	  unbind = function( obj, type, fn ) {
-	    obj.removeEventListener( type, fn, false );
-	  };
-	} else if ( docElem.detachEvent ) {
-	  unbind = function( obj, type, fn ) {
-	    obj.detachEvent( "on" + type, obj[ type + fn ] );
-	    try {
-	      delete obj[ type + fn ];
-	    } catch ( err ) {
-	      // can't delete window object properties
-	      obj[ type + fn ] = undefined;
-	    }
-	  };
-	}
-	
-	var eventie = {
-	  bind: bind,
-	  unbind: unbind
-	};
-	
-	// ----- module definition ----- //
-	if ( true ) {
-	  // CommonJS
-	  module.exports = eventie;
-	} else if ( typeof define === 'function' && define.amd ) {
-	  // AMD
-	  define( eventie );
-	} else {
-	  // browser global
-	  window.eventie = eventie;
-	}
-	
-	})( typeof window !== 'undefined' ? window : null );
-
-
-/***/ },
-/* 255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * EventEmitter v4.2.0 - git.io/ee
-	 * Oliver Caldwell
-	 * MIT license
-	 * @preserve
-	 */
-	
-	(function () {
-		// Place the script in strict mode
-		'use strict';
-	
-		/**
-		 * Class for managing events.
-		 * Can be extended to provide event functionality in other classes.
-		 *
-		 * @class EventEmitter Manages event registering and emitting.
-		 */
-		function EventEmitter() {}
-	
-		// Shortcuts to improve speed and size
-	
-		// Easy access to the prototype
-		var proto = EventEmitter.prototype;
-	
-		/**
-		 * Finds the index of the listener for the event in it's storage array.
-		 *
-		 * @param {Function[]} listeners Array of listeners to search through.
-		 * @param {Function} listener Method to look for.
-		 * @return {Number} Index of the specified listener, -1 if not found
-		 * @api private
-		 */
-		function indexOfListener(listeners, listener) {
-			var i = listeners.length;
-			while (i--) {
-				if (listeners[i].listener === listener) {
-					return i;
-				}
-			}
-	
-			return -1;
-		}
-	
-		/**
-		 * Returns the listener array for the specified event.
-		 * Will initialise the event object and listener arrays if required.
-		 * Will return an object if you use a regex search. The object contains keys for each matched event. So /ba[rz]/ might return an object containing bar and baz. But only if you have either defined them with defineEvent or added some listeners to them.
-		 * Each property in the object response is an array of listener functions.
-		 *
-		 * @param {String|RegExp} evt Name of the event to return the listeners from.
-		 * @return {Function[]|Object} All listener functions for the event.
-		 */
-		proto.getListeners = function getListeners(evt) {
-			var events = this._getEvents();
-			var response;
-			var key;
-	
-			// Return a concatenated array of all matching events if
-			// the selector is a regular expression.
-			if (typeof evt === 'object') {
-				response = {};
-				for (key in events) {
-					if (events.hasOwnProperty(key) && evt.test(key)) {
-						response[key] = events[key];
-					}
-				}
-			}
-			else {
-				response = events[evt] || (events[evt] = []);
-			}
-	
-			return response;
-		};
-	
-		/**
-		 * Takes a list of listener objects and flattens it into a list of listener functions.
-		 *
-		 * @param {Object[]} listeners Raw listener objects.
-		 * @return {Function[]} Just the listener functions.
-		 */
-		proto.flattenListeners = function flattenListeners(listeners) {
-			var flatListeners = [];
-			var i;
-	
-			for (i = 0; i < listeners.length; i += 1) {
-				flatListeners.push(listeners[i].listener);
-			}
-	
-			return flatListeners;
-		};
-	
-		/**
-		 * Fetches the requested listeners via getListeners but will always return the results inside an object. This is mainly for internal use but others may find it useful.
-		 *
-		 * @param {String|RegExp} evt Name of the event to return the listeners from.
-		 * @return {Object} All listener functions for an event in an object.
-		 */
-		proto.getListenersAsObject = function getListenersAsObject(evt) {
-			var listeners = this.getListeners(evt);
-			var response;
-	
-			if (listeners instanceof Array) {
-				response = {};
-				response[evt] = listeners;
-			}
-	
-			return response || listeners;
-		};
-	
-		/**
-		 * Adds a listener function to the specified event.
-		 * The listener will not be added if it is a duplicate.
-		 * If the listener returns true then it will be removed after it is called.
-		 * If you pass a regular expression as the event name then the listener will be added to all events that match it.
-		 *
-		 * @param {String|RegExp} evt Name of the event to attach the listener to.
-		 * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.addListener = function addListener(evt, listener) {
-			var listeners = this.getListenersAsObject(evt);
-			var listenerIsWrapped = typeof listener === 'object';
-			var key;
-	
-			for (key in listeners) {
-				if (listeners.hasOwnProperty(key) && indexOfListener(listeners[key], listener) === -1) {
-					listeners[key].push(listenerIsWrapped ? listener : {
-						listener: listener,
-						once: false
-					});
-				}
-			}
-	
-			return this;
-		};
-	
-		/**
-		 * Alias of addListener
-		 */
-		proto.on = proto.addListener;
-	
-		/**
-		 * Semi-alias of addListener. It will add a listener that will be
-		 * automatically removed after it's first execution.
-		 *
-		 * @param {String|RegExp} evt Name of the event to attach the listener to.
-		 * @param {Function} listener Method to be called when the event is emitted. If the function returns true then it will be removed after calling.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.addOnceListener = function addOnceListener(evt, listener) {
-			return this.addListener(evt, {
-				listener: listener,
-				once: true
-			});
-		};
-	
-		/**
-		 * Alias of addOnceListener.
-		 */
-		proto.once = proto.addOnceListener;
-	
-		/**
-		 * Defines an event name. This is required if you want to use a regex to add a listener to multiple events at once. If you don't do this then how do you expect it to know what event to add to? Should it just add to every possible match for a regex? No. That is scary and bad.
-		 * You need to tell it what event names should be matched by a regex.
-		 *
-		 * @param {String} evt Name of the event to create.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.defineEvent = function defineEvent(evt) {
-			this.getListeners(evt);
-			return this;
-		};
-	
-		/**
-		 * Uses defineEvent to define multiple events.
-		 *
-		 * @param {String[]} evts An array of event names to define.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.defineEvents = function defineEvents(evts) {
-			for (var i = 0; i < evts.length; i += 1) {
-				this.defineEvent(evts[i]);
-			}
-			return this;
-		};
-	
-		/**
-		 * Removes a listener function from the specified event.
-		 * When passed a regular expression as the event name, it will remove the listener from all events that match it.
-		 *
-		 * @param {String|RegExp} evt Name of the event to remove the listener from.
-		 * @param {Function} listener Method to remove from the event.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.removeListener = function removeListener(evt, listener) {
-			var listeners = this.getListenersAsObject(evt);
-			var index;
-			var key;
-	
-			for (key in listeners) {
-				if (listeners.hasOwnProperty(key)) {
-					index = indexOfListener(listeners[key], listener);
-	
-					if (index !== -1) {
-						listeners[key].splice(index, 1);
-					}
-				}
-			}
-	
-			return this;
-		};
-	
-		/**
-		 * Alias of removeListener
-		 */
-		proto.off = proto.removeListener;
-	
-		/**
-		 * Adds listeners in bulk using the manipulateListeners method.
-		 * If you pass an object as the second argument you can add to multiple events at once. The object should contain key value pairs of events and listeners or listener arrays. You can also pass it an event name and an array of listeners to be added.
-		 * You can also pass it a regular expression to add the array of listeners to all events that match it.
-		 * Yeah, this function does quite a bit. That's probably a bad thing.
-		 *
-		 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add to multiple events at once.
-		 * @param {Function[]} [listeners] An optional array of listener functions to add.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.addListeners = function addListeners(evt, listeners) {
-			// Pass through to manipulateListeners
-			return this.manipulateListeners(false, evt, listeners);
-		};
-	
-		/**
-		 * Removes listeners in bulk using the manipulateListeners method.
-		 * If you pass an object as the second argument you can remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-		 * You can also pass it an event name and an array of listeners to be removed.
-		 * You can also pass it a regular expression to remove the listeners from all events that match it.
-		 *
-		 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to remove from multiple events at once.
-		 * @param {Function[]} [listeners] An optional array of listener functions to remove.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.removeListeners = function removeListeners(evt, listeners) {
-			// Pass through to manipulateListeners
-			return this.manipulateListeners(true, evt, listeners);
-		};
-	
-		/**
-		 * Edits listeners in bulk. The addListeners and removeListeners methods both use this to do their job. You should really use those instead, this is a little lower level.
-		 * The first argument will determine if the listeners are removed (true) or added (false).
-		 * If you pass an object as the second argument you can add/remove from multiple events at once. The object should contain key value pairs of events and listeners or listener arrays.
-		 * You can also pass it an event name and an array of listeners to be added/removed.
-		 * You can also pass it a regular expression to manipulate the listeners of all events that match it.
-		 *
-		 * @param {Boolean} remove True if you want to remove listeners, false if you want to add.
-		 * @param {String|Object|RegExp} evt An event name if you will pass an array of listeners next. An object if you wish to add/remove from multiple events at once.
-		 * @param {Function[]} [listeners] An optional array of listener functions to add/remove.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.manipulateListeners = function manipulateListeners(remove, evt, listeners) {
-			var i;
-			var value;
-			var single = remove ? this.removeListener : this.addListener;
-			var multiple = remove ? this.removeListeners : this.addListeners;
-	
-			// If evt is an object then pass each of it's properties to this method
-			if (typeof evt === 'object' && !(evt instanceof RegExp)) {
-				for (i in evt) {
-					if (evt.hasOwnProperty(i) && (value = evt[i])) {
-						// Pass the single listener straight through to the singular method
-						if (typeof value === 'function') {
-							single.call(this, i, value);
-						}
-						else {
-							// Otherwise pass back to the multiple function
-							multiple.call(this, i, value);
-						}
-					}
-				}
-			}
-			else {
-				// So evt must be a string
-				// And listeners must be an array of listeners
-				// Loop over it and pass each one to the multiple method
-				i = listeners.length;
-				while (i--) {
-					single.call(this, evt, listeners[i]);
-				}
-			}
-	
-			return this;
-		};
-	
-		/**
-		 * Removes all listeners from a specified event.
-		 * If you do not specify an event then all listeners will be removed.
-		 * That means every event will be emptied.
-		 * You can also pass a regex to remove all events that match it.
-		 *
-		 * @param {String|RegExp} [evt] Optional name of the event to remove all listeners for. Will remove from every event if not passed.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.removeEvent = function removeEvent(evt) {
-			var type = typeof evt;
-			var events = this._getEvents();
-			var key;
-	
-			// Remove different things depending on the state of evt
-			if (type === 'string') {
-				// Remove all listeners for the specified event
-				delete events[evt];
-			}
-			else if (type === 'object') {
-				// Remove all events matching the regex.
-				for (key in events) {
-					if (events.hasOwnProperty(key) && evt.test(key)) {
-						delete events[key];
-					}
-				}
-			}
-			else {
-				// Remove all listeners in all events
-				delete this._events;
-			}
-	
-			return this;
-		};
-	
-		/**
-		 * Emits an event of your choice.
-		 * When emitted, every listener attached to that event will be executed.
-		 * If you pass the optional argument array then those arguments will be passed to every listener upon execution.
-		 * Because it uses `apply`, your array of arguments will be passed as if you wrote them out separately.
-		 * So they will not arrive within the array on the other side, they will be separate.
-		 * You can also pass a regular expression to emit to all events that match it.
-		 *
-		 * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-		 * @param {Array} [args] Optional array of arguments to be passed to each listener.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.emitEvent = function emitEvent(evt, args) {
-			var listeners = this.getListenersAsObject(evt);
-			var listener;
-			var i;
-			var key;
-			var response;
-	
-			for (key in listeners) {
-				if (listeners.hasOwnProperty(key)) {
-					i = listeners[key].length;
-	
-					while (i--) {
-						// If the listener returns true then it shall be removed from the event
-						// The function is executed either with a basic call or an apply if there is an args array
-						listener = listeners[key][i];
-						response = listener.listener.apply(this, args || []);
-						if (response === this._getOnceReturnValue() || listener.once === true) {
-							this.removeListener(evt, listener.listener);
-						}
-					}
-				}
-			}
-	
-			return this;
-		};
-	
-		/**
-		 * Alias of emitEvent
-		 */
-		proto.trigger = proto.emitEvent;
-	
-		/**
-		 * Subtly different from emitEvent in that it will pass its arguments on to the listeners, as opposed to taking a single array of arguments to pass on.
-		 * As with emitEvent, you can pass a regex in place of the event name to emit to all events that match it.
-		 *
-		 * @param {String|RegExp} evt Name of the event to emit and execute listeners for.
-		 * @param {...*} Optional additional arguments to be passed to each listener.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.emit = function emit(evt) {
-			var args = Array.prototype.slice.call(arguments, 1);
-			return this.emitEvent(evt, args);
-		};
-	
-		/**
-		 * Sets the current value to check against when executing listeners. If a
-		 * listeners return value matches the one set here then it will be removed
-		 * after execution. This value defaults to true.
-		 *
-		 * @param {*} value The new value to check for when executing listeners.
-		 * @return {Object} Current instance of EventEmitter for chaining.
-		 */
-		proto.setOnceReturnValue = function setOnceReturnValue(value) {
-			this._onceReturnValue = value;
-			return this;
-		};
-	
-		/**
-		 * Fetches the current value to check against when executing listeners. If
-		 * the listeners return value matches this one then it should be removed
-		 * automatically. It will return true by default.
-		 *
-		 * @return {*|Boolean} The current value to check for or the default, true.
-		 * @api private
-		 */
-		proto._getOnceReturnValue = function _getOnceReturnValue() {
-			if (this.hasOwnProperty('_onceReturnValue')) {
-				return this._onceReturnValue;
-			}
-			else {
-				return true;
-			}
-		};
-	
-		/**
-		 * Fetches the events object and creates one if required.
-		 *
-		 * @return {Object} The events storage object.
-		 * @api private
-		 */
-		proto._getEvents = function _getEvents() {
-			return this._events || (this._events = {});
-		};
-	
-		// Expose the class either via AMD, CommonJS or the global object
-		if (true) {
-			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return EventEmitter;
-			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		}
-		else if (typeof module !== 'undefined' && module.exports){
-			module.exports = EventEmitter;
-		}
-		else {
-			this.EventEmitter = EventEmitter;
-		}
-	}.call(this));
-
-
-/***/ },
-/* 256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*!
-	 * getSize v1.1.8
-	 * measure size of elements
-	 * MIT license
-	 */
-	
-	/*jshint browser: true, strict: true, undef: true, unused: true */
-	/*global define: false, exports: false, require: false, module: false */
-	
-	( function( window, undefined ) {
-	'use strict';
-	
-	if (!window) return;
-	
-	// -------------------------- helpers -------------------------- //
-	
-	var getComputedStyle = window.getComputedStyle;
-	var getStyle = getComputedStyle ?
-	  function( elem ) {
-	    return getComputedStyle( elem, null );
-	  } :
-	  function( elem ) {
-	    return elem.currentStyle;
-	  };
-	
-	// get a number from a string, not a percentage
-	function getStyleSize( value ) {
-	  var num = parseFloat( value );
-	  // not a percent like '100%', and a number
-	  var isValid = value.indexOf('%') === -1 && !isNaN( num );
-	  return isValid && num;
-	}
-	
-	// -------------------------- measurements -------------------------- //
-	
-	var measurements = [
-	  'paddingLeft',
-	  'paddingRight',
-	  'paddingTop',
-	  'paddingBottom',
-	  'marginLeft',
-	  'marginRight',
-	  'marginTop',
-	  'marginBottom',
-	  'borderLeftWidth',
-	  'borderRightWidth',
-	  'borderTopWidth',
-	  'borderBottomWidth'
-	];
-	
-	function getZeroSize() {
-	  var size = {
-	    width: 0,
-	    height: 0,
-	    innerWidth: 0,
-	    innerHeight: 0,
-	    outerWidth: 0,
-	    outerHeight: 0
-	  };
-	  for ( var i=0, len = measurements.length; i < len; i++ ) {
-	    var measurement = measurements[i];
-	    size[ measurement ] = 0;
-	  }
-	  return size;
-	}
-	
-	
-	
-	function defineGetSize( getStyleProperty ) {
-	
-	// -------------------------- box sizing -------------------------- //
-	
-	var boxSizingProp = getStyleProperty('boxSizing');
-	var isBoxSizeOuter;
-	
-	/**
-	 * WebKit measures the outer-width on style.width on border-box elems
-	 * IE & Firefox measures the inner-width
-	 */
-	( function() {
-	  if ( !boxSizingProp ) {
-	    return;
-	  }
-	
-	  var div = document.createElement('div');
-	  div.style.width = '200px';
-	  div.style.padding = '1px 2px 3px 4px';
-	  div.style.borderStyle = 'solid';
-	  div.style.borderWidth = '1px 2px 3px 4px';
-	  div.style[ boxSizingProp ] = 'border-box';
-	
-	  var body = document.body || document.documentElement;
-	  body.appendChild( div );
-	  var style = getStyle( div );
-	
-	  isBoxSizeOuter = getStyleSize( style.width ) === 200;
-	  body.removeChild( div );
-	})();
-	
-	
-	// -------------------------- getSize -------------------------- //
-	
-	function getSize( elem ) {
-	  // use querySeletor if elem is string
-	  if ( typeof elem === 'string' ) {
-	    elem = document.querySelector( elem );
-	  }
-	
-	  // do not proceed on non-objects
-	  if ( !elem || typeof elem !== 'object' || !elem.nodeType ) {
-	    return;
-	  }
-	
-	  var style = getStyle( elem );
-	
-	  // if hidden, everything is 0
-	  if ( style.display === 'none' ) {
-	    return getZeroSize();
-	  }
-	
-	  var size = {};
-	  size.width = elem.offsetWidth;
-	  size.height = elem.offsetHeight;
-	
-	  var isBorderBox = size.isBorderBox = !!( boxSizingProp &&
-	    style[ boxSizingProp ] && style[ boxSizingProp ] === 'border-box' );
-	
-	  // get all measurements
-	  for ( var i=0, len = measurements.length; i < len; i++ ) {
-	    var measurement = measurements[i];
-	    var value = style[ measurement ];
-	    value = mungeNonPixel( elem, value );
-	    var num = parseFloat( value );
-	    // any 'auto', 'medium' value will be 0
-	    size[ measurement ] = !isNaN( num ) ? num : 0;
-	  }
-	
-	  var paddingWidth = size.paddingLeft + size.paddingRight;
-	  var paddingHeight = size.paddingTop + size.paddingBottom;
-	  var marginWidth = size.marginLeft + size.marginRight;
-	  var marginHeight = size.marginTop + size.marginBottom;
-	  var borderWidth = size.borderLeftWidth + size.borderRightWidth;
-	  var borderHeight = size.borderTopWidth + size.borderBottomWidth;
-	
-	  var isBorderBoxSizeOuter = isBorderBox && isBoxSizeOuter;
-	
-	  // overwrite width and height if we can get it from style
-	  var styleWidth = getStyleSize( style.width );
-	  if ( styleWidth !== false ) {
-	    size.width = styleWidth +
-	      // add padding and border unless it's already including it
-	      ( isBorderBoxSizeOuter ? 0 : paddingWidth + borderWidth );
-	  }
-	
-	  var styleHeight = getStyleSize( style.height );
-	  if ( styleHeight !== false ) {
-	    size.height = styleHeight +
-	      // add padding and border unless it's already including it
-	      ( isBorderBoxSizeOuter ? 0 : paddingHeight + borderHeight );
-	  }
-	
-	  size.innerWidth = size.width - ( paddingWidth + borderWidth );
-	  size.innerHeight = size.height - ( paddingHeight + borderHeight );
-	
-	  size.outerWidth = size.width + marginWidth;
-	  size.outerHeight = size.height + marginHeight;
-	
-	  return size;
-	}
-	
-	// IE8 returns percent values, not pixels
-	// taken from jQuery's curCSS
-	function mungeNonPixel( elem, value ) {
-	  // IE8 and has percent value
-	  if ( getComputedStyle || value.indexOf('%') === -1 ) {
-	    return value;
-	  }
-	  var style = elem.style;
-	  // Remember the original values
-	  var left = style.left;
-	  var rs = elem.runtimeStyle;
-	  var rsLeft = rs && rs.left;
-	
-	  // Put in the new values to get a computed value out
-	  if ( rsLeft ) {
-	    rs.left = elem.currentStyle.left;
-	  }
-	  style.left = value;
-	  value = style.pixelLeft;
-	
-	  // Revert the changed values
-	  style.left = left;
-	  if ( rsLeft ) {
-	    rs.left = rsLeft;
-	  }
-	
-	  return value;
-	}
-	
-	return getSize;
-	
-	}
-	
-	// transport
-	if ( true ) {
-	  // CommonJS for Component
-	  module.exports = defineGetSize( __webpack_require__(257) );
-	} else if ( typeof define === 'function' && define.amd ) {
-	  // AMD for RequireJS
-	  define( [ 'get-style-property/get-style-property' ], defineGetSize );
-	} else {
-	  // browser global
-	  window.getSize = defineGetSize( window.getStyleProperty );
-	}
-	
-	})( typeof window !== 'undefined' ? window : null );
-
-
-/***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * getStyleProperty v1.0.4
-	 * original by kangax
-	 * http://perfectionkills.com/feature-testing-css-properties/
-	 * MIT license
-	 */
-	
-	/*jshint browser: true, strict: true, undef: true */
-	/*global define: false, exports: false, module: false */
-	
-	( function( window ) {
-	
-	'use strict';
-	
-	var prefixes = 'Webkit Moz ms Ms O'.split(' ');
-	var docElemStyle = document.documentElement.style;
-	
-	function getStyleProperty( propName ) {
-	  if ( !propName ) {
-	    return;
-	  }
-	
-	  // test standard property first
-	  if ( typeof docElemStyle[ propName ] === 'string' ) {
-	    return propName;
-	  }
-	
-	  // capitalize
-	  propName = propName.charAt(0).toUpperCase() + propName.slice(1);
-	
-	  // test vendor specific properties
-	  var prefixed;
-	  for ( var i=0, len = prefixes.length; i < len; i++ ) {
-	    prefixed = prefixes[i] + propName;
-	    if ( typeof docElemStyle[ prefixed ] === 'string' ) {
-	      return prefixed;
-	    }
-	  }
-	}
-	
-	// transport
-	if ( true ) {
-	  // AMD
-	  !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-	    return getStyleProperty;
-	  }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if ( typeof exports === 'object' ) {
-	  // CommonJS for Component
-	  module.exports = getStyleProperty;
-	} else {
-	  // browser global
-	  window.getStyleProperty = getStyleProperty;
 	}
 	
 	})( window );
-
-
-/***/ },
-/* 258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/**
-	 * matchesSelector v1.0.3
-	 * matchesSelector( element, '.selector' )
-	 * MIT license
-	 */
 	
-	/*jshint browser: true, strict: true, undef: true, unused: true */
-	/*global define: false, module: false */
-	
-	( function( ElemProto ) {
-	
-	  'use strict';
-	
-	  var matchesMethod = ( function() {
-	    // check for the standard method name first
-	    if ( ElemProto.matches ) {
-	      return 'matches';
-	    }
-	    // check un-prefixed
-	    if ( ElemProto.matchesSelector ) {
-	      return 'matchesSelector';
-	    }
-	    // check vendor prefixes
-	    var prefixes = [ 'webkit', 'moz', 'ms', 'o' ];
-	
-	    for ( var i=0, len = prefixes.length; i < len; i++ ) {
-	      var prefix = prefixes[i];
-	      var method = prefix + 'MatchesSelector';
-	      if ( ElemProto[ method ] ) {
-	        return method;
-	      }
-	    }
-	  })();
-	
-	  // ----- match ----- //
-	
-	  function match( elem, selector ) {
-	    return elem[ matchesMethod ]( selector );
-	  }
-	
-	  // ----- appendToFragment ----- //
-	
-	  function checkParent( elem ) {
-	    // not needed if already has parent
-	    if ( elem.parentNode ) {
-	      return;
-	    }
-	    var fragment = document.createDocumentFragment();
-	    fragment.appendChild( elem );
-	  }
-	
-	  // ----- query ----- //
-	
-	  // fall back to using QSA
-	  // thx @jonathantneal https://gist.github.com/3062955
-	  function query( elem, selector ) {
-	    // append to fragment if no parent
-	    checkParent( elem );
-	
-	    // match elem with all selected elems of parent
-	    var elems = elem.parentNode.querySelectorAll( selector );
-	    for ( var i=0, len = elems.length; i < len; i++ ) {
-	      // return true if match
-	      if ( elems[i] === elem ) {
-	        return true;
-	      }
-	    }
-	    // otherwise return false
-	    return false;
-	  }
-	
-	  // ----- matchChild ----- //
-	
-	  function matchChild( elem, selector ) {
-	    checkParent( elem );
-	    return match( elem, selector );
-	  }
-	
-	  // ----- matchesSelector ----- //
-	
-	  var matchesSelector;
-	
-	  if ( matchesMethod ) {
-	    // IE9 supports matchesSelector, but doesn't work on orphaned elems
-	    // check for that
-	    var div = document.createElement('div');
-	    var supportsOrphans = match( div, 'div' );
-	    matchesSelector = supportsOrphans ? match : matchChild;
-	  } else {
-	    matchesSelector = query;
-	  }
-	
-	  // transport
-	  if ( true ) {
-	    // AMD
-	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-	      return matchesSelector;
-	    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	  } else if ( typeof exports === 'object' ) {
-	    module.exports = matchesSelector;
-	  }
-	  else {
-	    // browser global
-	    window.matchesSelector = matchesSelector;
-	  }
-	
-	})( Element.prototype );
-
+	}.call(window));
 
 /***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
+/* 253 */
+/***/ function(module, exports) {
 
-	/**
-	 * Outlayer Item
-	 */
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
 	
-	( function( window ) {
-	'use strict';
-	
-	if (!window) return;
-	
-	// ----- get style ----- //
-	
-	var getComputedStyle = window.getComputedStyle;
-	var getStyle = getComputedStyle ?
-	  function( elem ) {
-	    return getComputedStyle( elem, null );
-	  } :
-	  function( elem ) {
-	    return elem.currentStyle;
-	  };
-	
-	
-	// extend objects
-	function extend( a, b ) {
-	  for ( var prop in b ) {
-	    a[ prop ] = b[ prop ];
-	  }
-	  return a;
-	}
-	
-	function isEmptyObj( obj ) {
-	  for ( var prop in obj ) {
-	    return false;
-	  }
-	  prop = null;
-	  return true;
-	}
-	
-	// http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/
-	function toDash( str ) {
-	  return str.replace( /([A-Z])/g, function( $1 ){
-	    return '-' + $1.toLowerCase();
-	  });
-	}
-	
-	// -------------------------- Outlayer definition -------------------------- //
-	
-	function outlayerItemDefinition( EventEmitter, getSize, getStyleProperty ) {
-	
-	// -------------------------- CSS3 support -------------------------- //
-	
-	var transitionProperty = getStyleProperty('transition');
-	var transformProperty = getStyleProperty('transform');
-	var supportsCSS3 = transitionProperty && transformProperty;
-	var is3d = !!getStyleProperty('perspective');
-	
-	var transitionEndEvent = {
-	  WebkitTransition: 'webkitTransitionEnd',
-	  MozTransition: 'transitionend',
-	  OTransition: 'otransitionend',
-	  transition: 'transitionend'
-	}[ transitionProperty ];
-	
-	// properties that could have vendor prefix
-	var prefixableProperties = [
-	  'transform',
-	  'transition',
-	  'transitionDuration',
-	  'transitionProperty'
-	];
-	
-	// cache all vendor properties
-	var vendorProperties = ( function() {
-	  var cache = {};
-	  for ( var i=0, len = prefixableProperties.length; i < len; i++ ) {
-	    var prop = prefixableProperties[i];
-	    var supportedProp = getStyleProperty( prop );
-	    if ( supportedProp && supportedProp !== prop ) {
-	      cache[ prop ] = supportedProp;
-	    }
-	  }
-	  return cache;
-	})();
-	
-	// -------------------------- Item -------------------------- //
-	
-	function Item( element, layout ) {
-	  if ( !element ) {
-	    return;
-	  }
-	
-	  this.element = element;
-	  // parent layout class, i.e. Masonry, Isotope, or Packery
-	  this.layout = layout;
-	  this.position = {
-	    x: 0,
-	    y: 0
-	  };
-	
-	  this._create();
-	}
-	
-	// inherit EventEmitter
-	extend( Item.prototype, EventEmitter.prototype );
-	
-	Item.prototype._create = function() {
-	  // transition objects
-	  this._transn = {
-	    ingProperties: {},
-	    clean: {},
-	    onEnd: {}
-	  };
-	
-	  this.css({
-	    position: 'absolute'
-	  });
-	};
-	
-	// trigger specified handler for event type
-	Item.prototype.handleEvent = function( event ) {
-	  var method = 'on' + event.type;
-	  if ( this[ method ] ) {
-	    this[ method ]( event );
-	  }
-	};
-	
-	Item.prototype.getSize = function() {
-	  this.size = getSize( this.element );
-	};
-	
-	/**
-	 * apply CSS styles to element
-	 * @param {Object} style
-	 */
-	Item.prototype.css = function( style ) {
-	  var elemStyle = this.element.style;
-	
-	  for ( var prop in style ) {
-	    // use vendor property if available
-	    var supportedProp = vendorProperties[ prop ] || prop;
-	    elemStyle[ supportedProp ] = style[ prop ];
-	  }
-	};
-	
-	 // measure position, and sets it
-	Item.prototype.getPosition = function() {
-	  var style = getStyle( this.element );
-	  var layoutOptions = this.layout.options;
-	  var isOriginLeft = layoutOptions.isOriginLeft;
-	  var isOriginTop = layoutOptions.isOriginTop;
-	  var x = parseInt( style[ isOriginLeft ? 'left' : 'right' ], 10 );
-	  var y = parseInt( style[ isOriginTop ? 'top' : 'bottom' ], 10 );
-	
-	  // clean up 'auto' or other non-integer values
-	  x = isNaN( x ) ? 0 : x;
-	  y = isNaN( y ) ? 0 : y;
-	  // remove padding from measurement
-	  var layoutSize = this.layout.size;
-	  x -= isOriginLeft ? layoutSize.paddingLeft : layoutSize.paddingRight;
-	  y -= isOriginTop ? layoutSize.paddingTop : layoutSize.paddingBottom;
-	
-	  this.position.x = x;
-	  this.position.y = y;
-	};
-	
-	// set settled position, apply padding
-	Item.prototype.layoutPosition = function() {
-	  var layoutSize = this.layout.size;
-	  var layoutOptions = this.layout.options;
-	  var style = {};
-	
-	  if ( layoutOptions.isOriginLeft ) {
-	    style.left = ( this.position.x + layoutSize.paddingLeft ) + 'px';
-	    // reset other property
-	    style.right = '';
-	  } else {
-	    style.right = ( this.position.x + layoutSize.paddingRight ) + 'px';
-	    style.left = '';
-	  }
-	
-	  if ( layoutOptions.isOriginTop ) {
-	    style.top = ( this.position.y + layoutSize.paddingTop ) + 'px';
-	    style.bottom = '';
-	  } else {
-	    style.bottom = ( this.position.y + layoutSize.paddingBottom ) + 'px';
-	    style.top = '';
-	  }
-	
-	  this.css( style );
-	  this.emitEvent( 'layout', [ this ] );
-	};
-	
-	
-	// transform translate function
-	var translate = is3d ?
-	  function( x, y ) {
-	    return 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-	  } :
-	  function( x, y ) {
-	    return 'translate(' + x + 'px, ' + y + 'px)';
-	  };
-	
-	
-	Item.prototype._transitionTo = function( x, y ) {
-	  this.getPosition();
-	  // get current x & y from top/left
-	  var curX = this.position.x;
-	  var curY = this.position.y;
-	
-	  var compareX = parseInt( x, 10 );
-	  var compareY = parseInt( y, 10 );
-	  var didNotMove = compareX === this.position.x && compareY === this.position.y;
-	
-	  // save end position
-	  this.setPosition( x, y );
-	
-	  // if did not move and not transitioning, just go to layout
-	  if ( didNotMove && !this.isTransitioning ) {
-	    this.layoutPosition();
-	    return;
-	  }
-	
-	  var transX = x - curX;
-	  var transY = y - curY;
-	  var transitionStyle = {};
-	  // flip cooridinates if origin on right or bottom
-	  var layoutOptions = this.layout.options;
-	  transX = layoutOptions.isOriginLeft ? transX : -transX;
-	  transY = layoutOptions.isOriginTop ? transY : -transY;
-	  transitionStyle.transform = translate( transX, transY );
-	
-	  this.transition({
-	    to: transitionStyle,
-	    onTransitionEnd: {
-	      transform: this.layoutPosition
-	    },
-	    isCleaning: true
-	  });
-	};
-	
-	// non transition + transform support
-	Item.prototype.goTo = function( x, y ) {
-	  this.setPosition( x, y );
-	  this.layoutPosition();
-	};
-	
-	// use transition and transforms if supported
-	Item.prototype.moveTo = supportsCSS3 ?
-	  Item.prototype._transitionTo : Item.prototype.goTo;
-	
-	Item.prototype.setPosition = function( x, y ) {
-	  this.position.x = parseInt( x, 10 );
-	  this.position.y = parseInt( y, 10 );
-	};
-	
-	// ----- transition ----- //
-	
-	/**
-	 * @param {Object} style - CSS
-	 * @param {Function} onTransitionEnd
-	 */
-	
-	// non transition, just trigger callback
-	Item.prototype._nonTransition = function( args ) {
-	  this.css( args.to );
-	  if ( args.isCleaning ) {
-	    this._removeStyles( args.to );
-	  }
-	  for ( var prop in args.onTransitionEnd ) {
-	    args.onTransitionEnd[ prop ].call( this );
-	  }
-	};
-	
-	/**
-	 * proper transition
-	 * @param {Object} args - arguments
-	 *   @param {Object} to - style to transition to
-	 *   @param {Object} from - style to start transition from
-	 *   @param {Boolean} isCleaning - removes transition styles after transition
-	 *   @param {Function} onTransitionEnd - callback
-	 */
-	Item.prototype._transition = function( args ) {
-	  // redirect to nonTransition if no transition duration
-	  if ( !parseFloat( this.layout.options.transitionDuration ) ) {
-	    this._nonTransition( args );
-	    return;
-	  }
-	
-	  var _transition = this._transn;
-	  // keep track of onTransitionEnd callback by css property
-	  for ( var prop in args.onTransitionEnd ) {
-	    _transition.onEnd[ prop ] = args.onTransitionEnd[ prop ];
-	  }
-	  // keep track of properties that are transitioning
-	  for ( prop in args.to ) {
-	    _transition.ingProperties[ prop ] = true;
-	    // keep track of properties to clean up when transition is done
-	    if ( args.isCleaning ) {
-	      _transition.clean[ prop ] = true;
-	    }
-	  }
-	
-	  // set from styles
-	  if ( args.from ) {
-	    this.css( args.from );
-	    // force redraw. http://blog.alexmaccaw.com/css-transitions
-	    var h = this.element.offsetHeight;
-	    // hack for JSHint to hush about unused var
-	    h = null;
-	  }
-	  // enable transition
-	  this.enableTransition( args.to );
-	  // set styles that are transitioning
-	  this.css( args.to );
-	
-	  this.isTransitioning = true;
-	
-	};
-	
-	var itemTransitionProperties = transformProperty && ( toDash( transformProperty ) +
-	  ',opacity' );
-	
-	Item.prototype.enableTransition = function(/* style */) {
-	  // only enable if not already transitioning
-	  // bug in IE10 were re-setting transition style will prevent
-	  // transitionend event from triggering
-	  if ( this.isTransitioning ) {
-	    return;
-	  }
-	
-	  // make transition: foo, bar, baz from style object
-	  // TODO uncomment this bit when IE10 bug is resolved
-	  // var transitionValue = [];
-	  // for ( var prop in style ) {
-	  //   // dash-ify camelCased properties like WebkitTransition
-	  //   transitionValue.push( toDash( prop ) );
-	  // }
-	  // enable transition styles
-	  // HACK always enable transform,opacity for IE10
-	  this.css({
-	    transitionProperty: itemTransitionProperties,
-	    transitionDuration: this.layout.options.transitionDuration
-	  });
-	  // listen for transition end event
-	  this.element.addEventListener( transitionEndEvent, this, false );
-	};
-	
-	Item.prototype.transition = Item.prototype[ transitionProperty ? '_transition' : '_nonTransition' ];
-	
-	// ----- events ----- //
-	
-	Item.prototype.onwebkitTransitionEnd = function( event ) {
-	  this.ontransitionend( event );
-	};
-	
-	Item.prototype.onotransitionend = function( event ) {
-	  this.ontransitionend( event );
-	};
-	
-	// properties that I munge to make my life easier
-	var dashedVendorProperties = {
-	  '-webkit-transform': 'transform',
-	  '-moz-transform': 'transform',
-	  '-o-transform': 'transform'
-	};
-	
-	Item.prototype.ontransitionend = function( event ) {
-	  // disregard bubbled events from children
-	  if ( event.target !== this.element ) {
-	    return;
-	  }
-	  var _transition = this._transn;
-	  // get property name of transitioned property, convert to prefix-free
-	  var propertyName = dashedVendorProperties[ event.propertyName ] || event.propertyName;
-	
-	  // remove property that has completed transitioning
-	  delete _transition.ingProperties[ propertyName ];
-	  // check if any properties are still transitioning
-	  if ( isEmptyObj( _transition.ingProperties ) ) {
-	    // all properties have completed transitioning
-	    this.disableTransition();
-	  }
-	  // clean style
-	  if ( propertyName in _transition.clean ) {
-	    // clean up style
-	    this.element.style[ event.propertyName ] = '';
-	    delete _transition.clean[ propertyName ];
-	  }
-	  // trigger onTransitionEnd callback
-	  if ( propertyName in _transition.onEnd ) {
-	    var onTransitionEnd = _transition.onEnd[ propertyName ];
-	    onTransitionEnd.call( this );
-	    delete _transition.onEnd[ propertyName ];
-	  }
-	
-	  this.emitEvent( 'transitionEnd', [ this ] );
-	};
-	
-	Item.prototype.disableTransition = function() {
-	  this.removeTransitionStyles();
-	  this.element.removeEventListener( transitionEndEvent, this, false );
-	  this.isTransitioning = false;
-	};
-	
-	/**
-	 * removes style property from element
-	 * @param {Object} style
-	**/
-	Item.prototype._removeStyles = function( style ) {
-	  // clean up transition styles
-	  var cleanStyle = {};
-	  for ( var prop in style ) {
-	    cleanStyle[ prop ] = '';
-	  }
-	  this.css( cleanStyle );
-	};
-	
-	var cleanTransitionStyle = {
-	  transitionProperty: '',
-	  transitionDuration: ''
-	};
-	
-	Item.prototype.removeTransitionStyles = function() {
-	  // remove transition
-	  this.css( cleanTransitionStyle );
-	};
-	
-	// ----- show/hide/remove ----- //
-	
-	// remove element from DOM
-	Item.prototype.removeElem = function() {
-	  this.element.parentNode.removeChild( this.element );
-	  this.emitEvent( 'remove', [ this ] );
-	};
-	
-	Item.prototype.remove = function() {
-	  // just remove element if no transition support or no transition
-	  if ( !transitionProperty || !parseFloat( this.layout.options.transitionDuration ) ) {
-	    this.removeElem();
-	    return;
-	  }
-	
-	  // start transition
-	  var _this = this;
-	  this.on( 'transitionEnd', function() {
-	    _this.removeElem();
-	    return true; // bind once
-	  });
-	  this.hide();
-	};
-	
-	Item.prototype.reveal = function() {
-	  delete this.isHidden;
-	  // remove display: none
-	  this.css({ display: '' });
-	
-	  var options = this.layout.options;
-	  this.transition({
-	    from: options.hiddenStyle,
-	    to: options.visibleStyle,
-	    isCleaning: true
-	  });
-	};
-	
-	Item.prototype.hide = function() {
-	  // set flag
-	  this.isHidden = true;
-	  // remove display: none
-	  this.css({ display: '' });
-	
-	  var options = this.layout.options;
-	  this.transition({
-	    from: options.visibleStyle,
-	    to: options.hiddenStyle,
-	    // keep hidden stuff hidden
-	    isCleaning: true,
-	    onTransitionEnd: {
-	      opacity: function() {
-	        // check if still hidden
-	        // during transition, item may have been un-hidden
-	        if ( this.isHidden ) {
-	          this.css({ display: 'none' });
-	        }
-	      }
-	    }
-	  });
-	};
-	
-	Item.prototype.destroy = function() {
-	  this.css({
-	    position: '',
-	    left: '',
-	    right: '',
-	    top: '',
-	    bottom: '',
-	    transition: '',
-	    transform: ''
-	  });
-	};
-	
-	return Item;
-	
-	}
-	
-	// -------------------------- transport -------------------------- //
-	if (true) {
-	  // CommonJS
-	  module.exports = outlayerItemDefinition(
-	    __webpack_require__(255),
-	    __webpack_require__(256),
-	    __webpack_require__(257)
-	  );
-	} else if ( typeof define === 'function' && define.amd ) {
-	  // AMD
-	  define( [
-	      'eventEmitter/EventEmitter',
-	      'get-size/get-size',
-	      'get-style-property/get-style-property'
-	    ],
-	    outlayerItemDefinition );
-	} else {
-	  // browser global
-	  window.Outlayer = {};
-	  window.Outlayer.Item = outlayerItemDefinition(
-	    window.EventEmitter,
-	    window.getSize,
-	    window.getStyleProperty
-	  );
-	}
-	
-	})( typeof window !== 'undefined' ? window : null );
-
-
-/***/ },
-/* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/*!
-	 * imagesLoaded v3.1.8
-	 * JavaScript is all like "You images are done yet or what?"
-	 * MIT License
-	 */
-	
-	( function( window, factory ) { 'use strict';
-	  // universal module definition
-	
-	  /*global define: false, module: false, require: false */
-	
-	  if ( true ) {
-	    // CommonJS
-	    module.exports = factory(
-	      window,
-	      __webpack_require__(261),
-	      __webpack_require__(262)
-	    );
-	  } else if ( typeof define === 'function' && define.amd ) {
-	    // AMD
-	    define( [
-	      'eventEmitter/EventEmitter',
-	      'eventie/eventie'
-	    ], function( EventEmitter, eventie ) {
-	      return factory( window, EventEmitter, eventie );
-	    });
-	  } else {
-	    // browser global
-	    window.imagesLoaded = factory(
-	      window,
-	      window.EventEmitter,
-	      window.eventie
-	    );
-	  }
-	
-	})( window,
-	
-	// --------------------------  factory -------------------------- //
-	
-	function factory( window, EventEmitter, eventie ) {
-	
-	'use strict';
-	
-	var $ = window.jQuery;
-	var console = window.console;
-	var hasConsole = typeof console !== 'undefined';
-	
-	// -------------------------- helpers -------------------------- //
-	
-	// extend objects
-	function extend( a, b ) {
-	  for ( var prop in b ) {
-	    a[ prop ] = b[ prop ];
-	  }
-	  return a;
-	}
-	
-	var objToString = Object.prototype.toString;
-	function isArray( obj ) {
-	  return objToString.call( obj ) === '[object Array]';
-	}
-	
-	// turn element or nodeList into an array
-	function makeArray( obj ) {
-	  var ary = [];
-	  if ( isArray( obj ) ) {
-	    // use object if already an array
-	    ary = obj;
-	  } else if ( typeof obj.length === 'number' ) {
-	    // convert nodeList to array
-	    for ( var i=0, len = obj.length; i < len; i++ ) {
-	      ary.push( obj[i] );
-	    }
-	  } else {
-	    // array of single index
-	    ary.push( obj );
-	  }
-	  return ary;
-	}
-	
-	  // -------------------------- imagesLoaded -------------------------- //
-	
-	  /**
-	   * @param {Array, Element, NodeList, String} elem
-	   * @param {Object or Function} options - if function, use as callback
-	   * @param {Function} onAlways - callback function
-	   */
-	  function ImagesLoaded( elem, options, onAlways ) {
-	    // coerce ImagesLoaded() without new, to be new ImagesLoaded()
-	    if ( !( this instanceof ImagesLoaded ) ) {
-	      return new ImagesLoaded( elem, options );
-	    }
-	    // use elem as selector string
-	    if ( typeof elem === 'string' ) {
-	      elem = document.querySelectorAll( elem );
-	    }
-	
-	    this.elements = makeArray( elem );
-	    this.options = extend( {}, this.options );
-	
-	    if ( typeof options === 'function' ) {
-	      onAlways = options;
-	    } else {
-	      extend( this.options, options );
-	    }
-	
-	    if ( onAlways ) {
-	      this.on( 'always', onAlways );
-	    }
-	
-	    this.getImages();
-	
-	    if ( $ ) {
-	      // add jQuery Deferred object
-	      this.jqDeferred = new $.Deferred();
-	    }
-	
-	    // HACK check async to allow time to bind listeners
-	    var _this = this;
-	    setTimeout( function() {
-	      _this.check();
-	    });
-	  }
-	
-	  ImagesLoaded.prototype = new EventEmitter();
-	
-	  ImagesLoaded.prototype.options = {};
-	
-	  ImagesLoaded.prototype.getImages = function() {
-	    this.images = [];
-	
-	    // filter & find items if we have an item selector
-	    for ( var i=0, len = this.elements.length; i < len; i++ ) {
-	      var elem = this.elements[i];
-	      // filter siblings
-	      if ( elem.nodeName === 'IMG' ) {
-	        this.addImage( elem );
-	      }
-	      // find children
-	      // no non-element nodes, #143
-	      var nodeType = elem.nodeType;
-	      if ( !nodeType || !( nodeType === 1 || nodeType === 9 || nodeType === 11 ) ) {
-	        continue;
-	      }
-	      var childElems = elem.querySelectorAll('img');
-	      // concat childElems to filterFound array
-	      for ( var j=0, jLen = childElems.length; j < jLen; j++ ) {
-	        var img = childElems[j];
-	        this.addImage( img );
-	      }
-	    }
-	  };
-	
-	  /**
-	   * @param {Image} img
-	   */
-	  ImagesLoaded.prototype.addImage = function( img ) {
-	    var loadingImage = new LoadingImage( img );
-	    this.images.push( loadingImage );
-	  };
-	
-	  ImagesLoaded.prototype.check = function() {
-	    var _this = this;
-	    var checkedCount = 0;
-	    var length = this.images.length;
-	    this.hasAnyBroken = false;
-	    // complete if no images
-	    if ( !length ) {
-	      this.complete();
-	      return;
-	    }
-	
-	    function onConfirm( image, message ) {
-	      if ( _this.options.debug && hasConsole ) {
-	        console.log( 'confirm', image, message );
-	      }
-	
-	      _this.progress( image );
-	      checkedCount++;
-	      if ( checkedCount === length ) {
-	        _this.complete();
-	      }
-	      return true; // bind once
-	    }
-	
-	    for ( var i=0; i < length; i++ ) {
-	      var loadingImage = this.images[i];
-	      loadingImage.on( 'confirm', onConfirm );
-	      loadingImage.check();
-	    }
-	  };
-	
-	  ImagesLoaded.prototype.progress = function( image ) {
-	    this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
-	    // HACK - Chrome triggers event before object properties have changed. #83
-	    var _this = this;
-	    setTimeout( function() {
-	      _this.emit( 'progress', _this, image );
-	      if ( _this.jqDeferred && _this.jqDeferred.notify ) {
-	        _this.jqDeferred.notify( _this, image );
-	      }
-	    });
-	  };
-	
-	  ImagesLoaded.prototype.complete = function() {
-	    var eventName = this.hasAnyBroken ? 'fail' : 'done';
-	    this.isComplete = true;
-	    var _this = this;
-	    // HACK - another setTimeout so that confirm happens after progress
-	    setTimeout( function() {
-	      _this.emit( eventName, _this );
-	      _this.emit( 'always', _this );
-	      if ( _this.jqDeferred ) {
-	        var jqMethod = _this.hasAnyBroken ? 'reject' : 'resolve';
-	        _this.jqDeferred[ jqMethod ]( _this );
-	      }
-	    });
-	  };
-	
-	  // -------------------------- jquery -------------------------- //
-	
-	  if ( $ ) {
-	    $.fn.imagesLoaded = function( options, callback ) {
-	      var instance = new ImagesLoaded( this, options, callback );
-	      return instance.jqDeferred.promise( $(this) );
-	    };
-	  }
-	
-	
-	  // --------------------------  -------------------------- //
-	
-	  function LoadingImage( img ) {
-	    this.img = img;
-	  }
-	
-	  LoadingImage.prototype = new EventEmitter();
-	
-	  LoadingImage.prototype.check = function() {
-	    // first check cached any previous images that have same src
-	    var resource = cache[ this.img.src ] || new Resource( this.img.src );
-	    if ( resource.isConfirmed ) {
-	      this.confirm( resource.isLoaded, 'cached was confirmed' );
-	      return;
-	    }
-	
-	    // If complete is true and browser supports natural sizes,
-	    // try to check for image status manually.
-	    if ( this.img.complete && this.img.naturalWidth !== undefined ) {
-	      // report based on naturalWidth
-	      this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
-	      return;
-	    }
-	
-	    // If none of the checks above matched, simulate loading on detached element.
-	    var _this = this;
-	    resource.on( 'confirm', function( resrc, message ) {
-	      _this.confirm( resrc.isLoaded, message );
-	      return true;
-	    });
-	
-	    resource.check();
-	  };
-	
-	  LoadingImage.prototype.confirm = function( isLoaded, message ) {
-	    this.isLoaded = isLoaded;
-	    this.emit( 'confirm', this, message );
-	  };
-	
-	  // -------------------------- Resource -------------------------- //
-	
-	  // Resource checks each src, only once
-	  // separate class from LoadingImage to prevent memory leaks. See #115
-	
-	  var cache = {};
-	
-	  function Resource( src ) {
-	    this.src = src;
-	    // add to cache
-	    cache[ src ] = this;
-	  }
-	
-	  Resource.prototype = new EventEmitter();
-	
-	  Resource.prototype.check = function() {
-	    // only trigger checking once
-	    if ( this.isChecked ) {
-	      return;
-	    }
-	    // simulate loading on detached element
-	    var proxyImage = new Image();
-	    eventie.bind( proxyImage, 'load', this );
-	    eventie.bind( proxyImage, 'error', this );
-	    proxyImage.src = this.src;
-	    // set flag
-	    this.isChecked = true;
-	  };
-	
-	  // ----- events ----- //
-	
-	  // trigger specified handler for event type
-	  Resource.prototype.handleEvent = function( event ) {
-	    var method = 'on' + event.type;
-	    if ( this[ method ] ) {
-	      this[ method ]( event );
-	    }
-	  };
-	
-	  Resource.prototype.onload = function( event ) {
-	    this.confirm( true, 'onload' );
-	    this.unbindProxyEvents( event );
-	  };
-	
-	  Resource.prototype.onerror = function( event ) {
-	    this.confirm( false, 'onerror' );
-	    this.unbindProxyEvents( event );
-	  };
-	
-	  // ----- confirm ----- //
-	
-	  Resource.prototype.confirm = function( isLoaded, message ) {
-	    this.isConfirmed = true;
-	    this.isLoaded = isLoaded;
-	    this.emit( 'confirm', this, message );
-	  };
-	
-	  Resource.prototype.unbindProxyEvents = function( event ) {
-	    eventie.unbind( event.target, 'load', this );
-	    eventie.unbind( event.target, 'error', this );
-	  };
-	
-	  // -----  ----- //
-	
-	  return ImagesLoaded;
-	
-	});
-
-
-/***/ },
-/* 261 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	 * EventEmitter v4.2.11 - git.io/ee
 	 * Unlicense - http://unlicense.org/
 	 * Oliver Caldwell - http://oli.me.uk/
@@ -35850,10 +33911,10 @@
 	    };
 	
 	    // Expose the class either via AMD, CommonJS or the global object
-	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	    if (typeof define === 'function' && define.amd) {
+	        define(function () {
 	            return EventEmitter;
-	        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        });
 	    }
 	    else if (typeof module === 'object' && module.exports){
 	        module.exports = EventEmitter;
@@ -35862,98 +33923,1911 @@
 	        exports.EventEmitter = EventEmitter;
 	    }
 	}.call(this));
-
+	
+	}.call(window));
 
 /***/ },
-/* 262 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * eventie v1.0.6
-	 * event binding helper
-	 *   eventie.bind( elem, 'click', myFn )
-	 *   eventie.unbind( elem, 'click', myFn )
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
+	/*!
+	 * getSize v1.2.2
+	 * measure size of elements
 	 * MIT license
 	 */
 	
-	/*jshint browser: true, undef: true, unused: true */
-	/*global define: false, module: false */
+	/*jshint browser: true, strict: true, undef: true, unused: true */
+	/*global define: false, exports: false, require: false, module: false, console: false */
+	
+	( function( window, undefined ) {
+	
+	'use strict';
+	
+	// -------------------------- helpers -------------------------- //
+	
+	// get a number from a string, not a percentage
+	function getStyleSize( value ) {
+	  var num = parseFloat( value );
+	  // not a percent like '100%', and a number
+	  var isValid = value.indexOf('%') === -1 && !isNaN( num );
+	  return isValid && num;
+	}
+	
+	function noop() {}
+	
+	var logError = typeof console === 'undefined' ? noop :
+	  function( message ) {
+	    console.error( message );
+	  };
+	
+	// -------------------------- measurements -------------------------- //
+	
+	var measurements = [
+	  'paddingLeft',
+	  'paddingRight',
+	  'paddingTop',
+	  'paddingBottom',
+	  'marginLeft',
+	  'marginRight',
+	  'marginTop',
+	  'marginBottom',
+	  'borderLeftWidth',
+	  'borderRightWidth',
+	  'borderTopWidth',
+	  'borderBottomWidth'
+	];
+	
+	function getZeroSize() {
+	  var size = {
+	    width: 0,
+	    height: 0,
+	    innerWidth: 0,
+	    innerHeight: 0,
+	    outerWidth: 0,
+	    outerHeight: 0
+	  };
+	  for ( var i=0, len = measurements.length; i < len; i++ ) {
+	    var measurement = measurements[i];
+	    size[ measurement ] = 0;
+	  }
+	  return size;
+	}
+	
+	
+	
+	function defineGetSize( getStyleProperty ) {
+	
+	// -------------------------- setup -------------------------- //
+	
+	var isSetup = false;
+	
+	var getStyle, boxSizingProp, isBoxSizeOuter;
+	
+	/**
+	 * setup vars and functions
+	 * do it on initial getSize(), rather than on script load
+	 * For Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+	 */
+	function setup() {
+	  // setup once
+	  if ( isSetup ) {
+	    return;
+	  }
+	  isSetup = true;
+	
+	  var getComputedStyle = window.getComputedStyle;
+	  getStyle = ( function() {
+	    var getStyleFn = getComputedStyle ?
+	      function( elem ) {
+	        return getComputedStyle( elem, null );
+	      } :
+	      function( elem ) {
+	        return elem.currentStyle;
+	      };
+	
+	      return function getStyle( elem ) {
+	        var style = getStyleFn( elem );
+	        if ( !style ) {
+	          logError( 'Style returned ' + style +
+	            '. Are you running this code in a hidden iframe on Firefox? ' +
+	            'See http://bit.ly/getsizebug1' );
+	        }
+	        return style;
+	      };
+	  })();
+	
+	  // -------------------------- box sizing -------------------------- //
+	
+	  boxSizingProp = getStyleProperty('boxSizing');
+	
+	  /**
+	   * WebKit measures the outer-width on style.width on border-box elems
+	   * IE & Firefox measures the inner-width
+	   */
+	  if ( boxSizingProp ) {
+	    var div = document.createElement('div');
+	    div.style.width = '200px';
+	    div.style.padding = '1px 2px 3px 4px';
+	    div.style.borderStyle = 'solid';
+	    div.style.borderWidth = '1px 2px 3px 4px';
+	    div.style[ boxSizingProp ] = 'border-box';
+	
+	    var body = document.body || document.documentElement;
+	    body.appendChild( div );
+	    var style = getStyle( div );
+	
+	    isBoxSizeOuter = getStyleSize( style.width ) === 200;
+	    body.removeChild( div );
+	  }
+	
+	}
+	
+	// -------------------------- getSize -------------------------- //
+	
+	function getSize( elem ) {
+	  setup();
+	
+	  // use querySeletor if elem is string
+	  if ( typeof elem === 'string' ) {
+	    elem = document.querySelector( elem );
+	  }
+	
+	  // do not proceed on non-objects
+	  if ( !elem || typeof elem !== 'object' || !elem.nodeType ) {
+	    return;
+	  }
+	
+	  var style = getStyle( elem );
+	
+	  // if hidden, everything is 0
+	  if ( style.display === 'none' ) {
+	    return getZeroSize();
+	  }
+	
+	  var size = {};
+	  size.width = elem.offsetWidth;
+	  size.height = elem.offsetHeight;
+	
+	  var isBorderBox = size.isBorderBox = !!( boxSizingProp &&
+	    style[ boxSizingProp ] && style[ boxSizingProp ] === 'border-box' );
+	
+	  // get all measurements
+	  for ( var i=0, len = measurements.length; i < len; i++ ) {
+	    var measurement = measurements[i];
+	    var value = style[ measurement ];
+	    value = mungeNonPixel( elem, value );
+	    var num = parseFloat( value );
+	    // any 'auto', 'medium' value will be 0
+	    size[ measurement ] = !isNaN( num ) ? num : 0;
+	  }
+	
+	  var paddingWidth = size.paddingLeft + size.paddingRight;
+	  var paddingHeight = size.paddingTop + size.paddingBottom;
+	  var marginWidth = size.marginLeft + size.marginRight;
+	  var marginHeight = size.marginTop + size.marginBottom;
+	  var borderWidth = size.borderLeftWidth + size.borderRightWidth;
+	  var borderHeight = size.borderTopWidth + size.borderBottomWidth;
+	
+	  var isBorderBoxSizeOuter = isBorderBox && isBoxSizeOuter;
+	
+	  // overwrite width and height if we can get it from style
+	  var styleWidth = getStyleSize( style.width );
+	  if ( styleWidth !== false ) {
+	    size.width = styleWidth +
+	      // add padding and border unless it's already including it
+	      ( isBorderBoxSizeOuter ? 0 : paddingWidth + borderWidth );
+	  }
+	
+	  var styleHeight = getStyleSize( style.height );
+	  if ( styleHeight !== false ) {
+	    size.height = styleHeight +
+	      // add padding and border unless it's already including it
+	      ( isBorderBoxSizeOuter ? 0 : paddingHeight + borderHeight );
+	  }
+	
+	  size.innerWidth = size.width - ( paddingWidth + borderWidth );
+	  size.innerHeight = size.height - ( paddingHeight + borderHeight );
+	
+	  size.outerWidth = size.width + marginWidth;
+	  size.outerHeight = size.height + marginHeight;
+	
+	  return size;
+	}
+	
+	// IE8 returns percent values, not pixels
+	// taken from jQuery's curCSS
+	function mungeNonPixel( elem, value ) {
+	  // IE8 and has percent value
+	  if ( window.getComputedStyle || value.indexOf('%') === -1 ) {
+	    return value;
+	  }
+	  var style = elem.style;
+	  // Remember the original values
+	  var left = style.left;
+	  var rs = elem.runtimeStyle;
+	  var rsLeft = rs && rs.left;
+	
+	  // Put in the new values to get a computed value out
+	  if ( rsLeft ) {
+	    rs.left = elem.currentStyle.left;
+	  }
+	  style.left = value;
+	  value = style.pixelLeft;
+	
+	  // Revert the changed values
+	  style.left = left;
+	  if ( rsLeft ) {
+	    rs.left = rsLeft;
+	  }
+	
+	  return value;
+	}
+	
+	return getSize;
+	
+	}
+	
+	// transport
+	if ( typeof define === 'function' && define.amd ) {
+	  // AMD for RequireJS
+	  define( [ 'get-style-property/get-style-property' ], defineGetSize );
+	} else if ( true ) {
+	  // CommonJS for Component
+	  module.exports = defineGetSize( __webpack_require__(255) );
+	} else {
+	  // browser global
+	  window.getSize = defineGetSize( window.getStyleProperty );
+	}
+	
+	})( window );
+	
+	}.call(window));
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
+	/*!
+	 * getStyleProperty v1.0.4
+	 * original by kangax
+	 * http://perfectionkills.com/feature-testing-css-properties/
+	 * MIT license
+	 */
+	
+	/*jshint browser: true, strict: true, undef: true */
+	/*global define: false, exports: false, module: false */
 	
 	( function( window ) {
 	
 	'use strict';
 	
-	var docElem = document.documentElement;
+	var prefixes = 'Webkit Moz ms Ms O'.split(' ');
+	var docElemStyle = document.documentElement.style;
 	
-	var bind = function() {};
+	function getStyleProperty( propName ) {
+	  if ( !propName ) {
+	    return;
+	  }
 	
-	function getIEEvent( obj ) {
-	  var event = window.event;
-	  // add event.target
-	  event.target = event.target || event.srcElement || obj;
-	  return event;
-	}
+	  // test standard property first
+	  if ( typeof docElemStyle[ propName ] === 'string' ) {
+	    return propName;
+	  }
 	
-	if ( docElem.addEventListener ) {
-	  bind = function( obj, type, fn ) {
-	    obj.addEventListener( type, fn, false );
-	  };
-	} else if ( docElem.attachEvent ) {
-	  bind = function( obj, type, fn ) {
-	    obj[ type + fn ] = fn.handleEvent ?
-	      function() {
-	        var event = getIEEvent( obj );
-	        fn.handleEvent.call( fn, event );
-	      } :
-	      function() {
-	        var event = getIEEvent( obj );
-	        fn.call( obj, event );
-	      };
-	    obj.attachEvent( "on" + type, obj[ type + fn ] );
-	  };
-	}
+	  // capitalize
+	  propName = propName.charAt(0).toUpperCase() + propName.slice(1);
 	
-	var unbind = function() {};
-	
-	if ( docElem.removeEventListener ) {
-	  unbind = function( obj, type, fn ) {
-	    obj.removeEventListener( type, fn, false );
-	  };
-	} else if ( docElem.detachEvent ) {
-	  unbind = function( obj, type, fn ) {
-	    obj.detachEvent( "on" + type, obj[ type + fn ] );
-	    try {
-	      delete obj[ type + fn ];
-	    } catch ( err ) {
-	      // can't delete window object properties
-	      obj[ type + fn ] = undefined;
+	  // test vendor specific properties
+	  var prefixed;
+	  for ( var i=0, len = prefixes.length; i < len; i++ ) {
+	    prefixed = prefixes[i] + propName;
+	    if ( typeof docElemStyle[ prefixed ] === 'string' ) {
+	      return prefixed;
 	    }
-	  };
+	  }
 	}
 	
-	var eventie = {
-	  bind: bind,
-	  unbind: unbind
-	};
-	
-	// ----- module definition ----- //
-	
-	if ( true ) {
+	// transport
+	if ( typeof define === 'function' && define.amd ) {
 	  // AMD
-	  !(__WEBPACK_AMD_DEFINE_FACTORY__ = (eventie), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if ( typeof exports === 'object' ) {
-	  // CommonJS
-	  module.exports = eventie;
+	  define( function() {
+	    return getStyleProperty;
+	  });
+	} else if ( true ) {
+	  // CommonJS for Component
+	  module.exports = getStyleProperty;
 	} else {
 	  // browser global
-	  window.eventie = eventie;
+	  window.getStyleProperty = getStyleProperty;
 	}
 	
 	})( window );
+	
+	}.call(window));
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
+	/**
+	 * Fizzy UI utils v1.0.1
+	 * MIT license
+	 */
+	
+	/*jshint browser: true, undef: true, unused: true, strict: true */
+	
+	( function( window, factory ) {
+	  /*global define: false, module: false, require: false */
+	  'use strict';
+	  // universal module definition
+	
+	  if ( typeof define == 'function' && define.amd ) {
+	    // AMD
+	    define( [
+	      'doc-ready/doc-ready',
+	      'matches-selector/matches-selector'
+	    ], function( docReady, matchesSelector ) {
+	      return factory( window, docReady, matchesSelector );
+	    });
+	  } else if ( true ) {
+	    // CommonJS
+	    module.exports = factory(
+	      window,
+	      __webpack_require__(257),
+	      __webpack_require__(258)
+	    );
+	  } else {
+	    // browser global
+	    window.fizzyUIUtils = factory(
+	      window,
+	      window.docReady,
+	      window.matchesSelector
+	    );
+	  }
+	
+	}( window, function factory( window, docReady, matchesSelector ) {
+	
+	'use strict';
+	
+	var utils = {};
+	
+	// ----- extend ----- //
+	
+	// extends objects
+	utils.extend = function( a, b ) {
+	  for ( var prop in b ) {
+	    a[ prop ] = b[ prop ];
+	  }
+	  return a;
+	};
+	
+	// ----- modulo ----- //
+	
+	utils.modulo = function( num, div ) {
+	  return ( ( num % div ) + div ) % div;
+	};
+	
+	// ----- isArray ----- //
+	  
+	var objToString = Object.prototype.toString;
+	utils.isArray = function( obj ) {
+	  return objToString.call( obj ) == '[object Array]';
+	};
+	
+	// ----- makeArray ----- //
+	
+	// turn element or nodeList into an array
+	utils.makeArray = function( obj ) {
+	  var ary = [];
+	  if ( utils.isArray( obj ) ) {
+	    // use object if already an array
+	    ary = obj;
+	  } else if ( obj && typeof obj.length == 'number' ) {
+	    // convert nodeList to array
+	    for ( var i=0, len = obj.length; i < len; i++ ) {
+	      ary.push( obj[i] );
+	    }
+	  } else {
+	    // array of single index
+	    ary.push( obj );
+	  }
+	  return ary;
+	};
+	
+	// ----- indexOf ----- //
+	
+	// index of helper cause IE8
+	utils.indexOf = Array.prototype.indexOf ? function( ary, obj ) {
+	    return ary.indexOf( obj );
+	  } : function( ary, obj ) {
+	    for ( var i=0, len = ary.length; i < len; i++ ) {
+	      if ( ary[i] === obj ) {
+	        return i;
+	      }
+	    }
+	    return -1;
+	  };
+	
+	// ----- removeFrom ----- //
+	
+	utils.removeFrom = function( ary, obj ) {
+	  var index = utils.indexOf( ary, obj );
+	  if ( index != -1 ) {
+	    ary.splice( index, 1 );
+	  }
+	};
+	
+	// ----- isElement ----- //
+	
+	// http://stackoverflow.com/a/384380/182183
+	utils.isElement = ( typeof HTMLElement == 'function' || typeof HTMLElement == 'object' ) ?
+	  function isElementDOM2( obj ) {
+	    return obj instanceof HTMLElement;
+	  } :
+	  function isElementQuirky( obj ) {
+	    return obj && typeof obj == 'object' &&
+	      obj.nodeType == 1 && typeof obj.nodeName == 'string';
+	  };
+	
+	// ----- setText ----- //
+	
+	utils.setText = ( function() {
+	  var setTextProperty;
+	  function setText( elem, text ) {
+	    // only check setTextProperty once
+	    setTextProperty = setTextProperty || ( document.documentElement.textContent !== undefined ? 'textContent' : 'innerText' );
+	    elem[ setTextProperty ] = text;
+	  }
+	  return setText;
+	})();
+	
+	// ----- getParent ----- //
+	
+	utils.getParent = function( elem, selector ) {
+	  while ( elem != document.body ) {
+	    elem = elem.parentNode;
+	    if ( matchesSelector( elem, selector ) ) {
+	      return elem;
+	    }
+	  }
+	};
+	
+	// ----- getQueryElement ----- //
+	
+	// use element as selector string
+	utils.getQueryElement = function( elem ) {
+	  if ( typeof elem == 'string' ) {
+	    return document.querySelector( elem );
+	  }
+	  return elem;
+	};
+	
+	// ----- handleEvent ----- //
+	
+	// enable .ontype to trigger from .addEventListener( elem, 'type' )
+	utils.handleEvent = function( event ) {
+	  var method = 'on' + event.type;
+	  if ( this[ method ] ) {
+	    this[ method ]( event );
+	  }
+	};
+	
+	// ----- filterFindElements ----- //
+	
+	utils.filterFindElements = function( elems, selector ) {
+	  // make array of elems
+	  elems = utils.makeArray( elems );
+	  var ffElems = [];
+	
+	  for ( var i=0, len = elems.length; i < len; i++ ) {
+	    var elem = elems[i];
+	    // check that elem is an actual element
+	    if ( !utils.isElement( elem ) ) {
+	      continue;
+	    }
+	    // filter & find items if we have a selector
+	    if ( selector ) {
+	      // filter siblings
+	      if ( matchesSelector( elem, selector ) ) {
+	        ffElems.push( elem );
+	      }
+	      // find children
+	      var childElems = elem.querySelectorAll( selector );
+	      // concat childElems to filterFound array
+	      for ( var j=0, jLen = childElems.length; j < jLen; j++ ) {
+	        ffElems.push( childElems[j] );
+	      }
+	    } else {
+	      ffElems.push( elem );
+	    }
+	  }
+	
+	  return ffElems;
+	};
+	
+	// ----- debounceMethod ----- //
+	
+	utils.debounceMethod = function( _class, methodName, threshold ) {
+	  // original method
+	  var method = _class.prototype[ methodName ];
+	  var timeoutName = methodName + 'Timeout';
+	
+	  _class.prototype[ methodName ] = function() {
+	    var timeout = this[ timeoutName ];
+	    if ( timeout ) {
+	      clearTimeout( timeout );
+	    }
+	    var args = arguments;
+	
+	    var _this = this;
+	    this[ timeoutName ] = setTimeout( function() {
+	      method.apply( _this, args );
+	      delete _this[ timeoutName ];
+	    }, threshold || 100 );
+	  };
+	};
+	
+	// ----- htmlInit ----- //
+	
+	// http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/
+	utils.toDashed = function( str ) {
+	  return str.replace( /(.)([A-Z])/g, function( match, $1, $2 ) {
+	    return $1 + '-' + $2;
+	  }).toLowerCase();
+	};
+	
+	var console = window.console;
+	/**
+	 * allow user to initialize classes via .js-namespace class
+	 * htmlInit( Widget, 'widgetName' )
+	 * options are parsed from data-namespace-option attribute
+	 */
+	utils.htmlInit = function( WidgetClass, namespace ) {
+	  docReady( function() {
+	    var dashedNamespace = utils.toDashed( namespace );
+	    var elems = document.querySelectorAll( '.js-' + dashedNamespace );
+	    var dataAttr = 'data-' + dashedNamespace + '-options';
+	
+	    for ( var i=0, len = elems.length; i < len; i++ ) {
+	      var elem = elems[i];
+	      var attr = elem.getAttribute( dataAttr );
+	      var options;
+	      try {
+	        options = attr && JSON.parse( attr );
+	      } catch ( error ) {
+	        // log error, do not initialize
+	        if ( console ) {
+	          console.error( 'Error parsing ' + dataAttr + ' on ' +
+	            elem.nodeName.toLowerCase() + ( elem.id ? '#' + elem.id : '' ) + ': ' +
+	            error );
+	        }
+	        continue;
+	      }
+	      // initialize
+	      var instance = new WidgetClass( elem, options );
+	      // make available via $().data('layoutname')
+	      var jQuery = window.jQuery;
+	      if ( jQuery ) {
+	        jQuery.data( elem, namespace, instance );
+	      }
+	    }
+	  });
+	};
+	
+	// -----  ----- //
+	
+	return utils;
+	
+	}));
+	
+	}.call(window));
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
+	/*!
+	 * docReady v1.0.3
+	 * Cross browser DOMContentLoaded event emitter
+	 * MIT license
+	 */
+	
+	/*jshint browser: true, strict: true, undef: true, unused: true*/
+	/*global define: false, require: false, module: false */
+	
+	( function( window ) {
+	
+	'use strict';
+	
+	var document = window.document;
+	// collection of functions to be triggered on ready
+	var queue = [];
+	
+	function docReady( fn ) {
+	  // throw out non-functions
+	  if ( typeof fn !== 'function' ) {
+	    return;
+	  }
+	
+	  if ( docReady.isReady ) {
+	    // ready now, hit it
+	    fn();
+	  } else {
+	    // queue function when ready
+	    queue.push( fn );
+	  }
+	}
+	
+	docReady.isReady = false;
+	
+	// triggered on various doc ready events
+	function init( event ) {
+	  // bail if IE8 document is not ready just yet
+	  var isIE8NotReady = event.type === 'readystatechange' && document.readyState !== 'complete';
+	  if ( docReady.isReady || isIE8NotReady ) {
+	    return;
+	  }
+	  docReady.isReady = true;
+	
+	  // process queue
+	  for ( var i=0, len = queue.length; i < len; i++ ) {
+	    var fn = queue[i];
+	    fn();
+	  }
+	}
+	
+	function defineDocReady( eventie ) {
+	  eventie.bind( document, 'DOMContentLoaded', init );
+	  eventie.bind( document, 'readystatechange', init );
+	  eventie.bind( window, 'load', init );
+	
+	  return docReady;
+	}
+	
+	// transport
+	if ( typeof define === 'function' && define.amd ) {
+	  // AMD
+	  // if RequireJS, then doc is already ready
+	  docReady.isReady = typeof requirejs === 'function';
+	  define( [ 'eventie/eventie' ], defineDocReady );
+	} else if ( true ) {
+	  module.exports = defineDocReady( __webpack_require__(252) );
+	} else {
+	  // browser global
+	  window.docReady = defineDocReady( window.eventie );
+	}
+	
+	})( window );
+	
+	}.call(window));
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
+	/**
+	 * matchesSelector v1.0.3
+	 * matchesSelector( element, '.selector' )
+	 * MIT license
+	 */
+	
+	/*jshint browser: true, strict: true, undef: true, unused: true */
+	/*global define: false, module: false */
+	
+	( function( ElemProto ) {
+	
+	  'use strict';
+	
+	  var matchesMethod = ( function() {
+	    // check for the standard method name first
+	    if ( ElemProto.matches ) {
+	      return 'matches';
+	    }
+	    // check un-prefixed
+	    if ( ElemProto.matchesSelector ) {
+	      return 'matchesSelector';
+	    }
+	    // check vendor prefixes
+	    var prefixes = [ 'webkit', 'moz', 'ms', 'o' ];
+	
+	    for ( var i=0, len = prefixes.length; i < len; i++ ) {
+	      var prefix = prefixes[i];
+	      var method = prefix + 'MatchesSelector';
+	      if ( ElemProto[ method ] ) {
+	        return method;
+	      }
+	    }
+	  })();
+	
+	  // ----- match ----- //
+	
+	  function match( elem, selector ) {
+	    return elem[ matchesMethod ]( selector );
+	  }
+	
+	  // ----- appendToFragment ----- //
+	
+	  function checkParent( elem ) {
+	    // not needed if already has parent
+	    if ( elem.parentNode ) {
+	      return;
+	    }
+	    var fragment = document.createDocumentFragment();
+	    fragment.appendChild( elem );
+	  }
+	
+	  // ----- query ----- //
+	
+	  // fall back to using QSA
+	  // thx @jonathantneal https://gist.github.com/3062955
+	  function query( elem, selector ) {
+	    // append to fragment if no parent
+	    checkParent( elem );
+	
+	    // match elem with all selected elems of parent
+	    var elems = elem.parentNode.querySelectorAll( selector );
+	    for ( var i=0, len = elems.length; i < len; i++ ) {
+	      // return true if match
+	      if ( elems[i] === elem ) {
+	        return true;
+	      }
+	    }
+	    // otherwise return false
+	    return false;
+	  }
+	
+	  // ----- matchChild ----- //
+	
+	  function matchChild( elem, selector ) {
+	    checkParent( elem );
+	    return match( elem, selector );
+	  }
+	
+	  // ----- matchesSelector ----- //
+	
+	  var matchesSelector;
+	
+	  if ( matchesMethod ) {
+	    // IE9 supports matchesSelector, but doesn't work on orphaned elems
+	    // check for that
+	    var div = document.createElement('div');
+	    var supportsOrphans = match( div, 'div' );
+	    matchesSelector = supportsOrphans ? match : matchChild;
+	  } else {
+	    matchesSelector = query;
+	  }
+	
+	  // transport
+	  if ( typeof define === 'function' && define.amd ) {
+	    // AMD
+	    define( function() {
+	      return matchesSelector;
+	    });
+	  } else if ( true ) {
+	    module.exports = matchesSelector;
+	  }
+	  else {
+	    // browser global
+	    window.matchesSelector = matchesSelector;
+	  }
+	
+	})( Element.prototype );
+	
+	}.call(window));
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
+	/**
+	 * Outlayer Item
+	 */
+	
+	( function( window, factory ) {
+	  'use strict';
+	  // universal module definition
+	  if ( typeof define === 'function' && define.amd ) {
+	    // AMD
+	    define( [
+	        'eventEmitter/EventEmitter',
+	        'get-size/get-size',
+	        'get-style-property/get-style-property',
+	        'fizzy-ui-utils/utils'
+	      ],
+	      function( EventEmitter, getSize, getStyleProperty, utils ) {
+	        return factory( window, EventEmitter, getSize, getStyleProperty, utils );
+	      }
+	    );
+	  } else if (true) {
+	    // CommonJS
+	    module.exports = factory(
+	      window,
+	      __webpack_require__(253),
+	      __webpack_require__(254),
+	      __webpack_require__(255),
+	      __webpack_require__(256)
+	    );
+	  } else {
+	    // browser global
+	    window.Outlayer = {};
+	    window.Outlayer.Item = factory(
+	      window,
+	      window.EventEmitter,
+	      window.getSize,
+	      window.getStyleProperty,
+	      window.fizzyUIUtils
+	    );
+	  }
+	
+	}( window, function factory( window, EventEmitter, getSize, getStyleProperty, utils ) {
+	'use strict';
+	
+	// ----- helpers ----- //
+	
+	var getComputedStyle = window.getComputedStyle;
+	var getStyle = getComputedStyle ?
+	  function( elem ) {
+	    return getComputedStyle( elem, null );
+	  } :
+	  function( elem ) {
+	    return elem.currentStyle;
+	  };
+	
+	
+	function isEmptyObj( obj ) {
+	  for ( var prop in obj ) {
+	    return false;
+	  }
+	  prop = null;
+	  return true;
+	}
+	
+	// -------------------------- CSS3 support -------------------------- //
+	
+	var transitionProperty = getStyleProperty('transition');
+	var transformProperty = getStyleProperty('transform');
+	var supportsCSS3 = transitionProperty && transformProperty;
+	var is3d = !!getStyleProperty('perspective');
+	
+	var transitionEndEvent = {
+	  WebkitTransition: 'webkitTransitionEnd',
+	  MozTransition: 'transitionend',
+	  OTransition: 'otransitionend',
+	  transition: 'transitionend'
+	}[ transitionProperty ];
+	
+	// properties that could have vendor prefix
+	var prefixableProperties = [
+	  'transform',
+	  'transition',
+	  'transitionDuration',
+	  'transitionProperty'
+	];
+	
+	// cache all vendor properties
+	var vendorProperties = ( function() {
+	  var cache = {};
+	  for ( var i=0, len = prefixableProperties.length; i < len; i++ ) {
+	    var prop = prefixableProperties[i];
+	    var supportedProp = getStyleProperty( prop );
+	    if ( supportedProp && supportedProp !== prop ) {
+	      cache[ prop ] = supportedProp;
+	    }
+	  }
+	  return cache;
+	})();
+	
+	// -------------------------- Item -------------------------- //
+	
+	function Item( element, layout ) {
+	  if ( !element ) {
+	    return;
+	  }
+	
+	  this.element = element;
+	  // parent layout class, i.e. Masonry, Isotope, or Packery
+	  this.layout = layout;
+	  this.position = {
+	    x: 0,
+	    y: 0
+	  };
+	
+	  this._create();
+	}
+	
+	// inherit EventEmitter
+	utils.extend( Item.prototype, EventEmitter.prototype );
+	
+	Item.prototype._create = function() {
+	  // transition objects
+	  this._transn = {
+	    ingProperties: {},
+	    clean: {},
+	    onEnd: {}
+	  };
+	
+	  this.css({
+	    position: 'absolute'
+	  });
+	};
+	
+	// trigger specified handler for event type
+	Item.prototype.handleEvent = function( event ) {
+	  var method = 'on' + event.type;
+	  if ( this[ method ] ) {
+	    this[ method ]( event );
+	  }
+	};
+	
+	Item.prototype.getSize = function() {
+	  this.size = getSize( this.element );
+	};
+	
+	/**
+	 * apply CSS styles to element
+	 * @param {Object} style
+	 */
+	Item.prototype.css = function( style ) {
+	  var elemStyle = this.element.style;
+	
+	  for ( var prop in style ) {
+	    // use vendor property if available
+	    var supportedProp = vendorProperties[ prop ] || prop;
+	    elemStyle[ supportedProp ] = style[ prop ];
+	  }
+	};
+	
+	 // measure position, and sets it
+	Item.prototype.getPosition = function() {
+	  var style = getStyle( this.element );
+	  var layoutOptions = this.layout.options;
+	  var isOriginLeft = layoutOptions.isOriginLeft;
+	  var isOriginTop = layoutOptions.isOriginTop;
+	  var xValue = style[ isOriginLeft ? 'left' : 'right' ];
+	  var yValue = style[ isOriginTop ? 'top' : 'bottom' ];
+	  // convert percent to pixels
+	  var layoutSize = this.layout.size;
+	  var x = xValue.indexOf('%') != -1 ?
+	    ( parseFloat( xValue ) / 100 ) * layoutSize.width : parseInt( xValue, 10 );
+	  var y = yValue.indexOf('%') != -1 ?
+	    ( parseFloat( yValue ) / 100 ) * layoutSize.height : parseInt( yValue, 10 );
+	
+	  // clean up 'auto' or other non-integer values
+	  x = isNaN( x ) ? 0 : x;
+	  y = isNaN( y ) ? 0 : y;
+	  // remove padding from measurement
+	  x -= isOriginLeft ? layoutSize.paddingLeft : layoutSize.paddingRight;
+	  y -= isOriginTop ? layoutSize.paddingTop : layoutSize.paddingBottom;
+	
+	  this.position.x = x;
+	  this.position.y = y;
+	};
+	
+	// set settled position, apply padding
+	Item.prototype.layoutPosition = function() {
+	  var layoutSize = this.layout.size;
+	  var layoutOptions = this.layout.options;
+	  var style = {};
+	
+	  // x
+	  var xPadding = layoutOptions.isOriginLeft ? 'paddingLeft' : 'paddingRight';
+	  var xProperty = layoutOptions.isOriginLeft ? 'left' : 'right';
+	  var xResetProperty = layoutOptions.isOriginLeft ? 'right' : 'left';
+	
+	  var x = this.position.x + layoutSize[ xPadding ];
+	  // set in percentage or pixels
+	  style[ xProperty ] = this.getXValue( x );
+	  // reset other property
+	  style[ xResetProperty ] = '';
+	
+	  // y
+	  var yPadding = layoutOptions.isOriginTop ? 'paddingTop' : 'paddingBottom';
+	  var yProperty = layoutOptions.isOriginTop ? 'top' : 'bottom';
+	  var yResetProperty = layoutOptions.isOriginTop ? 'bottom' : 'top';
+	
+	  var y = this.position.y + layoutSize[ yPadding ];
+	  // set in percentage or pixels
+	  style[ yProperty ] = this.getYValue( y );
+	  // reset other property
+	  style[ yResetProperty ] = '';
+	
+	  this.css( style );
+	  this.emitEvent( 'layout', [ this ] );
+	};
+	
+	Item.prototype.getXValue = function( x ) {
+	  var layoutOptions = this.layout.options;
+	  return layoutOptions.percentPosition && !layoutOptions.isHorizontal ?
+	    ( ( x / this.layout.size.width ) * 100 ) + '%' : x + 'px';
+	};
+	
+	Item.prototype.getYValue = function( y ) {
+	  var layoutOptions = this.layout.options;
+	  return layoutOptions.percentPosition && layoutOptions.isHorizontal ?
+	    ( ( y / this.layout.size.height ) * 100 ) + '%' : y + 'px';
+	};
+	
+	
+	Item.prototype._transitionTo = function( x, y ) {
+	  this.getPosition();
+	  // get current x & y from top/left
+	  var curX = this.position.x;
+	  var curY = this.position.y;
+	
+	  var compareX = parseInt( x, 10 );
+	  var compareY = parseInt( y, 10 );
+	  var didNotMove = compareX === this.position.x && compareY === this.position.y;
+	
+	  // save end position
+	  this.setPosition( x, y );
+	
+	  // if did not move and not transitioning, just go to layout
+	  if ( didNotMove && !this.isTransitioning ) {
+	    this.layoutPosition();
+	    return;
+	  }
+	
+	  var transX = x - curX;
+	  var transY = y - curY;
+	  var transitionStyle = {};
+	  transitionStyle.transform = this.getTranslate( transX, transY );
+	
+	  this.transition({
+	    to: transitionStyle,
+	    onTransitionEnd: {
+	      transform: this.layoutPosition
+	    },
+	    isCleaning: true
+	  });
+	};
+	
+	Item.prototype.getTranslate = function( x, y ) {
+	  // flip cooridinates if origin on right or bottom
+	  var layoutOptions = this.layout.options;
+	  x = layoutOptions.isOriginLeft ? x : -x;
+	  y = layoutOptions.isOriginTop ? y : -y;
+	
+	  if ( is3d ) {
+	    return 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+	  }
+	
+	  return 'translate(' + x + 'px, ' + y + 'px)';
+	};
+	
+	// non transition + transform support
+	Item.prototype.goTo = function( x, y ) {
+	  this.setPosition( x, y );
+	  this.layoutPosition();
+	};
+	
+	// use transition and transforms if supported
+	Item.prototype.moveTo = supportsCSS3 ?
+	  Item.prototype._transitionTo : Item.prototype.goTo;
+	
+	Item.prototype.setPosition = function( x, y ) {
+	  this.position.x = parseInt( x, 10 );
+	  this.position.y = parseInt( y, 10 );
+	};
+	
+	// ----- transition ----- //
+	
+	/**
+	 * @param {Object} style - CSS
+	 * @param {Function} onTransitionEnd
+	 */
+	
+	// non transition, just trigger callback
+	Item.prototype._nonTransition = function( args ) {
+	  this.css( args.to );
+	  if ( args.isCleaning ) {
+	    this._removeStyles( args.to );
+	  }
+	  for ( var prop in args.onTransitionEnd ) {
+	    args.onTransitionEnd[ prop ].call( this );
+	  }
+	};
+	
+	/**
+	 * proper transition
+	 * @param {Object} args - arguments
+	 *   @param {Object} to - style to transition to
+	 *   @param {Object} from - style to start transition from
+	 *   @param {Boolean} isCleaning - removes transition styles after transition
+	 *   @param {Function} onTransitionEnd - callback
+	 */
+	Item.prototype._transition = function( args ) {
+	  // redirect to nonTransition if no transition duration
+	  if ( !parseFloat( this.layout.options.transitionDuration ) ) {
+	    this._nonTransition( args );
+	    return;
+	  }
+	
+	  var _transition = this._transn;
+	  // keep track of onTransitionEnd callback by css property
+	  for ( var prop in args.onTransitionEnd ) {
+	    _transition.onEnd[ prop ] = args.onTransitionEnd[ prop ];
+	  }
+	  // keep track of properties that are transitioning
+	  for ( prop in args.to ) {
+	    _transition.ingProperties[ prop ] = true;
+	    // keep track of properties to clean up when transition is done
+	    if ( args.isCleaning ) {
+	      _transition.clean[ prop ] = true;
+	    }
+	  }
+	
+	  // set from styles
+	  if ( args.from ) {
+	    this.css( args.from );
+	    // force redraw. http://blog.alexmaccaw.com/css-transitions
+	    var h = this.element.offsetHeight;
+	    // hack for JSHint to hush about unused var
+	    h = null;
+	  }
+	  // enable transition
+	  this.enableTransition( args.to );
+	  // set styles that are transitioning
+	  this.css( args.to );
+	
+	  this.isTransitioning = true;
+	
+	};
+	
+	// dash before all cap letters, including first for
+	// WebkitTransform => -webkit-transform
+	function toDashedAll( str ) {
+	  return str.replace( /([A-Z])/g, function( $1 ) {
+	    return '-' + $1.toLowerCase();
+	  });
+	}
+	
+	var transitionProps = 'opacity,' +
+	  toDashedAll( vendorProperties.transform || 'transform' );
+	
+	Item.prototype.enableTransition = function(/* style */) {
+	  // HACK changing transitionProperty during a transition
+	  // will cause transition to jump
+	  if ( this.isTransitioning ) {
+	    return;
+	  }
+	
+	  // make `transition: foo, bar, baz` from style object
+	  // HACK un-comment this when enableTransition can work
+	  // while a transition is happening
+	  // var transitionValues = [];
+	  // for ( var prop in style ) {
+	  //   // dash-ify camelCased properties like WebkitTransition
+	  //   prop = vendorProperties[ prop ] || prop;
+	  //   transitionValues.push( toDashedAll( prop ) );
+	  // }
+	  // enable transition styles
+	  this.css({
+	    transitionProperty: transitionProps,
+	    transitionDuration: this.layout.options.transitionDuration
+	  });
+	  // listen for transition end event
+	  this.element.addEventListener( transitionEndEvent, this, false );
+	};
+	
+	Item.prototype.transition = Item.prototype[ transitionProperty ? '_transition' : '_nonTransition' ];
+	
+	// ----- events ----- //
+	
+	Item.prototype.onwebkitTransitionEnd = function( event ) {
+	  this.ontransitionend( event );
+	};
+	
+	Item.prototype.onotransitionend = function( event ) {
+	  this.ontransitionend( event );
+	};
+	
+	// properties that I munge to make my life easier
+	var dashedVendorProperties = {
+	  '-webkit-transform': 'transform',
+	  '-moz-transform': 'transform',
+	  '-o-transform': 'transform'
+	};
+	
+	Item.prototype.ontransitionend = function( event ) {
+	  // disregard bubbled events from children
+	  if ( event.target !== this.element ) {
+	    return;
+	  }
+	  var _transition = this._transn;
+	  // get property name of transitioned property, convert to prefix-free
+	  var propertyName = dashedVendorProperties[ event.propertyName ] || event.propertyName;
+	
+	  // remove property that has completed transitioning
+	  delete _transition.ingProperties[ propertyName ];
+	  // check if any properties are still transitioning
+	  if ( isEmptyObj( _transition.ingProperties ) ) {
+	    // all properties have completed transitioning
+	    this.disableTransition();
+	  }
+	  // clean style
+	  if ( propertyName in _transition.clean ) {
+	    // clean up style
+	    this.element.style[ event.propertyName ] = '';
+	    delete _transition.clean[ propertyName ];
+	  }
+	  // trigger onTransitionEnd callback
+	  if ( propertyName in _transition.onEnd ) {
+	    var onTransitionEnd = _transition.onEnd[ propertyName ];
+	    onTransitionEnd.call( this );
+	    delete _transition.onEnd[ propertyName ];
+	  }
+	
+	  this.emitEvent( 'transitionEnd', [ this ] );
+	};
+	
+	Item.prototype.disableTransition = function() {
+	  this.removeTransitionStyles();
+	  this.element.removeEventListener( transitionEndEvent, this, false );
+	  this.isTransitioning = false;
+	};
+	
+	/**
+	 * removes style property from element
+	 * @param {Object} style
+	**/
+	Item.prototype._removeStyles = function( style ) {
+	  // clean up transition styles
+	  var cleanStyle = {};
+	  for ( var prop in style ) {
+	    cleanStyle[ prop ] = '';
+	  }
+	  this.css( cleanStyle );
+	};
+	
+	var cleanTransitionStyle = {
+	  transitionProperty: '',
+	  transitionDuration: ''
+	};
+	
+	Item.prototype.removeTransitionStyles = function() {
+	  // remove transition
+	  this.css( cleanTransitionStyle );
+	};
+	
+	// ----- show/hide/remove ----- //
+	
+	// remove element from DOM
+	Item.prototype.removeElem = function() {
+	  this.element.parentNode.removeChild( this.element );
+	  // remove display: none
+	  this.css({ display: '' });
+	  this.emitEvent( 'remove', [ this ] );
+	};
+	
+	Item.prototype.remove = function() {
+	  // just remove element if no transition support or no transition
+	  if ( !transitionProperty || !parseFloat( this.layout.options.transitionDuration ) ) {
+	    this.removeElem();
+	    return;
+	  }
+	
+	  // start transition
+	  var _this = this;
+	  this.once( 'transitionEnd', function() {
+	    _this.removeElem();
+	  });
+	  this.hide();
+	};
+	
+	Item.prototype.reveal = function() {
+	  delete this.isHidden;
+	  // remove display: none
+	  this.css({ display: '' });
+	
+	  var options = this.layout.options;
+	
+	  var onTransitionEnd = {};
+	  var transitionEndProperty = this.getHideRevealTransitionEndProperty('visibleStyle');
+	  onTransitionEnd[ transitionEndProperty ] = this.onRevealTransitionEnd;
+	
+	  this.transition({
+	    from: options.hiddenStyle,
+	    to: options.visibleStyle,
+	    isCleaning: true,
+	    onTransitionEnd: onTransitionEnd
+	  });
+	};
+	
+	Item.prototype.onRevealTransitionEnd = function() {
+	  // check if still visible
+	  // during transition, item may have been hidden
+	  if ( !this.isHidden ) {
+	    this.emitEvent('reveal');
+	  }
+	};
+	
+	/**
+	 * get style property use for hide/reveal transition end
+	 * @param {String} styleProperty - hiddenStyle/visibleStyle
+	 * @returns {String}
+	 */
+	Item.prototype.getHideRevealTransitionEndProperty = function( styleProperty ) {
+	  var optionStyle = this.layout.options[ styleProperty ];
+	  // use opacity
+	  if ( optionStyle.opacity ) {
+	    return 'opacity';
+	  }
+	  // get first property
+	  for ( var prop in optionStyle ) {
+	    return prop;
+	  }
+	};
+	
+	Item.prototype.hide = function() {
+	  // set flag
+	  this.isHidden = true;
+	  // remove display: none
+	  this.css({ display: '' });
+	
+	  var options = this.layout.options;
+	
+	  var onTransitionEnd = {};
+	  var transitionEndProperty = this.getHideRevealTransitionEndProperty('hiddenStyle');
+	  onTransitionEnd[ transitionEndProperty ] = this.onHideTransitionEnd;
+	
+	  this.transition({
+	    from: options.visibleStyle,
+	    to: options.hiddenStyle,
+	    // keep hidden stuff hidden
+	    isCleaning: true,
+	    onTransitionEnd: onTransitionEnd
+	  });
+	};
+	
+	Item.prototype.onHideTransitionEnd = function() {
+	  // check if still hidden
+	  // during transition, item may have been un-hidden
+	  if ( this.isHidden ) {
+	    this.css({ display: 'none' });
+	    this.emitEvent('hide');
+	  }
+	};
+	
+	Item.prototype.destroy = function() {
+	  this.css({
+	    position: '',
+	    left: '',
+	    right: '',
+	    top: '',
+	    bottom: '',
+	    transition: '',
+	    transform: ''
+	  });
+	};
+	
+	return Item;
+	
+	}));
+	
+	}.call(window));
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*** IMPORTS FROM imports-loader ***/
+	var define = false;
+	(function() {
+	
+	/*!
+	 * imagesLoaded v4.1.0
+	 * JavaScript is all like "You images are done yet or what?"
+	 * MIT License
+	 */
+	
+	( function( window, factory ) { 'use strict';
+	  // universal module definition
+	
+	  /*global define: false, module: false, require: false */
+	
+	  if ( typeof define == 'function' && define.amd ) {
+	    // AMD
+	    define( [
+	      'ev-emitter/ev-emitter'
+	    ], function( EvEmitter ) {
+	      return factory( window, EvEmitter );
+	    });
+	  } else if ( typeof module == 'object' && module.exports ) {
+	    // CommonJS
+	    module.exports = factory(
+	      window,
+	      __webpack_require__(261)
+	    );
+	  } else {
+	    // browser global
+	    window.imagesLoaded = factory(
+	      window,
+	      window.EvEmitter
+	    );
+	  }
+	
+	})( window,
+	
+	// --------------------------  factory -------------------------- //
+	
+	function factory( window, EvEmitter ) {
+	
+	'use strict';
+	
+	var $ = window.jQuery;
+	var console = window.console;
+	
+	// -------------------------- helpers -------------------------- //
+	
+	// extend objects
+	function extend( a, b ) {
+	  for ( var prop in b ) {
+	    a[ prop ] = b[ prop ];
+	  }
+	  return a;
+	}
+	
+	// turn element or nodeList into an array
+	function makeArray( obj ) {
+	  var ary = [];
+	  if ( Array.isArray( obj ) ) {
+	    // use object if already an array
+	    ary = obj;
+	  } else if ( typeof obj.length == 'number' ) {
+	    // convert nodeList to array
+	    for ( var i=0; i < obj.length; i++ ) {
+	      ary.push( obj[i] );
+	    }
+	  } else {
+	    // array of single index
+	    ary.push( obj );
+	  }
+	  return ary;
+	}
+	
+	// -------------------------- imagesLoaded -------------------------- //
+	
+	/**
+	 * @param {Array, Element, NodeList, String} elem
+	 * @param {Object or Function} options - if function, use as callback
+	 * @param {Function} onAlways - callback function
+	 */
+	function ImagesLoaded( elem, options, onAlways ) {
+	  // coerce ImagesLoaded() without new, to be new ImagesLoaded()
+	  if ( !( this instanceof ImagesLoaded ) ) {
+	    return new ImagesLoaded( elem, options, onAlways );
+	  }
+	  // use elem as selector string
+	  if ( typeof elem == 'string' ) {
+	    elem = document.querySelectorAll( elem );
+	  }
+	
+	  this.elements = makeArray( elem );
+	  this.options = extend( {}, this.options );
+	
+	  if ( typeof options == 'function' ) {
+	    onAlways = options;
+	  } else {
+	    extend( this.options, options );
+	  }
+	
+	  if ( onAlways ) {
+	    this.on( 'always', onAlways );
+	  }
+	
+	  this.getImages();
+	
+	  if ( $ ) {
+	    // add jQuery Deferred object
+	    this.jqDeferred = new $.Deferred();
+	  }
+	
+	  // HACK check async to allow time to bind listeners
+	  setTimeout( function() {
+	    this.check();
+	  }.bind( this ));
+	}
+	
+	ImagesLoaded.prototype = Object.create( EvEmitter.prototype );
+	
+	ImagesLoaded.prototype.options = {};
+	
+	ImagesLoaded.prototype.getImages = function() {
+	  this.images = [];
+	
+	  // filter & find items if we have an item selector
+	  this.elements.forEach( this.addElementImages, this );
+	};
+	
+	/**
+	 * @param {Node} element
+	 */
+	ImagesLoaded.prototype.addElementImages = function( elem ) {
+	  // filter siblings
+	  if ( elem.nodeName == 'IMG' ) {
+	    this.addImage( elem );
+	  }
+	  // get background image on element
+	  if ( this.options.background === true ) {
+	    this.addElementBackgroundImages( elem );
+	  }
+	
+	  // find children
+	  // no non-element nodes, #143
+	  var nodeType = elem.nodeType;
+	  if ( !nodeType || !elementNodeTypes[ nodeType ] ) {
+	    return;
+	  }
+	  var childImgs = elem.querySelectorAll('img');
+	  // concat childElems to filterFound array
+	  for ( var i=0; i < childImgs.length; i++ ) {
+	    var img = childImgs[i];
+	    this.addImage( img );
+	  }
+	
+	  // get child background images
+	  if ( typeof this.options.background == 'string' ) {
+	    var children = elem.querySelectorAll( this.options.background );
+	    for ( i=0; i < children.length; i++ ) {
+	      var child = children[i];
+	      this.addElementBackgroundImages( child );
+	    }
+	  }
+	};
+	
+	var elementNodeTypes = {
+	  1: true,
+	  9: true,
+	  11: true
+	};
+	
+	ImagesLoaded.prototype.addElementBackgroundImages = function( elem ) {
+	  var style = getComputedStyle( elem );
+	  if ( !style ) {
+	    // Firefox returns null if in a hidden iframe https://bugzil.la/548397
+	    return;
+	  }
+	  // get url inside url("...")
+	  var reURL = /url\((['"])?(.*?)\1\)/gi;
+	  var matches = reURL.exec( style.backgroundImage );
+	  while ( matches !== null ) {
+	    var url = matches && matches[2];
+	    if ( url ) {
+	      this.addBackground( url, elem );
+	    }
+	    matches = reURL.exec( style.backgroundImage );
+	  }
+	};
+	
+	/**
+	 * @param {Image} img
+	 */
+	ImagesLoaded.prototype.addImage = function( img ) {
+	  var loadingImage = new LoadingImage( img );
+	  this.images.push( loadingImage );
+	};
+	
+	ImagesLoaded.prototype.addBackground = function( url, elem ) {
+	  var background = new Background( url, elem );
+	  this.images.push( background );
+	};
+	
+	ImagesLoaded.prototype.check = function() {
+	  var _this = this;
+	  this.progressedCount = 0;
+	  this.hasAnyBroken = false;
+	  // complete if no images
+	  if ( !this.images.length ) {
+	    this.complete();
+	    return;
+	  }
+	
+	  function onProgress( image, elem, message ) {
+	    // HACK - Chrome triggers event before object properties have changed. #83
+	    setTimeout( function() {
+	      _this.progress( image, elem, message );
+	    });
+	  }
+	
+	  this.images.forEach( function( loadingImage ) {
+	    loadingImage.once( 'progress', onProgress );
+	    loadingImage.check();
+	  });
+	};
+	
+	ImagesLoaded.prototype.progress = function( image, elem, message ) {
+	  this.progressedCount++;
+	  this.hasAnyBroken = this.hasAnyBroken || !image.isLoaded;
+	  // progress event
+	  this.emitEvent( 'progress', [ this, image, elem ] );
+	  if ( this.jqDeferred && this.jqDeferred.notify ) {
+	    this.jqDeferred.notify( this, image );
+	  }
+	  // check if completed
+	  if ( this.progressedCount == this.images.length ) {
+	    this.complete();
+	  }
+	
+	  if ( this.options.debug && console ) {
+	    console.log( 'progress: ' + message, image, elem );
+	  }
+	};
+	
+	ImagesLoaded.prototype.complete = function() {
+	  var eventName = this.hasAnyBroken ? 'fail' : 'done';
+	  this.isComplete = true;
+	  this.emitEvent( eventName, [ this ] );
+	  this.emitEvent( 'always', [ this ] );
+	  if ( this.jqDeferred ) {
+	    var jqMethod = this.hasAnyBroken ? 'reject' : 'resolve';
+	    this.jqDeferred[ jqMethod ]( this );
+	  }
+	};
+	
+	// --------------------------  -------------------------- //
+	
+	function LoadingImage( img ) {
+	  this.img = img;
+	}
+	
+	LoadingImage.prototype = Object.create( EvEmitter.prototype );
+	
+	LoadingImage.prototype.check = function() {
+	  // If complete is true and browser supports natural sizes,
+	  // try to check for image status manually.
+	  var isComplete = this.getIsImageComplete();
+	  if ( isComplete ) {
+	    // report based on naturalWidth
+	    this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
+	    return;
+	  }
+	
+	  // If none of the checks above matched, simulate loading on detached element.
+	  this.proxyImage = new Image();
+	  this.proxyImage.addEventListener( 'load', this );
+	  this.proxyImage.addEventListener( 'error', this );
+	  // bind to image as well for Firefox. #191
+	  this.img.addEventListener( 'load', this );
+	  this.img.addEventListener( 'error', this );
+	  this.proxyImage.src = this.img.src;
+	};
+	
+	LoadingImage.prototype.getIsImageComplete = function() {
+	  return this.img.complete && this.img.naturalWidth !== undefined;
+	};
+	
+	LoadingImage.prototype.confirm = function( isLoaded, message ) {
+	  this.isLoaded = isLoaded;
+	  this.emitEvent( 'progress', [ this, this.img, message ] );
+	};
+	
+	// ----- events ----- //
+	
+	// trigger specified handler for event type
+	LoadingImage.prototype.handleEvent = function( event ) {
+	  var method = 'on' + event.type;
+	  if ( this[ method ] ) {
+	    this[ method ]( event );
+	  }
+	};
+	
+	LoadingImage.prototype.onload = function() {
+	  this.confirm( true, 'onload' );
+	  this.unbindEvents();
+	};
+	
+	LoadingImage.prototype.onerror = function() {
+	  this.confirm( false, 'onerror' );
+	  this.unbindEvents();
+	};
+	
+	LoadingImage.prototype.unbindEvents = function() {
+	  this.proxyImage.removeEventListener( 'load', this );
+	  this.proxyImage.removeEventListener( 'error', this );
+	  this.img.removeEventListener( 'load', this );
+	  this.img.removeEventListener( 'error', this );
+	};
+	
+	// -------------------------- Background -------------------------- //
+	
+	function Background( url, element ) {
+	  this.url = url;
+	  this.element = element;
+	  this.img = new Image();
+	}
+	
+	// inherit LoadingImage prototype
+	Background.prototype = Object.create( LoadingImage.prototype );
+	
+	Background.prototype.check = function() {
+	  this.img.addEventListener( 'load', this );
+	  this.img.addEventListener( 'error', this );
+	  this.img.src = this.url;
+	  // check if image is already complete
+	  var isComplete = this.getIsImageComplete();
+	  if ( isComplete ) {
+	    this.confirm( this.img.naturalWidth !== 0, 'naturalWidth' );
+	    this.unbindEvents();
+	  }
+	};
+	
+	Background.prototype.unbindEvents = function() {
+	  this.img.removeEventListener( 'load', this );
+	  this.img.removeEventListener( 'error', this );
+	};
+	
+	Background.prototype.confirm = function( isLoaded, message ) {
+	  this.isLoaded = isLoaded;
+	  this.emitEvent( 'progress', [ this, this.element, message ] );
+	};
+	
+	// -------------------------- jQuery -------------------------- //
+	
+	ImagesLoaded.makeJQueryPlugin = function( jQuery ) {
+	  jQuery = jQuery || window.jQuery;
+	  if ( !jQuery ) {
+	    return;
+	  }
+	  // set local variable
+	  $ = jQuery;
+	  // $().imagesLoaded()
+	  $.fn.imagesLoaded = function( options, callback ) {
+	    var instance = new ImagesLoaded( this, options, callback );
+	    return instance.jqDeferred.promise( $(this) );
+	  };
+	};
+	// try making plugin
+	ImagesLoaded.makeJQueryPlugin();
+	
+	// --------------------------  -------------------------- //
+	
+	return ImagesLoaded;
+	
+	});
+	
+	}.call(window));
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+	 * EvEmitter v1.0.1
+	 * Lil' event emitter
+	 * MIT License
+	 */
+	
+	/* jshint unused: true, undef: true, strict: true */
+	
+	( function( global, factory ) {
+	  // universal module definition
+	  /* jshint strict: false */ /* globals define, module */
+	  if ( true ) {
+	    // AMD - RequireJS
+	    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ( typeof module == 'object' && module.exports ) {
+	    // CommonJS - Browserify, Webpack
+	    module.exports = factory();
+	  } else {
+	    // Browser globals
+	    global.EvEmitter = factory();
+	  }
+	
+	}( this, function() {
+	
+	"use strict";
+	
+	function EvEmitter() {}
+	
+	var proto = EvEmitter.prototype;
+	
+	proto.on = function( eventName, listener ) {
+	  if ( !eventName || !listener ) {
+	    return;
+	  }
+	  // set events hash
+	  var events = this._events = this._events || {};
+	  // set listeners array
+	  var listeners = events[ eventName ] = events[ eventName ] || [];
+	  // only add once
+	  if ( listeners.indexOf( listener ) == -1 ) {
+	    listeners.push( listener );
+	  }
+	
+	  return this;
+	};
+	
+	proto.once = function( eventName, listener ) {
+	  if ( !eventName || !listener ) {
+	    return;
+	  }
+	  // add event
+	  this.on( eventName, listener );
+	  // set once flag
+	  // set onceEvents hash
+	  var onceEvents = this._onceEvents = this._onceEvents || {};
+	  // set onceListeners array
+	  var onceListeners = onceEvents[ eventName ] = onceEvents[ eventName ] || [];
+	  // set flag
+	  onceListeners[ listener ] = true;
+	
+	  return this;
+	};
+	
+	proto.off = function( eventName, listener ) {
+	  var listeners = this._events && this._events[ eventName ];
+	  if ( !listeners || !listeners.length ) {
+	    return;
+	  }
+	  var index = listeners.indexOf( listener );
+	  if ( index != -1 ) {
+	    listeners.splice( index, 1 );
+	  }
+	
+	  return this;
+	};
+	
+	proto.emitEvent = function( eventName, args ) {
+	  var listeners = this._events && this._events[ eventName ];
+	  if ( !listeners || !listeners.length ) {
+	    return;
+	  }
+	  var i = 0;
+	  var listener = listeners[i];
+	  args = args || [];
+	  // once stuff
+	  var onceListeners = this._onceEvents && this._onceEvents[ eventName ];
+	
+	  while ( listener ) {
+	    var isOnce = onceListeners && onceListeners[ listener ];
+	    if ( isOnce ) {
+	      // remove listener
+	      // remove before trigger to prevent recursion
+	      this.off( eventName, listener );
+	      // unset once flag
+	      delete onceListeners[ listener ];
+	    }
+	    // trigger listener
+	    listener.apply( this, args );
+	    // get next listener
+	    i += isOnce ? 0 : 1;
+	    listener = listeners[i];
+	  }
+	
+	  return this;
+	};
+	
+	return EvEmitter;
+	
+	}));
 
 
 /***/ },
-/* 263 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35962,7 +35836,7 @@
 	
 	var PinsUtil = __webpack_require__(240);
 	var PinsStore = __webpack_require__(244);
-	var PinFormBoardItem = __webpack_require__(264);
+	var PinFormBoardItem = __webpack_require__(263);
 	
 	var PinsForm = React.createClass({
 	  displayName: 'PinsForm',
@@ -36134,7 +36008,7 @@
 	      { className: 'new-pin' },
 	      React.createElement(
 	        'form',
-	        { className: 'pin-form group' },
+	        { className: 'form group' },
 	        React.createElement(
 	          'div',
 	          { className: 'pin-form-left' },
@@ -36201,12 +36075,12 @@
 	module.exports = PinsForm;
 
 /***/ },
-/* 264 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsStore = __webpack_require__(265);
-	var BoardsUtil = __webpack_require__(266);
+	var BoardsStore = __webpack_require__(264);
+	var BoardsUtil = __webpack_require__(265);
 	var CurrentUserStore = __webpack_require__(221);
 	var PinFormBoardItem = React.createClass({
 	  displayName: 'PinFormBoardItem',
@@ -36280,7 +36154,7 @@
 	module.exports = PinFormBoardItem;
 
 /***/ },
-/* 265 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(222).Store;
@@ -36352,10 +36226,10 @@
 	module.exports = BoardsStore;
 
 /***/ },
-/* 266 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var BoardsActions = __webpack_require__(267);
+	var BoardsActions = __webpack_require__(266);
 	
 	var BoardsUtil = {
 	  fetchAllBoards: function () {
@@ -36382,6 +36256,49 @@
 	        }
 	      }
 	    });
+	  },
+	
+	  createBoard: function (data, callback) {
+	    $.post({
+	      url: "/api/boards/",
+	      dataType: "json",
+	      data: data,
+	      success: function (data) {
+	        BoardsActions.receiveSingleBoard(data);
+	        if (callback) {
+	          callback(data.id);
+	        }
+	      }
+	    });
+	  },
+	
+	  updateBoard: function (id, data, callback) {
+	    $.ajax({
+	      url: "/api/boards/" + id,
+	      dataType: "json",
+	      type: 'PATCH',
+	      data: data,
+	      success: function (board) {
+	        BoardsActions.receiveSingleBoard(board);
+	        if (callback) {
+	          callback(board.id);
+	        }
+	      }
+	    });
+	  },
+	
+	  deleteBoard: function (id, callback) {
+	    $.ajax({
+	      url: "/api/boards/" + id,
+	      dataType: "json",
+	      type: 'DELETE',
+	      success: function (board) {
+	        BoardsActions.removeSingleBoard(board);
+	        if (callback) {
+	          callback(board.id);
+	        }
+	      }
+	    });
 	  }
 	
 	};
@@ -36389,7 +36306,7 @@
 	module.exports = BoardsUtil;
 
 /***/ },
-/* 267 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(213);
@@ -36415,11 +36332,10 @@
 	module.exports = BoardsActions;
 
 /***/ },
-/* 268 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinsEdit = __webpack_require__(269);
 	var PinsIndexItem = __webpack_require__(245);
 	
 	var PinsUtil = __webpack_require__(240);
@@ -36475,44 +36391,21 @@
 	module.exports = PinsDetail;
 
 /***/ },
-/* 269 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	
-	var PinsEdit = React.createClass({
-	  displayName: "PinsEdit",
-	
-	  render: function () {
-	    var pin = this.props.pin;
-	    return React.createElement("div", { className: "pin-edit" });
-	  }
-	});
-	
-	module.exports = PinsEdit;
-
-/***/ },
-/* 270 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(266);
-	var BoardsStore = __webpack_require__(265);
-	var BoardsIndexItem = __webpack_require__(271);
+	var UserStore = __webpack_require__(264);
+	var BoardsUtil = __webpack_require__(265);
+	var BoardsStore = __webpack_require__(280);
+	var BoardsIndexItem = __webpack_require__(269);
 	var UsersUtil = __webpack_require__(218);
-	var Masonry = __webpack_require__(249)(React);
-	var masonryOptions = {
-	  transitionDuration: '0.2s',
-	  itemSelector: '.pin',
-	  columnWidth: '.pin',
-	  isResizable: true
-	};
 	
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
 	
 	  getInitialState: function () {
-	    return { allBoards: [] };
+	    return { allBoards: [], user: {} };
 	  },
 	
 	  componentDidMount: function () {
@@ -36536,7 +36429,9 @@
 	    } else {
 	      userId = parseInt(this.props.params.user_id);
 	    }
-	    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
+	    this.setState({
+	      allBoards: BoardsStore.findByUserId(userId),
+	      user: UserStore.find(userId) });
 	  },
 	
 	  render: function () {
@@ -36544,23 +36439,29 @@
 	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
 	    });
 	
+	    var user = "anonymous";
+	    if (typeof this.state.user !== "undefined") {
+	      user = this.state.user.username;
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'user-board-page group' },
 	      React.createElement(
-	        Masonry,
-	        { className: 'masonry-container transitions-enabled infinite-scroll centered clearfix' },
+	        'h2',
+	        null,
+	        user
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'new-create-link' },
 	        React.createElement(
-	          'div',
-	          { className: 'new-create-link' },
-	          React.createElement(
-	            'a',
-	            { href: '#/boards/new' },
-	            'Add Board'
-	          )
-	        ),
-	        boards
-	      )
+	          'a',
+	          { href: '#/boards/new' },
+	          'Add Board'
+	        )
+	      ),
+	      boards
 	    );
 	  }
 	});
@@ -36568,7 +36469,7 @@
 	module.exports = BoardsIndex;
 
 /***/ },
-/* 271 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36578,11 +36479,6 @@
 	  displayName: 'BoardsIndexItem',
 	
 	  mixins: [History],
-	
-	  handleClick: function (e) {
-	    e.preventDefault();
-	    this.history.pushState({}, "/boards/" + this.props.board.id);
-	  },
 	
 	  render: function () {
 	    var board = this.props.board;
@@ -36606,10 +36502,10 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'board-index-item index-item', onClick: this.handleClick },
+	      { className: 'board-index-item index-item' },
 	      React.createElement(
 	        'div',
-	        { className: 'board-detail-link' },
+	        { className: 'board-detail-link', onClick: this.handleClick },
 	        React.createElement(
 	          'section',
 	          { className: 'title' },
@@ -36629,25 +36525,52 @@
 	          )
 	        )
 	      ),
-	      React.createElement('div', { className: 'edit-board-button' })
+	      React.createElement(
+	        'div',
+	        { className: 'edit-board-button' },
+	        React.createElement(
+	          'a',
+	          { href: "#/boards/edit/" + this.props.board.id },
+	          'Edit'
+	        )
+	      )
 	    );
+	  },
+	
+	  handleClick: function (e) {
+	    e.preventDefault();
+	    this.history.pushState({}, "/boards/" + this.props.board.id);
 	  }
+	
 	});
 	
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 272 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CurrentUserStore = __webpack_require__(221);
+	var LinkedStateMixin = __webpack_require__(207);
+	var History = __webpack_require__(159).History;
+	
+	var BoardsUtil = __webpack_require__(265);
+	var BoardsStore = __webpack_require__(264);
 	
 	var BoardsForm = React.createClass({
 	  displayName: 'BoardsForm',
 	
+	  mixins: [LinkedStateMixin, History],
+	
 	  getInitialState: function () {
-	    return {};
+	    return {
+	      title: "",
+	      description: ""
+	    };
+	  },
+	
+	  updateDescription: function (e) {
+	    this.setState({ description: e.currentTarget.value });
 	  },
 	
 	  render: function () {
@@ -36658,9 +36581,48 @@
 	      React.createElement(
 	        'h2',
 	        null,
-	        'new_board'
+	        'New Board'
+	      ),
+	      React.createElement(
+	        'form',
+	        { className: 'form group', onClick: this.handleSubmit },
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'text',
+	            className: 'board[title]',
+	            id: 'board_title',
+	            placeholder: 'Board Name',
+	            valueLink: this.linkState('title') })
+	        ),
+	        React.createElement('textarea', {
+	          className: 'board[description]',
+	          id: 'board_description',
+	          placeholder: 'Add a description',
+	          onChange: this.updateDescription,
+	          value: this.state.description }),
+	        React.createElement(
+	          'div',
+	          { className: 'small-red-button', onClick: this.handleSubmit },
+	          React.createElement(
+	            'button',
+	            null,
+	            'Create Board'
+	          )
+	        )
 	      )
 	    );
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    var data = { board: { title: this.state.title, description: this.state.description } };
+	
+	    //upon creation call success callback in BoardsUtil.
+	    BoardsUtil.createBoard(data, function (board_id) {
+	      this.history.pushState({}, "/boards/" + board_id);
+	    }.bind(this));
 	  }
 	
 	});
@@ -36668,24 +36630,148 @@
 	module.exports = BoardsForm;
 
 /***/ },
-/* 273 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(266);
-	var BoardsStore = __webpack_require__(265);
+	var LinkedStateMixin = __webpack_require__(207);
+	var History = __webpack_require__(159).History;
+	var CurrentUserStore = __webpack_require__(221);
+	
+	var BoardsUtil = __webpack_require__(265);
+	var BoardsStore = __webpack_require__(264);
+	
+	var BoardsEdit = React.createClass({
+	  displayName: 'BoardsEdit',
+	
+	  mixins: [LinkedStateMixin, History],
+	
+	  getInitialState: function () {
+	    return {
+	      id: null,
+	      title: "",
+	      description: ""
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.boardListener = BoardsStore.addListener(this.__onChange);
+	    BoardsUtil.fetchSingleBoard(this.props.params.board_id);
+	  },
+	
+	  componentWillUnMount: function () {
+	    this.boardDetailListener.remove();
+	  },
+	
+	  updateDescription: function (e) {
+	    this.setState({ description: e.currentTarget.value });
+	  },
+	
+	  __onChange: function (id) {
+	    var boardId;
+	    if (id) {
+	      boardId = id;
+	    } else {
+	      boardId = parseInt(this.props.params.board_id);
+	    }
+	
+	    var board = BoardsStore.find(boardId);
+	    var user = CurrentUserStore.currentUser();
+	    if (board.author_id === user.id) {
+	      this.setState({ id: board.id, title: board.title, description: board.description });
+	    }
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'board-edit' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        this.state.title
+	      ),
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Edit Board'
+	      ),
+	      React.createElement(
+	        'form',
+	        { className: 'form group' },
+	        React.createElement(
+	          'div',
+	          { className: 'input' },
+	          React.createElement('input', {
+	            type: 'text',
+	            className: 'board[title]',
+	            id: 'board_title',
+	            placeholder: 'Board Name',
+	            valueLink: this.linkState('title') })
+	        ),
+	        React.createElement('textarea', {
+	          className: 'board[description]',
+	          id: 'board_description',
+	          placeholder: 'Add a description',
+	          onChange: this.updateDescription,
+	          value: this.state.description }),
+	        React.createElement(
+	          'div',
+	          { className: 'small-red-button', onClick: this.handleEdit },
+	          React.createElement(
+	            'button',
+	            null,
+	            'Edit Board'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'small-red-button', onClick: this.handleDelete },
+	          React.createElement(
+	            'button',
+	            null,
+	            'Delete Board'
+	          )
+	        )
+	      )
+	    );
+	  },
+	
+	  handleEdit: function (e) {
+	    e.preventDefault();
+	    var data = { board: { title: this.state.title, description: this.state.description } };
+	    // this.setState(data);
+	    //upon creation call success callback in BoardsUtil.
+	    BoardsUtil.updateBoard(this.state.id, data, function (board_id) {
+	      this.history.pushState({}, "/boards/" + board_id);
+	    }.bind(this));
+	  },
+	
+	  handleDelete: function (e) {
+	    e.preventDefault();
+	
+	    //upon creation call success callback in BoardsUtil.
+	    BoardsUtil.updateBoard(this.state.id, function (board_id) {
+	      this.history.pushState({}, "/boards/");
+	    }.bind(this));
+	  }
+	
+	});
+	
+	module.exports = BoardsEdit;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var BoardsUtil = __webpack_require__(265);
+	var BoardsStore = __webpack_require__(264);
 	var PinsIndexItem = __webpack_require__(245);
 	
 	var PinsUtil = __webpack_require__(240);
 	var PinsStore = __webpack_require__(244);
-	
-	var Masonry = __webpack_require__(249)(React);
-	var masonryOptions = {
-	  transitionDuration: '0.2s',
-	  itemSelector: '.pin',
-	  columnWidth: '.pin',
-	  isResizable: true
-	};
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
@@ -36728,9 +36814,19 @@
 	  render: function () {
 	    var board = this.state.board;
 	    var board_title = "Unknown Board";
+	    var board_description = "";
+	    var board_author = "anonymous";
 	
 	    if (typeof board.title !== "undefined") {
 	      board_title = board.title;
+	    }
+	
+	    if (typeof board.description !== "undefined") {
+	      board_description = board.description;
+	    }
+	
+	    if (typeof board.author !== "undefined" && typeof board.author.username !== "undefined") {
+	      board_author = board.author.username;
 	    }
 	
 	    var board_pins = this.state.boardPins.map(function (pin) {
@@ -36739,15 +36835,25 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'board-index index-item group' },
+	      { className: 'board-index' },
 	      React.createElement(
-	        Masonry,
-	        { className: 'masonry-container transitions-enabled infinite-scroll centered clearfix' },
-	        React.createElement(
-	          'h2',
-	          null,
-	          board_title
-	        ),
+	        'h2',
+	        null,
+	        board_title
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        board_description
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        board_author
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'index-item group' },
 	        React.createElement(
 	          'div',
 	          { className: 'new-create-link' },
@@ -36759,7 +36865,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { id: 'masonry-container', className: 'landing-page' },
+	          { className: 'landing-page' },
 	          board_pins
 	        )
 	      )
@@ -36770,13 +36876,13 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 274 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var SessionApiUtil = __webpack_require__(211);
 	var CurrentUserStore = __webpack_require__(221);
-	var Header = __webpack_require__(275);
+	var Header = __webpack_require__(274);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -36805,14 +36911,14 @@
 	module.exports = App;
 
 /***/ },
-/* 275 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
 	var CurrentUserStore = __webpack_require__(221);
 	
-	var SearchBar = __webpack_require__(276);
+	var SearchBar = __webpack_require__(275);
 	var SessionApiUtil = __webpack_require__(211);
 	
 	var Header = React.createClass({
@@ -36836,13 +36942,6 @@
 	    this.setState({ currentUser: CurrentUserStore.currentUser() });
 	  },
 	
-	  logout: function (e) {
-	    e.preventDefault();
-	    SessionApiUtil.logout(function () {
-	      this.history.pushState({}, "/session/new");
-	    }.bind(this));
-	  },
-	
 	  render: function () {
 	    var user = this.state.currentUser;
 	    var userBoards;
@@ -36855,7 +36954,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'header group' },
+	      { className: 'header' },
 	      React.createElement(
 	        'div',
 	        { className: 'header-center group' },
@@ -36898,6 +36997,13 @@
 	        )
 	      )
 	    );
+	  },
+	
+	  logout: function (e) {
+	    e.preventDefault();
+	    SessionApiUtil.logout(function () {
+	      this.history.pushState({}, "/session/new");
+	    }.bind(this));
 	  }
 	
 	});
@@ -36905,11 +37011,13 @@
 	module.exports = Header;
 
 /***/ },
-/* 276 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
+	var SearchResultsStore = __webpack_require__(276);
+	var SearchApiUtil = __webpack_require__(278);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -36917,15 +37025,143 @@
 	  mixins: [LinkedStateMixin],
 	
 	  getInitialState: function () {
-	    return { searchBar: {} };
+	    return { page: 1, query: "" };
+	  },
+	
+	  componentDidMount: function () {
+	    this.listener = SearchResultsStore.addListener(this._onChange);
+	  },
+	
+	  _onChange: function () {
+	    this.forceUpdate();
+	  },
+	
+	  search: function (e) {
+	    var query = e.target.value;
+	    SearchApiUtil.search(query, 1);
+	
+	    this.setState({ page: 1, query: query });
+	  },
+	
+	  nextPage: function () {
+	    var nextPage = this.state.page + 1;
+	    SearchApiUtil.search(this.state.query, nextPage);
+	
+	    this.setState({ page: nextPage });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
 	  },
 	
 	  render: function () {
 	
+	    var totalCount = SearchResultsStore.meta().totalCount || 0;
+	
+	    var summary = React.createElement(
+	      'p',
+	      null,
+	      ' Displaying ',
+	      SearchResultsStore.all().length,
+	      ' of ',
+	      totalCount
+	    );
+	
+	    var userResults = [],
+	        pinResults = [],
+	        boardResults = [],
+	        commentResults = [],
+	        tagResults;
+	    var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
+	      if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
+	        userResults.push(React.createElement(
+	          'li',
+	          { key: idx },
+	          React.createElement(
+	            'a',
+	            { href: "#/users/" + searchResult.id },
+	            'Pinner: ',
+	            searchResult.username
+	          )
+	        ));
+	      } else if (searchResult._type === "Pin" && typeof searchResult.id !== "undefined") {
+	        pinResults.push(React.createElement(
+	          'li',
+	          { key: idx },
+	          React.createElement(
+	            'a',
+	            { href: "#/pins/" + searchResult.id },
+	            'Pin: ',
+	            searchResult.title
+	          )
+	        ));
+	      } else if (searchResult._type === "Board" && typeof searchResult.id !== "undefined") {
+	        boardResults.push(React.createElement(
+	          'li',
+	          { key: idx },
+	          React.createElement(
+	            'a',
+	            { href: "#/boards/" + searchResult.id },
+	            'Board: ',
+	            searchResult.title
+	          )
+	        ));
+	      } else if (searchResult._type === "Comment" && typeof searchResult.id !== "undefined" && typeof searchResult.pin.id !== "undefined") {
+	        commentResults.push(React.createElement(
+	          'li',
+	          { key: idx },
+	          React.createElement(
+	            'a',
+	            { href: "#/pins/" + searchResult.pin.id },
+	            'Comment: ',
+	            searchResult.body
+	          )
+	        ));
+	      }
+	    });
 	    return React.createElement(
 	      'div',
 	      { className: 'search group' },
-	      React.createElement('input', { type: 'text', placeholder: 'search' }),
+	      React.createElement(
+	        'div',
+	        { className: 'search-bar' },
+	        React.createElement('input', { type: 'text', placeholder: 'search', onKeyUp: this.search }),
+	        React.createElement(
+	          'div',
+	          { className: 'search-results hidden' },
+	          summary,
+	          React.createElement(
+	            'ul',
+	            null,
+	            'Tag Results ',
+	            tagResults
+	          ),
+	          React.createElement(
+	            'ul',
+	            null,
+	            'Pinner Results ',
+	            userResults
+	          ),
+	          React.createElement(
+	            'ul',
+	            null,
+	            'Board Results ',
+	            boardResults
+	          ),
+	          React.createElement(
+	            'ul',
+	            null,
+	            'Pin Results ',
+	            pinResults
+	          ),
+	          React.createElement(
+	            'ul',
+	            null,
+	            'Comment Results ',
+	            commentResults
+	          )
+	        )
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'search-button' },
@@ -36937,6 +37173,156 @@
 	});
 	
 	module.exports = Search;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(222).Store;
+	var AppDispatcher = __webpack_require__(213);
+	var SearchConstants = __webpack_require__(277);
+	
+	var _searchResults = [];
+	var _meta = {};
+	
+	var SearchResultsStore = new Store(AppDispatcher);
+	
+	SearchResultsStore.all = function () {
+	  return _searchResults.slice();
+	};
+	
+	SearchResultsStore.meta = function () {
+	  return _meta;
+	};
+	
+	SearchResultsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SearchConstants.RECEIVE_SEARCH_RESULTS:
+	      _searchResults = payload.searchResults;
+	      _meta = payload.meta;
+	      SearchResultsStore.__emitChange();
+	      break;
+	
+	  }
+	};
+	
+	module.exports = SearchResultsStore;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports) {
+
+	
+	var SearchConstants = {
+	  RECEIVE_SEARCH_RESULTS: "RECEIVE_SEARCH_RESULTS"
+	};
+	
+	module.exports = SearchConstants;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SearchActions = __webpack_require__(279);
+	
+	var SearchApiUtil = {
+	
+	  search: function (query, page) {
+	    $.ajax({
+	      url: '/api/search',
+	      type: 'GET',
+	      dataType: 'json',
+	      data: { query: query, page: page },
+	      success: function (data) {
+	        SearchActions.receiveResults(data);
+	      }
+	    });
+	  }
+	
+	};
+	
+	module.exports = SearchApiUtil;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SearchConstants = __webpack_require__(277);
+	var AppDispatcher = __webpack_require__(213);
+	
+	var SearchActions = {
+	  receiveResults: function (data) {
+	    AppDispatcher.dispatch({
+	      actionType: SearchConstants.RECEIVE_SEARCH_RESULTS,
+	      searchResults: data.results,
+	      meta: { totalCount: data.total_count }
+	    });
+	  }
+	
+	};
+	
+	module.exports = SearchActions;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(222).Store;
+	var Dispatcher = __webpack_require__(213);
+	var UserConstants = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../constants/uuser_constants\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var UserStore = new Store(Dispatcher);
+	
+	var _users = [];
+	
+	var addUser = function (user) {
+	  _users.push(user);
+	};
+	
+	var updateUser = function (user) {
+	  var idx;
+	  for (var i = 0; i < _users.length; i++) {
+	    if (_users[i].id === user.id) {
+	      idx = i;
+	    }
+	  }
+	
+	  if (typeof idx === "undefined") {
+	    addUser(user);
+	  } else {
+	    _users[idx] = user;
+	  }
+	};
+	
+	UserStore.user = function () {
+	  return $.extend({}, _user);
+	};
+	
+	UserStore.find = function () {
+	  return $.extend({}, _user);
+	};
+	
+	UserStore.isLoggedIn = function () {
+	  return !!_user.id;
+	};
+	
+	UserStore.userHasBeenFetched = function () {
+	  return _userHasBeenFetched;
+	};
+	
+	UserStore.__onDispatch = function (payload) {
+	  if (payload.actionType === UserConstants.RECEIVE_CURRENT_USER) {
+	    _userHasBeenFetched = true;
+	    _user = payload.user;
+	    UserStore.__emitChange();
+	  } else if (payload.actionType === UserConstants.REMOVE_CURRENT_USER) {
+	    _userHasBeenFetched = false;
+	    _user = {};
+	    UserStore.__emitChange();
+	  }
+	};
+	
+	module.exports = UserStore;
 
 /***/ }
 /******/ ]);
