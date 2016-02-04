@@ -17,7 +17,7 @@ var PinsDetail = React.createClass({
 
   componentWillReceiveProps: function(nextProps) {
     var pinId = parseInt(nextProps.params.pin_id);
-    PinsUtil.fetchSinglePin(this.__onChange(pinId));
+    PinsUtil.fetchSinglePin(pinId, this.__onChange);
 
   },
 

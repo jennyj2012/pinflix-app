@@ -16,7 +16,7 @@ var BoardsIndex = React.createClass({
 
   componentWillReceiveProps: function(nextProps) {
     var userId = parseInt(nextProps.params.user_id);
-    // UsersUtil.fetchSingleUser(this.__onChange(userId));
+    // UsersUtil.fetchSingleUser(this.__onChange);
   },
 
   componentWillUnMount: function (){

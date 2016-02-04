@@ -20,7 +20,7 @@ var BoardsUtil = {
       dataType: "json",
       success: function (board) {
         BoardsActions.receiveSingleBoard(board);
-        if(callback){ callback(); }
+        if(callback){ callback(board.id); }
       }
     });
   },

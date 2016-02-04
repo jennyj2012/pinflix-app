@@ -22,7 +22,7 @@
 //       dataType: 'json',
 //       success: function (user) {
 //         UserActions.receiveSingleUser(user);
-//           if(callback){ callback(); }
+//           if(callback){ callback(user.id); }
 //       }
 //     });
 //   },

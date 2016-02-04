@@ -21,7 +21,7 @@ var BoardsIndexItem = React.createClass({
 
   componentWillReceiveProps: function(nextProps) {
     var boardId = parseInt(nextProps.params.board_id);
-    BoardsUtil.fetchSingleBoard(this.__onChange(boardId));
+    BoardsUtil.fetchSingleBoard(boardId, this.__onChange);
   },
 
   componentWillUnMount: function (){

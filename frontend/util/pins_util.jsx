@@ -17,7 +17,7 @@ var PinsUtil = {
       dataType: "json",
       success: function (pin) {
         PinsActions.receiveSinglePin(pin);
-        if(callback){ callback(); }
+        if(callback){ callback(pin.id); }
       }
     });
   },

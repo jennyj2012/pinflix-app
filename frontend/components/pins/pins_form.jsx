@@ -23,28 +23,53 @@ var PinsForm = React.createClass({
   },
 
   componentDidMount: function (){
+    this.pinListener = PinsStore.addListener(this.__onChange);
     if(typeof this.props.params.pin_id !== "undefined"){
-      this.pinListener = PinsStore.addListener(this.__onChange);
       PinsUtil.fetchSinglePin(this.props.params.pin_id);
     }
   },
-  //
-  // componentWillReceiveProps: function(nextProps) {
-  //   // debugger
-  //   // this.setState({ });
-  // },
 
-  componentWillUnMount: function (){
-    if(typeof this.props.params.pin_id !== "undefined"){
-      this.pinListener.remove();
+  componentWillReceiveProps: function(nextProps) {
+    var pinId;
+    if(typeof nextProps.params.pin_id !== "undefined"){
+      pinId = parseInt(nextProps.params.pin_id);
+    }
+    if(typeof pinId === "undefined"){
+      this.__onChange(-1);
+    } else {
+      PinsUtil.fetchSinglePin(pinId, this.__onChange);
     }
   },
 
-  __onChange: function (){
-    var prevPinId = parseInt(this.props.params.pin_id);
-    if(typeof prevPinId !== "undefined"){
-      var prevPin = PinsStore.find(prevPinId);
+  componentWillUnMount: function () {
+      this.pinListener.remove();
+  },
 
+  __onChange: function (id){
+    var prevPinId;
+
+    //forced prop change to props/new
+    if(id === -1) {
+      prevPinId = null;
+    } else if(id){
+      prevPinId = id;
+    } else if(typeof this.props.params.pin_id !== "undefined") {
+      prevPinId = parseInt(this.props.params.pin_id);
+    }
+
+    var prevPin = PinsStore.find(prevPinId);
+    if(typeof prevPin === "undefined"){
+      this.setState({
+        title: "",
+        description: "",
+        photoId: false,
+        pin: { },
+        httpUrl: "",
+        upload: false,
+        imageFile: null,
+        imageUrl: ""
+      });
+    } else {
       this.setState({
         photoId: true,
         pin: prevPin,
@@ -53,6 +78,7 @@ var PinsForm = React.createClass({
       });
     }
   },
+
   resetURL: function (e){
     this.setState({httpUrl: "", upload: true});
   },
