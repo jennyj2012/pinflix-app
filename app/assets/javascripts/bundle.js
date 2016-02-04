@@ -24820,44 +24820,40 @@
 
 /***/ },
 /* 218 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var CurrentUserActions = __webpack_require__(212);
-	
-	var UsersApiUtil = {
-	
-	  createUser: function (credentials, callback) {
-	    $.ajax({
-	      url: '/api/users',
-	      type: 'POST',
-	      dataType: 'json',
-	      data: credentials,
-	      success: function (currentUser) {
-	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        if (callback) {
-	          callback();
-	        }
-	      }
-	    });
-	  },
-	
-	  fetchSingleUser: function (id, callback) {
-	    $.ajax({
-	      url: '/api/users/',
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (user) {
-	        UserActions.receiveSingleUser(user);
-	        if (callback) {
-	          callback();
-	        }
-	      }
-	    });
-	  }
-	
-	};
-	
-	module.exports = UsersApiUtil;
+	// var CurrentUserActions = require("./../actions/current_user_actions");
+	//
+	// var UsersApiUtil = {
+	//
+	//   createUser: function (credentials, callback) {
+	//     $.ajax({
+	//       url: '/api/users',
+	//       type: 'POST',
+	//       dataType: 'json',
+	//       data: credentials,
+	//       success: function (currentUser) {
+	//         CurrentUserActions.receiveCurrentUser(currentUser);
+	//         if(callback){ callback(); }
+	//       }
+	//     });
+	//   },
+	//
+	//   fetchSingleUser: function (id, callback) {
+	//     $.ajax({
+	//       url: '/api/users/',
+	//       type: 'GET',
+	//       dataType: 'json',
+	//       success: function (user) {
+	//         UserActions.receiveSingleUser(user);
+	//           if(callback){ callback(); }
+	//       }
+	//     });
+	//   },
+	//
+	// };
+	//
+	// module.exports = UsersApiUtil;
 
 /***/ },
 /* 219 */
@@ -26237,7 +26233,6 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule invariant
 	 */
 	
 	'use strict';
@@ -26293,7 +26288,6 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule emptyFunction
 	 */
 	
 	"use strict";
@@ -32471,7 +32465,7 @@
 	var BoardsUtil = __webpack_require__(251);
 	var BoardsStore = __webpack_require__(250);
 	var BoardsIndexItem = __webpack_require__(256);
-	var UsersUtil = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../users_util\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	// var UsersUtil = require('../../users_util');
 	
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
@@ -32487,7 +32481,7 @@
 	
 	  componentWillReceiveProps: function (nextProps) {
 	    var userId = parseInt(nextProps.params.user_id);
-	    UsersUtil.fetchSingleUser(this.__onChange(userId));
+	    // UsersUtil.fetchSingleUser(this.__onChange(userId));
 	  },
 	
 	  componentWillUnMount: function () {

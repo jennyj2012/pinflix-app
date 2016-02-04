@@ -132,9 +132,7 @@ pin_16 = Pin.new(
   board: board_3)
 
   photo_16 = Photo.new();
-  photo_16.image = URI.parse("http://www.movingimagesource.us/images/articles/electric-house-20111201-145328-large.jpg").open
-  photo_16.image_file_name = "buster_keaton.jpg"
-  photo_16.image_content_type = "image/jpg"
+  photo_16.image = URI.parse("http://www.movingimagesource.us/images/articles/electric-house-20111201-145328-large.jpg")
   photo_16.save!
 
   pin_16.author = user_2;

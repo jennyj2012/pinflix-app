@@ -2,7 +2,7 @@ var React = require('react');
 var BoardsUtil = require('../../util/boards_util');
 var BoardsStore = require('../../stores/boards_store');
 var BoardsIndexItem = require('./boards_index_item');
-var UsersUtil = require('../../users_util');
+// var UsersUtil = require('../../users_util');
 
 var BoardsIndex = React.createClass({
   getInitialState: function (){
@@ -16,7 +16,7 @@ var BoardsIndex = React.createClass({
 
   componentWillReceiveProps: function(nextProps) {
     var userId = parseInt(nextProps.params.user_id);
-    UsersUtil.fetchSingleUser(this.__onChange(userId));
+    // UsersUtil.fetchSingleUser(this.__onChange(userId));
   },
 
   componentWillUnMount: function (){
