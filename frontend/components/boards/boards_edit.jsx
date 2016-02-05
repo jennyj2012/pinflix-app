@@ -13,6 +13,7 @@ var BoardsEdit = React.createClass({
   getInitialState: function() {
     return {
       id: null,
+      author_id: null,
       title: "",
       description: "",
     };
@@ -41,8 +42,12 @@ var BoardsEdit = React.createClass({
 
     var board = BoardsStore.find(boardId);
     var user = CurrentUserStore.currentUser();
-    if(board.author_id === user.id){
-      this.setState({ id: board.id, title: board.title, description: board.description});
+    if(typeof board !== "undefined" && board.author_id === user.id){
+      this.setState({
+        id: board.id,
+        author_id: board.author_id,
+        title: board.title,
+        description: board.description});
     }
   },
 
@@ -93,10 +98,10 @@ var BoardsEdit = React.createClass({
 
   handleDelete: function(e) {
     e.preventDefault();
-
     //upon creation call success callback in BoardsUtil.
-    BoardsUtil.updateBoard(this.state.id, function (board_id) {
-      this.history.pushState({}, "/boards/");
+    BoardsUtil.deleteBoard(this.state.id, function (user_id) {
+      debugger
+      this.history.pushState({}, "/users/" + user_id);
     }.bind(this));
 
   }

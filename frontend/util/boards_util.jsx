@@ -57,7 +57,8 @@ var BoardsUtil = {
       type: 'DELETE',
       success: function (board) {
         BoardsActions.removeSingleBoard(board);
-        if(callback) { callback(board.id); }
+        if(callback) { callback(board.author_id); }
+
       }
     });
   },

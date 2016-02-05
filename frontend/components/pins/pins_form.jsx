@@ -213,7 +213,6 @@ var PinsForm = React.createClass({
   },
 
   handleSubmit: function(board_id, e) {
-    // debugger
     e.preventDefault();
     var formData = new FormData();
     formData.append("pin[title]", this.state.title);

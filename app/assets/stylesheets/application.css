@@ -249,3 +249,7 @@
  .hidden {
    display: none;
  }
+
+ .my-gallery-class{
+    margin: 0px auto;
+ }

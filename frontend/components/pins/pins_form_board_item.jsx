@@ -35,7 +35,7 @@ var PinFormBoardItem = React.createClass({
       return (
         <li className="pin-board-list-item group" key={board.id}>
           <figcaption>{board.title}</figcaption>
-          <div className="pin-to-board-button hidden-button small-red-button" onClick={this.handleSubmit}>
+          <div className="pin-to-board-button hidden-button small-red-button">
             <button onClick={handleSubmit.bind(null, board.id)}>Pin It</button>
           </div>
         </li>

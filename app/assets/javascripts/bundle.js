@@ -52,20 +52,20 @@
 	var History = __webpack_require__(159).History;
 	
 	var UsersForm = __webpack_require__(206);
-	var SessionForm = __webpack_require__(220);
-	var CurrentUserStore = __webpack_require__(221);
+	var SessionForm = __webpack_require__(221);
+	var CurrentUserStore = __webpack_require__(222);
 	var SessionsApiUtil = __webpack_require__(211);
 	
-	var PinsIndex = __webpack_require__(239);
-	var PinsForm = __webpack_require__(262);
-	var PinsDetail = __webpack_require__(267);
+	var PinsIndex = __webpack_require__(240);
+	var PinsForm = __webpack_require__(263);
+	var PinsDetail = __webpack_require__(268);
 	
-	var BoardsIndex = __webpack_require__(268);
+	var BoardsIndex = __webpack_require__(269);
 	var BoardsForm = __webpack_require__(272);
 	var BoardsEdit = __webpack_require__(273);
 	var BoardsDetail = __webpack_require__(274);
 	
-	var CommentsIndex = __webpack_require__(246);
+	var CommentsIndex = __webpack_require__(247);
 	
 	var App = __webpack_require__(275);
 	
@@ -24456,7 +24456,6 @@
 	      type: 'DELETE',
 	      dataType: 'json',
 	      success: function (currentUser) {
-	        console.log("removed current user from controller: " + currentUser.username);
 	        CurrentUserActions.removeCurrentUser(currentUser);
 	        if (callback) {
 	          callback();
@@ -24867,7 +24866,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(213);
-	var UserConstants = __webpack_require__(217);
+	var UserConstants = __webpack_require__(220);
 	
 	var UserActions = {
 	  receiveSingleUser: function (user) {
@@ -24883,6 +24882,17 @@
 
 /***/ },
 /* 220 */
+/***/ function(module, exports) {
+
+	var UserConstants = {
+	  RECEIVE_SINGLE_USER: "RECEIVE_SINGLE_USER",
+	  REMOVE_SINGLE_USER: "REMOVE_SINGLE_USER"
+	};
+	
+	module.exports = UserConstants;
+
+/***/ },
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -24890,7 +24900,7 @@
 	var History = __webpack_require__(159).History;
 	
 	var SessionApiUtil = __webpack_require__(211);
-	var CurrentUserStore = __webpack_require__(221);
+	var CurrentUserStore = __webpack_require__(222);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
@@ -24998,10 +25008,10 @@
 	module.exports = SessionForm;
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(222).Store;
+	var Store = __webpack_require__(223).Store;
 	var Dispatcher = __webpack_require__(213);
 	var CurrentUserConstants = __webpack_require__(217);
 	
@@ -25037,7 +25047,7 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25049,15 +25059,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(223);
-	module.exports.MapStore = __webpack_require__(226);
-	module.exports.Mixin = __webpack_require__(238);
-	module.exports.ReduceStore = __webpack_require__(227);
-	module.exports.Store = __webpack_require__(228);
+	module.exports.Container = __webpack_require__(224);
+	module.exports.MapStore = __webpack_require__(227);
+	module.exports.Mixin = __webpack_require__(239);
+	module.exports.ReduceStore = __webpack_require__(228);
+	module.exports.Store = __webpack_require__(229);
 
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25079,10 +25089,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(224);
+	var FluxStoreGroup = __webpack_require__(225);
 	
 	var invariant = __webpack_require__(216);
-	var shallowEqual = __webpack_require__(225);
+	var shallowEqual = __webpack_require__(226);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25240,7 +25250,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25321,7 +25331,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports) {
 
 	/**
@@ -25376,7 +25386,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25397,8 +25407,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(227);
-	var Immutable = __webpack_require__(237);
+	var FluxReduceStore = __webpack_require__(228);
+	var Immutable = __webpack_require__(238);
 	
 	var invariant = __webpack_require__(216);
 	
@@ -25526,7 +25536,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25547,9 +25557,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(228);
+	var FluxStore = __webpack_require__(229);
 	
-	var abstractMethod = __webpack_require__(236);
+	var abstractMethod = __webpack_require__(237);
 	var invariant = __webpack_require__(216);
 	
 	var FluxReduceStore = (function (_FluxStore) {
@@ -25633,7 +25643,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25652,7 +25662,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(229);
+	var _require = __webpack_require__(230);
 	
 	var EventEmitter = _require.EventEmitter;
 	
@@ -25816,7 +25826,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25829,14 +25839,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(230)
+	  EventEmitter: __webpack_require__(231)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25855,11 +25865,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(231);
-	var EventSubscriptionVendor = __webpack_require__(233);
+	var EmitterSubscription = __webpack_require__(232);
+	var EventSubscriptionVendor = __webpack_require__(234);
 	
-	var emptyFunction = __webpack_require__(235);
-	var invariant = __webpack_require__(234);
+	var emptyFunction = __webpack_require__(236);
+	var invariant = __webpack_require__(235);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -26033,7 +26043,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26054,7 +26064,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(232);
+	var EventSubscription = __webpack_require__(233);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26086,7 +26096,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports) {
 
 	/**
@@ -26140,7 +26150,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 233 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26159,7 +26169,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(234);
+	var invariant = __webpack_require__(235);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -26249,7 +26259,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26304,7 +26314,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports) {
 
 	/**
@@ -26346,7 +26356,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26373,7 +26383,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31360,7 +31370,7 @@
 	}));
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31377,7 +31387,7 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(224);
+	var FluxStoreGroup = __webpack_require__(225);
 	
 	var invariant = __webpack_require__(216);
 	
@@ -31483,18 +31493,19 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinsUtil = __webpack_require__(240);
-	var PinsStore = __webpack_require__(244);
-	var PinsIndexItem = __webpack_require__(245);
+	var PinsUtil = __webpack_require__(241);
+	var PinsStore = __webpack_require__(245);
+	var PinsIndexItem = __webpack_require__(246);
 	
-	var CurrentUserStore = __webpack_require__(221);
-	var Masonry = __webpack_require__(249);
+	var CurrentUserStore = __webpack_require__(222);
+	var Masonry = __webpack_require__(250);
 	var masonryOptions = {
-	  transitionDuration: '0'
+	  transitionDuration: '0',
+	  isFitWidth: true
 	};
 	
 	var PinsIndex = React.createClass({
@@ -31518,7 +31529,6 @@
 	  },
 	
 	  render: function () {
-	
 	    var pins = this.state.allPins.map(function (pin) {
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: false });
 	    });
@@ -31544,10 +31554,10 @@
 	module.exports = PinsIndex;
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PinsActions = __webpack_require__(241);
+	var PinsActions = __webpack_require__(242);
 	
 	var PinsUtil = {
 	  fetchAllPins: function () {
@@ -31606,12 +31616,12 @@
 	module.exports = PinsUtil;
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(213);
-	var PinsConstants = __webpack_require__(242);
-	var BoardsConstants = __webpack_require__(243);
+	var PinsConstants = __webpack_require__(243);
+	var BoardsConstants = __webpack_require__(244);
 	
 	var PinsActions = {
 	  receiveAllPins: function (pins) {
@@ -31633,7 +31643,7 @@
 	module.exports = PinsActions;
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports) {
 
 	var PinsConstants = {
@@ -31644,7 +31654,7 @@
 	module.exports = PinsConstants;
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports) {
 
 	var BoardsConstants = {
@@ -31656,12 +31666,12 @@
 	module.exports = BoardsConstants;
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(222).Store;
+	var Store = __webpack_require__(223).Store;
 	var Dispatcher = __webpack_require__(213);
-	var PinsConstants = __webpack_require__(242);
+	var PinsConstants = __webpack_require__(243);
 	var PinsStore = new Store(Dispatcher);
 	
 	var _pins = [];
@@ -31727,12 +31737,12 @@
 	module.exports = PinsStore;
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndex = __webpack_require__(246);
-	var CommentsForm = __webpack_require__(248);
+	var CommentsIndex = __webpack_require__(247);
+	var CommentsForm = __webpack_require__(249);
 	var History = __webpack_require__(159).History;
 	
 	var PinsIndexItem = React.createClass({
@@ -31834,11 +31844,11 @@
 	module.exports = PinsIndexItem;
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndexItem = __webpack_require__(247);
+	var CommentsIndexItem = __webpack_require__(248);
 	
 	var CommentsIndex = React.createClass({
 	  displayName: 'CommentsIndex',
@@ -31860,7 +31870,7 @@
 	module.exports = CommentsIndex;
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31903,15 +31913,15 @@
 	module.exports = CommentsIndexItem;
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
-	var CurrentUserStore = __webpack_require__(221);
+	var CurrentUserStore = __webpack_require__(222);
 	
-	var PinsUtil = __webpack_require__(240);
-	var PinsStore = __webpack_require__(244);
+	var PinsUtil = __webpack_require__(241);
+	var PinsStore = __webpack_require__(245);
 	
 	var CommentsForm = React.createClass({
 	  displayName: 'CommentsForm',
@@ -31987,7 +31997,7 @@
 	module.exports = CommentsForm;
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -31995,8 +32005,8 @@
 	(function() {
 	
 	var isBrowser = (typeof window !== 'undefined');
-	var Masonry = isBrowser ? window.Masonry || __webpack_require__(250) : null;
-	var imagesloaded = isBrowser ? __webpack_require__(260) : null;
+	var Masonry = isBrowser ? window.Masonry || __webpack_require__(251) : null;
+	var imagesloaded = isBrowser ? __webpack_require__(261) : null;
 	var React = __webpack_require__(1);
 	var refName = 'masonryContainer';
 	
@@ -32193,7 +32203,7 @@
 	}.call(window));
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -32222,9 +32232,9 @@
 	  } else if ( true ) {
 	    // CommonJS
 	    module.exports = factory(
-	      __webpack_require__(251),
-	      __webpack_require__(254),
-	      __webpack_require__(256)
+	      __webpack_require__(252),
+	      __webpack_require__(255),
+	      __webpack_require__(257)
 	    );
 	  } else {
 	    // browser global
@@ -32407,7 +32417,7 @@
 	}.call(window));
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -32441,11 +32451,11 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(252),
 	      __webpack_require__(253),
 	      __webpack_require__(254),
-	      __webpack_require__(256),
-	      __webpack_require__(259)
+	      __webpack_require__(255),
+	      __webpack_require__(257),
+	      __webpack_require__(260)
 	    );
 	  } else {
 	    // browser global
@@ -33344,7 +33354,7 @@
 	}.call(window));
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -33437,7 +33447,7 @@
 	}.call(window));
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -33922,7 +33932,7 @@
 	}.call(window));
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34172,7 +34182,7 @@
 	  define( [ 'get-style-property/get-style-property' ], defineGetSize );
 	} else if ( true ) {
 	  // CommonJS for Component
-	  module.exports = defineGetSize( __webpack_require__(255) );
+	  module.exports = defineGetSize( __webpack_require__(256) );
 	} else {
 	  // browser global
 	  window.getSize = defineGetSize( window.getStyleProperty );
@@ -34183,7 +34193,7 @@
 	}.call(window));
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34249,7 +34259,7 @@
 	}.call(window));
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34280,8 +34290,8 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(257),
-	      __webpack_require__(258)
+	      __webpack_require__(258),
+	      __webpack_require__(259)
 	    );
 	  } else {
 	    // browser global
@@ -34530,7 +34540,7 @@
 	}.call(window));
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34602,7 +34612,7 @@
 	  docReady.isReady = typeof requirejs === 'function';
 	  define( [ 'eventie/eventie' ], defineDocReady );
 	} else if ( true ) {
-	  module.exports = defineDocReady( __webpack_require__(252) );
+	  module.exports = defineDocReady( __webpack_require__(253) );
 	} else {
 	  // browser global
 	  window.docReady = defineDocReady( window.eventie );
@@ -34613,7 +34623,7 @@
 	}.call(window));
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34731,7 +34741,7 @@
 	}.call(window));
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34761,10 +34771,10 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(253),
 	      __webpack_require__(254),
 	      __webpack_require__(255),
-	      __webpack_require__(256)
+	      __webpack_require__(256),
+	      __webpack_require__(257)
 	    );
 	  } else {
 	    // browser global
@@ -35326,7 +35336,7 @@
 	}.call(window));
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -35355,7 +35365,7 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(261)
+	      __webpack_require__(262)
 	    );
 	  } else {
 	    // browser global
@@ -35707,7 +35717,7 @@
 	}.call(window));
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -35822,16 +35832,16 @@
 
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
 	
-	var PinsUtil = __webpack_require__(240);
-	var PinsStore = __webpack_require__(244);
-	var PinFormBoardItem = __webpack_require__(263);
+	var PinsUtil = __webpack_require__(241);
+	var PinsStore = __webpack_require__(245);
+	var PinFormBoardItem = __webpack_require__(264);
 	
 	var PinsForm = React.createClass({
 	  displayName: 'PinsForm',
@@ -36041,7 +36051,6 @@
 	  },
 	
 	  handleSubmit: function (board_id, e) {
-	    // debugger
 	    e.preventDefault();
 	    var formData = new FormData();
 	    formData.append("pin[title]", this.state.title);
@@ -36070,13 +36079,13 @@
 	module.exports = PinsForm;
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsStore = __webpack_require__(264);
-	var BoardsUtil = __webpack_require__(265);
-	var CurrentUserStore = __webpack_require__(221);
+	var BoardsStore = __webpack_require__(265);
+	var BoardsUtil = __webpack_require__(266);
+	var CurrentUserStore = __webpack_require__(222);
 	var PinFormBoardItem = React.createClass({
 	  displayName: 'PinFormBoardItem',
 	
@@ -36118,7 +36127,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'pin-to-board-button hidden-button small-red-button', onClick: this.handleSubmit },
+	          { className: 'pin-to-board-button hidden-button small-red-button' },
 	          React.createElement(
 	            'button',
 	            { onClick: handleSubmit.bind(null, board.id) },
@@ -36149,12 +36158,12 @@
 	module.exports = PinFormBoardItem;
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(222).Store;
+	var Store = __webpack_require__(223).Store;
 	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(243);
+	var BoardsConstants = __webpack_require__(244);
 	
 	var BoardsStore = new Store(Dispatcher);
 	
@@ -36179,6 +36188,18 @@
 	    addBoard(board);
 	  } else {
 	    _boards[idx] = board;
+	  }
+	};
+	
+	var removeBoard = function (board) {
+	  var idx;
+	  for (var i = 0; i < _boards.length; i++) {
+	    if (_boards[i].id === board.id) {
+	      idx = i;
+	    }
+	  }
+	  if (typeof idx === "undefined") {
+	    _boards.splice(idx, 1);
 	  }
 	};
 	
@@ -36213,6 +36234,10 @@
 	      updateBoard(payload.board);
 	      BoardsStore.__emitChange();
 	      break;
+	    case BoardsConstants.SINGLE_BOARD_REMOVED:
+	      removeBoard(payload.board);
+	      BoardsStore.__emitChange();
+	      break;
 	    default:
 	      break;
 	  }
@@ -36221,10 +36246,10 @@
 	module.exports = BoardsStore;
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var BoardsActions = __webpack_require__(266);
+	var BoardsActions = __webpack_require__(267);
 	
 	var BoardsUtil = {
 	  fetchAllBoards: function () {
@@ -36290,7 +36315,7 @@
 	      success: function (board) {
 	        BoardsActions.removeSingleBoard(board);
 	        if (callback) {
-	          callback(board.id);
+	          callback(board.author_id);
 	        }
 	      }
 	    });
@@ -36301,11 +36326,11 @@
 	module.exports = BoardsUtil;
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(243);
+	var BoardsConstants = __webpack_require__(244);
 	
 	var BoardsActions = {
 	  receiveAllBoards: function (boards) {
@@ -36334,14 +36359,14 @@
 	module.exports = BoardsActions;
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinsIndexItem = __webpack_require__(245);
+	var PinsIndexItem = __webpack_require__(246);
 	
-	var PinsUtil = __webpack_require__(240);
-	var PinsStore = __webpack_require__(244);
+	var PinsUtil = __webpack_require__(241);
+	var PinsStore = __webpack_require__(245);
 	
 	var PinsDetail = React.createClass({
 	  displayName: 'PinsDetail',
@@ -36393,14 +36418,14 @@
 	module.exports = PinsDetail;
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(265);
-	var BoardsStore = __webpack_require__(264);
-	var BoardsIndexItem = __webpack_require__(271);
-	var UsersStore = __webpack_require__(269);
+	var BoardsUtil = __webpack_require__(266);
+	var BoardsStore = __webpack_require__(265);
+	var BoardsIndexItem = __webpack_require__(270);
+	var UsersStore = __webpack_require__(271);
 	var UsersUtil = __webpack_require__(218);
 	
 	var BoardsIndex = React.createClass({
@@ -36412,6 +36437,7 @@
 	
 	  componentDidMount: function () {
 	    this.boardListener = BoardsStore.addListener(this.__onChange);
+	    UsersUtil.fetchSingleUser(this.props.params.user_id);
 	    BoardsUtil.fetchAllBoards();
 	  },
 	
@@ -36431,13 +36457,16 @@
 	    } else {
 	      userId = parseInt(this.props.params.user_id);
 	    }
-	
 	    var user = UsersStore.find(userId);
+	    var username = "anonymous";
+	    if (user) {
+	      username = user.username;
+	    }
 	    var boards = BoardsStore.findByUserId(userId);
 	
 	    this.setState({
 	      allBoards: boards,
-	      user: user
+	      author: username
 	    });
 	  },
 	
@@ -36471,80 +36500,7 @@
 	module.exports = BoardsIndex;
 
 /***/ },
-/* 269 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(222).Store;
-	var Dispatcher = __webpack_require__(213);
-	var UserConstants = __webpack_require__(270);
-	
-	var UsersStore = new Store(Dispatcher);
-	
-	var _users = [];
-	
-	var resetUsers = function (users) {
-	  _users = users;
-	};
-	
-	var addUser = function (user) {
-	  _users.push(user);
-	};
-	
-	var updateUser = function (user) {
-	  var idx;
-	  for (var i = 0; i < _users.length; i++) {
-	    if (_users[i].id === user.id) {
-	      idx = i;
-	    }
-	  }
-	
-	  if (typeof idx === "undefined") {
-	    addUser(user);
-	  } else {
-	    _users[idx] = user;
-	  }
-	};
-	
-	UsersStore.all = function () {
-	  return _users.slice();
-	};
-	
-	UsersStore.find = function (id) {
-	  var idx;
-	  for (var i = 0; i < _users.length; i++) {
-	    if (_users[i].id === id) {
-	      idx = i;
-	    }
-	  }
-	  return _users[idx];
-	};
-	
-	UsersStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.RECEIVE_USER:
-	      updateUser(payload.user);
-	      UsersStore.__emitChange();
-	      break;
-	    default:
-	      break;
-	  }
-	};
-	
-	module.exports = UsersStore;
-
-/***/ },
 /* 270 */
-/***/ function(module, exports) {
-
-	var UserConstants = {
-	  RECEIVE_SINGLE_USER: "RECEIVE_SINGLE_USER",
-	  REMOVE_SINGLE_USER: "REMOVE_SINGLE_USER"
-	};
-	
-	module.exports = UserConstants;
-
-/***/ },
-/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36622,6 +36578,69 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(223).Store;
+	var Dispatcher = __webpack_require__(213);
+	var UserConstants = __webpack_require__(220);
+	
+	var UsersStore = new Store(Dispatcher);
+	
+	var _users = [];
+	
+	var resetUsers = function (users) {
+	  _users = users;
+	};
+	
+	var addUser = function (user) {
+	  _users.push(user);
+	};
+	
+	var updateUser = function (user) {
+	  var idx;
+	  for (var i = 0; i < _users.length; i++) {
+	    if (_users[i].id === user.id) {
+	      idx = i;
+	    }
+	  }
+	
+	  if (typeof idx === "undefined") {
+	    addUser(user);
+	  } else {
+	    _users[idx] = user;
+	  }
+	};
+	
+	UsersStore.all = function () {
+	  return _users.slice();
+	};
+	
+	UsersStore.find = function (id) {
+	  // debugger
+	  var idx;
+	  for (var i = 0; i < _users.length; i++) {
+	    if (_users[i].id === id) {
+	      idx = i;
+	    }
+	  }
+	  return _users[idx];
+	};
+	
+	UsersStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.RECEIVE_SINGLE_USER:
+	      updateUser(payload.user);
+	      UsersStore.__emitChange();
+	      break;
+	    default:
+	      break;
+	  }
+	};
+	
+	module.exports = UsersStore;
+
+/***/ },
 /* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -36629,8 +36648,8 @@
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
 	
-	var BoardsUtil = __webpack_require__(265);
-	var BoardsStore = __webpack_require__(264);
+	var BoardsUtil = __webpack_require__(266);
+	var BoardsStore = __webpack_require__(265);
 	
 	var BoardsForm = React.createClass({
 	  displayName: 'BoardsForm',
@@ -36660,7 +36679,7 @@
 	      ),
 	      React.createElement(
 	        'form',
-	        { className: 'form group', onClick: this.handleSubmit },
+	        { className: 'form group' },
 	        React.createElement(
 	          'div',
 	          { className: 'input' },
@@ -36679,10 +36698,10 @@
 	          value: this.state.description }),
 	        React.createElement(
 	          'div',
-	          { className: 'small-red-button', onClick: this.handleSubmit },
+	          { className: 'small-red-button' },
 	          React.createElement(
 	            'button',
-	            null,
+	            { onClick: this.handleSubmit },
 	            'Create Board'
 	          )
 	        )
@@ -36711,10 +36730,10 @@
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
-	var CurrentUserStore = __webpack_require__(221);
+	var CurrentUserStore = __webpack_require__(222);
 	
-	var BoardsUtil = __webpack_require__(265);
-	var BoardsStore = __webpack_require__(264);
+	var BoardsUtil = __webpack_require__(266);
+	var BoardsStore = __webpack_require__(265);
 	
 	var BoardsEdit = React.createClass({
 	  displayName: 'BoardsEdit',
@@ -36724,6 +36743,7 @@
 	  getInitialState: function () {
 	    return {
 	      id: null,
+	      author_id: null,
 	      title: "",
 	      description: ""
 	    };
@@ -36752,8 +36772,12 @@
 	
 	    var board = BoardsStore.find(boardId);
 	    var user = CurrentUserStore.currentUser();
-	    if (board.author_id === user.id) {
-	      this.setState({ id: board.id, title: board.title, description: board.description });
+	    if (typeof board !== "undefined" && board.author_id === user.id) {
+	      this.setState({
+	        id: board.id,
+	        author_id: board.author_id,
+	        title: board.title,
+	        description: board.description });
 	    }
 	  },
 	
@@ -36825,10 +36849,10 @@
 	
 	  handleDelete: function (e) {
 	    e.preventDefault();
-	
 	    //upon creation call success callback in BoardsUtil.
-	    BoardsUtil.updateBoard(this.state.id, function (board_id) {
-	      this.history.pushState({}, "/boards/");
+	    BoardsUtil.deleteBoard(this.state.id, function (user_id) {
+	      debugger;
+	      this.history.pushState({}, "/users/" + user_id);
 	    }.bind(this));
 	  }
 	
@@ -36841,12 +36865,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(265);
-	var BoardsStore = __webpack_require__(264);
-	var PinsIndexItem = __webpack_require__(245);
+	var BoardsUtil = __webpack_require__(266);
+	var BoardsStore = __webpack_require__(265);
+	var PinsIndexItem = __webpack_require__(246);
 	
-	var PinsUtil = __webpack_require__(240);
-	var PinsStore = __webpack_require__(244);
+	var PinsUtil = __webpack_require__(241);
+	var PinsStore = __webpack_require__(245);
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
@@ -36956,7 +36980,7 @@
 
 	var React = __webpack_require__(1);
 	var SessionApiUtil = __webpack_require__(211);
-	var CurrentUserStore = __webpack_require__(221);
+	var CurrentUserStore = __webpack_require__(222);
 	var Header = __webpack_require__(276);
 	
 	var App = React.createClass({
@@ -36991,7 +37015,7 @@
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var CurrentUserStore = __webpack_require__(221);
+	var CurrentUserStore = __webpack_require__(222);
 	
 	var SearchBar = __webpack_require__(277);
 	var SessionApiUtil = __webpack_require__(211);
@@ -37253,7 +37277,7 @@
 /* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(222).Store;
+	var Store = __webpack_require__(223).Store;
 	var AppDispatcher = __webpack_require__(213);
 	var SearchConstants = __webpack_require__(279);
 	

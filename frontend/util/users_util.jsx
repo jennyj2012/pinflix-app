@@ -23,7 +23,7 @@ var UsersApiUtil = {
       dataType: 'json',
       success: function (user) {
         UserActions.receiveSingleUser(user);
-          if(callback){ callback(user.id); }
+        if(callback){ callback(user.id); }
       }
     });
   },

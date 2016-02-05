@@ -34,7 +34,6 @@ var SessionsApiUtil = {
       type: 'DELETE',
       dataType: 'json',
       success: function (currentUser) {
-        console.log("removed current user from controller: " + currentUser.username);
         CurrentUserActions.removeCurrentUser(currentUser);
         if(callback){ callback(); }
       }

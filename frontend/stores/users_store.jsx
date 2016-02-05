@@ -34,6 +34,7 @@ UsersStore.all = function () {
 };
 
 UsersStore.find = function (id) {
+  // debugger
   var idx;
   for(var i = 0; i < _users.length; i++){
     if(_users[i].id === id){
@@ -45,7 +46,7 @@ UsersStore.find = function (id) {
 
 UsersStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
-    case UserConstants.RECEIVE_USER:
+    case UserConstants.RECEIVE_SINGLE_USER:
       updateUser(payload.user);
       UsersStore.__emitChange();
       break;

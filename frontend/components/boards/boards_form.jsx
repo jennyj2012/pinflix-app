@@ -24,7 +24,7 @@ var BoardsForm = React.createClass({
     return(
       <div>
         <h2>New Board</h2>
-        <form className="form group" onClick={this.handleSubmit}>
+        <form className="form group">
           <div className="input">
             <input
               type="text"
@@ -41,8 +41,8 @@ var BoardsForm = React.createClass({
             onChange={this.updateDescription}
             value={this.state.description}></textarea>
 
-          <div className="small-red-button" onClick={this.handleSubmit}>
-            <button >Create Board</button>
+          <div className="small-red-button">
+            <button onClick={this.handleSubmit}>Create Board</button>
           </div>
         </form>
       </div>

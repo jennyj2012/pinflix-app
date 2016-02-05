@@ -28,6 +28,18 @@ var updateBoard = function(board){
   }
 };
 
+var removeBoard = function(board){
+  var idx;
+  for(var i = 0; i < _boards.length; i++){
+    if(_boards[i].id === board.id){
+      idx = i;
+    }
+  }
+  if(typeof idx === "undefined"){
+    _boards.splice(idx, 1);
+  }
+};
+
 BoardsStore.all = function () {
   return _boards.slice();
 };
@@ -57,6 +69,10 @@ BoardsStore.__onDispatch = function (payload) {
       break;
     case BoardsConstants.SINGLE_BOARD_RECEIVED:
       updateBoard(payload.board);
+      BoardsStore.__emitChange();
+      break;
+    case BoardsConstants.SINGLE_BOARD_REMOVED:
+      removeBoard(payload.board);
       BoardsStore.__emitChange();
       break;
     default:

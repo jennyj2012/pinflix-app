@@ -13,6 +13,7 @@ var BoardsIndex = React.createClass({
 
   componentDidMount: function (){
     this.boardListener = BoardsStore.addListener(this.__onChange);
+    UsersUtil.fetchSingleUser(this.props.params.user_id);
     BoardsUtil.fetchAllBoards();
 
   },
@@ -33,13 +34,16 @@ var BoardsIndex = React.createClass({
     } else {
       userId = parseInt(this.props.params.user_id);
     }
-
     var user = UsersStore.find(userId);
+    var username = "anonymous";
+    if (user){
+      username = user.username;
+    }
     var boards = BoardsStore.findByUserId(userId);
 
     this.setState({
       allBoards: boards,
-      user: user
+      author: username
     });
   },
 
@@ -47,7 +51,6 @@ var BoardsIndex = React.createClass({
     var boards = this.state.allBoards.map(function (board) {
       return <BoardsIndexItem key={board.id} board={board}></BoardsIndexItem>;
     });
-
 
     return (
       <div className="user-board-page group">

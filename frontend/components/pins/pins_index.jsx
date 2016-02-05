@@ -7,6 +7,7 @@ var CurrentUserStore = require("../../stores/current_user_store");
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
   transitionDuration: '0',
+  isFitWidth: true
 };
 
 var PinsIndex = React.createClass({
@@ -28,7 +29,6 @@ var PinsIndex = React.createClass({
   },
 
   render: function () {
-
     var pins = this.state.allPins.map(function (pin) {
         return <PinsIndexItem key={pin.id} pin={pin} showComments={false}/>;
     });

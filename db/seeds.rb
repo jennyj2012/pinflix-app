@@ -256,18 +256,6 @@ pin_19 = Pin.new(
     pin_19.author = user_2;
     pin_19.photo = photo_19;
     pin_19.save!
-pin_19 = Pin.new(
-    title: "Kung Fu Panda 3",
-    description: "Spoiler: Po meets his father",
-    board: board_4)
-
-    photo_19 = Photo.new();
-    photo_19.image = URI.parse("http://images.m-magazine.com/uploads/posts/image/86054/kung-fu-panda-3.jpg")
-    photo_19.save!
-
-    pin_19.author = user_2;
-    pin_19.photo = photo_19;
-    pin_19.save!
 pin_20 = Pin.new(
     title: "Renevant",
     description: "My mom likes Robert Redford better",
@@ -424,6 +412,234 @@ pin_31 = Pin.new(
     pin_31.author = user_1;
     pin_31.photo = photo_31;
     pin_31.save!
+pin_32 = Pin.new(
+    title: "Kung Fu Panda 3",
+    description: "Spoiler: Po meets his father",
+    board: board_4)
+
+    photo_32 = Photo.new();
+    photo_32.image = URI.parse("http://images.m-magazine.com/uploads/posts/image/86054/kung-fu-panda-3.jpg")
+    photo_32.save!
+
+    pin_32.author = user_2;
+    pin_32.photo = photo_32;
+    pin_32.save!
+pin_33 = Pin.new(
+    title: "Bladerunner",
+    description: "Cult movie with Harrison Ford",
+    board: board_3)
+
+    photo_33 = Photo.new();
+    photo_33.image = URI.parse("http://cache.coverbrowser.com/image/soundtracks/1016-1.jpg")
+    photo_33.save!
+
+    pin_33.author = user_2;
+    pin_33.photo = photo_33;
+    pin_33.save!
+pin_34 = Pin.new(
+    title: "Battle Royal",
+    description: "Japanese Hunger Games",
+    board: board_1)
+
+    photo_34 = Photo.new();
+    photo_34.image = URI.parse("http://pop-break.com/wp-content/uploads/2014/11/Battle_royale_pochette.jpg")
+    photo_34.save!
+
+    pin_34.author = user_1;
+    pin_34.photo = photo_34;
+    pin_34.save!
+pin_35 = Pin.new(
+    title: "Four Feathers",
+    description: "Heath Ledger",
+    board: board_1)
+
+    photo_35 = Photo.new();
+    photo_35.image = URI.parse("https://upload.wikimedia.org/wikipedia/en/c/cb/The_Four_Feathers_2002_movie.jpg")
+    photo_35.save!
+
+    pin_35.author = user_1;
+    pin_35.photo = photo_35;
+    pin_35.save!
+pin_36 = Pin.new(
+    title: "Stir Crazy",
+    description: "Hilarious prison movie",
+    board: board_3)
+
+    photo_36 = Photo.new();
+    photo_36.image = URI.parse("http://www.homevideos.com/movies-covers/Stir%20Crazy.jpg")
+    photo_36.save!
+
+    pin_36.author = user_2;
+    pin_36.photo = photo_36;
+    pin_36.save!
+pin_37 = Pin.new(
+    title: "Hot Fuzz",
+    description: "Parody of police movies",
+    board: board_2)
+
+    photo_37 = Photo.new();
+    photo_37.image = URI.parse("http://resizing.flixster.com/X3r7lD-cPG8SkBINeXeoPIzFc6Y=/800x1200/dkpu1ddg7pbsk.cloudfront.net/movie/11/17/07/11170770_ori.jpg")
+    photo_37.save!
+
+    pin_37.author = user_2;
+    pin_37.photo = photo_37;
+    pin_37.save!
+pin_38 = Pin.new(
+    title: "Cool Runnings",
+    description: "Luge team from Jamaica",
+    board: board_3)
+
+    photo_38 = Photo.new();
+    photo_38.image = URI.parse("http://i.dailymail.co.uk/i/pix/2014/01/20/article-2542846-03B2AF880000044D-14_306x451.jpg")
+    photo_38.save!
+
+    pin_38.author = user_2;
+    pin_38.photo = photo_38;
+    pin_38.save!
+pin_39 = Pin.new(
+    title: "A Very Potter Musical",
+    description: "Musical parody of Harry Potter books",
+    board: board_1)
+
+    photo_39 = Photo.new();
+    photo_39.image = URI.parse("https://upload.wikimedia.org/wikipedia/en/9/99/Very_Potter_Musical.jpg")
+    photo_39.save!
+
+    pin_39.author = user_1;
+    pin_39.photo = photo_39;
+    pin_39.save!
+pin_40 = Pin.new(
+    title: "Born in East LA",
+    description: "Mexican American gets deported to Mexico",
+    board: board_3)
+
+    photo_40 = Photo.new();
+    photo_40.image = URI.parse("http://ia.media-imdb.com/images/M/MV5BMjA0MTM0NDk4M15BMl5BanBnXkFtZTcwOTMzMDIyMQ@@._V1_UY268_CR3,0,182,268_AL_.jpg")
+    photo_40.save!
+
+    pin_40.author = user_2;
+    pin_40.photo = photo_40;
+    pin_40.save!
+pin_41 = Pin.new(
+    title: "Dinosaurs",
+    description: "Kids TV series",
+    board: board_3)
+
+    photo_41 = Photo.new();
+    photo_41.image = URI.parse("http://j.static-locatetv.com/images/content/4/888626_dinosaurs.jpg")
+    photo_41.save!
+
+    pin_41.author = user_2;
+    pin_41.photo = photo_41;
+    pin_41.save!
+pin_42 = Pin.new(
+    title: "The Muppets",
+    description: "Timeless",
+    board: board_1)
+
+    photo_42 = Photo.new();
+    photo_42.image = URI.parse("http://img.lum.dolimg.com/v1/images/open-uri20150422-12561-3n3ywv_b0210f50.jpeg?region=0%2C0%2C1000%2C1409")
+    photo_42.save!
+
+    pin_42.author = user_1;
+    pin_42.photo = photo_42;
+    pin_42.save!
+pin_43 = Pin.new(
+    title: "Dexter",
+    description: "Spoiler: He's a serial killer",
+    board: board_1)
+
+    photo_43 = Photo.new();
+    photo_43.image = URI.parse("http://cdn.ientry.com/sites/webpronews/pictures/dexter_1310284_616.jpg")
+    photo_43.save!
+
+    pin_43.author = user_1;
+    pin_43.photo = photo_43;
+    pin_43.save!
+pin_44 = Pin.new(
+    title: "House of Cards",
+    description: "Political Drama",
+    board: board_1)
+
+    photo_44 = Photo.new();
+    photo_44.image = URI.parse("http://cdn.bgr.com/2013/04/netflix-house-of-cards.jpg")
+    photo_44.save!
+
+    pin_44.author = user_1;
+    pin_44.photo = photo_44;
+    pin_44.save!
+pin_45 = Pin.new(
+    title: "Breaking Bad",
+    description: "Crime Drama",
+    board: board_2)
+
+    photo_45 = Photo.new();
+    photo_45.image = URI.parse("http://images.amcnetworks.com/amc.com/wp-content/uploads/2010/12/BB-S3-400x600.jpg")
+    photo_45.save!
+
+    pin_45.author = user_2;
+    pin_45.photo = photo_45;
+    pin_45.save!
+pin_46 = Pin.new(
+    title: "Game of Thrones",
+    description: "Spoiler: Super duper violent",
+    board: board_2)
+
+    photo_46 = Photo.new();
+    photo_46.image = URI.parse("http://abovethelaw.com/wp-content/uploads/2015/04/game-of-thrones.jpg")
+    photo_46.save!
+
+    pin_46.author = user_2;
+    pin_46.photo = photo_46;
+    pin_46.save!
+pin_47 = Pin.new(
+    title: "Narcos",
+    description: "Story of Colombian drug lord, Pablo Escobar",
+    board: board_1)
+
+    photo_47 = Photo.new();
+    photo_47.image = URI.parse("http://cdn1-www.comingsoon.net/assets/uploads/gallery/narcos/narcos0003.jpg")
+    photo_47.save!
+
+    pin_47.author = user_1;
+    pin_47.photo = photo_47;
+    pin_47.save!
+pin_48 = Pin.new(
+    title: "Ouran High School Host Club",
+    description: "Spoiler: He's a She",
+    board: board_1)
+
+    photo_48 = Photo.new();
+    photo_48.image = URI.parse("http://vignette3.wikia.nocookie.net/ouran/images/f/fa/Ouran_High_School_Host_Club_Postacie.jpg/revision/latest?cb=20150310085454&path-prefix=pl")
+    photo_48.save!
+
+    pin_48.author = user_1;
+    pin_48.photo = photo_48;
+    pin_48.save!
+pin_49 = Pin.new(
+    title: "Slumdog Millionaire",
+    description: "Spoiler: He gets the girl",
+    board: board_1)
+
+    photo_49 = Photo.new();
+    photo_49.image = URI.parse("http://ia.media-imdb.com/images/M/MV5BMTU2NTA5NzI0N15BMl5BanBnXkFtZTcwMjUxMjYxMg@@._V1_UY1200_CR90,0,630,1200_AL_.jpg")
+    photo_49.save!
+
+    pin_49.author = user_1;
+    pin_49.photo = photo_49;
+    pin_49.save!
+pin_50 = Pin.new(
+    title: "Hotel Budapest",
+    description: "I hear it's really long",
+    board: board_4)
+
+    photo_50 = Photo.new();
+    photo_50.image = URI.parse("https://upload.wikimedia.org/wikipedia/en/a/a6/The_Grand_Budapest_Hotel_Poster.jpg")
+    photo_50.save!
+
+    pin_50.author = user_2;
+    pin_50.photo = photo_50;
+    pin_50.save!
 #
 Comment.destroy_all
 comment_1 = Comment.create(
