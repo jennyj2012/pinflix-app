@@ -4,6 +4,11 @@ var BoardsStore = require('../../stores/boards_store');
 var BoardsIndexItem = require('./boards_index_item');
 var UsersStore = require('../../stores/users_store');
 var UsersUtil = require('../../util/users_util');
+var Masonry = require('react-masonry-component');
+var masonryOptions = {
+  transitionDuration: '0',
+  isFitWidth: true
+};
 
 
 var BoardsIndex = React.createClass({
@@ -55,6 +60,7 @@ var BoardsIndex = React.createClass({
     return (
       <div className="user-board-page group">
         <h2>{this.state.author}</h2>
+
           <div className="new-create-link">
             <a href='#/boards/new'>
               Add Board
@@ -62,6 +68,7 @@ var BoardsIndex = React.createClass({
           </div>
 
           {boards}
+
       </div>
     );
   }

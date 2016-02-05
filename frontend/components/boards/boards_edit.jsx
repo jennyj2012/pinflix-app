@@ -84,10 +84,10 @@ var BoardsEdit = React.createClass({
     }
 
     return(
-      <div className="board-edit" >
-        <h1>{this.state.title}</h1>
-        <h2>Edit Board</h2>
-        <form className="form group" >
+      <div className="board-edit " >
+        <form className="form basic-modal group" >
+          <h1>{this.state.title}</h1>
+          <h2>Edit Board</h2>
           <div className="input required">
             <input
               type="text"

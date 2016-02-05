@@ -40,7 +40,7 @@ var Header = React.createClass({
 
           <div className="header-left group">
             <div>
-              <a href="/" className="logo">
+              <a href="/" className="logo buttonbar">
                 <img src={window.pinflix.logo}/>
               </a>
             </div>

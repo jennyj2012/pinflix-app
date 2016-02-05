@@ -36456,6 +36456,11 @@
 	var BoardsIndexItem = __webpack_require__(270);
 	var UsersStore = __webpack_require__(271);
 	var UsersUtil = __webpack_require__(218);
+	var Masonry = __webpack_require__(250);
+	var masonryOptions = {
+	  transitionDuration: '0',
+	  isFitWidth: true
+	};
 	
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
@@ -36867,20 +36872,20 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'board-edit' },
-	      React.createElement(
-	        'h1',
-	        null,
-	        this.state.title
-	      ),
-	      React.createElement(
-	        'h2',
-	        null,
-	        'Edit Board'
-	      ),
+	      { className: 'board-edit ' },
 	      React.createElement(
 	        'form',
-	        { className: 'form group' },
+	        { className: 'form basic-modal group' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          this.state.title
+	        ),
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Edit Board'
+	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'input required' },
@@ -37179,7 +37184,7 @@
 	            null,
 	            React.createElement(
 	              'a',
-	              { href: '/', className: 'logo' },
+	              { href: '/', className: 'logo buttonbar' },
 	              React.createElement('img', { src: window.pinflix.logo })
 	            )
 	          ),
