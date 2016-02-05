@@ -15,8 +15,7 @@ var UserForm = React.createClass({
   render: function () {
     // <p className="errors">Fill out all data</p>
     return (
-      <div className="sign-up basic-modal" onSubmit={this.handleSubmit}>
-
+      <div className="sign-up" onSubmit={this.handleSubmit}>
         <div className="log-in-button button-style-link">
             <a href="#/session/new">Log in</a>
         </div>

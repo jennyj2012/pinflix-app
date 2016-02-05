@@ -30,7 +30,7 @@
 }
 
 .form {
-  width: 660px;
+  width: 680px;
   background: #fff;
   margin: auto;
 }
@@ -42,14 +42,14 @@
 
 .pin-form-right {
   width: 330px;
-  float: right;
+  float: left;
 }
 
 .pin-board-list-item {
   border: 1px solid #ccc;
   padding: 5px;
-  height: 34px;
-
+  height: 50px;
+  vertical-align: middle;
 }
 
 .pin-board-list-item figcaption {
@@ -67,9 +67,9 @@
 }
 
 .pin-it-button {
-  position: absolute;
-  top: 0;
-  left: 0;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
 }
 
 .pin-image-link {
@@ -94,4 +94,16 @@
   height: 100%;
   background: #000;
   opacity: .1;
+}
+
+#pin_description {
+  width: 80%;
+}
+
+.mini-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 0;
+  float: left;
+  margin-right: 5px;
 }

@@ -60,7 +60,7 @@ function _ensureLoggedIn(nextState, replace, callback) {
 var router = (
   <Router>
     <Route path="session/new" component={SessionForm} onEnter={_ensureLoggedOut} />
-    <Route path="users/new" component={UsersForm} />
+    <Route path="users/new" component={UsersForm} onEnter={_ensureLoggedOut} />
     <Route path="/" component={App} onEnter={_ensureLoggedIn}>
       <IndexRoute component={PinsIndex} />
       <Route path="users/:user_id" component={BoardsIndex} />

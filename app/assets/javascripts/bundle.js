@@ -106,7 +106,7 @@
 	  Router,
 	  null,
 	  React.createElement(Route, { path: 'session/new', component: SessionForm, onEnter: _ensureLoggedOut }),
-	  React.createElement(Route, { path: 'users/new', component: UsersForm }),
+	  React.createElement(Route, { path: 'users/new', component: UsersForm, onEnter: _ensureLoggedOut }),
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App, onEnter: _ensureLoggedIn },
@@ -24082,7 +24082,7 @@
 	    // <p className="errors">Fill out all data</p>
 	    return React.createElement(
 	      'div',
-	      { className: 'sign-up basic-modal', onSubmit: this.handleSubmit },
+	      { className: 'sign-up', onSubmit: this.handleSubmit },
 	      React.createElement(
 	        'div',
 	        { className: 'log-in-button button-style-link' },
@@ -36032,7 +36032,7 @@
 	      { className: 'new-pin' },
 	      React.createElement(
 	        'form',
-	        { className: 'form group' },
+	        { className: 'form basic-modal group' },
 	        React.createElement(
 	          'div',
 	          { className: 'pin-form-left' },
@@ -36143,6 +36143,7 @@
 	      return React.createElement(
 	        'li',
 	        { className: 'pin-board-list-item group', key: board.id },
+	        React.createElement('img', { className: 'mini-thumb', src: board.pins[0].photo.image_url }),
 	        React.createElement(
 	          'figcaption',
 	          null,
@@ -36150,7 +36151,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'pin-to-board-button hidden-button small-red-button' },
+	          { className: 'pin-to-board-button hidden small-red-button' },
 	          React.createElement(
 	            'button',
 	            { onClick: handleSubmit.bind(null, board.id) },
@@ -36167,6 +36168,11 @@
 	        'h2',
 	        null,
 	        'Pick a board'
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Hover over a board'
 	      ),
 	      React.createElement(
 	        'ul',
@@ -36709,7 +36715,7 @@
 	      ),
 	      React.createElement(
 	        'form',
-	        { className: 'form group' },
+	        { className: 'form basic-modal group' },
 	        React.createElement(
 	          'div',
 	          { className: 'input required' },

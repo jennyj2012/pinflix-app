@@ -5,6 +5,14 @@
 
 .sign-up {
   width: 600px;
+  background: image-url('movie_background.jpg') no-repeat;
+  background-size: cover;
+  margin: 100px auto;
+  position: relative;
+  border-radius: 5%;
+  box-shadow: 0 0 30px #ccc;
+  display: block;
+  padding: 20px 0;
 }
 
 .log-in-button {
@@ -22,4 +30,9 @@
 
 .sign-up-button button{
   width: 330px;
+}
+
+.sign-up h1,
+.sign-up p {
+  color: #fff;
 }

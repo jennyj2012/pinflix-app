@@ -24,7 +24,7 @@ var BoardsForm = React.createClass({
     return(
       <div>
         <h2>New Board</h2>
-        <form className="form group">
+        <form className="form basic-modal group">
           <div className="input required">
             <input
               type="text"
