@@ -4,10 +4,14 @@ var History = require('react-router').History;
 var CurrentUserStore = require('../../stores/current_user_store');
 var PinsIndexItem = require('../pins/pins_index_item');
 
-
 var BoardsUtil = require('../../util/boards_util');
 var BoardsStore = require('../../stores/boards_store');
 
+var Masonry = require('react-masonry-component');
+var masonryOptions = {
+  transitionDuration: '0',
+  isFitWidth: true
+};
 var BoardsEdit = React.createClass({
   mixins: [LinkedStateMixin, History],
 
@@ -79,8 +83,6 @@ var BoardsEdit = React.createClass({
       });
     }
 
-
-
     return(
       <div className="board-edit" >
         <h1>{this.state.title}</h1>
@@ -107,7 +109,14 @@ var BoardsEdit = React.createClass({
 
         <div>
           <h2>Pins In this Board</h2>
-          {pins}
+            <Masonry
+            className={'my-gallery-class'} // default ''
+            elementType={'ul'} // default 'div'
+            options={masonryOptions} // default {}
+            disableImagesLoaded={false} // default false
+            >
+              {pins}
+            </Masonry>
         </div>
       </div>
     );

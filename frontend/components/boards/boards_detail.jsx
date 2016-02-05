@@ -7,6 +7,11 @@ var CurrentUserStore = require('../../stores/current_user_store');
 var PinsUtil = require('../../util/pins_util');
 var PinsStore = require('../../stores/pins_store');
 
+var Masonry = require('react-masonry-component');
+var masonryOptions = {
+  transitionDuration: '0',
+  isFitWidth: true
+};
 
 var BoardsIndexItem = React.createClass({
   getInitialState: function (){
@@ -50,7 +55,7 @@ var BoardsIndexItem = React.createClass({
     var board_description = "";
     var board_author = "anonymous";
     var user = CurrentUserStore.currentUser();
-    var buttons = [];
+    var editButton = [];
 
 
     if(typeof board.title !== "undefined"){
@@ -70,10 +75,10 @@ var BoardsIndexItem = React.createClass({
       });
 
     if(typeof board.author_id !== "undefined" && board.author_id === user.id){
-      buttons = (
-          <div className="small-red-button" onClick={this.handleEdit}>
-            <button>Edit Board</button>
-          </div>
+      editButton = (
+        <div className="button-style-link">
+            <a href={"#/boards/edit/" + board.id}>Edit</a>
+        </div>
         );
     }
 
@@ -82,33 +87,28 @@ var BoardsIndexItem = React.createClass({
         <h2>{board_title}</h2>
         <h4>{board_description}</h4>
         <h4>{board_author}</h4>
-        {buttons}
+        {editButton}
+
         <div className="index-item group">
+        <Masonry
+        className={'my-gallery-class'} // default ''
+        elementType={'ul'} // default 'div'
+        options={masonryOptions} // default {}
+        disableImagesLoaded={false} // default false
+        >
           <div className="new-create-link">
           <a href='#/pins/new'>
             Add Pin
           </a>
-          </div>
+        </div>
 
-          <div className="landing-page">
-            {board_pins}
-          </div>
+        {board_pins}
+        </Masonry>
         </div>
 
       </div>
     );
-  },
-
-  handleEdit: function(e) {
-    e.preventDefault();
-    var data = {board: {title: this.state.title, description: this.state.description} };
-    // this.setState(data);
-    //upon creation call success callback in BoardsUtil.
-    BoardsUtil.updateBoard(this.state.id, data, function (board_id) {
-      this.history.pushState({}, "/boards/" + board_id);
-    }.bind(this));
-
-  },
+  }
 });
 
 module.exports = BoardsIndexItem;

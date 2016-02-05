@@ -36743,6 +36743,11 @@
 	var BoardsUtil = __webpack_require__(266);
 	var BoardsStore = __webpack_require__(265);
 	
+	var Masonry = __webpack_require__(250);
+	var masonryOptions = {
+	  transitionDuration: '0',
+	  isFitWidth: true
+	};
 	var BoardsEdit = React.createClass({
 	  displayName: 'BoardsEdit',
 	
@@ -36870,7 +36875,16 @@
 	          null,
 	          'Pins In this Board'
 	        ),
-	        pins
+	        React.createElement(
+	          Masonry,
+	          {
+	            className: 'my-gallery-class' // default ''
+	            , elementType: 'ul' // default 'div'
+	            , options: masonryOptions // default {}
+	            , disableImagesLoaded: false // default false
+	          },
+	          pins
+	        )
 	      )
 	    );
 	  },
@@ -36909,6 +36923,12 @@
 	
 	var PinsUtil = __webpack_require__(241);
 	var PinsStore = __webpack_require__(245);
+	
+	var Masonry = __webpack_require__(250);
+	var masonryOptions = {
+	  transitionDuration: '0',
+	  isFitWidth: true
+	};
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
@@ -36954,7 +36974,7 @@
 	    var board_description = "";
 	    var board_author = "anonymous";
 	    var user = CurrentUserStore.currentUser();
-	    var buttons = [];
+	    var editButton = [];
 	
 	    if (typeof board.title !== "undefined") {
 	      board_title = board.title;
@@ -36973,13 +36993,13 @@
 	    });
 	
 	    if (typeof board.author_id !== "undefined" && board.author_id === user.id) {
-	      buttons = React.createElement(
+	      editButton = React.createElement(
 	        'div',
-	        { className: 'small-red-button', onClick: this.handleEdit },
+	        { className: 'button-style-link' },
 	        React.createElement(
-	          'button',
-	          null,
-	          'Edit Board'
+	          'a',
+	          { href: "#/boards/edit/" + board.id },
+	          'Edit'
 	        )
 	      );
 	    }
@@ -37002,36 +37022,31 @@
 	        null,
 	        board_author
 	      ),
-	      buttons,
+	      editButton,
 	      React.createElement(
 	        'div',
 	        { className: 'index-item group' },
 	        React.createElement(
-	          'div',
-	          { className: 'new-create-link' },
+	          Masonry,
+	          {
+	            className: 'my-gallery-class' // default ''
+	            , elementType: 'ul' // default 'div'
+	            , options: masonryOptions // default {}
+	            , disableImagesLoaded: false // default false
+	          },
 	          React.createElement(
-	            'a',
-	            { href: '#/pins/new' },
-	            'Add Pin'
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'landing-page' },
+	            'div',
+	            { className: 'new-create-link' },
+	            React.createElement(
+	              'a',
+	              { href: '#/pins/new' },
+	              'Add Pin'
+	            )
+	          ),
 	          board_pins
 	        )
 	      )
 	    );
-	  },
-	
-	  handleEdit: function (e) {
-	    e.preventDefault();
-	    var data = { board: { title: this.state.title, description: this.state.description } };
-	    // this.setState(data);
-	    //upon creation call success callback in BoardsUtil.
-	    BoardsUtil.updateBoard(this.state.id, data, function (board_id) {
-	      this.history.pushState({}, "/boards/" + board_id);
-	    }.bind(this));
 	  }
 	});
 	
