@@ -61,13 +61,13 @@
 	var PinsDetail = __webpack_require__(267);
 	
 	var BoardsIndex = __webpack_require__(268);
-	var BoardsForm = __webpack_require__(270);
-	var BoardsEdit = __webpack_require__(271);
-	var BoardsDetail = __webpack_require__(272);
+	var BoardsForm = __webpack_require__(272);
+	var BoardsEdit = __webpack_require__(273);
+	var BoardsDetail = __webpack_require__(274);
 	
 	var CommentsIndex = __webpack_require__(246);
 	
-	var App = __webpack_require__(273);
+	var App = __webpack_require__(275);
 	
 	function _ensureLoggedOut(nextState, replace, callback) {
 	  if (CurrentUserStore.userHasBeenFetched()) {
@@ -24875,12 +24875,6 @@
 	      actionType: UserConstants.RECEIVE_SINGLE_USER,
 	      user: user
 	    });
-	  },
-	  removeSingleUser: function (user) {
-	    Dispatcher.dispatch({
-	      actionType: UserConstants.REMOVE_SINGLE_USER,
-	      user: user
-	    });
 	  }
 	
 	};
@@ -31655,7 +31649,8 @@
 
 	var BoardsConstants = {
 	  ALL_BOARDS_RECEIVED: "ALL_BOARDS_RECEIVED",
-	  SINGLE_BOARD_RECEIVED: "SINGLE_BOARD_RECEIVED"
+	  SINGLE_BOARD_RECEIVED: "SINGLE_BOARD_RECEIVED",
+	  SINGLE_BOARD_REMOVED: "SINGLE_BOARD_REMOVED"
 	};
 	
 	module.exports = BoardsConstants;
@@ -36325,6 +36320,13 @@
 	      actionType: BoardsConstants.SINGLE_BOARD_RECEIVED,
 	      board: board
 	    });
+	  },
+	
+	  removeSingleBoard: function (board) {
+	    Dispatcher.dispatch({
+	      actionType: BoardsConstants.SINGLE_BOARD_REMOVED,
+	      board: board
+	    });
 	  }
 	
 	};
@@ -36395,17 +36397,17 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var UserStore = __webpack_require__(264);
 	var BoardsUtil = __webpack_require__(265);
-	var BoardsStore = __webpack_require__(280);
-	var BoardsIndexItem = __webpack_require__(269);
+	var BoardsStore = __webpack_require__(264);
+	var BoardsIndexItem = __webpack_require__(271);
+	var UsersStore = __webpack_require__(269);
 	var UsersUtil = __webpack_require__(218);
 	
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
 	
 	  getInitialState: function () {
-	    return { allBoards: [], user: {} };
+	    return { allBoards: [], author: "anonymous" };
 	  },
 	
 	  componentDidMount: function () {
@@ -36429,9 +36431,14 @@
 	    } else {
 	      userId = parseInt(this.props.params.user_id);
 	    }
+	
+	    var user = UsersStore.find(userId);
+	    var boards = BoardsStore.findByUserId(userId);
+	
 	    this.setState({
-	      allBoards: BoardsStore.findByUserId(userId),
-	      user: UserStore.find(userId) });
+	      allBoards: boards,
+	      user: user
+	    });
 	  },
 	
 	  render: function () {
@@ -36439,18 +36446,13 @@
 	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
 	    });
 	
-	    var user = "anonymous";
-	    if (typeof this.state.user !== "undefined") {
-	      user = this.state.user.username;
-	    }
-	
 	    return React.createElement(
 	      'div',
 	      { className: 'user-board-page group' },
 	      React.createElement(
 	        'h2',
 	        null,
-	        user
+	        this.state.author
 	      ),
 	      React.createElement(
 	        'div',
@@ -36470,6 +36472,79 @@
 
 /***/ },
 /* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(222).Store;
+	var Dispatcher = __webpack_require__(213);
+	var UserConstants = __webpack_require__(270);
+	
+	var UsersStore = new Store(Dispatcher);
+	
+	var _users = [];
+	
+	var resetUsers = function (users) {
+	  _users = users;
+	};
+	
+	var addUser = function (user) {
+	  _users.push(user);
+	};
+	
+	var updateUser = function (user) {
+	  var idx;
+	  for (var i = 0; i < _users.length; i++) {
+	    if (_users[i].id === user.id) {
+	      idx = i;
+	    }
+	  }
+	
+	  if (typeof idx === "undefined") {
+	    addUser(user);
+	  } else {
+	    _users[idx] = user;
+	  }
+	};
+	
+	UsersStore.all = function () {
+	  return _users.slice();
+	};
+	
+	UsersStore.find = function (id) {
+	  var idx;
+	  for (var i = 0; i < _users.length; i++) {
+	    if (_users[i].id === id) {
+	      idx = i;
+	    }
+	  }
+	  return _users[idx];
+	};
+	
+	UsersStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.RECEIVE_USER:
+	      updateUser(payload.user);
+	      UsersStore.__emitChange();
+	      break;
+	    default:
+	      break;
+	  }
+	};
+	
+	module.exports = UsersStore;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports) {
+
+	var UserConstants = {
+	  RECEIVE_SINGLE_USER: "RECEIVE_SINGLE_USER",
+	  REMOVE_SINGLE_USER: "REMOVE_SINGLE_USER"
+	};
+	
+	module.exports = UserConstants;
+
+/***/ },
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36547,7 +36622,7 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 270 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36630,7 +36705,7 @@
 	module.exports = BoardsForm;
 
 /***/ },
-/* 271 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36762,7 +36837,7 @@
 	module.exports = BoardsEdit;
 
 /***/ },
-/* 272 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36876,13 +36951,13 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 273 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var SessionApiUtil = __webpack_require__(211);
 	var CurrentUserStore = __webpack_require__(221);
-	var Header = __webpack_require__(274);
+	var Header = __webpack_require__(276);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -36911,14 +36986,14 @@
 	module.exports = App;
 
 /***/ },
-/* 274 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
 	var CurrentUserStore = __webpack_require__(221);
 	
-	var SearchBar = __webpack_require__(275);
+	var SearchBar = __webpack_require__(277);
 	var SessionApiUtil = __webpack_require__(211);
 	
 	var Header = React.createClass({
@@ -37011,13 +37086,13 @@
 	module.exports = Header;
 
 /***/ },
-/* 275 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
-	var SearchResultsStore = __webpack_require__(276);
-	var SearchApiUtil = __webpack_require__(278);
+	var SearchResultsStore = __webpack_require__(278);
+	var SearchApiUtil = __webpack_require__(280);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -37175,12 +37250,12 @@
 	module.exports = Search;
 
 /***/ },
-/* 276 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(222).Store;
 	var AppDispatcher = __webpack_require__(213);
-	var SearchConstants = __webpack_require__(277);
+	var SearchConstants = __webpack_require__(279);
 	
 	var _searchResults = [];
 	var _meta = {};
@@ -37209,7 +37284,7 @@
 	module.exports = SearchResultsStore;
 
 /***/ },
-/* 277 */
+/* 279 */
 /***/ function(module, exports) {
 
 	
@@ -37220,10 +37295,10 @@
 	module.exports = SearchConstants;
 
 /***/ },
-/* 278 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchActions = __webpack_require__(279);
+	var SearchActions = __webpack_require__(281);
 	
 	var SearchApiUtil = {
 	
@@ -37244,10 +37319,10 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 279 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchConstants = __webpack_require__(277);
+	var SearchConstants = __webpack_require__(279);
 	var AppDispatcher = __webpack_require__(213);
 	
 	var SearchActions = {
@@ -37262,67 +37337,6 @@
 	};
 	
 	module.exports = SearchActions;
-
-/***/ },
-/* 280 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(222).Store;
-	var Dispatcher = __webpack_require__(213);
-	var UserConstants = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../constants/uuser_constants\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	
-	var UserStore = new Store(Dispatcher);
-	
-	var _users = [];
-	
-	var addUser = function (user) {
-	  _users.push(user);
-	};
-	
-	var updateUser = function (user) {
-	  var idx;
-	  for (var i = 0; i < _users.length; i++) {
-	    if (_users[i].id === user.id) {
-	      idx = i;
-	    }
-	  }
-	
-	  if (typeof idx === "undefined") {
-	    addUser(user);
-	  } else {
-	    _users[idx] = user;
-	  }
-	};
-	
-	UserStore.user = function () {
-	  return $.extend({}, _user);
-	};
-	
-	UserStore.find = function () {
-	  return $.extend({}, _user);
-	};
-	
-	UserStore.isLoggedIn = function () {
-	  return !!_user.id;
-	};
-	
-	UserStore.userHasBeenFetched = function () {
-	  return _userHasBeenFetched;
-	};
-	
-	UserStore.__onDispatch = function (payload) {
-	  if (payload.actionType === UserConstants.RECEIVE_CURRENT_USER) {
-	    _userHasBeenFetched = true;
-	    _user = payload.user;
-	    UserStore.__emitChange();
-	  } else if (payload.actionType === UserConstants.REMOVE_CURRENT_USER) {
-	    _userHasBeenFetched = false;
-	    _user = {};
-	    UserStore.__emitChange();
-	  }
-	};
-	
-	module.exports = UserStore;
 
 /***/ }
 /******/ ]);

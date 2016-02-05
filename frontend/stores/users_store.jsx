@@ -1,11 +1,14 @@
 var Store = require('flux/utils').Store;
 var Dispatcher = require('../dispatcher/dispatcher');
-var UserConstants = require('../constants/uuser_constants');
+var UserConstants = require('../constants/user_constants');
 
-var UserStore = new Store(Dispatcher);
+var UsersStore = new Store(Dispatcher);
 
 var _users = [];
 
+var resetUsers = function(users){
+  _users = users;
+};
 
 var addUser = function(user){
   _users.push(user);
@@ -26,33 +29,31 @@ var updateUser = function(user){
   }
 };
 
-UserStore.user = function () {
-  return $.extend({}, _user);
+UsersStore.all = function () {
+  return _users.slice();
 };
 
-UserStore.find = function () {
-  return $.extend({}, _user);
-};
-
-UserStore.isLoggedIn = function () {
-  return !!_user.id;
-};
-
-UserStore.userHasBeenFetched = function () {
-  return _userHasBeenFetched;
-};
-
-UserStore.__onDispatch = function (payload) {
-  if (payload.actionType === UserConstants.RECEIVE_CURRENT_USER) {
-    _userHasBeenFetched = true;
-    _user = payload.user;
-    UserStore.__emitChange();
+UsersStore.find = function (id) {
+  var idx;
+  for(var i = 0; i < _users.length; i++){
+    if(_users[i].id === id){
+      idx = i;
+    }
   }
-  else if (payload.actionType === UserConstants.REMOVE_CURRENT_USER) {
-    _userHasBeenFetched = false;
-    _user = {};
-    UserStore.__emitChange();
-  }
+  return _users[idx];
 };
 
-module.exports = UserStore;
+UsersStore.__onDispatch = function (payload) {
+  switch (payload.actionType) {
+    case UserConstants.RECEIVE_USER:
+      updateUser(payload.user);
+      UsersStore.__emitChange();
+      break;
+    default:
+      break;
+  }
+
+
+};
+
+module.exports = UsersStore;

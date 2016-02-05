@@ -1,6 +1,7 @@
 class Api::UsersController < ApplicationController
   def index
     @users = User.all
+    render "api/users/index"
   end
 
   def new
@@ -21,6 +22,7 @@ class Api::UsersController < ApplicationController
 
   def show
     @user = User.find_by_id(params[:id])
+    render "api/users/show"
   end
 
 

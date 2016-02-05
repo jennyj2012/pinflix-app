@@ -1,19 +1,20 @@
 var React = require('react');
-var UserStore = require('../../stores/boards_store');
 var BoardsUtil = require('../../util/boards_util');
-var BoardsStore = require('../../stores/users_store');
+var BoardsStore = require('../../stores/boards_store');
 var BoardsIndexItem = require('./boards_index_item');
+var UsersStore = require('../../stores/users_store');
 var UsersUtil = require('../../util/users_util');
 
 
 var BoardsIndex = React.createClass({
   getInitialState: function (){
-    return {allBoards: [], user: {}};
+    return {allBoards: [], author: "anonymous"};
   },
 
   componentDidMount: function (){
     this.boardListener = BoardsStore.addListener(this.__onChange);
     BoardsUtil.fetchAllBoards();
+
   },
 
   componentWillReceiveProps: function(nextProps) {
@@ -32,9 +33,14 @@ var BoardsIndex = React.createClass({
     } else {
       userId = parseInt(this.props.params.user_id);
     }
+
+    var user = UsersStore.find(userId);
+    var boards = BoardsStore.findByUserId(userId);
+
     this.setState({
-      allBoards: BoardsStore.findByUserId(userId),
-      user: UserStore.find(userId)});
+      allBoards: boards,
+      user: user
+    });
   },
 
   render: function () {
@@ -42,14 +48,10 @@ var BoardsIndex = React.createClass({
       return <BoardsIndexItem key={board.id} board={board}></BoardsIndexItem>;
     });
 
-    var user = "anonymous";
-    if(typeof this.state.user !== "undefined"){
-      user = this.state.user.username;
-    }
 
     return (
       <div className="user-board-page group">
-        <h2>{user}</h2>
+        <h2>{this.state.author}</h2>
           <div className="new-create-link">
             <a href='#/boards/new'>
               Add Board

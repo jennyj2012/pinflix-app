@@ -14,6 +14,13 @@ var BoardsActions = {
       actionType: BoardsConstants.SINGLE_BOARD_RECEIVED,
       board: board
     });
+  },
+
+  removeSingleBoard: function(board){
+    Dispatcher.dispatch({
+      actionType: BoardsConstants.SINGLE_BOARD_REMOVED,
+      board: board
+    });
   }
 
 };
