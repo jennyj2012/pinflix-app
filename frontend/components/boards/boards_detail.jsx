@@ -9,7 +9,7 @@ var PinsStore = require('../../stores/pins_store');
 
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
-  transitionDuration: '0',
+  transitionDuration: '0.5s',
   isFitWidth: true,
   itemSelector: '.index-item',
   columnWidth: '.index-item',

@@ -31520,13 +31520,12 @@
 	var CurrentUserStore = __webpack_require__(222);
 	var Masonry = __webpack_require__(250);
 	var masonryOptions = {
-	  transitionDuration: '0',
+	  transitionDuration: '0.5s',
 	  isFitWidth: true,
 	  itemSelector: '.index-item',
 	  columnWidth: '.index-item',
 	  isResizable: true,
 	  isAnimated: true
-	
 	};
 	
 	var PinsIndex = React.createClass({
@@ -36989,7 +36988,7 @@
 	
 	var Masonry = __webpack_require__(250);
 	var masonryOptions = {
-	  transitionDuration: '0',
+	  transitionDuration: '0.5s',
 	  isFitWidth: true,
 	  itemSelector: '.index-item',
 	  columnWidth: '.index-item',

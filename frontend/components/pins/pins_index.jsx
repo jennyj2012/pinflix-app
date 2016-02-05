@@ -6,13 +6,12 @@ var PinsIndexItem = require('./pins_index_item');
 var CurrentUserStore = require("../../stores/current_user_store");
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
-  transitionDuration: '0',
+  transitionDuration: '0.5s',
   isFitWidth: true,
   itemSelector: '.index-item',
   columnWidth: '.index-item',
   isResizable: true,
-  isAnimated: true
-
+  isAnimated: true,
 };
 
 var PinsIndex = React.createClass({
