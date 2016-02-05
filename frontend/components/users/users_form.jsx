@@ -26,7 +26,7 @@ var UserForm = React.createClass({
         <p>Join PinFlix and discover and save movie ideas.</p>
         <p>PinFlix is a Pinterest clone.</p>
 
-        <div className="input">
+        <div className="input username required">
           <input
             type="text"
             name="user[username]"
@@ -35,7 +35,7 @@ var UserForm = React.createClass({
             valueLink={this.linkState('username')}/>
         </div>
 
-        <div className="input">
+        <div className="input email required">
           <input
             type="text"
             name="user[email]"
@@ -44,7 +44,7 @@ var UserForm = React.createClass({
             valueLink={this.linkState('email')}/>
         </div>
 
-        <div className="input">
+        <div className="input password required">
           <input
             type="password"
             name="user[password]"
@@ -68,10 +68,20 @@ var UserForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var credentials = $(e.target).serializeJSON();
-    UsersApiUtil.createUser(credentials, function () {
-      this.history.pushState({}, "/");
-    }.bind(this));
+    //css validation
+    if(this.state.username === ""){
+      $(".username").addClass("invalid");
+    } else if(this.state.password === ""){
+      $(".password").addClass("invalid");
+    }
+    if(this.state.email === ""){
+      $(".email").addClass("invalid");
+    } else {
+      var credentials = $(e.target).serializeJSON();
+      UsersApiUtil.createUser(credentials, function () {
+        this.history.pushState({}, "/");
+      }.bind(this));
+    }
   },
 
   handleGuest: function(e) {

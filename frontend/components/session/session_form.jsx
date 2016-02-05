@@ -21,7 +21,7 @@ var SessionForm = React.createClass({
           <h1>Log In to PinFlix</h1>
           <p>PinFlix is a movie discovery web application inspired by Pinterest</p>
 
-          <div className="input">
+          <div className="input username required">
             <input
               type="text"
               name="user[username]"
@@ -30,7 +30,7 @@ var SessionForm = React.createClass({
               valueLink={this.linkState('username')}/>
           </div>
 
-          <div className="input">
+          <div className="input password required">
             <input
               type="password"
               name="user[password]"
@@ -60,10 +60,16 @@ var SessionForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var credentials = $(e.target).serializeJSON();
-    SessionApiUtil.login(credentials, function () {
-      this.history.pushState({}, "/");
-    }.bind(this));
+    if(this.state.username === ""){
+      $(".username").addClass("invalid");
+    } else if(this.state.password === ""){
+      $(".password").addClass("invalid");
+    } else {
+      var credentials = $(e.target).serializeJSON();
+      SessionApiUtil.login(credentials, function () {
+        this.history.pushState({}, "/");
+      }.bind(this));
+    }
   },
 
   handleGuest: function(e) {

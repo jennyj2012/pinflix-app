@@ -25,7 +25,7 @@ var BoardsForm = React.createClass({
       <div>
         <h2>New Board</h2>
         <form className="form group">
-          <div className="input">
+          <div className="input required">
             <input
               type="text"
               className="board[title]"
@@ -51,12 +51,15 @@ var BoardsForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var data = {board: {title: this.state.title, description: this.state.description} };
-
-    //upon creation call success callback in BoardsUtil.
-    BoardsUtil.createBoard(data, function (board_id) {
-      this.history.pushState({}, "/boards/" + board_id);
-    }.bind(this));
+    if(this.state.title === ""){
+      $(".required").addClass("invalid");
+    } else {
+      var data = {board: {title: this.state.title, description: this.state.description} };
+      //upon creation call success callback in BoardsUtil.
+      BoardsUtil.createBoard(data, function (board_id) {
+        this.history.pushState({}, "/boards/" + board_id);
+      }.bind(this));
+    }
 
   }
 

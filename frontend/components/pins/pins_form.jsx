@@ -185,7 +185,7 @@ var PinsForm = React.createClass({
             <h2> Create a Pin </h2>
             {imageDisplay}
 
-            <div className="input">
+            <div className="input required">
               <input
                 type="text"
                 className="pin[title]"
@@ -214,27 +214,30 @@ var PinsForm = React.createClass({
 
   handleSubmit: function(board_id, e) {
     e.preventDefault();
-    var formData = new FormData();
-    formData.append("pin[title]", this.state.title);
-    formData.append("pin[description]", this.state.description);
-    formData.append("pin[board_id]", board_id);
+    if(this.state.title === ""){
+      $(".required").addClass("invalid");
+    } else {
+      var formData = new FormData();
+      formData.append("pin[title]", this.state.title);
+      formData.append("pin[description]", this.state.description);
+      formData.append("pin[board_id]", board_id);
 
-    if(this.state.upload) {
-      formData.append("pin[imageFile]", this.state.imageFile);
+      if(this.state.upload) {
+        formData.append("pin[imageFile]", this.state.imageFile);
+      }
+
+      if(this.state.httpUrl !== "") {
+        formData.append("pin[http_url]", this.state.httpUrl);
+      }
+
+      if(typeof this.state.pin.id !== "undefined") {
+        formData.append("pin[prev_photo_id]", this.state.pin.photo.id);
+      }
+      //upon creation call success callback in PinsUtil.
+      PinsUtil.createPin(formData, function (pin_id) {
+        this.history.pushState({}, "/pins/" + pin_id);
+      }.bind(this));
     }
-
-    if(this.state.httpUrl !== "") {
-      formData.append("pin[http_url]", this.state.httpUrl);
-    }
-
-    if(typeof this.state.pin.id !== "undefined") {
-      formData.append("pin[prev_photo_id]", this.state.pin.photo.id);
-    }
-    //upon creation call success callback in PinsUtil.
-    PinsUtil.createPin(formData, function (pin_id) {
-      this.history.pushState({}, "/pins/" + pin_id);
-    }.bind(this));
-
   }
 
 });

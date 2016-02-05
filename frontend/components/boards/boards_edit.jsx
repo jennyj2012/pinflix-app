@@ -88,7 +88,7 @@ var BoardsEdit = React.createClass({
         <h1>{this.state.title}</h1>
         <h2>Edit Board</h2>
         <form className="form group" >
-          <div className="input">
+          <div className="input required">
             <input
               type="text"
               className="board[title]"
@@ -124,13 +124,16 @@ var BoardsEdit = React.createClass({
 
   handleEdit: function(e) {
     e.preventDefault();
-    var data = {board: {title: this.state.title, description: this.state.description} };
-    // this.setState(data);
-    //upon creation call success callback in BoardsUtil.
-    BoardsUtil.updateBoard(this.state.board.id, data, function (board_id) {
-      this.history.pushState({}, "/boards/" + board_id);
-    }.bind(this));
-
+    if(this.state.title === ""){
+      $(".required").addClass("invalid");
+    } else {
+      var data = {board: {title: this.state.title, description: this.state.description} };
+      // this.setState(data);
+      //upon creation call success callback in BoardsUtil.
+      BoardsUtil.updateBoard(this.state.board.id, data, function (board_id) {
+        this.history.pushState({}, "/boards/" + board_id);
+      }.bind(this));
+    }
   },
 
   handleDelete: function(e) {

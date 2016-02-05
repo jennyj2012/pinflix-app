@@ -250,6 +250,15 @@
    display: none;
  }
 
- .my-gallery-class{
+ .my-gallery-class {
     margin: 0px auto;
+ }
+
+ .required {
+
+ }
+
+ .invalid input,
+ .invalid textarea {
+   border: 3px solid red;
  }

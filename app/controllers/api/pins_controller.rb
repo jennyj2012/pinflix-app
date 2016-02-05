@@ -25,6 +25,8 @@ class Api::PinsController < ApplicationController
     elsif imageFile
       photo.image = imageFile;
     # #else default
+    else
+      photo.image = nil;
     end
     photo.save!
     @pin.photo = photo

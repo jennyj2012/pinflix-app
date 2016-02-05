@@ -36,7 +36,7 @@ var CommentsForm = React.createClass({
               <a href="#">
                 {this.state.currentUser.username}
               </a>
-            <form onSubmit={this.handleSubmit} className="comment-form">
+            <form onSubmit={this.handleSubmit} className="comment-form requried">
               <textarea
                 className="comment[body]"
                 id="comment_body"
@@ -52,14 +52,17 @@ var CommentsForm = React.createClass({
       </div>
     );
   },
-  
+
   handleSubmit: function(e){
     e.preventDefault();
-
-    PinsUtil.createPinComment({
-      body: this.state.body,
-      pin_id: this.props.pin.id
-    });
+    if(this.state.title === ""){
+      $(".required").addClass("invalid");
+    } else {
+      PinsUtil.createPinComment({
+        body: this.state.body,
+        pin_id: this.props.pin.id
+      });
+    }
   }
 });
 

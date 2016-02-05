@@ -24112,7 +24112,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'input' },
+	          { className: 'input username required' },
 	          React.createElement('input', {
 	            type: 'text',
 	            name: 'user[username]',
@@ -24122,7 +24122,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'input' },
+	          { className: 'input email required' },
 	          React.createElement('input', {
 	            type: 'text',
 	            name: 'user[email]',
@@ -24132,7 +24132,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'input' },
+	          { className: 'input password required' },
 	          React.createElement('input', {
 	            type: 'password',
 	            name: 'user[password]',
@@ -24164,10 +24164,20 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    var credentials = $(e.target).serializeJSON();
-	    UsersApiUtil.createUser(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
+	    //css validation
+	    if (this.state.username === "") {
+	      $(".username").addClass("invalid");
+	    } else if (this.state.password === "") {
+	      $(".password").addClass("invalid");
+	    }
+	    if (this.state.email === "") {
+	      $(".email").addClass("invalid");
+	    } else {
+	      var credentials = $(e.target).serializeJSON();
+	      UsersApiUtil.createUser(credentials, function () {
+	        this.history.pushState({}, "/");
+	      }.bind(this));
+	    }
 	  },
 	
 	  handleGuest: function (e) {
@@ -24932,7 +24942,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'input' },
+	          { className: 'input username required' },
 	          React.createElement('input', {
 	            type: 'text',
 	            name: 'user[username]',
@@ -24942,7 +24952,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'input' },
+	          { className: 'input password required' },
 	          React.createElement('input', {
 	            type: 'password',
 	            name: 'user[password]',
@@ -24988,10 +24998,16 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    var credentials = $(e.target).serializeJSON();
-	    SessionApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
+	    if (this.state.username === "") {
+	      $(".username").addClass("invalid");
+	    } else if (this.state.password === "") {
+	      $(".password").addClass("invalid");
+	    } else {
+	      var credentials = $(e.target).serializeJSON();
+	      SessionApiUtil.login(credentials, function () {
+	        this.history.pushState({}, "/");
+	      }.bind(this));
+	    }
 	  },
 	
 	  handleGuest: function (e) {
@@ -31963,7 +31979,7 @@
 	        ),
 	        React.createElement(
 	          'form',
-	          { onSubmit: this.handleSubmit, className: 'comment-form' },
+	          { onSubmit: this.handleSubmit, className: 'comment-form requried' },
 	          React.createElement('textarea', {
 	            className: 'comment[body]',
 	            id: 'comment_body',
@@ -31986,11 +32002,14 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	
-	    PinsUtil.createPinComment({
-	      body: this.state.body,
-	      pin_id: this.props.pin.id
-	    });
+	    if (this.state.title === "") {
+	      $(".required").addClass("invalid");
+	    } else {
+	      PinsUtil.createPinComment({
+	        body: this.state.body,
+	        pin_id: this.props.pin.id
+	      });
+	    }
 	  }
 	});
 	
@@ -36025,7 +36044,7 @@
 	          imageDisplay,
 	          React.createElement(
 	            'div',
-	            { className: 'input' },
+	            { className: 'input required' },
 	            React.createElement('input', {
 	              type: 'text',
 	              className: 'pin[title]',
@@ -36052,26 +36071,30 @@
 	
 	  handleSubmit: function (board_id, e) {
 	    e.preventDefault();
-	    var formData = new FormData();
-	    formData.append("pin[title]", this.state.title);
-	    formData.append("pin[description]", this.state.description);
-	    formData.append("pin[board_id]", board_id);
+	    if (this.state.title === "") {
+	      $(".required").addClass("invalid");
+	    } else {
+	      var formData = new FormData();
+	      formData.append("pin[title]", this.state.title);
+	      formData.append("pin[description]", this.state.description);
+	      formData.append("pin[board_id]", board_id);
 	
-	    if (this.state.upload) {
-	      formData.append("pin[imageFile]", this.state.imageFile);
-	    }
+	      if (this.state.upload) {
+	        formData.append("pin[imageFile]", this.state.imageFile);
+	      }
 	
-	    if (this.state.httpUrl !== "") {
-	      formData.append("pin[http_url]", this.state.httpUrl);
-	    }
+	      if (this.state.httpUrl !== "") {
+	        formData.append("pin[http_url]", this.state.httpUrl);
+	      }
 	
-	    if (typeof this.state.pin.id !== "undefined") {
-	      formData.append("pin[prev_photo_id]", this.state.pin.photo.id);
+	      if (typeof this.state.pin.id !== "undefined") {
+	        formData.append("pin[prev_photo_id]", this.state.pin.photo.id);
+	      }
+	      //upon creation call success callback in PinsUtil.
+	      PinsUtil.createPin(formData, function (pin_id) {
+	        this.history.pushState({}, "/pins/" + pin_id);
+	      }.bind(this));
 	    }
-	    //upon creation call success callback in PinsUtil.
-	    PinsUtil.createPin(formData, function (pin_id) {
-	      this.history.pushState({}, "/pins/" + pin_id);
-	    }.bind(this));
 	  }
 	
 	});
@@ -36689,7 +36712,7 @@
 	        { className: 'form group' },
 	        React.createElement(
 	          'div',
-	          { className: 'input' },
+	          { className: 'input required' },
 	          React.createElement('input', {
 	            type: 'text',
 	            className: 'board[title]',
@@ -36718,12 +36741,15 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    var data = { board: { title: this.state.title, description: this.state.description } };
-	
-	    //upon creation call success callback in BoardsUtil.
-	    BoardsUtil.createBoard(data, function (board_id) {
-	      this.history.pushState({}, "/boards/" + board_id);
-	    }.bind(this));
+	    if (this.state.title === "") {
+	      $(".required").addClass("invalid");
+	    } else {
+	      var data = { board: { title: this.state.title, description: this.state.description } };
+	      //upon creation call success callback in BoardsUtil.
+	      BoardsUtil.createBoard(data, function (board_id) {
+	        this.history.pushState({}, "/boards/" + board_id);
+	      }.bind(this));
+	    }
 	  }
 	
 	});
@@ -36851,7 +36877,7 @@
 	        { className: 'form group' },
 	        React.createElement(
 	          'div',
-	          { className: 'input' },
+	          { className: 'input required' },
 	          React.createElement('input', {
 	            type: 'text',
 	            className: 'board[title]',
@@ -36891,12 +36917,16 @@
 	
 	  handleEdit: function (e) {
 	    e.preventDefault();
-	    var data = { board: { title: this.state.title, description: this.state.description } };
-	    // this.setState(data);
-	    //upon creation call success callback in BoardsUtil.
-	    BoardsUtil.updateBoard(this.state.board.id, data, function (board_id) {
-	      this.history.pushState({}, "/boards/" + board_id);
-	    }.bind(this));
+	    if (this.state.title === "") {
+	      $(".required").addClass("invalid");
+	    } else {
+	      var data = { board: { title: this.state.title, description: this.state.description } };
+	      // this.setState(data);
+	      //upon creation call success callback in BoardsUtil.
+	      BoardsUtil.updateBoard(this.state.board.id, data, function (board_id) {
+	        this.history.pushState({}, "/boards/" + board_id);
+	      }.bind(this));
+	    }
 	  },
 	
 	  handleDelete: function (e) {
