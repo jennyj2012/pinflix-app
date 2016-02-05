@@ -7,7 +7,12 @@ var CurrentUserStore = require("../../stores/current_user_store");
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
   transitionDuration: '0',
-  isFitWidth: true
+  isFitWidth: true,
+  itemSelector: '.index-item',
+  columnWidth: '.index-item',
+  isResizable: true,
+  isAnimated: true
+
 };
 
 var PinsIndex = React.createClass({
@@ -36,8 +41,8 @@ var PinsIndex = React.createClass({
     return (
       <div className="landing-page">
         <Masonry
-        className={'my-gallery-class'} // default ''
-        elementType={'ul'} // default 'div'
+        className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+        elementType={'div'} // default 'div'
         options={masonryOptions} // default {}
         disableImagesLoaded={false} // default false
         >

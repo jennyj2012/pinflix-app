@@ -43,7 +43,12 @@ var PinsDetail = React.createClass({
 
     return (
       <div className="pin-detail">
+      <div className="info">
+      <h2>Pin Detail</h2>
+      </div>
+        <div className="detail">
         {pinComponent}
+        </div>
       </div>
     );
   }

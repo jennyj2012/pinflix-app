@@ -13,7 +13,7 @@ var masonryOptions = {
 
 var BoardsIndex = React.createClass({
   getInitialState: function (){
-    return {allBoards: [], author: "anonymous"};
+    return {allBoards: [], author: ""};
   },
 
   componentDidMount: function (){
@@ -40,7 +40,7 @@ var BoardsIndex = React.createClass({
       userId = parseInt(this.props.params.user_id);
     }
     var user = UsersStore.find(userId);
-    var username = "anonymous";
+    var username = "";
     if (user){
       username = user.username;
     }
@@ -59,8 +59,9 @@ var BoardsIndex = React.createClass({
 
     return (
       <div className="user-board-page group">
+      <div className="info">
         <h2>{this.state.author}</h2>
-
+      </div>
           <div className="new-create-link">
             <a href='#/boards/new'>
               Add Board

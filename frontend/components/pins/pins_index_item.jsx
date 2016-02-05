@@ -37,7 +37,7 @@ var PinsIndexItem = React.createClass({
     }
 
     return (
-      <div className="index-item pin-item">
+      <div className="index-item pin pin-item">
 
         <div className="pin-image-link" href={pinLink}>
 

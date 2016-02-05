@@ -1,6 +1,6 @@
 .index-item {
   width: 236px;
-  margin: auto 5px;
+  margin: 10px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 0 30px #ccc;
@@ -11,13 +11,17 @@
 .new-create-link a{
   width: 236px;
   height: 307px;
-  margin: auto 5px;
+  margin: 10px 5px;
   background: #bbb;
   border-radius: 10px;
   box-shadow: 0 0 30px #ccc;
   border: 3px dashed #ccc;
   float:left;
   cursor: pointer;
+  box-sizing: border-box;
+  color: #000;
+  font-size: 20px;
+  vertical-align: middle;
 }
 
 

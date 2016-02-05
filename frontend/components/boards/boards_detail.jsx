@@ -10,7 +10,12 @@ var PinsStore = require('../../stores/pins_store');
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
   transitionDuration: '0',
-  isFitWidth: true
+  isFitWidth: true,
+  itemSelector: '.index-item',
+  columnWidth: '.index-item',
+  isResizable: true,
+  isAnimated: true
+
 };
 
 var BoardsIndexItem = React.createClass({
@@ -51,9 +56,9 @@ var BoardsIndexItem = React.createClass({
 
   render: function () {
     var board = this.state.board;
-    var board_title = "Unknown Board";
+    var board_title = "";
     var board_description = "";
-    var board_author = "anonymous";
+    var board_author = "";
     var user = CurrentUserStore.currentUser();
     var editButton = [];
 
@@ -67,7 +72,7 @@ var BoardsIndexItem = React.createClass({
     }
 
     if(typeof board.author !== "undefined" && typeof board.author.username !== "undefined"){
-      board_author = board.author.username;
+      board_author = "By:" + board.author.username;
     }
 
     var board_pins = this.state.boardPins.map(function (pin) {
@@ -84,26 +89,28 @@ var BoardsIndexItem = React.createClass({
 
     return (
       <div className="board-index">
+      <div className="info">
         <h2>{board_title}</h2>
+        <h2>{board_author}</h2>
         <h4>{board_description}</h4>
-        <h4>{board_author}</h4>
         {editButton}
+      </div>
 
-        <div className="index-item group">
+        <div className="group">
         <Masonry
-        className={'my-gallery-class'} // default ''
-        elementType={'ul'} // default 'div'
+        className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+        elementType={'div'} // default 'div'
         options={masonryOptions} // default {}
         disableImagesLoaded={false} // default false
         >
-          <div className="new-create-link">
+          <div className="new-create-link index-item" >
           <a href='#/pins/new'>
             Add Pin
           </a>
         </div>
 
         {board_pins}
-        </Masonry>
+      </Masonry>
         </div>
 
       </div>

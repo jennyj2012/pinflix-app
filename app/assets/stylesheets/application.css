@@ -242,7 +242,7 @@
 
  .content {
    display:block;
-   padding-top: 64px; /*move content below header*/
+   padding-top: 55px; /*move content below header*/
    position: relative;
    width: 100%;
    margin: 0 auto;
@@ -254,6 +254,7 @@
 
  .my-gallery-class {
     margin: 0px auto;
+    /*width: 100%;*/
  }
 
  .required {
@@ -265,8 +266,16 @@
    border: 3px solid red;
  }
 
-body {
+/*body {
    width: 100%;
    height: 100%;
-   /*background: #383838;*/
- }
+   background: #383838;
+ }*/
+
+ .grid-item {
+  margin-bottom: 10px;
+}
+
+html {
+  overflow-y: scroll;
+}
