@@ -36505,6 +36505,7 @@
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
+	var CurrentUserStore = __webpack_require__(222);
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
@@ -36514,6 +36515,8 @@
 	  render: function () {
 	    var board = this.props.board;
 	    var pinThumbs = [];
+	    var editButton = [];
+	    var user = CurrentUserStore.currentUser();
 	
 	    for (var i = 0; i < 4; i++) {
 	      var thumb;
@@ -36529,6 +36532,18 @@
 	        { className: 'pin-thumb', key: i },
 	        thumb
 	      ));
+	    }
+	
+	    if (user.id === board.author_id) {
+	      editButton = React.createElement(
+	        'div',
+	        { className: 'edit-board-button' },
+	        React.createElement(
+	          'a',
+	          { href: "#/boards/edit/" + this.props.board.id },
+	          'Edit'
+	        )
+	      );
 	    }
 	
 	    return React.createElement(
@@ -36556,15 +36571,7 @@
 	          )
 	        )
 	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'edit-board-button' },
-	        React.createElement(
-	          'a',
-	          { href: "#/boards/edit/" + this.props.board.id },
-	          'Edit'
-	        )
-	      )
+	      editButton
 	    );
 	  },
 	
@@ -36731,6 +36738,7 @@
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
 	var CurrentUserStore = __webpack_require__(222);
+	var PinsIndexItem = __webpack_require__(246);
 	
 	var BoardsUtil = __webpack_require__(266);
 	var BoardsStore = __webpack_require__(265);
@@ -36742,7 +36750,7 @@
 	
 	  getInitialState: function () {
 	    return {
-	      id: null,
+	      board: {},
 	      author_id: null,
 	      title: "",
 	      description: ""
@@ -36764,6 +36772,7 @@
 	
 	  __onChange: function (id) {
 	    var boardId;
+	
 	    if (id) {
 	      boardId = id;
 	    } else {
@@ -36774,7 +36783,7 @@
 	    var user = CurrentUserStore.currentUser();
 	    if (typeof board !== "undefined" && board.author_id === user.id) {
 	      this.setState({
-	        id: board.id,
+	        board: board,
 	        author_id: board.author_id,
 	        title: board.title,
 	        description: board.description });
@@ -36782,6 +36791,42 @@
 	  },
 	
 	  render: function () {
+	    var buttons = [];
+	    var board = this.state.board;
+	    var user = CurrentUserStore.currentUser();
+	    var authorId = this.state.author_id;
+	    var pins = [];
+	
+	    if (typeof authorId !== "undefined" && authorId === user.id) {
+	      buttons = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'small-red-button', onClick: this.handleEdit },
+	          React.createElement(
+	            'button',
+	            null,
+	            'Edit Board'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'small-red-button', onClick: this.handleDelete },
+	          React.createElement(
+	            'button',
+	            null,
+	            'Delete Board'
+	          )
+	        )
+	      );
+	    }
+	
+	    if (typeof board.id !== "undefined") {
+	      pins = board.pins.map(function (pin) {
+	        return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
+	      });
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -36815,24 +36860,17 @@
 	          placeholder: 'Add a description',
 	          onChange: this.updateDescription,
 	          value: this.state.description }),
+	        buttons
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
 	        React.createElement(
-	          'div',
-	          { className: 'small-red-button', onClick: this.handleEdit },
-	          React.createElement(
-	            'button',
-	            null,
-	            'Edit Board'
-	          )
+	          'h2',
+	          null,
+	          'Pins In this Board'
 	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'small-red-button', onClick: this.handleDelete },
-	          React.createElement(
-	            'button',
-	            null,
-	            'Delete Board'
-	          )
-	        )
+	        pins
 	      )
 	    );
 	  },
@@ -36842,7 +36880,7 @@
 	    var data = { board: { title: this.state.title, description: this.state.description } };
 	    // this.setState(data);
 	    //upon creation call success callback in BoardsUtil.
-	    BoardsUtil.updateBoard(this.state.id, data, function (board_id) {
+	    BoardsUtil.updateBoard(this.state.board.id, data, function (board_id) {
 	      this.history.pushState({}, "/boards/" + board_id);
 	    }.bind(this));
 	  },
@@ -36851,7 +36889,6 @@
 	    e.preventDefault();
 	    //upon creation call success callback in BoardsUtil.
 	    BoardsUtil.deleteBoard(this.state.id, function (user_id) {
-	      debugger;
 	      this.history.pushState({}, "/users/" + user_id);
 	    }.bind(this));
 	  }
@@ -36868,6 +36905,7 @@
 	var BoardsUtil = __webpack_require__(266);
 	var BoardsStore = __webpack_require__(265);
 	var PinsIndexItem = __webpack_require__(246);
+	var CurrentUserStore = __webpack_require__(222);
 	
 	var PinsUtil = __webpack_require__(241);
 	var PinsStore = __webpack_require__(245);
@@ -36915,6 +36953,8 @@
 	    var board_title = "Unknown Board";
 	    var board_description = "";
 	    var board_author = "anonymous";
+	    var user = CurrentUserStore.currentUser();
+	    var buttons = [];
 	
 	    if (typeof board.title !== "undefined") {
 	      board_title = board.title;
@@ -36931,6 +36971,18 @@
 	    var board_pins = this.state.boardPins.map(function (pin) {
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
 	    });
+	
+	    if (typeof board.author_id !== "undefined" && board.author_id === user.id) {
+	      buttons = React.createElement(
+	        'div',
+	        { className: 'small-red-button', onClick: this.handleEdit },
+	        React.createElement(
+	          'button',
+	          null,
+	          'Edit Board'
+	        )
+	      );
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -36950,6 +37002,7 @@
 	        null,
 	        board_author
 	      ),
+	      buttons,
 	      React.createElement(
 	        'div',
 	        { className: 'index-item group' },
@@ -36969,6 +37022,16 @@
 	        )
 	      )
 	    );
+	  },
+	
+	  handleEdit: function (e) {
+	    e.preventDefault();
+	    var data = { board: { title: this.state.title, description: this.state.description } };
+	    // this.setState(data);
+	    //upon creation call success callback in BoardsUtil.
+	    BoardsUtil.updateBoard(this.state.id, data, function (board_id) {
+	      this.history.pushState({}, "/boards/" + board_id);
+	    }.bind(this));
 	  }
 	});
 	

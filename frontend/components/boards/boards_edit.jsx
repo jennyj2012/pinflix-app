@@ -2,6 +2,7 @@ var React = require('react');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var History = require('react-router').History;
 var CurrentUserStore = require('../../stores/current_user_store');
+var PinsIndexItem = require('../pins/pins_index_item');
 
 
 var BoardsUtil = require('../../util/boards_util');
@@ -12,7 +13,7 @@ var BoardsEdit = React.createClass({
 
   getInitialState: function() {
     return {
-      id: null,
+      board: {},
       author_id: null,
       title: "",
       description: "",
@@ -34,6 +35,7 @@ var BoardsEdit = React.createClass({
 
   __onChange: function (id){
     var boardId;
+
     if(id){
       boardId = id;
     } else {
@@ -44,7 +46,7 @@ var BoardsEdit = React.createClass({
     var user = CurrentUserStore.currentUser();
     if(typeof board !== "undefined" && board.author_id === user.id){
       this.setState({
-        id: board.id,
+        board: board,
         author_id: board.author_id,
         title: board.title,
         description: board.description});
@@ -52,6 +54,32 @@ var BoardsEdit = React.createClass({
   },
 
    render: function () {
+    var buttons = [];
+    var board = this.state.board;
+    var user = CurrentUserStore.currentUser();
+    var authorId = this.state.author_id;
+    var pins = [];
+
+    if(typeof authorId !== "undefined" && authorId === user.id){
+      buttons = (
+        <div>
+          <div className="small-red-button" onClick={this.handleEdit}>
+            <button>Edit Board</button>
+          </div>
+          <div className="small-red-button" onClick={this.handleDelete}>
+            <button>Delete Board</button>
+          </div>
+        </div>
+      );
+    }
+
+    if(typeof board.id !== "undefined"){
+      pins = board.pins.map(function (pin){
+        return <PinsIndexItem key={pin.id} pin={pin} showComments={true}/>;
+      });
+    }
+
+
 
     return(
       <div className="board-edit" >
@@ -74,13 +102,13 @@ var BoardsEdit = React.createClass({
             onChange={this.updateDescription}
             value={this.state.description}></textarea>
 
-          <div className="small-red-button" onClick={this.handleEdit}>
-            <button>Edit Board</button>
-          </div>
-          <div className="small-red-button" onClick={this.handleDelete}>
-            <button>Delete Board</button>
-          </div>
+          {buttons}
         </form>
+
+        <div>
+          <h2>Pins In this Board</h2>
+          {pins}
+        </div>
       </div>
     );
   },
@@ -90,7 +118,7 @@ var BoardsEdit = React.createClass({
     var data = {board: {title: this.state.title, description: this.state.description} };
     // this.setState(data);
     //upon creation call success callback in BoardsUtil.
-    BoardsUtil.updateBoard(this.state.id, data, function (board_id) {
+    BoardsUtil.updateBoard(this.state.board.id, data, function (board_id) {
       this.history.pushState({}, "/boards/" + board_id);
     }.bind(this));
 
@@ -100,7 +128,6 @@ var BoardsEdit = React.createClass({
     e.preventDefault();
     //upon creation call success callback in BoardsUtil.
     BoardsUtil.deleteBoard(this.state.id, function (user_id) {
-      debugger
       this.history.pushState({}, "/users/" + user_id);
     }.bind(this));
 

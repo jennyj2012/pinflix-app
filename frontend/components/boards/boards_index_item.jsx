@@ -1,6 +1,6 @@
 var React = require('react');
 var History = require('react-router').History;
-
+var CurrentUserStore = require('../../stores/current_user_store');
 
 var BoardsIndexItem = React.createClass({
   mixins: [History],
@@ -8,6 +8,8 @@ var BoardsIndexItem = React.createClass({
   render: function () {
     var board = this.props.board;
     var pinThumbs = [];
+    var editButton = [];
+    var user = CurrentUserStore.currentUser();
 
     for(var i = 0; i < 4; i++){
       var thumb;
@@ -25,6 +27,14 @@ var BoardsIndexItem = React.createClass({
       );
     }
 
+    if(user.id === board.author_id){
+      editButton = (
+        <div className="edit-board-button">
+            <a href={"#/boards/edit/" + this.props.board.id}>Edit</a>
+        </div>
+      );
+    }
+
     return (
       <div className="board-index-item index-item" >
           <div className="board-detail-link" onClick={this.handleClick}>
@@ -39,9 +49,7 @@ var BoardsIndexItem = React.createClass({
             </section>
           </div>
 
-        <div className="edit-board-button">
-            <a href={"#/boards/edit/" + this.props.board.id}>Edit</a>
-        </div>
+          {editButton}
       </div>
     );
   },

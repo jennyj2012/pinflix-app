@@ -2,6 +2,7 @@ var React = require('react');
 var BoardsUtil = require('../../util/boards_util');
 var BoardsStore = require('../../stores/boards_store');
 var PinsIndexItem = require('../pins/pins_index_item');
+var CurrentUserStore = require('../../stores/current_user_store');
 
 var PinsUtil = require('../../util/pins_util');
 var PinsStore = require('../../stores/pins_store');
@@ -48,6 +49,9 @@ var BoardsIndexItem = React.createClass({
     var board_title = "Unknown Board";
     var board_description = "";
     var board_author = "anonymous";
+    var user = CurrentUserStore.currentUser();
+    var buttons = [];
+
 
     if(typeof board.title !== "undefined"){
       board_title = board.title;
@@ -65,11 +69,20 @@ var BoardsIndexItem = React.createClass({
         return <PinsIndexItem key={pin.id} pin={pin} showComments={true} />;
       });
 
+    if(typeof board.author_id !== "undefined" && board.author_id === user.id){
+      buttons = (
+          <div className="small-red-button" onClick={this.handleEdit}>
+            <button>Edit Board</button>
+          </div>
+        );
+    }
+
     return (
       <div className="board-index">
         <h2>{board_title}</h2>
         <h4>{board_description}</h4>
         <h4>{board_author}</h4>
+        {buttons}
         <div className="index-item group">
           <div className="new-create-link">
           <a href='#/pins/new'>
@@ -84,7 +97,18 @@ var BoardsIndexItem = React.createClass({
 
       </div>
     );
-  }
+  },
+
+  handleEdit: function(e) {
+    e.preventDefault();
+    var data = {board: {title: this.state.title, description: this.state.description} };
+    // this.setState(data);
+    //upon creation call success callback in BoardsUtil.
+    BoardsUtil.updateBoard(this.state.id, data, function (board_id) {
+      this.history.pushState({}, "/boards/" + board_id);
+    }.bind(this));
+
+  },
 });
 
 module.exports = BoardsIndexItem;
