@@ -78,7 +78,7 @@ var Search = React.createClass({
        }
      });
     return(
-      <div className="search group">
+
           <div className = "search-bar">
             <input type="text" placeholder="search" onKeyUp={ this.search }/>
             <div className="search-results hidden">
@@ -91,10 +91,7 @@ var Search = React.createClass({
             </div>
 
           </div>
-          <div className="search-button">
-            <i className="fa fa-search"></i>
-          </div>
-      </div>
+
     );
   }
 

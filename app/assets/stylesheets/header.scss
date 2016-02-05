@@ -14,7 +14,7 @@
   margin: 0 auto;
   padding: 10px;
   display: block;
-  min-width: 700px;
+  min-width: 750px;
   width: 100%;
 }
 
@@ -26,20 +26,18 @@
 
 .header-left{
   float: left;
-  // min-width: 600px;
   height: 32px;
   position: relative;
   margin-right: 6px;
-  width: 100%;
+  width: 60%;
 }
 
-.search {
+.search-bar {
   vertical-align: middle;
   float: left;
   background: transparent;
   border: 0;
-  width: 70%;
-  position: relative;
+  width: 90%;
 }
 
 .search-bar input {
@@ -67,21 +65,6 @@
   width: 100%;
 }
 
-.search-bar {
-  float: left;
-  width: 100%;
-  padding: 0;
-}
-
-.search-button {
-  position: absolute;
-  right: 0;
-  width: 42px;
-  height: 30px;
-  border: 1px solid #ccc;
-  background: #fff;
-}
-
 .search-results {
   margin: 0 auto;
   position: absolute;
@@ -103,7 +86,6 @@
   padding: 5px 0 5px 10px;
   text-align: left;
   font-weight: normal;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

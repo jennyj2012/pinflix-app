@@ -37328,51 +37328,42 @@
 	    });
 	    return React.createElement(
 	      'div',
-	      { className: 'search group' },
+	      { className: 'search-bar' },
+	      React.createElement('input', { type: 'text', placeholder: 'search', onKeyUp: this.search }),
 	      React.createElement(
 	        'div',
-	        { className: 'search-bar' },
-	        React.createElement('input', { type: 'text', placeholder: 'search', onKeyUp: this.search }),
+	        { className: 'search-results hidden' },
+	        summary,
 	        React.createElement(
-	          'div',
-	          { className: 'search-results hidden' },
-	          summary,
-	          React.createElement(
-	            'ul',
-	            null,
-	            'Tag Results ',
-	            tagResults
-	          ),
-	          React.createElement(
-	            'ul',
-	            null,
-	            'Pinner Results ',
-	            userResults
-	          ),
-	          React.createElement(
-	            'ul',
-	            null,
-	            'Board Results ',
-	            boardResults
-	          ),
-	          React.createElement(
-	            'ul',
-	            null,
-	            'Pin Results ',
-	            pinResults
-	          ),
-	          React.createElement(
-	            'ul',
-	            null,
-	            'Comment Results ',
-	            commentResults
-	          )
+	          'ul',
+	          null,
+	          'Tag Results ',
+	          tagResults
+	        ),
+	        React.createElement(
+	          'ul',
+	          null,
+	          'Pinner Results ',
+	          userResults
+	        ),
+	        React.createElement(
+	          'ul',
+	          null,
+	          'Board Results ',
+	          boardResults
+	        ),
+	        React.createElement(
+	          'ul',
+	          null,
+	          'Pin Results ',
+	          pinResults
+	        ),
+	        React.createElement(
+	          'ul',
+	          null,
+	          'Comment Results ',
+	          commentResults
 	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'search-button' },
-	        React.createElement('i', { className: 'fa fa-search' })
 	      )
 	    );
 	  }
