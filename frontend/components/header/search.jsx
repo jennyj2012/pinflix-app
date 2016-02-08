@@ -45,10 +45,8 @@ var Search = React.createClass({
        <p> Displaying {SearchResultsStore.all().length} of {totalCount}</p>
      );
 
-     debugger
      var userResults = [], pinResults = [], boardResults = [], commentResults = [], tagResults;
      var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
-       debugger
        if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
           userResults.push(
             <li key={idx}>
