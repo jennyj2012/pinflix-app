@@ -17,53 +17,55 @@ var UserForm = React.createClass({
   render: function () {
     // <p className="errors">Fill out all data</p>
     return (
-      <div className="sign-up" onSubmit={this.handleSubmit}>
-        <div className="log-in-button button-style-link">
-            <a href="#/session/new">Log in</a>
-        </div>
+      <div>
+        <div className="sign-up" onSubmit={this.handleSubmit}>
+          <div className="log-in-button button-style-link">
+              <a href="#/session/new">Log in</a>
+          </div>
 
-      <form action="<%= users_url %>" method="post">
-        <h1>Sign Up for PinFlix</h1>
-        <p>Join PinFlix and discover and save movie ideas.</p>
-        <p>PinFlix is a Pinterest clone.</p>
+        <form action="<%= users_url %>" method="post">
+          <h1>Sign Up for PinFlix</h1>
+          <p>Join PinFlix and discover and save movie ideas.</p>
+          <p>PinFlix is a Pinterest clone.</p>
 
-        <div className="input username required">
-          <input
-            type="text"
-            name="user[username]"
-            id="user_username"
-            placeholder="Username"
-            valueLink={this.linkState('username')}/>
-        </div>
+          <div className="input username required">
+            <input
+              type="text"
+              name="user[username]"
+              id="user_username"
+              placeholder="Username"
+              valueLink={this.linkState('username')}/>
+          </div>
 
-        <div className="input email required">
-          <input
-            type="text"
-            name="user[email]"
-            id="user_email"
-            placeholder="Email"
-            valueLink={this.linkState('email')}/>
-        </div>
+          <div className="input email required">
+            <input
+              type="text"
+              name="user[email]"
+              id="user_email"
+              placeholder="Email"
+              valueLink={this.linkState('email')}/>
+          </div>
 
-        <div className="input password required">
-          <input
-            type="password"
-            name="user[password]"
-            id="user_password"
-            placeholder="Password"
-            valueLink={this.linkState('password')}/>
-        </div>
+          <div className="input password required">
+            <input
+              type="password"
+              name="user[password]"
+              id="user_password"
+              placeholder="Password"
+              valueLink={this.linkState('password')}/>
+          </div>
 
-        <div className="sign-up-button shade-button">
-          <button>Sign Up</button>
-        </div>
+          <div className="sign-up-button shade-button">
+            <button>Sign Up</button>
+          </div>
 
-        <div className="sign-up-button shade-button">
-          <button onClick={this.handleGuest}>Guest Sign In</button>
-        </div>
+          <div className="sign-up-button shade-button">
+            <button onClick={this.handleGuest}>Guest Sign In</button>
+          </div>
 
-      </form>
-      
+        </form>
+      </div>
+
       <Footer />
       </div>
     );

@@ -17,44 +17,46 @@ var SessionForm = React.createClass({
     // <p className="errors">Fill out all data</p>
 
     return (
-      <div className="log-in basic-modal" onSubmit={this.handleSubmit}>
-        <form>
-          <h1>Log In to PinFlix</h1>
-          <p>PinFlix is a movie discovery web application inspired by Pinterest</p>
+      <div>
+        <div className="log-in basic-modal" onSubmit={this.handleSubmit}>
+          <form>
+            <h1>Log In to PinFlix</h1>
+            <p>PinFlix is a movie discovery web application inspired by Pinterest</p>
 
-          <div className="input username required">
-            <input
-              type="text"
-              name="user[username]"
-              id="user_username"
-              placeholder="Username"
-              valueLink={this.linkState('username')}/>
-          </div>
+            <div className="input username required">
+              <input
+                type="text"
+                name="user[username]"
+                id="user_username"
+                placeholder="Username"
+                valueLink={this.linkState('username')}/>
+            </div>
 
-          <div className="input password required">
-            <input
-              type="password"
-              name="user[password]"
-              id="user_password"
-              placeholder="Password"
-              valueLink={this.linkState('password')}/>
-          </div>
+            <div className="input password required">
+              <input
+                type="password"
+                name="user[password]"
+                id="user_password"
+                placeholder="Password"
+                valueLink={this.linkState('password')}/>
+            </div>
 
-          <div className="division"></div>
+            <div className="division"></div>
 
-          <div className="action-links group">
-            <div className="guest-and-link">
-              <a href="#/users/new">Sign up now</a>
-              <div className="guest-sign-in shade-button">
-                <button onClick={this.handleGuest}>Guest Sign In</button>
+            <div className="action-links group">
+              <div className="guest-and-link">
+                <a href="#/users/new">Sign up now</a>
+                <div className="guest-sign-in shade-button">
+                  <button onClick={this.handleGuest}>Guest Sign In</button>
+                </div>
+              </div>
+              <div className="shade-button">
+                <button>Log In</button>
               </div>
             </div>
-            <div className="shade-button">
-              <button>Log In</button>
-            </div>
-          </div>
 
-        </form>
+          </form>
+        </div>
 
         <Footer />
       </div>

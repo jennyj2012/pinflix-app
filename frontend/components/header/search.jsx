@@ -45,8 +45,10 @@ var Search = React.createClass({
        <p> Displaying {SearchResultsStore.all().length} of {totalCount}</p>
      );
 
+     debugger
      var userResults = [], pinResults = [], boardResults = [], commentResults = [], tagResults;
      var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
+       debugger
        if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
           userResults.push(
             <li key={idx}>
@@ -68,10 +70,10 @@ var Search = React.createClass({
                 Board: {searchResult.title}
               </a>
             </li>);
-       } else if (searchResult._type === "Comment" && typeof searchResult.id !== "undefined" && typeof searchResult.pin.id !== "undefined"){
+       } else if (searchResult._type === "Comment" && typeof searchResult.pin_id !== "undefined"){
           commentResults.push(
             <li key={idx}>
-              <a href={"#/pins/" + searchResult.pin.id}>
+              <a href={"#/pins/" + searchResult.pin_id}>
                 Comment: {searchResult.body}
               </a>
             </li>);

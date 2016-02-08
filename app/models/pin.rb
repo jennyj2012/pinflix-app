@@ -1,6 +1,7 @@
 class Pin < ActiveRecord::Base
   include PgSearch
-  multisearchable :against => [:title, :description]
+  multisearchable :against => [:title, :description],
+  :using => [:tsearch, :trigram]
 
   has_many :comments, dependent: :destroy
   belongs_to :board

@@ -1,4 +1,4 @@
-json.extract! comment, :id, :body
+json.extract! comment, :id, :body, :pin_id
 
 
 json.author do

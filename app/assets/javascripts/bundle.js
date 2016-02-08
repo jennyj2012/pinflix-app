@@ -52,22 +52,22 @@
 	var History = __webpack_require__(159).History;
 	
 	var UsersForm = __webpack_require__(206);
-	var SessionForm = __webpack_require__(221);
-	var CurrentUserStore = __webpack_require__(222);
+	var SessionForm = __webpack_require__(222);
+	var CurrentUserStore = __webpack_require__(223);
 	var SessionsApiUtil = __webpack_require__(211);
 	
-	var PinsIndex = __webpack_require__(240);
-	var PinsForm = __webpack_require__(263);
-	var PinsDetail = __webpack_require__(268);
+	var PinsIndex = __webpack_require__(241);
+	var PinsForm = __webpack_require__(264);
+	var PinsDetail = __webpack_require__(269);
 	
-	var BoardsIndex = __webpack_require__(269);
-	var BoardsForm = __webpack_require__(272);
-	var BoardsEdit = __webpack_require__(273);
-	var BoardsDetail = __webpack_require__(274);
+	var BoardsIndex = __webpack_require__(270);
+	var BoardsForm = __webpack_require__(273);
+	var BoardsEdit = __webpack_require__(274);
+	var BoardsDetail = __webpack_require__(275);
 	
-	var CommentsIndex = __webpack_require__(247);
+	var CommentsIndex = __webpack_require__(248);
 	
-	var App = __webpack_require__(275);
+	var App = __webpack_require__(276);
 	
 	function _ensureLoggedOut(nextState, replace, callback) {
 	  if (CurrentUserStore.userHasBeenFetched()) {
@@ -24068,7 +24068,7 @@
 	var History = __webpack_require__(159).History;
 	var SessionApiUtil = __webpack_require__(211);
 	var UsersApiUtil = __webpack_require__(218);
-	var Footer = __webpack_require__(282);
+	var Footer = __webpack_require__(221);
 	
 	var UserForm = React.createClass({
 	  displayName: 'UserForm',
@@ -24083,80 +24083,84 @@
 	    // <p className="errors">Fill out all data</p>
 	    return React.createElement(
 	      'div',
-	      { className: 'sign-up', onSubmit: this.handleSubmit },
+	      null,
 	      React.createElement(
 	        'div',
-	        { className: 'log-in-button button-style-link' },
-	        React.createElement(
-	          'a',
-	          { href: '#/session/new' },
-	          'Log in'
-	        )
-	      ),
-	      React.createElement(
-	        'form',
-	        { action: '<%= users_url %>', method: 'post' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Sign Up for PinFlix'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'Join PinFlix and discover and save movie ideas.'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'PinFlix is a Pinterest clone.'
-	        ),
+	        { className: 'sign-up', onSubmit: this.handleSubmit },
 	        React.createElement(
 	          'div',
-	          { className: 'input username required' },
-	          React.createElement('input', {
-	            type: 'text',
-	            name: 'user[username]',
-	            id: 'user_username',
-	            placeholder: 'Username',
-	            valueLink: this.linkState('username') })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'input email required' },
-	          React.createElement('input', {
-	            type: 'text',
-	            name: 'user[email]',
-	            id: 'user_email',
-	            placeholder: 'Email',
-	            valueLink: this.linkState('email') })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'input password required' },
-	          React.createElement('input', {
-	            type: 'password',
-	            name: 'user[password]',
-	            id: 'user_password',
-	            placeholder: 'Password',
-	            valueLink: this.linkState('password') })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'sign-up-button shade-button' },
+	          { className: 'log-in-button button-style-link' },
 	          React.createElement(
-	            'button',
-	            null,
-	            'Sign Up'
+	            'a',
+	            { href: '#/session/new' },
+	            'Log in'
 	          )
 	        ),
 	        React.createElement(
-	          'div',
-	          { className: 'sign-up-button shade-button' },
+	          'form',
+	          { action: '<%= users_url %>', method: 'post' },
 	          React.createElement(
-	            'button',
-	            { onClick: this.handleGuest },
-	            'Guest Sign In'
+	            'h1',
+	            null,
+	            'Sign Up for PinFlix'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'Join PinFlix and discover and save movie ideas.'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'PinFlix is a Pinterest clone.'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'input username required' },
+	            React.createElement('input', {
+	              type: 'text',
+	              name: 'user[username]',
+	              id: 'user_username',
+	              placeholder: 'Username',
+	              valueLink: this.linkState('username') })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'input email required' },
+	            React.createElement('input', {
+	              type: 'text',
+	              name: 'user[email]',
+	              id: 'user_email',
+	              placeholder: 'Email',
+	              valueLink: this.linkState('email') })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'input password required' },
+	            React.createElement('input', {
+	              type: 'password',
+	              name: 'user[password]',
+	              id: 'user_password',
+	              placeholder: 'Password',
+	              valueLink: this.linkState('password') })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'sign-up-button shade-button' },
+	            React.createElement(
+	              'button',
+	              null,
+	              'Sign Up'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'sign-up-button shade-button' },
+	            React.createElement(
+	              'button',
+	              { onClick: this.handleGuest },
+	              'Guest Sign In'
+	            )
 	          )
 	        )
 	      ),
@@ -24908,12 +24912,53 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	
+	var Footer = React.createClass({
+	  displayName: "Footer",
+	
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      "div",
+	      { className: "footer" },
+	      React.createElement(
+	        "div",
+	        { className: "footer-center" },
+	        React.createElement(
+	          "div",
+	          { className: "footer-left" },
+	          React.createElement(
+	            "h4",
+	            null,
+	            "Created by Jenny Juarez, 2016 educational purposes.",
+	            React.createElement(
+	              "a",
+	              { href: "https://www.linkedin.com/in/jennyj2012" },
+	              " Hire Me."
+	            )
+	          )
+	        ),
+	        React.createElement("div", { className: "footer-right group" })
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Footer;
+
+/***/ },
+/* 222 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
-	var Footer = __webpack_require__(282);
+	var Footer = __webpack_require__(221);
 	
 	var SessionApiUtil = __webpack_require__(211);
-	var CurrentUserStore = __webpack_require__(222);
+	var CurrentUserStore = __webpack_require__(223);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
@@ -24929,69 +24974,73 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'log-in basic-modal', onSubmit: this.handleSubmit },
+	      null,
 	      React.createElement(
-	        'form',
-	        null,
+	        'div',
+	        { className: 'log-in basic-modal', onSubmit: this.handleSubmit },
 	        React.createElement(
-	          'h1',
+	          'form',
 	          null,
-	          'Log In to PinFlix'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'PinFlix is a movie discovery web application inspired by Pinterest'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'input username required' },
-	          React.createElement('input', {
-	            type: 'text',
-	            name: 'user[username]',
-	            id: 'user_username',
-	            placeholder: 'Username',
-	            valueLink: this.linkState('username') })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'input password required' },
-	          React.createElement('input', {
-	            type: 'password',
-	            name: 'user[password]',
-	            id: 'user_password',
-	            placeholder: 'Password',
-	            valueLink: this.linkState('password') })
-	        ),
-	        React.createElement('div', { className: 'division' }),
-	        React.createElement(
-	          'div',
-	          { className: 'action-links group' },
 	          React.createElement(
-	            'div',
-	            { className: 'guest-and-link' },
-	            React.createElement(
-	              'a',
-	              { href: '#/users/new' },
-	              'Sign up now'
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'guest-sign-in shade-button' },
-	              React.createElement(
-	                'button',
-	                { onClick: this.handleGuest },
-	                'Guest Sign In'
-	              )
-	            )
+	            'h1',
+	            null,
+	            'Log In to PinFlix'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'PinFlix is a movie discovery web application inspired by Pinterest'
 	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'shade-button' },
+	            { className: 'input username required' },
+	            React.createElement('input', {
+	              type: 'text',
+	              name: 'user[username]',
+	              id: 'user_username',
+	              placeholder: 'Username',
+	              valueLink: this.linkState('username') })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'input password required' },
+	            React.createElement('input', {
+	              type: 'password',
+	              name: 'user[password]',
+	              id: 'user_password',
+	              placeholder: 'Password',
+	              valueLink: this.linkState('password') })
+	          ),
+	          React.createElement('div', { className: 'division' }),
+	          React.createElement(
+	            'div',
+	            { className: 'action-links group' },
 	            React.createElement(
-	              'button',
-	              null,
-	              'Log In'
+	              'div',
+	              { className: 'guest-and-link' },
+	              React.createElement(
+	                'a',
+	                { href: '#/users/new' },
+	                'Sign up now'
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'guest-sign-in shade-button' },
+	                React.createElement(
+	                  'button',
+	                  { onClick: this.handleGuest },
+	                  'Guest Sign In'
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'shade-button' },
+	              React.createElement(
+	                'button',
+	                null,
+	                'Log In'
+	              )
 	            )
 	          )
 	        )
@@ -25028,10 +25077,10 @@
 	module.exports = SessionForm;
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(223).Store;
+	var Store = __webpack_require__(224).Store;
 	var Dispatcher = __webpack_require__(213);
 	var CurrentUserConstants = __webpack_require__(217);
 	
@@ -25067,7 +25116,7 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25079,15 +25128,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(224);
-	module.exports.MapStore = __webpack_require__(227);
-	module.exports.Mixin = __webpack_require__(239);
-	module.exports.ReduceStore = __webpack_require__(228);
-	module.exports.Store = __webpack_require__(229);
+	module.exports.Container = __webpack_require__(225);
+	module.exports.MapStore = __webpack_require__(228);
+	module.exports.Mixin = __webpack_require__(240);
+	module.exports.ReduceStore = __webpack_require__(229);
+	module.exports.Store = __webpack_require__(230);
 
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25109,10 +25158,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(225);
+	var FluxStoreGroup = __webpack_require__(226);
 	
 	var invariant = __webpack_require__(216);
-	var shallowEqual = __webpack_require__(226);
+	var shallowEqual = __webpack_require__(227);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25270,7 +25319,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25351,7 +25400,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports) {
 
 	/**
@@ -25406,7 +25455,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25427,8 +25476,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(228);
-	var Immutable = __webpack_require__(238);
+	var FluxReduceStore = __webpack_require__(229);
+	var Immutable = __webpack_require__(239);
 	
 	var invariant = __webpack_require__(216);
 	
@@ -25556,7 +25605,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25577,9 +25626,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(229);
+	var FluxStore = __webpack_require__(230);
 	
-	var abstractMethod = __webpack_require__(237);
+	var abstractMethod = __webpack_require__(238);
 	var invariant = __webpack_require__(216);
 	
 	var FluxReduceStore = (function (_FluxStore) {
@@ -25663,7 +25712,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25682,7 +25731,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(230);
+	var _require = __webpack_require__(231);
 	
 	var EventEmitter = _require.EventEmitter;
 	
@@ -25846,7 +25895,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25859,14 +25908,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(231)
+	  EventEmitter: __webpack_require__(232)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25885,11 +25934,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(232);
-	var EventSubscriptionVendor = __webpack_require__(234);
+	var EmitterSubscription = __webpack_require__(233);
+	var EventSubscriptionVendor = __webpack_require__(235);
 	
-	var emptyFunction = __webpack_require__(236);
-	var invariant = __webpack_require__(235);
+	var emptyFunction = __webpack_require__(237);
+	var invariant = __webpack_require__(236);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -26063,7 +26112,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26084,7 +26133,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(233);
+	var EventSubscription = __webpack_require__(234);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26116,7 +26165,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 233 */
+/* 234 */
 /***/ function(module, exports) {
 
 	/**
@@ -26170,7 +26219,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26189,7 +26238,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(235);
+	var invariant = __webpack_require__(236);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -26279,7 +26328,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26334,7 +26383,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports) {
 
 	/**
@@ -26376,7 +26425,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26403,7 +26452,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31390,7 +31439,7 @@
 	}));
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31407,7 +31456,7 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(225);
+	var FluxStoreGroup = __webpack_require__(226);
 	
 	var invariant = __webpack_require__(216);
 	
@@ -31513,16 +31562,16 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinsUtil = __webpack_require__(241);
-	var PinsStore = __webpack_require__(245);
-	var PinsIndexItem = __webpack_require__(246);
+	var PinsUtil = __webpack_require__(242);
+	var PinsStore = __webpack_require__(246);
+	var PinsIndexItem = __webpack_require__(247);
 	
-	var CurrentUserStore = __webpack_require__(222);
-	var Masonry = __webpack_require__(250);
+	var CurrentUserStore = __webpack_require__(223);
+	var Masonry = __webpack_require__(251);
 	var masonryOptions = {
 	  transitionDuration: '0.5s',
 	  isFitWidth: true,
@@ -31578,10 +31627,10 @@
 	module.exports = PinsIndex;
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PinsActions = __webpack_require__(242);
+	var PinsActions = __webpack_require__(243);
 	
 	var PinsUtil = {
 	  fetchAllPins: function () {
@@ -31640,12 +31689,12 @@
 	module.exports = PinsUtil;
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(213);
-	var PinsConstants = __webpack_require__(243);
-	var BoardsConstants = __webpack_require__(244);
+	var PinsConstants = __webpack_require__(244);
+	var BoardsConstants = __webpack_require__(245);
 	
 	var PinsActions = {
 	  receiveAllPins: function (pins) {
@@ -31667,7 +31716,7 @@
 	module.exports = PinsActions;
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports) {
 
 	var PinsConstants = {
@@ -31678,7 +31727,7 @@
 	module.exports = PinsConstants;
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports) {
 
 	var BoardsConstants = {
@@ -31690,12 +31739,12 @@
 	module.exports = BoardsConstants;
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(223).Store;
+	var Store = __webpack_require__(224).Store;
 	var Dispatcher = __webpack_require__(213);
-	var PinsConstants = __webpack_require__(243);
+	var PinsConstants = __webpack_require__(244);
 	var PinsStore = new Store(Dispatcher);
 	
 	var _pins = [];
@@ -31761,12 +31810,12 @@
 	module.exports = PinsStore;
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndex = __webpack_require__(247);
-	var CommentsForm = __webpack_require__(249);
+	var CommentsIndex = __webpack_require__(248);
+	var CommentsForm = __webpack_require__(250);
 	var History = __webpack_require__(159).History;
 	
 	var PinsIndexItem = React.createClass({
@@ -31862,11 +31911,11 @@
 	module.exports = PinsIndexItem;
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CommentsIndexItem = __webpack_require__(248);
+	var CommentsIndexItem = __webpack_require__(249);
 	
 	var CommentsIndex = React.createClass({
 	  displayName: 'CommentsIndex',
@@ -31888,7 +31937,7 @@
 	module.exports = CommentsIndex;
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31932,15 +31981,15 @@
 	module.exports = CommentsIndexItem;
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
-	var CurrentUserStore = __webpack_require__(222);
+	var CurrentUserStore = __webpack_require__(223);
 	
-	var PinsUtil = __webpack_require__(241);
-	var PinsStore = __webpack_require__(245);
+	var PinsUtil = __webpack_require__(242);
+	var PinsStore = __webpack_require__(246);
 	
 	var CommentsForm = React.createClass({
 	  displayName: 'CommentsForm',
@@ -32021,7 +32070,7 @@
 	module.exports = CommentsForm;
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -32029,8 +32078,8 @@
 	(function() {
 	
 	var isBrowser = (typeof window !== 'undefined');
-	var Masonry = isBrowser ? window.Masonry || __webpack_require__(251) : null;
-	var imagesloaded = isBrowser ? __webpack_require__(261) : null;
+	var Masonry = isBrowser ? window.Masonry || __webpack_require__(252) : null;
+	var imagesloaded = isBrowser ? __webpack_require__(262) : null;
 	var React = __webpack_require__(1);
 	var refName = 'masonryContainer';
 	
@@ -32227,7 +32276,7 @@
 	}.call(window));
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -32256,9 +32305,9 @@
 	  } else if ( true ) {
 	    // CommonJS
 	    module.exports = factory(
-	      __webpack_require__(252),
-	      __webpack_require__(255),
-	      __webpack_require__(257)
+	      __webpack_require__(253),
+	      __webpack_require__(256),
+	      __webpack_require__(258)
 	    );
 	  } else {
 	    // browser global
@@ -32441,7 +32490,7 @@
 	}.call(window));
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -32475,11 +32524,11 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(253),
 	      __webpack_require__(254),
 	      __webpack_require__(255),
-	      __webpack_require__(257),
-	      __webpack_require__(260)
+	      __webpack_require__(256),
+	      __webpack_require__(258),
+	      __webpack_require__(261)
 	    );
 	  } else {
 	    // browser global
@@ -33378,7 +33427,7 @@
 	}.call(window));
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -33471,7 +33520,7 @@
 	}.call(window));
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -33956,7 +34005,7 @@
 	}.call(window));
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34206,7 +34255,7 @@
 	  define( [ 'get-style-property/get-style-property' ], defineGetSize );
 	} else if ( true ) {
 	  // CommonJS for Component
-	  module.exports = defineGetSize( __webpack_require__(256) );
+	  module.exports = defineGetSize( __webpack_require__(257) );
 	} else {
 	  // browser global
 	  window.getSize = defineGetSize( window.getStyleProperty );
@@ -34217,7 +34266,7 @@
 	}.call(window));
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34283,7 +34332,7 @@
 	}.call(window));
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34314,8 +34363,8 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(258),
-	      __webpack_require__(259)
+	      __webpack_require__(259),
+	      __webpack_require__(260)
 	    );
 	  } else {
 	    // browser global
@@ -34564,7 +34613,7 @@
 	}.call(window));
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34636,7 +34685,7 @@
 	  docReady.isReady = typeof requirejs === 'function';
 	  define( [ 'eventie/eventie' ], defineDocReady );
 	} else if ( true ) {
-	  module.exports = defineDocReady( __webpack_require__(253) );
+	  module.exports = defineDocReady( __webpack_require__(254) );
 	} else {
 	  // browser global
 	  window.docReady = defineDocReady( window.eventie );
@@ -34647,7 +34696,7 @@
 	}.call(window));
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34765,7 +34814,7 @@
 	}.call(window));
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34795,10 +34844,10 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(254),
 	      __webpack_require__(255),
 	      __webpack_require__(256),
-	      __webpack_require__(257)
+	      __webpack_require__(257),
+	      __webpack_require__(258)
 	    );
 	  } else {
 	    // browser global
@@ -35360,7 +35409,7 @@
 	}.call(window));
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -35389,7 +35438,7 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(262)
+	      __webpack_require__(263)
 	    );
 	  } else {
 	    // browser global
@@ -35741,7 +35790,7 @@
 	}.call(window));
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -35856,16 +35905,16 @@
 
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
 	
-	var PinsUtil = __webpack_require__(241);
-	var PinsStore = __webpack_require__(245);
-	var PinFormBoardItem = __webpack_require__(264);
+	var PinsUtil = __webpack_require__(242);
+	var PinsStore = __webpack_require__(246);
+	var PinFormBoardItem = __webpack_require__(265);
 	
 	var PinsForm = React.createClass({
 	  displayName: 'PinsForm',
@@ -36107,13 +36156,13 @@
 	module.exports = PinsForm;
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsStore = __webpack_require__(265);
-	var BoardsUtil = __webpack_require__(266);
-	var CurrentUserStore = __webpack_require__(222);
+	var BoardsStore = __webpack_require__(266);
+	var BoardsUtil = __webpack_require__(267);
+	var CurrentUserStore = __webpack_require__(223);
 	var PinFormBoardItem = React.createClass({
 	  displayName: 'PinFormBoardItem',
 	
@@ -36193,12 +36242,12 @@
 	module.exports = PinFormBoardItem;
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(223).Store;
+	var Store = __webpack_require__(224).Store;
 	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(244);
+	var BoardsConstants = __webpack_require__(245);
 	
 	var BoardsStore = new Store(Dispatcher);
 	
@@ -36281,10 +36330,10 @@
 	module.exports = BoardsStore;
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var BoardsActions = __webpack_require__(267);
+	var BoardsActions = __webpack_require__(268);
 	
 	var BoardsUtil = {
 	  fetchAllBoards: function () {
@@ -36361,11 +36410,11 @@
 	module.exports = BoardsUtil;
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(244);
+	var BoardsConstants = __webpack_require__(245);
 	
 	var BoardsActions = {
 	  receiveAllBoards: function (boards) {
@@ -36394,14 +36443,14 @@
 	module.exports = BoardsActions;
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PinsIndexItem = __webpack_require__(246);
+	var PinsIndexItem = __webpack_require__(247);
 	
-	var PinsUtil = __webpack_require__(241);
-	var PinsStore = __webpack_require__(245);
+	var PinsUtil = __webpack_require__(242);
+	var PinsStore = __webpack_require__(246);
 	
 	var PinsDetail = React.createClass({
 	  displayName: 'PinsDetail',
@@ -36466,19 +36515,19 @@
 	module.exports = PinsDetail;
 
 /***/ },
-/* 269 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(266);
-	var BoardsStore = __webpack_require__(265);
+	var BoardsUtil = __webpack_require__(267);
+	var BoardsStore = __webpack_require__(266);
 	var UsersStore = __webpack_require__(271);
 	var UsersUtil = __webpack_require__(218);
-	var CurrentUserStore = __webpack_require__(222);
+	var CurrentUserStore = __webpack_require__(223);
 	
-	var BoardsIndexItem = __webpack_require__(270);
+	var BoardsIndexItem = __webpack_require__(272);
 	
-	var Masonry = __webpack_require__(250);
+	var Masonry = __webpack_require__(251);
 	var masonryOptions = {
 	  transitionDuration: '0.5s',
 	  isFitWidth: true,
@@ -36579,12 +36628,75 @@
 	module.exports = BoardsIndex;
 
 /***/ },
-/* 270 */
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(224).Store;
+	var Dispatcher = __webpack_require__(213);
+	var UserConstants = __webpack_require__(220);
+	
+	var UsersStore = new Store(Dispatcher);
+	
+	var _users = [];
+	
+	var resetUsers = function (users) {
+	  _users = users;
+	};
+	
+	var addUser = function (user) {
+	  _users.push(user);
+	};
+	
+	var updateUser = function (user) {
+	  var idx;
+	  for (var i = 0; i < _users.length; i++) {
+	    if (_users[i].id === user.id) {
+	      idx = i;
+	    }
+	  }
+	
+	  if (typeof idx === "undefined") {
+	    addUser(user);
+	  } else {
+	    _users[idx] = user;
+	  }
+	};
+	
+	UsersStore.all = function () {
+	  return _users.slice();
+	};
+	
+	UsersStore.find = function (id) {
+	  // debugger
+	  var idx;
+	  for (var i = 0; i < _users.length; i++) {
+	    if (_users[i].id === id) {
+	      idx = i;
+	    }
+	  }
+	  return _users[idx];
+	};
+	
+	UsersStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.RECEIVE_SINGLE_USER:
+	      updateUser(payload.user);
+	      UsersStore.__emitChange();
+	      break;
+	    default:
+	      break;
+	  }
+	};
+	
+	module.exports = UsersStore;
+
+/***/ },
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var CurrentUserStore = __webpack_require__(222);
+	var CurrentUserStore = __webpack_require__(223);
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
@@ -36664,78 +36776,15 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 271 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(223).Store;
-	var Dispatcher = __webpack_require__(213);
-	var UserConstants = __webpack_require__(220);
-	
-	var UsersStore = new Store(Dispatcher);
-	
-	var _users = [];
-	
-	var resetUsers = function (users) {
-	  _users = users;
-	};
-	
-	var addUser = function (user) {
-	  _users.push(user);
-	};
-	
-	var updateUser = function (user) {
-	  var idx;
-	  for (var i = 0; i < _users.length; i++) {
-	    if (_users[i].id === user.id) {
-	      idx = i;
-	    }
-	  }
-	
-	  if (typeof idx === "undefined") {
-	    addUser(user);
-	  } else {
-	    _users[idx] = user;
-	  }
-	};
-	
-	UsersStore.all = function () {
-	  return _users.slice();
-	};
-	
-	UsersStore.find = function (id) {
-	  // debugger
-	  var idx;
-	  for (var i = 0; i < _users.length; i++) {
-	    if (_users[i].id === id) {
-	      idx = i;
-	    }
-	  }
-	  return _users[idx];
-	};
-	
-	UsersStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.RECEIVE_SINGLE_USER:
-	      updateUser(payload.user);
-	      UsersStore.__emitChange();
-	      break;
-	    default:
-	      break;
-	  }
-	};
-	
-	module.exports = UsersStore;
-
-/***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
 	
-	var BoardsUtil = __webpack_require__(266);
-	var BoardsStore = __webpack_require__(265);
+	var BoardsUtil = __webpack_require__(267);
+	var BoardsStore = __webpack_require__(266);
 	
 	var BoardsForm = React.createClass({
 	  displayName: 'BoardsForm',
@@ -36813,19 +36862,19 @@
 	module.exports = BoardsForm;
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
-	var CurrentUserStore = __webpack_require__(222);
-	var PinsIndexItem = __webpack_require__(246);
+	var CurrentUserStore = __webpack_require__(223);
+	var PinsIndexItem = __webpack_require__(247);
 	
-	var BoardsUtil = __webpack_require__(266);
-	var BoardsStore = __webpack_require__(265);
+	var BoardsUtil = __webpack_require__(267);
+	var BoardsStore = __webpack_require__(266);
 	
-	var Masonry = __webpack_require__(250);
+	var Masonry = __webpack_require__(251);
 	var masonryOptions = {
 	  transitionDuration: '0',
 	  isFitWidth: true
@@ -36998,19 +37047,19 @@
 	module.exports = BoardsEdit;
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(266);
-	var BoardsStore = __webpack_require__(265);
-	var PinsIndexItem = __webpack_require__(246);
-	var CurrentUserStore = __webpack_require__(222);
+	var BoardsUtil = __webpack_require__(267);
+	var BoardsStore = __webpack_require__(266);
+	var PinsIndexItem = __webpack_require__(247);
+	var CurrentUserStore = __webpack_require__(223);
 	
-	var PinsUtil = __webpack_require__(241);
-	var PinsStore = __webpack_require__(245);
+	var PinsUtil = __webpack_require__(242);
+	var PinsStore = __webpack_require__(246);
 	
-	var Masonry = __webpack_require__(250);
+	var Masonry = __webpack_require__(251);
 	var masonryOptions = {
 	  transitionDuration: '0.5s',
 	  isFitWidth: true,
@@ -37160,14 +37209,14 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var SessionApiUtil = __webpack_require__(211);
-	var CurrentUserStore = __webpack_require__(222);
-	var Header = __webpack_require__(276);
-	var Footer = __webpack_require__(282);
+	var CurrentUserStore = __webpack_require__(223);
+	var Header = __webpack_require__(277);
+	var Footer = __webpack_require__(221);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -37197,14 +37246,14 @@
 	module.exports = App;
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var CurrentUserStore = __webpack_require__(222);
+	var CurrentUserStore = __webpack_require__(223);
 	
-	var SearchBar = __webpack_require__(277);
+	var SearchBar = __webpack_require__(278);
 	var SessionApiUtil = __webpack_require__(211);
 	
 	var Header = React.createClass({
@@ -37297,13 +37346,13 @@
 	module.exports = Header;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
-	var SearchResultsStore = __webpack_require__(278);
-	var SearchApiUtil = __webpack_require__(280);
+	var SearchResultsStore = __webpack_require__(279);
+	var SearchApiUtil = __webpack_require__(281);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -37353,12 +37402,14 @@
 	      totalCount
 	    );
 	
+	    debugger;
 	    var userResults = [],
 	        pinResults = [],
 	        boardResults = [],
 	        commentResults = [],
 	        tagResults;
 	    var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
+	      debugger;
 	      if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
 	        userResults.push(React.createElement(
 	          'li',
@@ -37392,13 +37443,13 @@
 	            searchResult.title
 	          )
 	        ));
-	      } else if (searchResult._type === "Comment" && typeof searchResult.id !== "undefined" && typeof searchResult.pin.id !== "undefined") {
+	      } else if (searchResult._type === "Comment" && typeof searchResult.pin_id !== "undefined") {
 	        commentResults.push(React.createElement(
 	          'li',
 	          { key: idx },
 	          React.createElement(
 	            'a',
-	            { href: "#/pins/" + searchResult.pin.id },
+	            { href: "#/pins/" + searchResult.pin_id },
 	            'Comment: ',
 	            searchResult.body
 	          )
@@ -37452,12 +37503,12 @@
 	module.exports = Search;
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(223).Store;
+	var Store = __webpack_require__(224).Store;
 	var AppDispatcher = __webpack_require__(213);
-	var SearchConstants = __webpack_require__(279);
+	var SearchConstants = __webpack_require__(280);
 	
 	var _searchResults = [];
 	var _meta = {};
@@ -37486,7 +37537,7 @@
 	module.exports = SearchResultsStore;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports) {
 
 	
@@ -37497,10 +37548,10 @@
 	module.exports = SearchConstants;
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchActions = __webpack_require__(281);
+	var SearchActions = __webpack_require__(282);
 	
 	var SearchApiUtil = {
 	
@@ -37521,10 +37572,10 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchConstants = __webpack_require__(279);
+	var SearchConstants = __webpack_require__(280);
 	var AppDispatcher = __webpack_require__(213);
 	
 	var SearchActions = {
@@ -37539,47 +37590,6 @@
 	};
 	
 	module.exports = SearchActions;
-
-/***/ },
-/* 282 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var Footer = React.createClass({
-	  displayName: "Footer",
-	
-	
-	  render: function () {
-	
-	    return React.createElement(
-	      "div",
-	      { className: "footer" },
-	      React.createElement(
-	        "div",
-	        { className: "footer-center" },
-	        React.createElement(
-	          "div",
-	          { className: "footer-left" },
-	          React.createElement(
-	            "h4",
-	            null,
-	            "Created by Jenny Juarez, 2016 educational purposes.",
-	            React.createElement(
-	              "a",
-	              { href: "https://www.linkedin.com/in/jennyj2012" },
-	              " Hire Me."
-	            )
-	          )
-	        ),
-	        React.createElement("div", { className: "footer-right group" })
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = Footer;
 
 /***/ }
 /******/ ]);
