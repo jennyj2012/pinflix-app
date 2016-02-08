@@ -28,13 +28,20 @@ var PinFormBoardItem = React.createClass({
   },
 
   render: function () {
-
     var handleSubmit = this.props.handleSubmit;
 
+
+
     var boards = this.state.allBoards.map(function (board) {
+      var thumb;
+      if(board.pins.length === 0){
+        thumb = <img className="mini-thumb" src={window.pinflix.logo}/>
+      } else {
+        thumb = <img className="mini-thumb" src={board.pins[0].photo.image_url}/>;
+      }
       return (
         <li className="pin-board-list-item group" key={board.id}>
-          <img className="mini-thumb" src={board.pins[0].photo.image_url}/>
+          {thumb}
           <figcaption>{board.title}</figcaption>
           <div className="pin-to-board-button hidden small-red-button">
             <button onClick={handleSubmit.bind(null, board.id)}>Pin It</button>

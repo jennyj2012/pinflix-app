@@ -36191,14 +36191,19 @@
 	  },
 	
 	  render: function () {
-	
 	    var handleSubmit = this.props.handleSubmit;
 	
 	    var boards = this.state.allBoards.map(function (board) {
+	      var thumb;
+	      if (board.pins.length === 0) {
+	        thumb = React.createElement('img', { className: 'mini-thumb', src: window.pinflix.logo });
+	      } else {
+	        thumb = React.createElement('img', { className: 'mini-thumb', src: board.pins[0].photo.image_url });
+	      }
 	      return React.createElement(
 	        'li',
 	        { className: 'pin-board-list-item group', key: board.id },
-	        React.createElement('img', { className: 'mini-thumb', src: board.pins[0].photo.image_url }),
+	        thumb,
 	        React.createElement(
 	          'figcaption',
 	          null,
@@ -36586,7 +36591,6 @@
 	  },
 	
 	  render: function () {
-	
 	    var boards = this.state.allBoards.map(function (board) {
 	      return React.createElement(BoardsIndexItem, {
 	        key: board.id,
