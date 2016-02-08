@@ -181,11 +181,18 @@
  }
 
 /*Add button highlight*/
- .shade-button button:active {
-
- }
- .shade-button button:focus {
-
+ .shade-button button:active,
+ .shade-button button:focus,
+ .shade-button button:hover,
+ .basic-red-button button:active,
+ .basic-red-button button:focus,
+ .basic-red-button button:hover,
+ .small-red-button button:focus,
+ .small-red-button button:active,
+ .small-red-button button:hover {
+   background: #ab171e;
+   border: 3px solid #e3262e;
+   box-sizing: border-box;
  }
 
  .basic-red-button {

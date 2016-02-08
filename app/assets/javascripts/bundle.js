@@ -25017,6 +25017,15 @@
 	            { className: 'action-links group' },
 	            React.createElement(
 	              'div',
+	              { className: 'shade-button' },
+	              React.createElement(
+	                'button',
+	                null,
+	                'Log In'
+	              )
+	            ),
+	            React.createElement(
+	              'div',
 	              { className: 'guest-and-link' },
 	              React.createElement(
 	                'a',
@@ -25031,15 +25040,6 @@
 	                  { onClick: this.handleGuest },
 	                  'Guest Sign In'
 	                )
-	              )
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'shade-button' },
-	              React.createElement(
-	                'button',
-	                null,
-	                'Log In'
 	              )
 	            )
 	          )
