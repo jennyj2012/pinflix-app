@@ -1,9 +1,7 @@
 # PinFlix
 # By Jenny Juarez
 
-[Heroku link][heroku] **NB:** This should be a link to your production site
-
-[heroku]: http://www.herokuapp.com
+[Heroku link](www.pinflixapp.com)  
 
 ## Minimum Viable Product
 
@@ -25,8 +23,8 @@ PinFlix is a movie discovery web application inspired by Pinterest built using R
 * [View Wireframes][view]
 * [DB schema][schema]
 
-[view]: ./docs/views.md
-[schema]: ./docs/schema.md
+[view]: ./wireframes/views.md
+[schema]: ./wireframes/schema.md
 
 ## Implementation Timeline
 
@@ -38,7 +36,7 @@ In Phase 1, I will begin by implementing user signup and authentication (using B
 
 ### Phase 2: Flux Architecture and Pin CRUD (1 days)
 
-Phase 2 is focused on continuing setting up Flux, the React Router, and the React view structure for the main application. After the basic Flux architecture has been set up, a Pin store will be implemented and a set of actions corresponding to the needed CRUD functionality created. Once this is done, I will create React views for the Pins `Index`, `IndexItem` and `Form`. At the end of Phase 2, Pins can be created, read, and edited in the browser. 
+Phase 2 is focused on continuing setting up Flux, the React Router, and the React view structure for the main application. After the basic Flux architecture has been set up, a Pin store will be implemented and a set of actions corresponding to the needed CRUD functionality created. Once this is done, I will create React views for the Pins `Index`, `IndexItem` and `Form`. At the end of Phase 2, Pins can be created, read, and edited in the browser.
 
 [Details][phase-two]
 
@@ -85,9 +83,9 @@ the BoardForm).
 - [ ] Follow Users
 - [ ] Multiple sessions
 
-[phase-one]: ./docs/phases/phase1.md
-[phase-two]: ./docs/phases/phase2.md
-[phase-three]: ./docs/phases/phase3.md
-[phase-four]: ./docs/phases/phase4.md
-[phase-five]: ./docs/phases/phase5.md
-[phase-six]: ./docs/phases/phase6.md
+[phase-one]: ./phases/phase1.md
+[phase-two]: ./phases/phase2.md
+[phase-three]: ./phases/phase3.md
+[phase-four]: ./phases/phase4.md
+[phase-five]: ./phases/phase5.md
+[phase-six]: ./phases/phase6.md

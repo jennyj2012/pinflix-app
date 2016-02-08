@@ -1,20 +1,21 @@
 #PINFLIX
 
-Welcome to PinFlix, a movie discovery site that lets you find and group movies into boards. Pinflix is a clone of [Pinterest](https://www.pinterest.com)
+Welcome to [PinFlix](www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards. Pinflix is a clone of [Pinterest](https://www.pinterest.com)
 
-www.pinflixapp.com
+![Pinterest](./docs/wireframes/wireframe_images/pinflix_wireframes.001.jpeg)
 
-##HOW TO USE
-Create an account
-Log in/ Log out
-View a feed of movies
-Search for movies, boards, or comments that match your interests.
-Create movie pins.
-Create boards for different categories.
-Pin your movie pins to your boards.
-Repin other movie pins to your boards
-Comment on a movie pin
-View comments on a movie pin
+##Features
+####Users can:
+* Create an account
+* Log in/ Log out
+* View a feed of movies
+* Search for movies, boards, or comments that match your interests.
+* Create movie pins.
+* Create boards for different categories.
+* Pin your movie pins to your boards.
+* Repin other movie pins to your boards
+* Comment on a movie pin
+* View comments on a movie pin
 
 ##SYSTEM INFO
 Ruby version 2.3.0 Node version 4.1.1 NPM version 2.1.x
