@@ -22,19 +22,7 @@ Seed database bundle exec rake db:seed
 
 To run locally start your servers start postresql “$ postgres -D /usr/local/pgsql/data” start rails “rails server” start webpack “webpack –watch”
 
-##TO-DO/FUTURE FEATURES
-
-Follow/Unfollow boards
-Follow/Unfollow users
-Invite users to boards
-Search Users
-Add multiple tags to pins and boards
-Add Info Box
-Add default avatar
-Upload file validations
-Spinners
-Disable buttons while processing
 
 ##IMPLEMENTATION DETAILS
-[Implementation Details](./docs/implementation_details.md)
+![Implementation Details](./docs/implementation_details.md)
 … Created by Jenny Juarez
