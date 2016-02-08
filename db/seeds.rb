@@ -1,10 +1,10 @@
 User.destroy_all
 user_1 = User.create!(
-  username: "test",
+  username: "Test",
   email: "test@gmail.com",
   password: "testing")
 user_2 = User.create!(
-  username: "guest",
+  username: "Guest",
   email: "guest@gmail.com",
   password: "pinflixguest")
 

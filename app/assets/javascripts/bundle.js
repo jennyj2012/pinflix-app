@@ -24188,7 +24188,7 @@
 	
 	  handleGuest: function (e) {
 	    e.preventDefault();
-	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
+	    var credentials = { user: { username: "Guest", password: "pinflixguest" } };
 	    this.setState(credentials);
 	    SessionApiUtil.login(credentials, function () {
 	      this.history.pushState({}, "/");
@@ -25065,7 +25065,7 @@
 	
 	  handleGuest: function (e) {
 	    e.preventDefault();
-	    var credentials = { user: { username: "guest", password: "pinflixguest" } };
+	    var credentials = { user: { username: "Guest", password: "pinflixguest" } };
 	    this.setState(credentials);
 	    SessionApiUtil.login(credentials, function () {
 	      this.history.pushState({}, "/");
@@ -36616,7 +36616,8 @@
 	        React.createElement(
 	          'h2',
 	          null,
-	          this.state.author
+	          this.state.author,
+	          ' Account'
 	        )
 	      ),
 	      createBoard,
