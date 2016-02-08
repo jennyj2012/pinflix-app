@@ -7,12 +7,6 @@ var History = require('react-router').History;
 var PinsIndexItem = React.createClass({
   mixins: [History],
 
-  // get_domain_from_url: function (url){
-  //   var a = document.createElement('a');
-  //   a.setAttribute('href', url);
-  //   return a.hostname;
-  // },
-
   render: function () {
     var pin = this.props.pin;
     var pinLink= "#/pins/"+ pin.id;

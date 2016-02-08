@@ -15,12 +15,11 @@ var masonryOptions = {
   columnWidth: '.index-item',
   isResizable: true,
   isAnimated: true
-
 };
 
 var BoardsIndexItem = React.createClass({
   getInitialState: function (){
-    return {board: {}, boardPins: []};
+    return {board: {}, boardPins: [], isCurrent: false};
   },
 
   componentDidMount: function (){
@@ -51,66 +50,80 @@ var BoardsIndexItem = React.createClass({
 
     var currentBoard = BoardsStore.find(boardId);
     var currentPins = PinsStore.findByBoardId(boardId);
-    this.setState({ board: currentBoard, boardPins: currentPins });
+    var currentUser = CurrentUserStore.currentUser();
+    var isCurrent = false;
+
+    if (currentBoard.author_id === currentUser.id){
+      isCurrent = true;
+    }
+
+    this.setState({
+      board: currentBoard,
+      boardPins: currentPins,
+      isCurrent: isCurrent
+    });
   },
 
   render: function () {
     var board = this.state.board;
-    var board_title = "";
-    var board_description = "";
-    var board_author = "";
-    var user = CurrentUserStore.currentUser();
+    var boardTitle = "";
+    var boardDescription = "";
+    var boardAuthor = "";
     var editButton = [];
+    var createPin = [];
 
 
     if(typeof board.title !== "undefined"){
-      board_title = board.title;
+      boardTitle = board.title;
     }
 
     if(typeof board.description !== "undefined"){
-      board_description = board.description;
+      boardDescription = board.description;
     }
 
     if(typeof board.author !== "undefined" && typeof board.author.username !== "undefined"){
-      board_author = "By:" + board.author.username;
+      boardAuthor = "By: " + board.author.username;
     }
 
     var board_pins = this.state.boardPins.map(function (pin) {
         return <PinsIndexItem key={pin.id} pin={pin} showComments={true} />;
       });
 
-    if(typeof board.author_id !== "undefined" && board.author_id === user.id){
+    if(this.state.isCurrent){
       editButton = (
         <div className="button-style-link">
             <a href={"#/boards/edit/" + board.id}>Edit</a>
         </div>
-        );
+      );
+
+      createPin = (
+        <div className="new-create-link index-item" >
+          <a href='#/pins/new'>
+            Add Pin
+          </a>
+        </div>
+      );
     }
 
     return (
       <div className="board-index">
       <div className="info">
-        <h2>{board_title}</h2>
-        <h2>{board_author}</h2>
-        <h4>{board_description}</h4>
+        <h1>{boardTitle}</h1>
+        <h2>{boardAuthor}</h2>
+        <h4>{boardDescription}</h4>
         {editButton}
       </div>
 
         <div className="group">
-        <Masonry
-        className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
-        elementType={'div'} // default 'div'
-        options={masonryOptions} // default {}
-        disableImagesLoaded={false} // default false
-        >
-          <div className="new-create-link index-item" >
-          <a href='#/pins/new'>
-            Add Pin
-          </a>
-        </div>
-
-        {board_pins}
-      </Masonry>
+          <Masonry
+          className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+          elementType={'div'} // default 'div'
+          options={masonryOptions} // default {}
+          disableImagesLoaded={false} // default false
+          >
+            {createPin}
+            {board_pins}
+          </Masonry>
         </div>
 
       </div>

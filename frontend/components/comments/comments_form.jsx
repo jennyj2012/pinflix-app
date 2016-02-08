@@ -55,13 +55,15 @@ var CommentsForm = React.createClass({
 
   handleSubmit: function(e){
     e.preventDefault();
-    if(this.state.title === ""){
+
+    if(this.state.body === ""){
       $(".required").addClass("invalid");
     } else {
       PinsUtil.createPinComment({
         body: this.state.body,
         pin_id: this.props.pin.id
       });
+      this.setState({body:  ""});
     }
   }
 });

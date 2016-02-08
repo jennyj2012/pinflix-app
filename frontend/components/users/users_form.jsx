@@ -3,6 +3,8 @@ var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var History = require('react-router').History;
 var SessionApiUtil = require('../../util/session_util');
 var UsersApiUtil = require('../../util/users_util');
+var Footer = require('../footer/footer');
+
 
 
 var UserForm = React.createClass({
@@ -61,6 +63,8 @@ var UserForm = React.createClass({
         </div>
 
       </form>
+      
+      <Footer />
       </div>
     );
   },

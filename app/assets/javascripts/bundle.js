@@ -24068,6 +24068,7 @@
 	var History = __webpack_require__(159).History;
 	var SessionApiUtil = __webpack_require__(211);
 	var UsersApiUtil = __webpack_require__(218);
+	var Footer = __webpack_require__(282);
 	
 	var UserForm = React.createClass({
 	  displayName: 'UserForm',
@@ -24158,7 +24159,8 @@
 	            'Guest Sign In'
 	          )
 	        )
-	      )
+	      ),
+	      React.createElement(Footer, null)
 	    );
 	  },
 	
@@ -24908,6 +24910,7 @@
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(207);
 	var History = __webpack_require__(159).History;
+	var Footer = __webpack_require__(282);
 	
 	var SessionApiUtil = __webpack_require__(211);
 	var CurrentUserStore = __webpack_require__(222);
@@ -24992,7 +24995,8 @@
 	            )
 	          )
 	        )
-	      )
+	      ),
+	      React.createElement(Footer, null)
 	    );
 	  },
 	
@@ -31770,12 +31774,6 @@
 	
 	  mixins: [History],
 	
-	  // get_domain_from_url: function (url){
-	  //   var a = document.createElement('a');
-	  //   a.setAttribute('href', url);
-	  //   return a.hostname;
-	  // },
-	
 	  render: function () {
 	    var pin = this.props.pin;
 	    var pinLink = "#/pins/" + pin.id;
@@ -31898,6 +31896,7 @@
 	var CommentsIndexItem = React.createClass({
 	  displayName: "CommentsIndexItem",
 	
+	
 	  render: function () {
 	    var comment = this.props.comment;
 	
@@ -32006,13 +32005,15 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    if (this.state.title === "") {
+	
+	    if (this.state.body === "") {
 	      $(".required").addClass("invalid");
 	    } else {
 	      PinsUtil.createPinComment({
 	        body: this.state.body,
 	        pin_id: this.props.pin.id
 	      });
+	      this.setState({ body: "" });
 	    }
 	  }
 	});
@@ -36116,6 +36117,7 @@
 	var PinFormBoardItem = React.createClass({
 	  displayName: 'PinFormBoardItem',
 	
+	
 	  getInitialState: function () {
 	    return { allBoards: [], currentUser: {} };
 	  },
@@ -36470,20 +36472,25 @@
 	var React = __webpack_require__(1);
 	var BoardsUtil = __webpack_require__(266);
 	var BoardsStore = __webpack_require__(265);
-	var BoardsIndexItem = __webpack_require__(270);
 	var UsersStore = __webpack_require__(271);
 	var UsersUtil = __webpack_require__(218);
+	var CurrentUserStore = __webpack_require__(222);
+	
+	var BoardsIndexItem = __webpack_require__(270);
+	
 	var Masonry = __webpack_require__(250);
 	var masonryOptions = {
-	  transitionDuration: '0',
-	  isFitWidth: true
+	  transitionDuration: '0.5s',
+	  isFitWidth: true,
+	  isResizable: true,
+	  isAnimated: true
 	};
 	
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
 	
 	  getInitialState: function () {
-	    return { allBoards: [], author: "" };
+	    return { allBoards: [], author: "", isCurrent: false };
 	  },
 	
 	  componentDidMount: function () {
@@ -36508,23 +36515,48 @@
 	    } else {
 	      userId = parseInt(this.props.params.user_id);
 	    }
+	
+	    var boards = BoardsStore.findByUserId(userId);
 	    var user = UsersStore.find(userId);
 	    var username = "";
-	    if (user) {
+	    var currentUser = CurrentUserStore.currentUser();
+	    var isCurrent = false;
+	
+	    if (user && user.id === currentUser.id) {
+	      username = user.username;
+	      isCurrent = true;
+	    } else if (user) {
 	      username = user.username;
 	    }
-	    var boards = BoardsStore.findByUserId(userId);
 	
 	    this.setState({
 	      allBoards: boards,
-	      author: username
+	      author: username,
+	      isCurrent: isCurrent
 	    });
 	  },
 	
 	  render: function () {
+	
 	    var boards = this.state.allBoards.map(function (board) {
-	      return React.createElement(BoardsIndexItem, { key: board.id, board: board });
-	    });
+	      return React.createElement(BoardsIndexItem, {
+	        key: board.id,
+	        board: board,
+	        isCurrent: this.state.isCurrent });
+	    }.bind(this));
+	
+	    var createBoard = [];
+	    if (this.state.isCurrent) {
+	      createBoard = React.createElement(
+	        'div',
+	        { className: 'new-create-link' },
+	        React.createElement(
+	          'a',
+	          { href: '#/boards/new' },
+	          'Add Board'
+	        )
+	      );
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -36538,15 +36570,7 @@
 	          this.state.author
 	        )
 	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'new-create-link' },
-	        React.createElement(
-	          'a',
-	          { href: '#/boards/new' },
-	          'Add Board'
-	        )
-	      ),
+	      createBoard,
 	      boards
 	    );
 	  }
@@ -36571,7 +36595,7 @@
 	    var board = this.props.board;
 	    var pinThumbs = [];
 	    var editButton = [];
-	    var user = CurrentUserStore.currentUser();
+	    var isCurrent = this.props.isCurrent;
 	
 	    for (var i = 0; i < 4; i++) {
 	      var thumb;
@@ -36589,7 +36613,7 @@
 	      ));
 	    }
 	
-	    if (user.id === board.author_id) {
+	    if (isCurrent) {
 	      editButton = React.createElement(
 	        'div',
 	        { className: 'edit-board-button' },
@@ -36994,14 +37018,13 @@
 	  columnWidth: '.index-item',
 	  isResizable: true,
 	  isAnimated: true
-	
 	};
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
 	
 	  getInitialState: function () {
-	    return { board: {}, boardPins: [] };
+	    return { board: {}, boardPins: [], isCurrent: false };
 	  },
 	
 	  componentDidMount: function () {
@@ -37032,34 +37055,45 @@
 	
 	    var currentBoard = BoardsStore.find(boardId);
 	    var currentPins = PinsStore.findByBoardId(boardId);
-	    this.setState({ board: currentBoard, boardPins: currentPins });
+	    var currentUser = CurrentUserStore.currentUser();
+	    var isCurrent = false;
+	
+	    if (currentBoard.author_id === currentUser.id) {
+	      isCurrent = true;
+	    }
+	
+	    this.setState({
+	      board: currentBoard,
+	      boardPins: currentPins,
+	      isCurrent: isCurrent
+	    });
 	  },
 	
 	  render: function () {
 	    var board = this.state.board;
-	    var board_title = "";
-	    var board_description = "";
-	    var board_author = "";
-	    var user = CurrentUserStore.currentUser();
+	    var boardTitle = "";
+	    var boardDescription = "";
+	    var boardAuthor = "";
 	    var editButton = [];
+	    var createPin = [];
 	
 	    if (typeof board.title !== "undefined") {
-	      board_title = board.title;
+	      boardTitle = board.title;
 	    }
 	
 	    if (typeof board.description !== "undefined") {
-	      board_description = board.description;
+	      boardDescription = board.description;
 	    }
 	
 	    if (typeof board.author !== "undefined" && typeof board.author.username !== "undefined") {
-	      board_author = "By:" + board.author.username;
+	      boardAuthor = "By: " + board.author.username;
 	    }
 	
 	    var board_pins = this.state.boardPins.map(function (pin) {
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
 	    });
 	
-	    if (typeof board.author_id !== "undefined" && board.author_id === user.id) {
+	    if (this.state.isCurrent) {
 	      editButton = React.createElement(
 	        'div',
 	        { className: 'button-style-link' },
@@ -37067,6 +37101,16 @@
 	          'a',
 	          { href: "#/boards/edit/" + board.id },
 	          'Edit'
+	        )
+	      );
+	
+	      createPin = React.createElement(
+	        'div',
+	        { className: 'new-create-link index-item' },
+	        React.createElement(
+	          'a',
+	          { href: '#/pins/new' },
+	          'Add Pin'
 	        )
 	      );
 	    }
@@ -37078,19 +37122,19 @@
 	        'div',
 	        { className: 'info' },
 	        React.createElement(
-	          'h2',
+	          'h1',
 	          null,
-	          board_title
+	          boardTitle
 	        ),
 	        React.createElement(
 	          'h2',
 	          null,
-	          board_author
+	          boardAuthor
 	        ),
 	        React.createElement(
 	          'h4',
 	          null,
-	          board_description
+	          boardDescription
 	        ),
 	        editButton
 	      ),
@@ -37105,15 +37149,7 @@
 	            , options: masonryOptions // default {}
 	            , disableImagesLoaded: false // default false
 	          },
-	          React.createElement(
-	            'div',
-	            { className: 'new-create-link index-item' },
-	            React.createElement(
-	              'a',
-	              { href: '#/pins/new' },
-	              'Add Pin'
-	            )
-	          ),
+	          createPin,
 	          board_pins
 	        )
 	      )
@@ -37131,6 +37167,7 @@
 	var SessionApiUtil = __webpack_require__(211);
 	var CurrentUserStore = __webpack_require__(222);
 	var Header = __webpack_require__(276);
+	var Footer = __webpack_require__(282);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -37150,7 +37187,8 @@
 	        'div',
 	        { className: 'content group' },
 	        this.props.children
-	      )
+	      ),
+	      React.createElement(Footer, null)
 	    );
 	  }
 	
@@ -37501,6 +37539,47 @@
 	};
 	
 	module.exports = SearchActions;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Footer = React.createClass({
+	  displayName: "Footer",
+	
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      "div",
+	      { className: "footer" },
+	      React.createElement(
+	        "div",
+	        { className: "footer-center" },
+	        React.createElement(
+	          "div",
+	          { className: "footer-left" },
+	          React.createElement(
+	            "h4",
+	            null,
+	            "Created by Jenny Juarez, 2016 educational purposes.",
+	            React.createElement(
+	              "a",
+	              { href: "https://www.linkedin.com/in/jennyj2012" },
+	              " Hire Me."
+	            )
+	          )
+	        ),
+	        React.createElement("div", { className: "footer-right group" })
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Footer;
 
 /***/ }
 /******/ ]);

@@ -2,6 +2,7 @@ var React = require('react');
 var SessionApiUtil = require('./../util/session_util');
 var CurrentUserStore = require('./../stores/current_user_store');
 var Header = require('./header/header');
+var Footer = require('./footer/footer');
 
 
 var App = React.createClass({
@@ -18,6 +19,7 @@ var App = React.createClass({
         <div className="content group">
           { this.props.children }
         </div>
+        <Footer/>
       </div>
     );
   }

@@ -1,19 +1,24 @@
 var React = require('react');
 var BoardsUtil = require('../../util/boards_util');
 var BoardsStore = require('../../stores/boards_store');
-var BoardsIndexItem = require('./boards_index_item');
 var UsersStore = require('../../stores/users_store');
 var UsersUtil = require('../../util/users_util');
+var CurrentUserStore = require('../../stores/current_user_store');
+
+var BoardsIndexItem = require('./boards_index_item');
+
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
-  transitionDuration: '0',
-  isFitWidth: true
+  transitionDuration: '0.5s',
+  isFitWidth: true,
+  isResizable: true,
+  isAnimated: true
 };
 
 
 var BoardsIndex = React.createClass({
   getInitialState: function (){
-    return {allBoards: [], author: ""};
+    return {allBoards: [], author: "", isCurrent: false};
   },
 
   componentDidMount: function (){
@@ -39,37 +44,57 @@ var BoardsIndex = React.createClass({
     } else {
       userId = parseInt(this.props.params.user_id);
     }
+
+    var boards = BoardsStore.findByUserId(userId);
     var user = UsersStore.find(userId);
     var username = "";
-    if (user){
+    var currentUser = CurrentUserStore.currentUser();
+    var isCurrent = false;
+
+    if (user && user.id === currentUser.id){
+      username = user.username;
+      isCurrent = true;
+    } else if (user){
       username = user.username;
     }
-    var boards = BoardsStore.findByUserId(userId);
 
     this.setState({
       allBoards: boards,
-      author: username
+      author: username,
+      isCurrent: isCurrent
     });
   },
 
   render: function () {
+
     var boards = this.state.allBoards.map(function (board) {
-      return <BoardsIndexItem key={board.id} board={board}></BoardsIndexItem>;
-    });
+      return (
+        <BoardsIndexItem
+          key={board.id}
+          board={board}
+          isCurrent={this.state.isCurrent}>
+        </BoardsIndexItem>
+      );
+    }.bind(this));
+
+    var createBoard = [];
+    if(this.state.isCurrent) {
+      createBoard = (
+        <div className="new-create-link">
+          <a href='#/boards/new'>
+            Add Board
+          </a>
+        </div>
+      );
+    }
 
     return (
       <div className="user-board-page group">
       <div className="info">
         <h2>{this.state.author}</h2>
       </div>
-          <div className="new-create-link">
-            <a href='#/boards/new'>
-              Add Board
-            </a>
-          </div>
-
+          {createBoard}
           {boards}
-
       </div>
     );
   }

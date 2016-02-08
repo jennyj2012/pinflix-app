@@ -9,7 +9,7 @@ var BoardsIndexItem = React.createClass({
     var board = this.props.board;
     var pinThumbs = [];
     var editButton = [];
-    var user = CurrentUserStore.currentUser();
+    var isCurrent = this.props.isCurrent;
 
     for(var i = 0; i < 4; i++){
       var thumb;
@@ -27,7 +27,7 @@ var BoardsIndexItem = React.createClass({
       );
     }
 
-    if(user.id === board.author_id){
+    if(isCurrent){
       editButton = (
         <div className="edit-board-button">
             <a href={"#/boards/edit/" + this.props.board.id}>Edit</a>
