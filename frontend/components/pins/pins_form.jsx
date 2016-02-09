@@ -18,7 +18,8 @@ var PinsForm = React.createClass({
       httpUrl: "",
       upload: false,
       imageFile: null,
-      imageUrl: ""
+      imageUrl: "",
+      processing: false
     };
   },
 
@@ -84,6 +85,7 @@ var PinsForm = React.createClass({
   },
 
   changeFile: function(e) {
+
     this.event = e;
     var reader = new FileReader();
     file = e.currentTarget.files[0];
@@ -122,26 +124,29 @@ var PinsForm = React.createClass({
 
     var inputItems = (
       <div>
-        <div className="input pin-file-input" onClick={this.resetURL} >
+        <div className="input pin-url-input" >
+          <input
+            type="text"
+            className="pin[http_url]"
+            id="pin_http_url"
+            value={this.state.httpUrl}
+            onChange={this.changeUrl}
+            placeholder="URL" />
+        </div>
 
+
+        <div className="input pin-file-input" onClick={this.resetURL} >
+        <label className="file-upload" >
+          <i className="fa fa-camera"></i>
+          <p>{this.state.imageUrl}</p>
         <input
           type="file"
           className="pin[file]"
           id="pin_file"
           onChange={this.changeFile}
           />
+        </label>
         </div>
-
-
-      <div className="input pin-url-input" >
-        <input
-          type="text"
-          className="pin[http_url]"
-          id="pin_http_url"
-          value={this.state.httpUrl}
-          onChange={this.changeUrl}
-          placeholder="URL" />
-      </div>
     </div>
     );
 
@@ -205,7 +210,7 @@ var PinsForm = React.createClass({
 
           </div>
             <div>
-              <PinFormBoardItem handleSubmit={this.handleSubmit}/>
+              <PinFormBoardItem processing={this.state.processing} handleSubmit={this.handleSubmit}/>
             </div>
         </form>
       </div>
@@ -217,6 +222,7 @@ var PinsForm = React.createClass({
     if(this.state.title === ""){
       $(".required").addClass("invalid");
     } else {
+      this.setState({processing: true});
       var formData = new FormData();
       formData.append("pin[title]", this.state.title);
       formData.append("pin[description]", this.state.description);

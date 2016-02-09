@@ -32015,6 +32015,11 @@
 	    this.setState({ body: e.currentTarget.value });
 	  },
 	
+	  keydown: function (e) {
+	    debugger;
+	    if (e.target.value == 13) this.setState({ body: e.currentTarget.value });
+	  },
+	
 	  render: function () {
 	    var comment = this.props.comment;
 	
@@ -32031,7 +32036,7 @@
 	        ),
 	        React.createElement(
 	          'form',
-	          { onSubmit: this.handleSubmit, className: 'comment-form requried' },
+	          { className: 'comment-form requried', onSubmit: this.handleSubmit, onKeyDown: this.keydown },
 	          React.createElement('textarea', {
 	            className: 'comment[body]',
 	            id: 'comment_body',
@@ -35930,7 +35935,8 @@
 	      httpUrl: "",
 	      upload: false,
 	      imageFile: null,
-	      imageUrl: ""
+	      imageUrl: "",
+	      processing: false
 	    };
 	  },
 	
@@ -35996,6 +36002,7 @@
 	  },
 	
 	  changeFile: function (e) {
+	
 	    this.event = e;
 	    var reader = new FileReader();
 	    file = e.currentTarget.files[0];
@@ -36036,16 +36043,6 @@
 	      null,
 	      React.createElement(
 	        'div',
-	        { className: 'input pin-file-input', onClick: this.resetURL },
-	        React.createElement('input', {
-	          type: 'file',
-	          className: 'pin[file]',
-	          id: 'pin_file',
-	          onChange: this.changeFile
-	        })
-	      ),
-	      React.createElement(
-	        'div',
 	        { className: 'input pin-url-input' },
 	        React.createElement('input', {
 	          type: 'text',
@@ -36054,6 +36051,26 @@
 	          value: this.state.httpUrl,
 	          onChange: this.changeUrl,
 	          placeholder: 'URL' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'input pin-file-input', onClick: this.resetURL },
+	        React.createElement(
+	          'label',
+	          { className: 'file-upload' },
+	          React.createElement('i', { className: 'fa fa-camera' }),
+	          React.createElement(
+	            'p',
+	            null,
+	            this.state.imageUrl
+	          ),
+	          React.createElement('input', {
+	            type: 'file',
+	            className: 'pin[file]',
+	            id: 'pin_file',
+	            onChange: this.changeFile
+	          })
+	        )
 	      )
 	    );
 	
@@ -36117,7 +36134,7 @@
 	        React.createElement(
 	          'div',
 	          null,
-	          React.createElement(PinFormBoardItem, { handleSubmit: this.handleSubmit })
+	          React.createElement(PinFormBoardItem, { processing: this.state.processing, handleSubmit: this.handleSubmit })
 	        )
 	      )
 	    );
@@ -36128,6 +36145,7 @@
 	    if (this.state.title === "") {
 	      $(".required").addClass("invalid");
 	    } else {
+	      this.setState({ processing: true });
 	      var formData = new FormData();
 	      formData.append("pin[title]", this.state.title);
 	      formData.append("pin[description]", this.state.description);
@@ -36221,25 +36239,33 @@
 	      );
 	    });
 	
-	    return React.createElement(
-	      'div',
-	      { className: 'pin-form-right' },
-	      React.createElement(
-	        'h2',
+	    if (this.props.processing) {
+	      return React.createElement(
+	        'div',
 	        null,
-	        'Pick a board'
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        'Hover over a board'
-	      ),
-	      React.createElement(
-	        'ul',
-	        { className: 'pin-board-list' },
-	        boards
-	      )
-	    );
+	        'Please Wait'
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        { className: 'pin-form-right' },
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Pick a board'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Hover over a board'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'pin-board-list' },
+	          boards
+	        )
+	      );
+	    }
 	  }
 	
 	});
@@ -36397,11 +36423,13 @@
 	  },
 	
 	  deleteBoard: function (id, callback) {
+	    debugger;
 	    $.ajax({
 	      url: "/api/boards/" + id,
 	      dataType: "json",
 	      type: 'DELETE',
 	      success: function (board) {
+	        debugger;
 	        BoardsActions.removeSingleBoard(board);
 	        if (callback) {
 	          callback(board.author_id);
@@ -37027,6 +37055,7 @@
 	
 	  handleEdit: function (e) {
 	    e.preventDefault();
+	    debugger;
 	    if (this.state.title === "") {
 	      $(".required").addClass("invalid");
 	    } else {
@@ -37042,7 +37071,7 @@
 	  handleDelete: function (e) {
 	    e.preventDefault();
 	    //upon creation call success callback in BoardsUtil.
-	    BoardsUtil.deleteBoard(this.state.id, function (user_id) {
+	    BoardsUtil.deleteBoard(this.state.board.id, function (user_id) {
 	      this.history.pushState({}, "/users/" + user_id);
 	    }.bind(this));
 	  }

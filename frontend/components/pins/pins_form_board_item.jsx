@@ -50,15 +50,20 @@ var PinFormBoardItem = React.createClass({
       );
     });
 
-    return(
-      <div className="pin-form-right">
-        <h2>Pick a board</h2>
-        <p>Hover over a board</p>
-        <ul className="pin-board-list">
-          {boards}
-        </ul>
-      </div>
-    );
+    if(this.props.processing){
+      return <div>Please Wait</div>;
+    } else {
+      return(
+        <div className="pin-form-right">
+          <h2>Pick a board</h2>
+          <p>Hover over a board</p>
+          <ul className="pin-board-list">
+            {boards}
+          </ul>
+        </div>
+      );
+    }
+
   }
 
 

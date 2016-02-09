@@ -124,6 +124,7 @@ var BoardsEdit = React.createClass({
 
   handleEdit: function(e) {
     e.preventDefault();
+    debugger
     if(this.state.title === ""){
       $(".required").addClass("invalid");
     } else {
@@ -139,7 +140,7 @@ var BoardsEdit = React.createClass({
   handleDelete: function(e) {
     e.preventDefault();
     //upon creation call success callback in BoardsUtil.
-    BoardsUtil.deleteBoard(this.state.id, function (user_id) {
+    BoardsUtil.deleteBoard(this.state.board.id, function (user_id) {
       this.history.pushState({}, "/users/" + user_id);
     }.bind(this));
 

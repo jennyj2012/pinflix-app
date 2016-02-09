@@ -113,3 +113,27 @@
   width: 236px;
   margin: 0 auto;
 }
+
+#pin_file {
+  display: none;
+}
+
+.pin-file-input {
+  position: relative;
+  cursor: pointer;
+}
+
+.file-upload {
+  display: block;
+  width: 75%;
+  height: 34px;
+  padding: 10px;
+  left: 10%;
+  font-size: 18px;
+  color: #fff;
+  background-image: linear-gradient(#e3262e, #ab171e);
+  position: relative;
+  border-radius: 5%;
+  cursor: pointer;
+  overflow: hidden;
+}

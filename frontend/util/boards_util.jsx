@@ -51,11 +51,13 @@ var BoardsUtil = {
   },
 
   deleteBoard: function (id, callback){
+    debugger
     $.ajax({
       url: "/api/boards/" + id,
       dataType: "json",
       type: 'DELETE',
       success: function (board) {
+        debugger
         BoardsActions.removeSingleBoard(board);
         if(callback) { callback(board.author_id); }
 
