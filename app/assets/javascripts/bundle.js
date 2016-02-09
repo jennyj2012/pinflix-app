@@ -36120,7 +36120,7 @@
 	              type: 'text',
 	              className: 'pin[title]',
 	              id: 'pin_title',
-	              placeholder: 'Movie Title or Caption',
+	              placeholder: 'Add a Movie Title',
 	              valueLink: this.linkState('title') })
 	          ),
 	          React.createElement('textarea', {
