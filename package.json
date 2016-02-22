@@ -30,9 +30,7 @@
     "react-history": "^1.0.0",
     "react-masonry-component": "^3.0.0",
     "react-router": "^1.0.3",
-    "webpack": "^1.12.12"
-  },
-  "devDependencies": {
+    "webpack": "^1.12.12",
     "babel-plugin-transform-es2015-destructuring": "^6.5.0",
     "babel-plugin-transform-object-rest-spread": "^6.5.0",
     "babel-preset-es2015": "^6.5.0"
