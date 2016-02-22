@@ -36639,13 +36639,15 @@
 	var BoardsUtil = __webpack_require__(269);
 	var CurrentUserStore = __webpack_require__(225);
 	var SessionApiUtil = __webpack_require__(213);
+	var LinkedStateMixin = __webpack_require__(209);
 	
 	var PinFormBoardItem = React.createClass({
 	  displayName: 'PinFormBoardItem',
 	
+	  mixins: [LinkedStateMixin],
 	
 	  getInitialState: function getInitialState() {
-	    return { allBoards: [], currentUser: {} };
+	    return { allBoards: [], currentUser: {}, board_title: "" };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -36682,7 +36684,7 @@
 	        thumb,
 	        React.createElement(
 	          'figcaption',
-	          null,
+	          { className: '.title' },
 	          board.title
 	        ),
 	        React.createElement(
@@ -36720,9 +36722,41 @@
 	        React.createElement(
 	          'ul',
 	          { className: 'pin-board-list' },
-	          boards
+	          boards,
+	          React.createElement(
+	            'li',
+	            { className: 'pin-board-list-item create-board-item group required' },
+	            React.createElement('input', {
+	              type: 'text',
+	              className: 'board[title] pin-create-board-input',
+	              id: 'board_title',
+	              placeholder: 'Create Board',
+	              valueLink: this.linkState('board_title') }),
+	            React.createElement(
+	              'div',
+	              { className: 'pin-to-board-button hidden small-red-button' },
+	              React.createElement(
+	                'button',
+	                { onClick: this.handleNewBoard },
+	                'Create Board'
+	              )
+	            )
+	          )
 	        )
 	      );
+	    }
+	  },
+	
+	  handleNewBoard: function handleNewBoard(e) {
+	    e.preventDefault();
+	    e.preventDefault();
+	    if (this.state.board_title === "") {
+	      $(".required").addClass("invalid");
+	    } else {
+	      BoardsUtil.createBoard({ board: { title: this.state.board_title } }, function () {
+	        $("create-board-item").removeClass("invalid");
+	        this.setState({ board_title: "" });
+	      }.bind(this));
 	    }
 	  }
 	

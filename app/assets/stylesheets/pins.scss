@@ -50,12 +50,24 @@
   padding: 5px;
   height: 50px;
   vertical-align: middle;
+  position: relative;
+}
+
+.pin-create-board-input {
+  height: 40px;
+  width: 307px;
+  padding: 5px;
+  border: none;
+  overflow: scroll;
+  text-align: left;
+  float: left;
 }
 
 .pin-board-list-item figcaption {
   text-align: left;
   float: left;
   height: 100%;
+  width: 200px;
 }
 
 .pin-board-list-item:hover .hidden{
@@ -63,7 +75,9 @@
 }
 
 .pin-to-board-button {
-  float: right;
+  // float: right;
+  position: absolute;
+  right: 5px;
 }
 
 
