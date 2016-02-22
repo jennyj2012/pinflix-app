@@ -50,7 +50,7 @@
  }
 
 .body {
-   background-image:url('page_background_blurred.png');
+   background: image-url('page_background_blurred.png') no-repeat;
    background-size: cover;
    background-repeat: repeat;
    animation: animatedBackground 200s linear infinite;
