@@ -1,6 +1,6 @@
 #PINFLIX
 
-Welcome to [PinFlix](www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards. Pinflix is a clone of [Pinterest](https://www.pinterest.com)
+Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards. Pinflix is a clone of [Pinterest](https://www.pinterest.com)
 
 ![Pinterest](./docs/wireframes/wireframe_images/pinflix_wireframes.001.jpeg)
 
