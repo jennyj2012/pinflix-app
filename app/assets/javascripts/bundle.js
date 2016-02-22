@@ -37918,6 +37918,8 @@
 
 	'use strict';
 	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
 	var React = __webpack_require__(1);
 	var LinkedStateMixin = __webpack_require__(209);
 	var SearchResultsStore = __webpack_require__(281);
@@ -37967,14 +37969,30 @@
 	  render: function render() {
 	
 	    var totalCount = SearchResultsStore.meta().totalCount || 0;
+	    var pageCount = SearchResultsStore.all().length;
+	    var nextPageLink = [];
+	
+	    if (pageCount % totalCount !== 0 && (typeof pageCount === 'undefined' ? 'undefined' : _typeof(pageCount)) % totalCount == "number") {
+	      nextPageLink = React.createElement(
+	        'p',
+	        { onClick: this.nextPage },
+	        ' Next Page '
+	      );
+	    }
 	
 	    var summary = React.createElement(
-	      'p',
+	      'div',
 	      null,
-	      ' Displaying ',
-	      SearchResultsStore.all().length,
-	      ' of ',
-	      totalCount
+	      React.createElement(
+	        'p',
+	        null,
+	        ' Displaying ',
+	        pageCount,
+	        ' of ',
+	        totalCount,
+	        ' '
+	      ),
+	      nextPageLink
 	    );
 	
 	    var userResults = [],
@@ -38029,6 +38047,7 @@
 	        ));
 	      }
 	    });
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'search-bar' },

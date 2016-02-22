@@ -16,7 +16,7 @@
   margin: 0;
   display: block;
   width: 100%;
-  min-width: 900px;
+  min-width: 1157px;
 }
 
 .header-right{
@@ -35,7 +35,6 @@
   height: 32px;
   position: relative;
   width: 70%;
-  overflow: auto;
 }
 
 .search-bar {
@@ -79,7 +78,7 @@
   position: absolute;
   width: 100%;
   height: 200px;
-  background: white;
+  background: #fff;
   opacity: .9;
   overflow: scroll;
 }

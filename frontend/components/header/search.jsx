@@ -46,9 +46,18 @@ var Search = React.createClass({
    render: function () {
 
      var totalCount = SearchResultsStore.meta().totalCount || 0;
+     var pageCount = SearchResultsStore.all().length
+     var nextPageLink = [];
+
+     if (pageCount % totalCount !== 0 && typeof pageCount % totalCount == "number"){
+       nextPageLink = <p onClick={this.nextPage}> Next Page </p>;
+     }
 
      var summary = (
-       <p> Displaying {SearchResultsStore.all().length} of {totalCount}</p>
+       <div>
+         <p> Displaying {pageCount} of {totalCount} </p>
+         {nextPageLink}
+       </div>
      );
 
      var userResults = [], pinResults = [], boardResults = [], commentResults = [], tagResults;
@@ -83,8 +92,8 @@ var Search = React.createClass({
             </li>);
        }
      });
-    return(
 
+    return(
           <div className = "search-bar">
             <input type="text" placeholder="search" onKeyUp={ this.search }/>
             <div className="search-results hidden">
