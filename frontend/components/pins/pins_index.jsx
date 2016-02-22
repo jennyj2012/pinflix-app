@@ -4,6 +4,7 @@ var PinsStore = require('../../stores/pins_store');
 var PinsIndexItem = require('./pins_index_item');
 
 var CurrentUserStore = require("../../stores/current_user_store");
+
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
   transitionDuration: '0.5s',
@@ -16,7 +17,7 @@ var masonryOptions = {
 
 var PinsIndex = React.createClass({
   getInitialState: function (){
-    return {allPins: []};
+    return {allPins: [], page: 1};
   },
 
   componentDidMount: function (){
@@ -34,6 +35,16 @@ var PinsIndex = React.createClass({
     }
   },
 
+  nextPage: function () {
+    var nextPage = this.state.page + 1;
+    PinsUtil.fetchAllPins(nextPage);
+
+    if(this.isMounted()) {
+      this.setState({page: nextPage});
+    }
+  },
+
+
   render: function () {
     var pins = this.state.allPins.map(function (pin) {
         return <PinsIndexItem key={pin.id} pin={pin} showComments={false}/>;
@@ -49,6 +60,7 @@ var PinsIndex = React.createClass({
         >
           {pins}
         </Masonry>
+
       </div>
     );
   }

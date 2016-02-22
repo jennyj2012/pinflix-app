@@ -131,7 +131,6 @@ var BoardsEdit = React.createClass({
 
   handleEdit: function(e) {
     e.preventDefault();
-    debugger
     if(this.state.title === ""){
       $(".required").addClass("invalid");
     } else {

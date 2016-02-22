@@ -31949,6 +31949,7 @@
 	var PinsIndexItem = __webpack_require__(249);
 	
 	var CurrentUserStore = __webpack_require__(225);
+	
 	var Masonry = __webpack_require__(253);
 	var masonryOptions = {
 	  transitionDuration: '0.5s',
@@ -31963,7 +31964,7 @@
 	  displayName: 'PinsIndex',
 	
 	  getInitialState: function getInitialState() {
-	    return { allPins: [] };
+	    return { allPins: [], page: 1 };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -31978,6 +31979,15 @@
 	  __onChange: function __onChange() {
 	    if (this.isMounted()) {
 	      this.setState({ allPins: PinsStore.all() });
+	    }
+	  },
+	
+	  nextPage: function nextPage() {
+	    var nextPage = this.state.page + 1;
+	    PinsUtil.fetchAllPins(nextPage);
+	
+	    if (this.isMounted()) {
+	      this.setState({ page: nextPage });
 	    }
 	  },
 	
@@ -36591,7 +36601,6 @@
 	  },
 	
 	  handleSubmit: function handleSubmit(board_id, e) {
-	    debugger;
 	    e.preventDefault();
 	    if (this.state.title === "") {
 	      $(".required").addClass("invalid");
@@ -37579,7 +37588,6 @@
 	
 	  handleEdit: function handleEdit(e) {
 	    e.preventDefault();
-	    debugger;
 	    if (this.state.title === "") {
 	      $(".required").addClass("invalid");
 	    } else {

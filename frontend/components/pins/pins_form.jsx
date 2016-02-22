@@ -238,7 +238,6 @@ var PinsForm = React.createClass({
   },
 
   handleSubmit: function(board_id, e) {
-    debugger
     e.preventDefault();
     if(this.state.title === "") {
       $(".required").addClass("invalid");
