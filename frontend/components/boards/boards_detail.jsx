@@ -53,9 +53,10 @@ var BoardsIndexItem = React.createClass({
     var currentUser = CurrentUserStore.currentUser();
     var isCurrent = false;
 
-    if (currentBoard.author_id === currentUser.id){
+    if (typeof currentBoard !== "undefined" && currentBoard.author_id === currentUser.id){
       isCurrent = true;
     }
+    
     if(this.isMounted()) {
       this.setState({
         board: currentBoard,

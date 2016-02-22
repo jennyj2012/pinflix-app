@@ -36919,13 +36919,11 @@
 	  },
 	
 	  deleteBoard: function deleteBoard(id, callback) {
-	    debugger;
 	    $.ajax({
 	      url: "/api/boards/" + id,
 	      dataType: "json",
 	      type: 'DELETE',
 	      success: function success(board) {
-	        debugger;
 	        BoardsActions.removeSingleBoard(board);
 	        if (callback) {
 	          callback(board.author_id);
@@ -37661,9 +37659,10 @@
 	    var currentUser = CurrentUserStore.currentUser();
 	    var isCurrent = false;
 	
-	    if (currentBoard.author_id === currentUser.id) {
+	    if (typeof currentBoard !== "undefined" && currentBoard.author_id === currentUser.id) {
 	      isCurrent = true;
 	    }
+	
 	    if (this.isMounted()) {
 	      this.setState({
 	        board: currentBoard,
