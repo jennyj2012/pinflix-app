@@ -33,6 +33,9 @@ var PinsUtil = {
       success: function (pin) {
         PinsActions.receiveSinglePin(pin);
         if(callback) { callback(pin.id); }
+      },
+      error: function (xhr, statusText, errorThrown) {
+        if(callback) { callback(errorThrown); }
       }
     });
   },

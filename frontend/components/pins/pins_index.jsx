@@ -29,7 +29,9 @@ var PinsIndex = React.createClass({
   },
 
   __onChange: function (){
-    this.setState({ allPins: PinsStore.all() });
+    if(this.isMounted()) {
+      this.setState({ allPins: PinsStore.all() });
+    }
   },
 
   render: function () {
@@ -38,7 +40,7 @@ var PinsIndex = React.createClass({
     });
 
     return (
-      <div className="landing-page">
+      <div className="landing-page" >
         <Masonry
         className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
         elementType={'div'} // default 'div'

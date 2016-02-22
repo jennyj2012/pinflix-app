@@ -15,21 +15,27 @@ var Search = React.createClass({
   },
 
   _onChange: function() {
-    this.forceUpdate();
+    if(this.isMounted()) {
+      this.forceUpdate();
+    }
   },
 
   search: function (e) {
     var query = e.target.value;
     SearchApiUtil.search(query, 1);
 
-    this.setState({page: 1, query: query});
+    if(this.isMounted()) {
+      this.setState({page: 1, query: query});
+    }
   },
 
   nextPage: function () {
-      var nextPage = this.state.page + 1;
-      SearchApiUtil.search(this.state.query, nextPage);
+    var nextPage = this.state.page + 1;
+    SearchApiUtil.search(this.state.query, nextPage);
 
+    if(this.isMounted()) {
       this.setState({page: nextPage});
+    }
   },
 
   componentWillUnmount: function() {

@@ -57,11 +57,19 @@ function _ensureLoggedIn(nextState, replace, callback) {
   }
 }
 
+function _mainBackground() {
+  $("body").removeClass("body");
+}
+
+function _fancyBackground() {
+  $("body").addClass("body");
+}
+
 var router = (
   <Router>
     <Route path="session/new" component={SessionForm} onEnter={_ensureLoggedOut} />
     <Route path="users/new" component={UsersForm} onEnter={_ensureLoggedOut} />
-    <Route path="/" component={App} onEnter={_ensureLoggedIn}>
+    <Route path="/" component={App} onEnter={_ensureLoggedIn} onEnter={_mainBackground} onLeave={_fancyBackground}>
       <IndexRoute component={PinsIndex} />
       <Route path="users/:user_id" component={BoardsIndex} />
       <Route path="boards/new" component={BoardsForm} />

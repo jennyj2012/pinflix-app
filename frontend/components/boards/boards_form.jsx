@@ -16,7 +16,9 @@ var BoardsForm = React.createClass({
   },
 
   updateDescription: function(e){
-    this.setState({description: e.currentTarget.value});
+    if(this.isMounted()) {
+      this.setState({description: e.currentTarget.value});
+    }
   },
 
    render: function () {

@@ -56,12 +56,13 @@ var BoardsIndexItem = React.createClass({
     if (currentBoard.author_id === currentUser.id){
       isCurrent = true;
     }
-
-    this.setState({
-      board: currentBoard,
-      boardPins: currentPins,
-      isCurrent: isCurrent
-    });
+    if(this.isMounted()) {
+      this.setState({
+        board: currentBoard,
+        boardPins: currentPins,
+        isCurrent: isCurrent
+      });
+    }
   },
 
   render: function () {
@@ -107,12 +108,12 @@ var BoardsIndexItem = React.createClass({
 
     return (
       <div className="board-index">
-      <div className="info">
-        <h1>{boardTitle}</h1>
-        <h2>{boardAuthor}</h2>
-        <h4>{boardDescription}</h4>
-        {editButton}
-      </div>
+        <div className="info">
+          <h1>{boardTitle}</h1>
+          <h2>{boardAuthor}</h2>
+          <h4>{boardDescription}</h4>
+          {editButton}
+        </div>
 
         <div className="group">
           <Masonry

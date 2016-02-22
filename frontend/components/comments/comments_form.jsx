@@ -20,17 +20,21 @@ var CommentsForm = React.createClass({
   },
 
   _onChange: function () {
-   this.setState({currentUser: CurrentUserStore.currentUser()});
+    if(this.isMounted()) {
+      this.setState({currentUser: CurrentUserStore.currentUser()});
+    }
  },
 
   updateBody: function(e){
-    this.setState({body: e.currentTarget.value});
+    if(this.isMounted()) {
+      this.setState({body: e.currentTarget.value});
+    }
   },
 
   keydown: function(e){
-    debugger
-    if(e.target.value == 13)
-    this.setState({body: e.currentTarget.value});
+    if(e.target.value == 13 && this.isMounted()) {
+        this.setState({body: e.currentTarget.value});
+    }
   },
 
   render: function () {
@@ -69,7 +73,9 @@ var CommentsForm = React.createClass({
         body: this.state.body,
         pin_id: this.props.pin.id
       });
-      this.setState({body:  ""});
+      if(this.isMounted()) {
+        this.setState({body:  ""});
+      }
     }
   }
 });

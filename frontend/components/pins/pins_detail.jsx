@@ -30,7 +30,10 @@ var PinsDetail = React.createClass({
     } else {
       pinId = parseInt(this.props.params.pin_id);
     }
-    this.setState({ pin: PinsStore.find(pinId) });
+
+    if(this.isMounted()) {
+      this.setState({ pin: PinsStore.find(pinId) });
+    }
   },
 
   render: function () {

@@ -11,12 +11,14 @@ var PinsIndexItem = React.createClass({
     var pin = this.props.pin;
     var pinLink= "#/pins/"+ pin.id;
     var pinAuthor = "anonymous";
+    var authorLink = "#"
     var comments;
     var imageURL = pin.photo.image_url;
     // var hostname;
 
     if(typeof pin.author !== "undefined"){
       pinAuthor = pin.author.username;
+      authorLink = "#/users/" + pin.author.id;
     }
 
     if(this.props.showComments === true){
@@ -56,7 +58,7 @@ var PinsIndexItem = React.createClass({
           </section>
 
           <section className="author">
-            <a href="#">
+            <a href={authorLink}>
             Author: {pinAuthor}
             </a>
           </section>

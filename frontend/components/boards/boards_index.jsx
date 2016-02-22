@@ -57,12 +57,13 @@ var BoardsIndex = React.createClass({
     } else if (user){
       username = user.username;
     }
-
-    this.setState({
-      allBoards: boards,
-      author: username,
-      isCurrent: isCurrent
-    });
+    if(this.isMounted()) {
+      this.setState({
+        allBoards: boards,
+        author: username,
+        isCurrent: isCurrent
+      });
+    }
   },
 
   render: function () {

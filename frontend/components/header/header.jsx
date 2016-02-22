@@ -21,7 +21,9 @@ var Header = React.createClass({
   },
 
   _onChange: function () {
-   this.setState({currentUser: CurrentUserStore.currentUser()});
+   if(this.isMounted()) {
+     this.setState({currentUser: CurrentUserStore.currentUser()});
+   }
  },
 
    render: function () {
@@ -46,10 +48,6 @@ var Header = React.createClass({
             </div>
 
               <SearchBar/>
-
-            <div className="tags">
-
-            </div>
           </div>
 
           <div className="header-right group">

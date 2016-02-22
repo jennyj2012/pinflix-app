@@ -34,7 +34,9 @@ var BoardsEdit = React.createClass({
   },
 
   updateDescription: function(e){
-    this.setState({description: e.currentTarget.value});
+    if(this.isMounted()) {
+      this.setState({description: e.currentTarget.value});
+    }
   },
 
   __onChange: function (id){
@@ -49,11 +51,13 @@ var BoardsEdit = React.createClass({
     var board = BoardsStore.find(boardId);
     var user = CurrentUserStore.currentUser();
     if(typeof board !== "undefined" && board.author_id === user.id){
-      this.setState({
-        board: board,
-        author_id: board.author_id,
-        title: board.title,
-        description: board.description});
+      if(this.isMounted()) {
+        this.setState({
+          board: board,
+          author_id: board.author_id,
+          title: board.title,
+          description: board.description});
+        }
     }
   },
 
@@ -66,7 +70,7 @@ var BoardsEdit = React.createClass({
 
     if(typeof authorId !== "undefined" && authorId === user.id){
       buttons = (
-        <div>
+        <div className="page">
           <div className="small-red-button" onClick={this.handleEdit}>
             <button>Edit Board</button>
           </div>
@@ -84,7 +88,7 @@ var BoardsEdit = React.createClass({
     }
 
     return(
-      <div className="board-edit " >
+      <div className="board-edit" >
         <form className="form basic-modal group" >
           <h1>{this.state.title}</h1>
           <h2>Edit Board</h2>
@@ -129,8 +133,6 @@ var BoardsEdit = React.createClass({
       $(".required").addClass("invalid");
     } else {
       var data = {board: {title: this.state.title, description: this.state.description} };
-      // this.setState(data);
-      //upon creation call success callback in BoardsUtil.
       BoardsUtil.updateBoard(this.state.board.id, data, function (board_id) {
         this.history.pushState({}, "/boards/" + board_id);
       }.bind(this));

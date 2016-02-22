@@ -16,7 +16,8 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel',
         query: {
-          presets: ['react']
+          plugins: ["transform-object-rest-spread", "transform-es2015-destructuring"],
+          presets: ['es2015', 'react']
         }
       },
       {

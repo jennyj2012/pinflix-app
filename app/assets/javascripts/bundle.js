@@ -44,6 +44,8 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 	var Router = __webpack_require__(159).Router;
@@ -52,22 +54,22 @@
 	var History = __webpack_require__(159).History;
 	
 	var UsersForm = __webpack_require__(206);
-	var SessionForm = __webpack_require__(222);
-	var CurrentUserStore = __webpack_require__(223);
-	var SessionsApiUtil = __webpack_require__(211);
+	var SessionForm = __webpack_require__(224);
+	var CurrentUserStore = __webpack_require__(225);
+	var SessionsApiUtil = __webpack_require__(213);
 	
-	var PinsIndex = __webpack_require__(241);
-	var PinsForm = __webpack_require__(264);
-	var PinsDetail = __webpack_require__(269);
+	var PinsIndex = __webpack_require__(243);
+	var PinsForm = __webpack_require__(266);
+	var PinsDetail = __webpack_require__(271);
 	
-	var BoardsIndex = __webpack_require__(270);
-	var BoardsForm = __webpack_require__(273);
-	var BoardsEdit = __webpack_require__(274);
-	var BoardsDetail = __webpack_require__(275);
+	var BoardsIndex = __webpack_require__(272);
+	var BoardsForm = __webpack_require__(275);
+	var BoardsEdit = __webpack_require__(276);
+	var BoardsDetail = __webpack_require__(277);
 	
-	var CommentsIndex = __webpack_require__(248);
+	var CommentsIndex = __webpack_require__(250);
 	
-	var App = __webpack_require__(276);
+	var App = __webpack_require__(278);
 	
 	function _ensureLoggedOut(nextState, replace, callback) {
 	  if (CurrentUserStore.userHasBeenFetched()) {
@@ -102,6 +104,14 @@
 	  }
 	}
 	
+	function _mainBackground() {
+	  $("body").removeClass("body");
+	}
+	
+	function _fancyBackground() {
+	  $("body").addClass("body");
+	}
+	
 	var router = React.createElement(
 	  Router,
 	  null,
@@ -109,7 +119,7 @@
 	  React.createElement(Route, { path: 'users/new', component: UsersForm, onEnter: _ensureLoggedOut }),
 	  React.createElement(
 	    Route,
-	    { path: '/', component: App, onEnter: _ensureLoggedIn },
+	    { path: '/', component: App, onEnter: _ensureLoggedIn, onEnter: _mainBackground, onLeave: _fancyBackground },
 	    React.createElement(IndexRoute, { component: PinsIndex }),
 	    React.createElement(Route, { path: 'users/:user_id', component: BoardsIndex }),
 	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),
@@ -24063,30 +24073,41 @@
 /* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var _reactFormValidations = __webpack_require__(207);
+	
+	var _FormField = __webpack_require__(208);
+	
+	var _FormField2 = _interopRequireDefault(_FormField);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
+	var LinkedStateMixin = __webpack_require__(209);
 	var History = __webpack_require__(159).History;
-	var SessionApiUtil = __webpack_require__(211);
-	var UsersApiUtil = __webpack_require__(218);
-	var Footer = __webpack_require__(221);
+	var SessionApiUtil = __webpack_require__(213);
+	var UsersApiUtil = __webpack_require__(220);
+	var Footer = __webpack_require__(223);
+	
 	
 	var UserForm = React.createClass({
 	  displayName: 'UserForm',
 	
 	  mixins: [LinkedStateMixin, History],
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { username: "", email: "", password: "" };
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    // <p className="errors">Fill out all data</p>
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'div',
-	        { className: 'sign-up', onSubmit: this.handleSubmit },
+	        { className: 'sign-up' },
 	        React.createElement(
 	          'div',
 	          { className: 'log-in-button button-style-link' },
@@ -24097,8 +24118,8 @@
 	          )
 	        ),
 	        React.createElement(
-	          'form',
-	          { action: '<%= users_url %>', method: 'post' },
+	          _reactFormValidations.Form,
+	          { validators: this.validators, submit: this.handleSubmit },
 	          React.createElement(
 	            'h1',
 	            null,
@@ -24115,43 +24136,33 @@
 	            'PinFlix is a Pinterest clone.'
 	          ),
 	          React.createElement(
-	            'div',
+	            _FormField2.default,
 	            { className: 'input username required' },
-	            React.createElement('input', {
+	            React.createElement(_reactFormValidations.Input, {
 	              type: 'text',
-	              name: 'user[username]',
-	              id: 'user_username',
-	              placeholder: 'Username',
-	              valueLink: this.linkState('username') })
+	              name: 'username',
+	              placeholder: 'Username' })
 	          ),
 	          React.createElement(
-	            'div',
+	            _FormField2.default,
 	            { className: 'input email required' },
-	            React.createElement('input', {
+	            React.createElement(_reactFormValidations.Input, {
 	              type: 'text',
-	              name: 'user[email]',
-	              id: 'user_email',
-	              placeholder: 'Email',
-	              valueLink: this.linkState('email') })
+	              name: 'email',
+	              placeholder: 'Email' })
 	          ),
 	          React.createElement(
-	            'div',
+	            _FormField2.default,
 	            { className: 'input password required' },
-	            React.createElement('input', {
+	            React.createElement(_reactFormValidations.Input, {
 	              type: 'password',
-	              name: 'user[password]',
-	              id: 'user_password',
-	              placeholder: 'Password',
-	              valueLink: this.linkState('password') })
+	              name: 'password',
+	              placeholder: 'Password' })
 	          ),
 	          React.createElement(
 	            'div',
 	            { className: 'sign-up-button shade-button' },
-	            React.createElement(
-	              'button',
-	              null,
-	              'Sign Up'
-	            )
+	            React.createElement('input', { id: 'button-style-input', type: 'submit', value: 'Sign Up' })
 	          ),
 	          React.createElement(
 	            'div',
@@ -24168,25 +24179,13 @@
 	    );
 	  },
 	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	    //css validation
-	    if (this.state.username === "") {
-	      $(".username").addClass("invalid");
-	    } else if (this.state.password === "") {
-	      $(".password").addClass("invalid");
-	    }
-	    if (this.state.email === "") {
-	      $(".email").addClass("invalid");
-	    } else {
-	      var credentials = $(e.target).serializeJSON();
-	      UsersApiUtil.createUser(credentials, function () {
-	        this.history.pushState({}, "/");
-	      }.bind(this));
-	    }
+	  handleSubmit: function handleSubmit(user) {
+	    UsersApiUtil.createUser({ user: user }, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
 	  },
 	
-	  handleGuest: function (e) {
+	  handleGuest: function handleGuest(e) {
 	    e.preventDefault();
 	    var credentials = { user: { username: "Guest", password: "pinflixguest" } };
 	    this.setState(credentials);
@@ -24197,15 +24196,370 @@
 	});
 	
 	module.exports = UserForm;
+	
+	UserForm.prototype.validators = {
+	  "username": ["presence"],
+	  "email": ["presence"],
+	  "password": [function (field, values) {
+	    var val = values[field];
+	    if (!val || val.length < 6) {
+	      return "must be at least 6 characters";
+	    } else {
+	      return "";
+	    }
+	  }]
+	};
 
 /***/ },
 /* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(208);
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Input = exports.Form = exports.defaultValidators = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var presence = function presence(field, values) {
+	  var val = values[field];
+	  if (typeof val === "undefined" || typeof val === "string" && !val) {
+	    return "can't be blank";
+	  } else {
+	    return "";
+	  }
+	};
+	
+	var confirmation = function confirmation(field, values) {
+	  var val = values[field];
+	  var confirmVal = values[field + "_confirmation"];
+	  if (val !== confirmVal) {
+	    return "must match confirmation";
+	  } else {
+	    return "";
+	  }
+	};
+	
+	var defaultValidators = exports.defaultValidators = { presence: presence, confirmation: confirmation };
+	
+	var Form = exports.Form = function (_Component) {
+	  _inherits(Form, _Component);
+	
+	  function Form(props) {
+	    _classCallCheck(this, Form);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Form).call(this, props));
+	
+	    _this.state = { values: _this.props.initialValues || {}, errors: {} };
+	    _this.setValidators(props);
+	    return _this;
+	  }
+	
+	  _createClass(Form, [{
+	    key: "setValidators",
+	    value: function setValidators(props) {
+	      var _this2 = this;
+	
+	      this.validators = {};
+	      var validators = props.validators;
+	
+	      if (!validators) return;
+	      for (var field in validators) {
+	        this.validators[field] = [];
+	        validators[field].forEach(function (validator) {
+	          if (typeof validator === "string") {
+	            _this2.validators[field].push(defaultValidators[validator]);
+	          } else if (typeof validator === "function") {
+	            _this2.validators[field].push(validator);
+	          }
+	        }, this);
+	      }
+	      console.log(this.validators);
+	    }
+	  }, {
+	    key: "onChange",
+	    value: function onChange(event) {
+	      var _event$target = event.target;
+	      var name = _event$target.name;
+	      var type = _event$target.type;
+	      var value = _event$target.value;
+	      var checked = _event$target.checked;
+	
+	      if (!name) return;
+	      if (type === "checkbox") value = checked;
+	      this.state.values[name] = value;
+	      this.forceUpdate();
+	    }
+	  }, {
+	    key: "onSubmit",
+	    value: function onSubmit(event) {
+	      event.preventDefault();
+	      this.performValidations();
+	      if (!this.anyErrors()) this.props.submit(this.state.values);
+	    }
+	  }, {
+	    key: "performValidations",
+	    value: function performValidations() {
+	      var values = this.state.values,
+	          errors = {};
+	      for (var field in this.validators) {
+	        errors[field] = [];
+	        this.validators[field].forEach(function (validator) {
+	          var message = validator(field, values);
+	          if (message) errors[field].push(message);
+	        });
+	      }
+	      this.state.errors = errors;
+	      this.forceUpdate();
+	    }
+	  }, {
+	    key: "errorMessages",
+	    value: function errorMessages() {
+	      var messages = [],
+	          errors = this.state.errors;
+	      for (var field in errors) {
+	        if (errors[field].length) {
+	          errors[field].forEach(function (message) {
+	            messages.push(field.split("_").join(" ") + " " + message);
+	          });
+	        }
+	      }
+	      return messages;
+	    }
+	  }, {
+	    key: "renderErrors",
+	    value: function renderErrors() {
+	      var messages = this.errorMessages();
+	      if (!messages.length) return null;
+	      return _react2.default.createElement(
+	        "ul",
+	        { className: "errors" },
+	        messages.map(function (message, idx) {
+	          return _react2.default.createElement(
+	            "li",
+	            { key: idx },
+	            message
+	          );
+	        })
+	      );
+	    }
+	  }, {
+	    key: "hasError",
+	    value: function hasError(name) {
+	      var errors = this.state.errors[name];
+	      return errors && errors.length;
+	    }
+	  }, {
+	    key: "anyErrors",
+	    value: function anyErrors() {
+	      for (var name in this.state.errors) {
+	        if (this.hasError(name)) return true;
+	      }
+	      return false;
+	    }
+	  }, {
+	    key: "inputClassName",
+	    value: function inputClassName(name) {
+	      return this.hasError(name) ? "error" : "";
+	    }
+	  }, {
+	    key: "inputClassNames",
+	    value: function inputClassNames() {
+	      var classNames = {};
+	      for (var name in this.state.values) {
+	        classNames[name] = this.inputClassName(name);
+	      }
+	      return classNames;
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var className = this.props.className;
+	
+	      var inputClassNames = this.inputClassNames(),
+	          values = this.state.values;
+	      var childProps = { inputClassNames: inputClassNames, values: values };
+	
+	      return _react2.default.createElement(
+	        "form",
+	        {
+	          className: className,
+	          onSubmit: this.onSubmit.bind(this),
+	          onChange: this.onChange.bind(this)
+	        },
+	        this.renderErrors(),
+	        _react2.default.Children.map(this.props.children, function (child) {
+	          return _react2.default.cloneElement(child, childProps);
+	        })
+	      );
+	    }
+	  }]);
+	
+	  return Form;
+	}(_react.Component);
+	
+	Form.propTypes = {
+	  submit: _react2.default.PropTypes.func.isRequired,
+	  className: _react2.default.PropTypes.string,
+	  initialValues: _react2.default.PropTypes.object,
+	  validators: _react2.default.PropTypes.object
+	};
+	
+	var Input = exports.Input = function (_Component2) {
+	  _inherits(Input, _Component2);
+	
+	  function Input() {
+	    _classCallCheck(this, Input);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Input).apply(this, arguments));
+	  }
+	
+	  _createClass(Input, [{
+	    key: "className",
+	    value: function className() {
+	      var _props = this.props;
+	      var inputClassNames = _props.inputClassNames;
+	      var className = _props.className;
+	      var name = _props.name;
+	
+	      var result = "";
+	      if (inputClassNames && inputClassNames[name]) result += inputClassNames[name];
+	      if (className) result += " " + className;
+	      return result;
+	    }
+	  }, {
+	    key: "value",
+	    value: function value() {
+	      var _props2 = this.props;
+	      var value = _props2.value;
+	      var values = _props2.values;
+	      var name = _props2.name;
+	
+	      if (value) return value;
+	      return values[name];
+	    }
+	  }, {
+	    key: "inputProps",
+	    value: function inputProps() {
+	      var _props3 = this.props;
+	      var inputClassNames = _props3.inputClassNames;
+	      var values = _props3.values;
+	      var className = _props3.className;
+	
+	      var other = _objectWithoutProperties(_props3, ["inputClassNames", "values", "className"]);
+	
+	      var className = this.className(),
+	          value = this.value();
+	      var props = Object.assign({}, other, { className: className });
+	      if (this.props.type === "checkbox") {
+	        props.checked = value;
+	      } else {
+	        props.value = value;
+	      }
+	      return props;
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement("input", this.inputProps());
+	    }
+	  }]);
+	
+	  return Input;
+	}(_react.Component);
+	
+	Input.propTypes = {
+	  type: _react2.default.PropTypes.string.isRequired,
+	  name: _react2.default.PropTypes.string.isRequired,
+	  inputClassNames: _react2.default.PropTypes.object,
+	  values: _react2.default.PropTypes.object,
+	  className: _react2.default.PropTypes.string
+	};
+
 
 /***/ },
 /* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var FormField = function (_Component) {
+	  _inherits(FormField, _Component);
+	
+	  function FormField() {
+	    _classCallCheck(this, FormField);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(FormField).apply(this, arguments));
+	  }
+	
+	  _createClass(FormField, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var className = _props.className;
+	      var children = _props.children;
+	
+	      var other = _objectWithoutProperties(_props, ['className', 'children']);
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: className },
+	        _react2.default.Children.map(children, function (child) {
+	          return _react2.default.cloneElement(child, other);
+	        })
+	      );
+	    }
+	  }]);
+	
+	  return FormField;
+	}(_react.Component);
+
+	exports.default = FormField;
+
+/***/ },
+/* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(210);
+
+/***/ },
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24222,8 +24576,8 @@
 	
 	'use strict';
 	
-	var ReactLink = __webpack_require__(209);
-	var ReactStateSetters = __webpack_require__(210);
+	var ReactLink = __webpack_require__(211);
+	var ReactStateSetters = __webpack_require__(212);
 	
 	/**
 	 * A simple mixin around ReactLink.forState().
@@ -24246,7 +24600,7 @@
 	module.exports = LinkedStateMixin;
 
 /***/ },
-/* 209 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24320,7 +24674,7 @@
 	module.exports = ReactLink;
 
 /***/ },
-/* 210 */
+/* 212 */
 /***/ function(module, exports) {
 
 	/**
@@ -24429,20 +24783,22 @@
 	module.exports = ReactStateSetters;
 
 /***/ },
-/* 211 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CurrentUserActions = __webpack_require__(212);
+	'use strict';
+	
+	var CurrentUserActions = __webpack_require__(214);
 	
 	var SessionsApiUtil = {
 	
-	  fetchCurrentUser: function (callback) {
+	  fetchCurrentUser: function fetchCurrentUser(callback) {
 	
 	    $.ajax({
 	      url: '/api/session',
 	      type: 'GET',
 	      dataType: 'json',
-	      success: function (currentUser) {
+	      success: function success(currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        if (callback) {
 	          callback(currentUser);
@@ -24451,13 +24807,13 @@
 	    });
 	  },
 	
-	  login: function (credentials, callback) {
+	  login: function login(credentials, callback) {
 	    $.ajax({
 	      url: '/api/session',
 	      type: 'POST',
 	      dataType: 'json',
 	      data: credentials,
-	      success: function (currentUser) {
+	      success: function success(currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        if (callback) {
 	          callback();
@@ -24466,12 +24822,12 @@
 	    });
 	  },
 	
-	  logout: function (callback) {
+	  logout: function logout(callback) {
 	    $.ajax({
 	      url: '/api/session',
 	      type: 'DELETE',
 	      dataType: 'json',
-	      success: function (currentUser) {
+	      success: function success(currentUser) {
 	        CurrentUserActions.removeCurrentUser(currentUser);
 	        if (callback) {
 	          callback();
@@ -24485,21 +24841,23 @@
 	module.exports = SessionsApiUtil;
 
 /***/ },
-/* 212 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(213);
-	var CurrentUserConstants = __webpack_require__(217);
+	'use strict';
+	
+	var Dispatcher = __webpack_require__(215);
+	var CurrentUserConstants = __webpack_require__(219);
 	
 	var CurrentUserActions = {
-	  receiveCurrentUser: function (currentUser) {
+	  receiveCurrentUser: function receiveCurrentUser(currentUser) {
 	    Dispatcher.dispatch({
 	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
 	      currentUser: currentUser
 	    });
 	  },
 	
-	  removeCurrentUser: function (currentUser) {
+	  removeCurrentUser: function removeCurrentUser(currentUser) {
 	    Dispatcher.dispatch({
 	      actionType: CurrentUserConstants.REMOVE_CURRENT_USER,
 	      currentUser: currentUser
@@ -24510,14 +24868,16 @@
 	module.exports = CurrentUserActions;
 
 /***/ },
-/* 213 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(214).Dispatcher;
+	'use strict';
+	
+	var Dispatcher = __webpack_require__(216).Dispatcher;
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 214 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24529,11 +24889,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(215);
+	module.exports.Dispatcher = __webpack_require__(217);
 
 
 /***/ },
-/* 215 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24555,7 +24915,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(218);
 	
 	var _prefix = 'ID_';
 	
@@ -24770,7 +25130,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 216 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24825,9 +25185,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 217 */
+/* 219 */
 /***/ function(module, exports) {
 
+	"use strict";
+	
 	var CurrentUserConstants = {
 	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER",
 	  REMOVE_CURRENT_USER: "REMOVE_CURRENT_USER"
@@ -24836,21 +25198,23 @@
 	module.exports = CurrentUserConstants;
 
 /***/ },
-/* 218 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CurrentUserActions = __webpack_require__(212);
-	var UserActions = __webpack_require__(219);
+	"use strict";
+	
+	var CurrentUserActions = __webpack_require__(214);
+	var UserActions = __webpack_require__(221);
 	
 	var UsersApiUtil = {
 	
-	  createUser: function (credentials, callback) {
+	  createUser: function createUser(credentials, callback) {
 	    $.ajax({
 	      url: '/api/users',
 	      type: 'POST',
 	      dataType: 'json',
 	      data: credentials,
-	      success: function (currentUser) {
+	      success: function success(currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        if (callback) {
 	          callback();
@@ -24859,12 +25223,12 @@
 	    });
 	  },
 	
-	  fetchSingleUser: function (id, callback) {
+	  fetchSingleUser: function fetchSingleUser(id, callback) {
 	    $.ajax({
 	      url: '/api/users/' + id,
 	      type: 'GET',
 	      dataType: 'json',
-	      success: function (user) {
+	      success: function success(user) {
 	        UserActions.receiveSingleUser(user);
 	        if (callback) {
 	          callback(user.id);
@@ -24878,14 +25242,16 @@
 	module.exports = UsersApiUtil;
 
 /***/ },
-/* 219 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(213);
-	var UserConstants = __webpack_require__(220);
+	'use strict';
+	
+	var Dispatcher = __webpack_require__(215);
+	var UserConstants = __webpack_require__(222);
 	
 	var UserActions = {
-	  receiveSingleUser: function (user) {
+	  receiveSingleUser: function receiveSingleUser(user) {
 	    Dispatcher.dispatch({
 	      actionType: UserConstants.RECEIVE_SINGLE_USER,
 	      user: user
@@ -24897,9 +25263,11 @@
 	module.exports = UserActions;
 
 /***/ },
-/* 220 */
+/* 222 */
 /***/ function(module, exports) {
 
+	"use strict";
+	
 	var UserConstants = {
 	  RECEIVE_SINGLE_USER: "RECEIVE_SINGLE_USER",
 	  REMOVE_SINGLE_USER: "REMOVE_SINGLE_USER"
@@ -24908,16 +25276,18 @@
 	module.exports = UserConstants;
 
 /***/ },
-/* 221 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
 	var React = __webpack_require__(1);
 	
 	var Footer = React.createClass({
 	  displayName: "Footer",
 	
 	
-	  render: function () {
+	  render: function render() {
 	
 	    return React.createElement(
 	      "div",
@@ -24949,27 +25319,29 @@
 	module.exports = Footer;
 
 /***/ },
-/* 222 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
-	var History = __webpack_require__(159).History;
-	var Footer = __webpack_require__(221);
+	'use strict';
 	
-	var SessionApiUtil = __webpack_require__(211);
-	var CurrentUserStore = __webpack_require__(223);
+	var React = __webpack_require__(1);
+	var LinkedStateMixin = __webpack_require__(209);
+	var History = __webpack_require__(159).History;
+	var Footer = __webpack_require__(223);
+	
+	var SessionApiUtil = __webpack_require__(213);
+	var CurrentUserStore = __webpack_require__(225);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
 	
 	  mixins: [LinkedStateMixin, History],
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { username: "", password: "" };
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    // <p className="errors">Fill out all data</p>
 	
 	    return React.createElement(
@@ -25049,7 +25421,7 @@
 	    );
 	  },
 	
-	  handleSubmit: function (e) {
+	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
 	    if (this.state.username === "") {
 	      $(".username").addClass("invalid");
@@ -25063,10 +25435,12 @@
 	    }
 	  },
 	
-	  handleGuest: function (e) {
+	  handleGuest: function handleGuest(e) {
 	    e.preventDefault();
 	    var credentials = { user: { username: "Guest", password: "pinflixguest" } };
-	    this.setState(credentials);
+	    if (this.isMounted()) {
+	      this.setState(credentials);
+	    }
 	    SessionApiUtil.login(credentials, function () {
 	      this.history.pushState({}, "/");
 	    }.bind(this));
@@ -25077,12 +25451,14 @@
 	module.exports = SessionForm;
 
 /***/ },
-/* 223 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(224).Store;
-	var Dispatcher = __webpack_require__(213);
-	var CurrentUserConstants = __webpack_require__(217);
+	'use strict';
+	
+	var Store = __webpack_require__(226).Store;
+	var Dispatcher = __webpack_require__(215);
+	var CurrentUserConstants = __webpack_require__(219);
 	
 	var CurrentUserStore = new Store(Dispatcher);
 	
@@ -25116,7 +25492,7 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 224 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25128,15 +25504,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(225);
-	module.exports.MapStore = __webpack_require__(228);
-	module.exports.Mixin = __webpack_require__(240);
-	module.exports.ReduceStore = __webpack_require__(229);
-	module.exports.Store = __webpack_require__(230);
+	module.exports.Container = __webpack_require__(227);
+	module.exports.MapStore = __webpack_require__(230);
+	module.exports.Mixin = __webpack_require__(242);
+	module.exports.ReduceStore = __webpack_require__(231);
+	module.exports.Store = __webpack_require__(232);
 
 
 /***/ },
-/* 225 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25158,10 +25534,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(226);
+	var FluxStoreGroup = __webpack_require__(228);
 	
-	var invariant = __webpack_require__(216);
-	var shallowEqual = __webpack_require__(227);
+	var invariant = __webpack_require__(218);
+	var shallowEqual = __webpack_require__(229);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25319,7 +25695,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 226 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25338,7 +25714,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(218);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -25400,7 +25776,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 227 */
+/* 229 */
 /***/ function(module, exports) {
 
 	/**
@@ -25455,7 +25831,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 228 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25476,10 +25852,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(229);
-	var Immutable = __webpack_require__(239);
+	var FluxReduceStore = __webpack_require__(231);
+	var Immutable = __webpack_require__(241);
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(218);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -25605,7 +25981,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 229 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25626,10 +26002,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(230);
+	var FluxStore = __webpack_require__(232);
 	
-	var abstractMethod = __webpack_require__(238);
-	var invariant = __webpack_require__(216);
+	var abstractMethod = __webpack_require__(240);
+	var invariant = __webpack_require__(218);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -25712,7 +26088,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 230 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25731,11 +26107,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(231);
+	var _require = __webpack_require__(233);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(218);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -25895,7 +26271,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 231 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25908,14 +26284,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(232)
+	  EventEmitter: __webpack_require__(234)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 232 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25934,11 +26310,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(233);
-	var EventSubscriptionVendor = __webpack_require__(235);
+	var EmitterSubscription = __webpack_require__(235);
+	var EventSubscriptionVendor = __webpack_require__(237);
 	
-	var emptyFunction = __webpack_require__(237);
-	var invariant = __webpack_require__(236);
+	var emptyFunction = __webpack_require__(239);
+	var invariant = __webpack_require__(238);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -26112,7 +26488,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 233 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26133,7 +26509,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(234);
+	var EventSubscription = __webpack_require__(236);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26165,7 +26541,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 234 */
+/* 236 */
 /***/ function(module, exports) {
 
 	/**
@@ -26219,7 +26595,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26238,7 +26614,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(236);
+	var invariant = __webpack_require__(238);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -26328,7 +26704,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26383,7 +26759,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 237 */
+/* 239 */
 /***/ function(module, exports) {
 
 	/**
@@ -26425,7 +26801,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 238 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26442,7 +26818,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(218);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -26452,7 +26828,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 239 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31439,7 +31815,7 @@
 	}));
 
 /***/ },
-/* 240 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31456,9 +31832,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(226);
+	var FluxStoreGroup = __webpack_require__(228);
 	
-	var invariant = __webpack_require__(216);
+	var invariant = __webpack_require__(218);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -31562,16 +31938,18 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 241 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var PinsUtil = __webpack_require__(242);
-	var PinsStore = __webpack_require__(246);
-	var PinsIndexItem = __webpack_require__(247);
+	'use strict';
 	
-	var CurrentUserStore = __webpack_require__(223);
-	var Masonry = __webpack_require__(251);
+	var React = __webpack_require__(1);
+	var PinsUtil = __webpack_require__(244);
+	var PinsStore = __webpack_require__(248);
+	var PinsIndexItem = __webpack_require__(249);
+	
+	var CurrentUserStore = __webpack_require__(225);
+	var Masonry = __webpack_require__(253);
 	var masonryOptions = {
 	  transitionDuration: '0.5s',
 	  isFitWidth: true,
@@ -31584,24 +31962,26 @@
 	var PinsIndex = React.createClass({
 	  displayName: 'PinsIndex',
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { allPins: [] };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.pinListener = PinsStore.addListener(this.__onChange);
 	    PinsUtil.fetchAllPins();
 	  },
 	
-	  componentWillUnMount: function () {
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.pinListener.remove();
 	  },
 	
-	  __onChange: function () {
-	    this.setState({ allPins: PinsStore.all() });
+	  __onChange: function __onChange() {
+	    if (this.isMounted()) {
+	      this.setState({ allPins: PinsStore.all() });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var pins = this.state.allPins.map(function (pin) {
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: false });
 	    });
@@ -31627,28 +32007,30 @@
 	module.exports = PinsIndex;
 
 /***/ },
-/* 242 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PinsActions = __webpack_require__(243);
+	"use strict";
+	
+	var PinsActions = __webpack_require__(245);
 	
 	var PinsUtil = {
-	  fetchAllPins: function () {
+	  fetchAllPins: function fetchAllPins() {
 	    $.get({
 	      url: "/api/pins",
 	      dataType: "json",
-	      success: function (pins) {
+	      success: function success(pins) {
 	        PinsActions.receiveAllPins(pins);
 	      }
 	    });
 	  },
 	
-	  fetchSinglePin: function (id, callback) {
+	  fetchSinglePin: function fetchSinglePin(id, callback) {
 	
 	    $.get({
 	      url: "/api/pins/" + id,
 	      dataType: "json",
-	      success: function (pin) {
+	      success: function success(pin) {
 	        PinsActions.receiveSinglePin(pin);
 	        if (callback) {
 	          callback(pin.id);
@@ -31657,28 +32039,33 @@
 	    });
 	  },
 	
-	  createPin: function (formData, callback) {
+	  createPin: function createPin(formData, callback) {
 	    $.post({
 	      url: "/api/pins/",
 	      dataType: "json",
 	      processData: false,
 	      contentType: false,
 	      data: formData,
-	      success: function (pin) {
+	      success: function success(pin) {
 	        PinsActions.receiveSinglePin(pin);
 	        if (callback) {
 	          callback(pin.id);
+	        }
+	      },
+	      error: function error(xhr, statusText, errorThrown) {
+	        if (callback) {
+	          callback(errorThrown);
 	        }
 	      }
 	    });
 	  },
 	
-	  createPinComment: function (comment) {
+	  createPinComment: function createPinComment(comment) {
 	    $.post({
 	      url: "/api/comments",
 	      dataType: "json",
 	      data: { comment: comment },
-	      success: function (pin) {
+	      success: function success(pin) {
 	        PinsActions.receiveSinglePin(pin);
 	      }
 	    });
@@ -31689,22 +32076,24 @@
 	module.exports = PinsUtil;
 
 /***/ },
-/* 243 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(213);
-	var PinsConstants = __webpack_require__(244);
-	var BoardsConstants = __webpack_require__(245);
+	'use strict';
+	
+	var Dispatcher = __webpack_require__(215);
+	var PinsConstants = __webpack_require__(246);
+	var BoardsConstants = __webpack_require__(247);
 	
 	var PinsActions = {
-	  receiveAllPins: function (pins) {
+	  receiveAllPins: function receiveAllPins(pins) {
 	    Dispatcher.dispatch({
 	      actionType: PinsConstants.ALL_PINS_RECEIVED,
 	      pins: pins
 	    });
 	  },
 	
-	  receiveSinglePin: function (pin) {
+	  receiveSinglePin: function receiveSinglePin(pin) {
 	    Dispatcher.dispatch({
 	      actionType: PinsConstants.SINGLE_PIN_RECEIVED,
 	      pin: pin
@@ -31716,9 +32105,11 @@
 	module.exports = PinsActions;
 
 /***/ },
-/* 244 */
+/* 246 */
 /***/ function(module, exports) {
 
+	"use strict";
+	
 	var PinsConstants = {
 	  PINS_RECEIVED: "ALL_PINS_RECEIVED",
 	  SINGLE_PIN_RECEIVED: "SINGLE_PIN_RECEIVED"
@@ -31727,9 +32118,11 @@
 	module.exports = PinsConstants;
 
 /***/ },
-/* 245 */
+/* 247 */
 /***/ function(module, exports) {
 
+	"use strict";
+	
 	var BoardsConstants = {
 	  ALL_BOARDS_RECEIVED: "ALL_BOARDS_RECEIVED",
 	  SINGLE_BOARD_RECEIVED: "SINGLE_BOARD_RECEIVED",
@@ -31739,25 +32132,27 @@
 	module.exports = BoardsConstants;
 
 /***/ },
-/* 246 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(224).Store;
-	var Dispatcher = __webpack_require__(213);
-	var PinsConstants = __webpack_require__(244);
+	'use strict';
+	
+	var Store = __webpack_require__(226).Store;
+	var Dispatcher = __webpack_require__(215);
+	var PinsConstants = __webpack_require__(246);
 	var PinsStore = new Store(Dispatcher);
 	
 	var _pins = [];
 	
-	var resetPins = function (pins) {
+	var resetPins = function resetPins(pins) {
 	  _pins = pins;
 	};
 	
-	var addPin = function (pin) {
+	var addPin = function addPin(pin) {
 	  _pins.push(pin);
 	};
 	
-	var updatePin = function (pin) {
+	var updatePin = function updatePin(pin) {
 	  var idx;
 	  for (var i = 0; i < _pins.length; i++) {
 	    if (_pins[i].id === pin.id) {
@@ -31810,12 +32205,14 @@
 	module.exports = PinsStore;
 
 /***/ },
-/* 247 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var CommentsIndex = __webpack_require__(248);
-	var CommentsForm = __webpack_require__(250);
+	var CommentsIndex = __webpack_require__(250);
+	var CommentsForm = __webpack_require__(252);
 	var History = __webpack_require__(159).History;
 	
 	var PinsIndexItem = React.createClass({
@@ -31823,16 +32220,18 @@
 	
 	  mixins: [History],
 	
-	  render: function () {
+	  render: function render() {
 	    var pin = this.props.pin;
 	    var pinLink = "#/pins/" + pin.id;
 	    var pinAuthor = "anonymous";
+	    var authorLink = "#";
 	    var comments;
 	    var imageURL = pin.photo.image_url;
 	    // var hostname;
 	
 	    if (typeof pin.author !== "undefined") {
 	      pinAuthor = pin.author.username;
+	      authorLink = "#/users/" + pin.author.id;
 	    }
 	
 	    if (this.props.showComments === true) {
@@ -31887,7 +32286,7 @@
 	          { className: 'author' },
 	          React.createElement(
 	            'a',
-	            { href: '#' },
+	            { href: authorLink },
 	            'Author: ',
 	            pinAuthor
 	          )
@@ -31897,13 +32296,13 @@
 	    );
 	  },
 	
-	  pinIt: function (e) {
+	  pinIt: function pinIt(e) {
 	    //send info to pin form to prepopulate.
 	    e.preventDefault();
 	    this.history.pushState({}, "/pins/new/" + this.props.pin.id);
 	  },
 	
-	  showPinDetails: function (e) {
+	  showPinDetails: function showPinDetails(e) {
 	    this.history.pushState({}, "/pins/" + this.props.pin.id);
 	  }
 	});
@@ -31911,16 +32310,18 @@
 	module.exports = PinsIndexItem;
 
 /***/ },
-/* 248 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var CommentsIndexItem = __webpack_require__(249);
+	var CommentsIndexItem = __webpack_require__(251);
 	
 	var CommentsIndex = React.createClass({
 	  displayName: 'CommentsIndex',
 	
-	  render: function () {
+	  render: function render() {
 	    var comments = this.props.comments.map(function (comment) {
 	      return React.createElement(CommentsIndexItem, { key: comment.id, comment: comment });
 	    });
@@ -31937,21 +32338,25 @@
 	module.exports = CommentsIndex;
 
 /***/ },
-/* 249 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
 	var React = __webpack_require__(1);
 	
 	var CommentsIndexItem = React.createClass({
 	  displayName: "CommentsIndexItem",
 	
 	
-	  render: function () {
+	  render: function render() {
 	    var comment = this.props.comment;
+	    var authorLink = "#";
 	
 	    var commentAuthor;
 	    if (comment.author) {
 	      commentAuthor = comment.author.username;
+	      authorLink = "#/users/" + comment.author.id;
 	    } else {
 	      commentAuthor = "anonymous";
 	    }
@@ -31964,7 +32369,7 @@
 	        { className: "comment" },
 	        React.createElement(
 	          "a",
-	          { href: "#" },
+	          { href: authorLink },
 	          "Commenter: ",
 	          commentAuthor
 	        ),
@@ -31981,46 +32386,53 @@
 	module.exports = CommentsIndexItem;
 
 /***/ },
-/* 250 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
-	var CurrentUserStore = __webpack_require__(223);
+	'use strict';
 	
-	var PinsUtil = __webpack_require__(242);
-	var PinsStore = __webpack_require__(246);
+	var React = __webpack_require__(1);
+	var LinkedStateMixin = __webpack_require__(209);
+	var CurrentUserStore = __webpack_require__(225);
+	
+	var PinsUtil = __webpack_require__(244);
+	var PinsStore = __webpack_require__(248);
 	
 	var CommentsForm = React.createClass({
 	  displayName: 'CommentsForm',
 	
 	  mixins: [LinkedStateMixin],
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { body: "", currentUser: {} };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.userListener = CurrentUserStore.addListener(this._onChange);
 	  },
 	
-	  componentWillUnMount: function () {
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.userListener.remove();
 	  },
 	
-	  _onChange: function () {
-	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	  _onChange: function _onChange() {
+	    if (this.isMounted()) {
+	      this.setState({ currentUser: CurrentUserStore.currentUser() });
+	    }
 	  },
 	
-	  updateBody: function (e) {
-	    this.setState({ body: e.currentTarget.value });
+	  updateBody: function updateBody(e) {
+	    if (this.isMounted()) {
+	      this.setState({ body: e.currentTarget.value });
+	    }
 	  },
 	
-	  keydown: function (e) {
-	    debugger;
-	    if (e.target.value == 13) this.setState({ body: e.currentTarget.value });
+	  keydown: function keydown(e) {
+	    if (e.target.value == 13 && this.isMounted()) {
+	      this.setState({ body: e.currentTarget.value });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var comment = this.props.comment;
 	
 	    return React.createElement(
@@ -32057,7 +32469,7 @@
 	    );
 	  },
 	
-	  handleSubmit: function (e) {
+	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
 	
 	    if (this.state.body === "") {
@@ -32067,7 +32479,9 @@
 	        body: this.state.body,
 	        pin_id: this.props.pin.id
 	      });
-	      this.setState({ body: "" });
+	      if (this.isMounted()) {
+	        this.setState({ body: "" });
+	      }
 	    }
 	  }
 	});
@@ -32075,7 +32489,7 @@
 	module.exports = CommentsForm;
 
 /***/ },
-/* 251 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -32083,8 +32497,8 @@
 	(function() {
 	
 	var isBrowser = (typeof window !== 'undefined');
-	var Masonry = isBrowser ? window.Masonry || __webpack_require__(252) : null;
-	var imagesloaded = isBrowser ? __webpack_require__(262) : null;
+	var Masonry = isBrowser ? window.Masonry || __webpack_require__(254) : null;
+	var imagesloaded = isBrowser ? __webpack_require__(264) : null;
 	var React = __webpack_require__(1);
 	var refName = 'masonryContainer';
 	
@@ -32281,7 +32695,7 @@
 	}.call(window));
 
 /***/ },
-/* 252 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -32310,9 +32724,9 @@
 	  } else if ( true ) {
 	    // CommonJS
 	    module.exports = factory(
-	      __webpack_require__(253),
-	      __webpack_require__(256),
-	      __webpack_require__(258)
+	      __webpack_require__(255),
+	      __webpack_require__(258),
+	      __webpack_require__(260)
 	    );
 	  } else {
 	    // browser global
@@ -32495,7 +32909,7 @@
 	}.call(window));
 
 /***/ },
-/* 253 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -32529,11 +32943,11 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(254),
-	      __webpack_require__(255),
 	      __webpack_require__(256),
+	      __webpack_require__(257),
 	      __webpack_require__(258),
-	      __webpack_require__(261)
+	      __webpack_require__(260),
+	      __webpack_require__(263)
 	    );
 	  } else {
 	    // browser global
@@ -33432,7 +33846,7 @@
 	}.call(window));
 
 /***/ },
-/* 254 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -33525,7 +33939,7 @@
 	}.call(window));
 
 /***/ },
-/* 255 */
+/* 257 */
 /***/ function(module, exports) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34010,7 +34424,7 @@
 	}.call(window));
 
 /***/ },
-/* 256 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34260,7 +34674,7 @@
 	  define( [ 'get-style-property/get-style-property' ], defineGetSize );
 	} else if ( true ) {
 	  // CommonJS for Component
-	  module.exports = defineGetSize( __webpack_require__(257) );
+	  module.exports = defineGetSize( __webpack_require__(259) );
 	} else {
 	  // browser global
 	  window.getSize = defineGetSize( window.getStyleProperty );
@@ -34271,7 +34685,7 @@
 	}.call(window));
 
 /***/ },
-/* 257 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34337,7 +34751,7 @@
 	}.call(window));
 
 /***/ },
-/* 258 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34368,8 +34782,8 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(259),
-	      __webpack_require__(260)
+	      __webpack_require__(261),
+	      __webpack_require__(262)
 	    );
 	  } else {
 	    // browser global
@@ -34618,7 +35032,7 @@
 	}.call(window));
 
 /***/ },
-/* 259 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34690,7 +35104,7 @@
 	  docReady.isReady = typeof requirejs === 'function';
 	  define( [ 'eventie/eventie' ], defineDocReady );
 	} else if ( true ) {
-	  module.exports = defineDocReady( __webpack_require__(254) );
+	  module.exports = defineDocReady( __webpack_require__(256) );
 	} else {
 	  // browser global
 	  window.docReady = defineDocReady( window.eventie );
@@ -34701,7 +35115,7 @@
 	}.call(window));
 
 /***/ },
-/* 260 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34819,7 +35233,7 @@
 	}.call(window));
 
 /***/ },
-/* 261 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -34849,10 +35263,10 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(255),
-	      __webpack_require__(256),
 	      __webpack_require__(257),
-	      __webpack_require__(258)
+	      __webpack_require__(258),
+	      __webpack_require__(259),
+	      __webpack_require__(260)
 	    );
 	  } else {
 	    // browser global
@@ -35414,7 +35828,7 @@
 	}.call(window));
 
 /***/ },
-/* 262 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*** IMPORTS FROM imports-loader ***/
@@ -35443,7 +35857,7 @@
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(263)
+	      __webpack_require__(265)
 	    );
 	  } else {
 	    // browser global
@@ -35795,7 +36209,7 @@
 	}.call(window));
 
 /***/ },
-/* 263 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -35910,44 +36324,48 @@
 
 
 /***/ },
-/* 264 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
+	var LinkedStateMixin = __webpack_require__(209);
 	var History = __webpack_require__(159).History;
 	
-	var PinsUtil = __webpack_require__(242);
-	var PinsStore = __webpack_require__(246);
-	var PinFormBoardItem = __webpack_require__(265);
+	var PinsUtil = __webpack_require__(244);
+	var PinsStore = __webpack_require__(248);
+	var PinFormBoardItem = __webpack_require__(267);
 	
 	var PinsForm = React.createClass({
 	  displayName: 'PinsForm',
 	
 	  mixins: [LinkedStateMixin, History],
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return {
 	      title: "",
 	      description: "",
 	      photoId: false,
 	      pin: {},
 	      httpUrl: "",
+	      httpReady: false,
 	      upload: false,
 	      imageFile: null,
 	      imageUrl: "",
-	      processing: false
+	      processing: false,
+	      serverErrors: ""
 	    };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.pinListener = PinsStore.addListener(this.__onChange);
 	    if (typeof this.props.params.pin_id !== "undefined") {
 	      PinsUtil.fetchSinglePin(this.props.params.pin_id);
 	    }
 	  },
 	
-	  componentWillReceiveProps: function (nextProps) {
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    var pinId;
 	    if (typeof nextProps.params.pin_id !== "undefined") {
 	      pinId = parseInt(nextProps.params.pin_id);
@@ -35959,11 +36377,11 @@
 	    }
 	  },
 	
-	  componentWillUnMount: function () {
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.pinListener.remove();
 	  },
 	
-	  __onChange: function (id) {
+	  __onChange: function __onChange(id) {
 	    var prevPinId;
 	
 	    //forced prop change to props/new
@@ -35976,7 +36394,7 @@
 	    }
 	
 	    var prevPin = PinsStore.find(prevPinId);
-	    if (typeof prevPin === "undefined") {
+	    if (typeof prevPin === "undefined" && this.isMounted()) {
 	      this.setState({
 	        title: "",
 	        description: "",
@@ -35987,7 +36405,7 @@
 	        imageFile: null,
 	        imageUrl: ""
 	      });
-	    } else {
+	    } else if (this.isMounted()) {
 	      this.setState({
 	        photoId: true,
 	        pin: prevPin,
@@ -35997,43 +36415,55 @@
 	    }
 	  },
 	
-	  resetURL: function (e) {
-	    this.setState({ httpUrl: "", upload: true });
+	  resetURL: function resetURL(e) {
+	    if (this.isMounted()) {
+	      this.setState({ httpUrl: "", upload: true, httpReady: false });
+	    }
 	  },
 	
-	  changeFile: function (e) {
+	  loadUrl: function loadUrl(e) {
+	    e.preventDefault();
+	    if (this.isMounted() && this.state.httpUrl != "") {
+	      this.setState({ httpReady: true });
+	    }
+	  },
 	
-	    this.event = e;
+	  changeFile: function changeFile(e) {
 	    var reader = new FileReader();
-	    file = e.currentTarget.files[0];
+	    var file = e.currentTarget.files[0];
 	    reader.onloadend = function () {
-	      this.setState({
-	        imageFile: file,
-	        imageUrl: reader.result,
-	        upload: true
-	      });
+	      if (this.isMounted()) {
+	        this.setState({
+	          imageFile: file,
+	          imageUrl: reader.result,
+	          upload: true
+	        });
+	      }
 	    }.bind(this);
 	
 	    if (file) {
 	      reader.readAsDataURL(file); // will trigger a load end event when it completes, and invoke reader.onloadend
-	    } else {
+	    } else if (this.isMounted()) {
 	        this.setState({ upload: false, imageFile: null, imageUrl: "" });
 	      }
 	  },
 	
-	  changeUrl: function (e) {
-	    this.setState({ httpUrl: e.currentTarget.value, upload: false });
+	  changeUrl: function changeUrl(e) {
+	    if (this.isMounted()) {
+	      this.setState({ httpUrl: e.currentTarget.value, upload: false, imageUrl: "" });
+	    }
 	  },
 	
-	  updateDescription: function (e) {
-	    this.setState({ description: e.currentTarget.value });
+	  updateDescription: function updateDescription(e) {
+	    if (this.isMounted()) {
+	      this.setState({ description: e.currentTarget.value });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var imageDisplay;
 	    var pin = this.state.pin;
 	    var filename;
-	
 	    // ******************************
 	    // INPUT ITEMS
 	    // ******************************
@@ -36041,17 +36471,6 @@
 	    var inputItems = React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'input pin-url-input' },
-	        React.createElement('input', {
-	          type: 'text',
-	          className: 'pin[http_url]',
-	          id: 'pin_http_url',
-	          value: this.state.httpUrl,
-	          onChange: this.changeUrl,
-	          placeholder: 'URL' })
-	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'input pin-file-input', onClick: this.resetURL },
@@ -36071,27 +36490,49 @@
 	            onChange: this.changeFile
 	          })
 	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'input pin-url-input' },
+	        React.createElement('input', {
+	          type: 'text',
+	          className: 'pin[http_url]',
+	          id: 'pin_http_url',
+	          value: this.state.httpUrl,
+	          onChange: this.changeUrl,
+	          placeholder: 'URL'
+	        })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'small-red-button', onClick: this.loadUrl },
+	        React.createElement(
+	          'button',
+	          null,
+	          'LoadUrl'
+	        )
 	      )
 	    );
 	
 	    // ******************************
 	    // IMAGE PREVIEW SWAP
 	    // ******************************
-	
 	    //show prevPin photo only
 	    if (this.state.photoId) {
-	      imageDisplay = React.createElement('img', { className: 'preview-image', src: pin.photo.image_url });
+	      imageDisplay = this.generateImage(pin.photo.image_url);
 	      inputItems = [];
-	    }
-	    //else show url or file buttons - reset views based on input in focus
-	    else {
-	        if (this.state.httpUrl !== "") {
-	          imageDisplay = React.createElement('img', { className: 'preview-image', src: this.state.httpUrl });
-	        } else if (this.state.upload) {
-	          imageDisplay = React.createElement('img', { className: 'preview-image', src: this.state.imageUrl });
+	
+	      //else show url or file buttons - reset views based on input in focus
+	    } else if (this.state.httpUrl !== "") {
+	        if (this.state.httpReady) {
+	          imageDisplay = this.generateImage(this.state.httpUrl);
 	        } else {
 	          imageDisplay = React.createElement('div', { className: 'preview-image' });
 	        }
+	      } else if (this.state.upload) {
+	        imageDisplay = this.generateImage(this.state.imageUrl);
+	      } else {
+	        imageDisplay = React.createElement('div', { className: 'preview-image' });
 	      }
 	
 	    // ******************************
@@ -36129,7 +36570,12 @@
 	            placeholder: 'Add a description',
 	            onChange: this.updateDescription,
 	            value: this.state.description }),
-	          inputItems
+	          inputItems,
+	          React.createElement(
+	            'div',
+	            { className: 'errors' },
+	            this.state.serverErrors
+	          )
 	        ),
 	        React.createElement(
 	          'div',
@@ -36140,11 +36586,16 @@
 	    );
 	  },
 	
-	  handleSubmit: function (board_id, e) {
+	  generateImage: function generateImage(src) {
+	    return React.createElement('img', { className: 'preview-image', src: src, alt: 'Image Not Found' });
+	  },
+	
+	  handleSubmit: function handleSubmit(board_id, e) {
+	    debugger;
 	    e.preventDefault();
 	    if (this.state.title === "") {
 	      $(".required").addClass("invalid");
-	    } else {
+	    } else if (this.isMounted()) {
 	      this.setState({ processing: true });
 	      var formData = new FormData();
 	      formData.append("pin[title]", this.state.title);
@@ -36163,8 +36614,12 @@
 	        formData.append("pin[prev_photo_id]", this.state.pin.photo.id);
 	      }
 	      //upon creation call success callback in PinsUtil.
-	      PinsUtil.createPin(formData, function (pin_id) {
-	        this.history.pushState({}, "/pins/" + pin_id);
+	      PinsUtil.createPin(formData, function (data) {
+	        if (typeof data == "number") {
+	          this.history.pushState({}, "/pins/" + data);
+	        } else {
+	          this.setState({ processing: false, serverErrors: data });
+	        }
 	      }.bind(this));
 	    }
 	  }
@@ -36174,41 +36629,44 @@
 	module.exports = PinsForm;
 
 /***/ },
-/* 265 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var BoardsStore = __webpack_require__(266);
-	var BoardsUtil = __webpack_require__(267);
-	var CurrentUserStore = __webpack_require__(223);
+	var BoardsStore = __webpack_require__(268);
+	var BoardsUtil = __webpack_require__(269);
+	var CurrentUserStore = __webpack_require__(225);
+	var SessionApiUtil = __webpack_require__(213);
+	
 	var PinFormBoardItem = React.createClass({
 	  displayName: 'PinFormBoardItem',
 	
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { allBoards: [], currentUser: {} };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
+	    SessionApiUtil.fetchCurrentUser();
+	
 	    this.boardListener = BoardsStore.addListener(this.__onChange);
 	    BoardsUtil.fetchAllBoards();
 	  },
 	
-	  componentWillUnMount: function () {
-	    this.userListener.remove();
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.boardListener.remove();
 	  },
 	
-	  _userChange: function () {
-	    this.setState({ currentUser: user });
-	  },
-	
-	  __onChange: function () {
+	  __onChange: function __onChange() {
 	    var userId = CurrentUserStore.currentUser().id;
-	    this.setState({ allBoards: BoardsStore.findByUserId(userId) });
+	    if (this.isMounted()) {
+	      this.setState({ allBoards: BoardsStore.findByUserId(userId) });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var handleSubmit = this.props.handleSubmit;
 	
 	    var boards = this.state.allBoards.map(function (board) {
@@ -36273,26 +36731,28 @@
 	module.exports = PinFormBoardItem;
 
 /***/ },
-/* 266 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(224).Store;
-	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(245);
+	'use strict';
+	
+	var Store = __webpack_require__(226).Store;
+	var Dispatcher = __webpack_require__(215);
+	var BoardsConstants = __webpack_require__(247);
 	
 	var BoardsStore = new Store(Dispatcher);
 	
 	var _boards = [];
 	
-	var resetBoards = function (boards) {
+	var resetBoards = function resetBoards(boards) {
 	  _boards = boards;
 	};
 	
-	var addBoard = function (board) {
+	var addBoard = function addBoard(board) {
 	  _boards.push(board);
 	};
 	
-	var updateBoard = function (board) {
+	var updateBoard = function updateBoard(board) {
 	  var idx;
 	  for (var i = 0; i < _boards.length; i++) {
 	    if (_boards[i].id === board.id) {
@@ -36306,7 +36766,7 @@
 	  }
 	};
 	
-	var removeBoard = function (board) {
+	var removeBoard = function removeBoard(board) {
 	  var idx;
 	  for (var i = 0; i < _boards.length; i++) {
 	    if (_boards[i].id === board.id) {
@@ -36361,30 +36821,32 @@
 	module.exports = BoardsStore;
 
 /***/ },
-/* 267 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var BoardsActions = __webpack_require__(268);
+	"use strict";
+	
+	var BoardsActions = __webpack_require__(270);
 	
 	var BoardsUtil = {
-	  fetchAllBoards: function () {
+	  fetchAllBoards: function fetchAllBoards() {
 	    $.get({
 	      url: "/api/boards",
 	      dataType: "json",
-	      success: function (boards) {
+	      success: function success(boards) {
 	        BoardsActions.receiveAllBoards(boards);
 	      },
-	      error: function (xhr, textStatus, errorThrown) {
+	      error: function error(xhr, textStatus, errorThrown) {
 	        console.log(errorThrown);
 	      }
 	    });
 	  },
 	
-	  fetchSingleBoard: function (id, callback) {
+	  fetchSingleBoard: function fetchSingleBoard(id, callback) {
 	    $.get({
 	      url: "/api/boards/" + id,
 	      dataType: "json",
-	      success: function (board) {
+	      success: function success(board) {
 	        BoardsActions.receiveSingleBoard(board);
 	        if (callback) {
 	          callback(board.id);
@@ -36393,12 +36855,12 @@
 	    });
 	  },
 	
-	  createBoard: function (data, callback) {
+	  createBoard: function createBoard(data, callback) {
 	    $.post({
 	      url: "/api/boards/",
 	      dataType: "json",
 	      data: data,
-	      success: function (data) {
+	      success: function success(data) {
 	        BoardsActions.receiveSingleBoard(data);
 	        if (callback) {
 	          callback(data.id);
@@ -36407,13 +36869,13 @@
 	    });
 	  },
 	
-	  updateBoard: function (id, data, callback) {
+	  updateBoard: function updateBoard(id, data, callback) {
 	    $.ajax({
 	      url: "/api/boards/" + id,
 	      dataType: "json",
 	      type: 'PATCH',
 	      data: data,
-	      success: function (board) {
+	      success: function success(board) {
 	        BoardsActions.receiveSingleBoard(board);
 	        if (callback) {
 	          callback(board.id);
@@ -36422,13 +36884,13 @@
 	    });
 	  },
 	
-	  deleteBoard: function (id, callback) {
+	  deleteBoard: function deleteBoard(id, callback) {
 	    debugger;
 	    $.ajax({
 	      url: "/api/boards/" + id,
 	      dataType: "json",
 	      type: 'DELETE',
-	      success: function (board) {
+	      success: function success(board) {
 	        debugger;
 	        BoardsActions.removeSingleBoard(board);
 	        if (callback) {
@@ -36443,28 +36905,30 @@
 	module.exports = BoardsUtil;
 
 /***/ },
-/* 268 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(213);
-	var BoardsConstants = __webpack_require__(245);
+	'use strict';
+	
+	var Dispatcher = __webpack_require__(215);
+	var BoardsConstants = __webpack_require__(247);
 	
 	var BoardsActions = {
-	  receiveAllBoards: function (boards) {
+	  receiveAllBoards: function receiveAllBoards(boards) {
 	    Dispatcher.dispatch({
 	      actionType: BoardsConstants.ALL_BOARDS_RECEIVED,
 	      boards: boards
 	    });
 	  },
 	
-	  receiveSingleBoard: function (board) {
+	  receiveSingleBoard: function receiveSingleBoard(board) {
 	    Dispatcher.dispatch({
 	      actionType: BoardsConstants.SINGLE_BOARD_RECEIVED,
 	      board: board
 	    });
 	  },
 	
-	  removeSingleBoard: function (board) {
+	  removeSingleBoard: function removeSingleBoard(board) {
 	    Dispatcher.dispatch({
 	      actionType: BoardsConstants.SINGLE_BOARD_REMOVED,
 	      board: board
@@ -36476,47 +36940,52 @@
 	module.exports = BoardsActions;
 
 /***/ },
-/* 269 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var PinsIndexItem = __webpack_require__(247);
+	'use strict';
 	
-	var PinsUtil = __webpack_require__(242);
-	var PinsStore = __webpack_require__(246);
+	var React = __webpack_require__(1);
+	var PinsIndexItem = __webpack_require__(249);
+	
+	var PinsUtil = __webpack_require__(244);
+	var PinsStore = __webpack_require__(248);
 	
 	var PinsDetail = React.createClass({
 	  displayName: 'PinsDetail',
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { pin: {} };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.pinListener = PinsStore.addListener(this.__onChange);
 	    PinsUtil.fetchSinglePin(this.props.params.pin_id);
 	  },
 	
-	  componentWillReceiveProps: function (nextProps) {
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    var pinId = parseInt(nextProps.params.pin_id);
 	    PinsUtil.fetchSinglePin(pinId, this.__onChange);
 	  },
 	
-	  componentWillUnMount: function () {
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.pinListener.remove();
 	  },
 	
-	  __onChange: function (id) {
+	  __onChange: function __onChange(id) {
 	    var pinId;
 	    if (id) {
 	      pinId = id;
 	    } else {
 	      pinId = parseInt(this.props.params.pin_id);
 	    }
-	    this.setState({ pin: PinsStore.find(pinId) });
+	
+	    if (this.isMounted()) {
+	      this.setState({ pin: PinsStore.find(pinId) });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var pin = this.state.pin;
 	    var pinComponent = [];
 	
@@ -36548,19 +37017,21 @@
 	module.exports = PinsDetail;
 
 /***/ },
-/* 270 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(267);
-	var BoardsStore = __webpack_require__(266);
-	var UsersStore = __webpack_require__(271);
-	var UsersUtil = __webpack_require__(218);
-	var CurrentUserStore = __webpack_require__(223);
+	var BoardsUtil = __webpack_require__(269);
+	var BoardsStore = __webpack_require__(268);
+	var UsersStore = __webpack_require__(273);
+	var UsersUtil = __webpack_require__(220);
+	var CurrentUserStore = __webpack_require__(225);
 	
-	var BoardsIndexItem = __webpack_require__(272);
+	var BoardsIndexItem = __webpack_require__(274);
 	
-	var Masonry = __webpack_require__(251);
+	var Masonry = __webpack_require__(253);
 	var masonryOptions = {
 	  transitionDuration: '0.5s',
 	  isFitWidth: true,
@@ -36571,26 +37042,26 @@
 	var BoardsIndex = React.createClass({
 	  displayName: 'BoardsIndex',
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { allBoards: [], author: "", isCurrent: false };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.boardListener = BoardsStore.addListener(this.__onChange);
 	    UsersUtil.fetchSingleUser(this.props.params.user_id);
 	    BoardsUtil.fetchAllBoards();
 	  },
 	
-	  componentWillReceiveProps: function (nextProps) {
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    var userId = parseInt(nextProps.params.user_id);
 	    UsersUtil.fetchSingleUser(userId, this.__onChange);
 	  },
 	
-	  componentWillUnMount: function () {
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.boardListener.remove();
 	  },
 	
-	  __onChange: function (id) {
+	  __onChange: function __onChange(id) {
 	    var userId;
 	    if (id) {
 	      userId = id;
@@ -36610,15 +37081,16 @@
 	    } else if (user) {
 	      username = user.username;
 	    }
-	
-	    this.setState({
-	      allBoards: boards,
-	      author: username,
-	      isCurrent: isCurrent
-	    });
+	    if (this.isMounted()) {
+	      this.setState({
+	        allBoards: boards,
+	        author: username,
+	        isCurrent: isCurrent
+	      });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var boards = this.state.allBoards.map(function (board) {
 	      return React.createElement(BoardsIndexItem, {
 	        key: board.id,
@@ -36661,26 +37133,28 @@
 	module.exports = BoardsIndex;
 
 /***/ },
-/* 271 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(224).Store;
-	var Dispatcher = __webpack_require__(213);
-	var UserConstants = __webpack_require__(220);
+	'use strict';
+	
+	var Store = __webpack_require__(226).Store;
+	var Dispatcher = __webpack_require__(215);
+	var UserConstants = __webpack_require__(222);
 	
 	var UsersStore = new Store(Dispatcher);
 	
 	var _users = [];
 	
-	var resetUsers = function (users) {
+	var resetUsers = function resetUsers(users) {
 	  _users = users;
 	};
 	
-	var addUser = function (user) {
+	var addUser = function addUser(user) {
 	  _users.push(user);
 	};
 	
-	var updateUser = function (user) {
+	var updateUser = function updateUser(user) {
 	  var idx;
 	  for (var i = 0; i < _users.length; i++) {
 	    if (_users[i].id === user.id) {
@@ -36724,19 +37198,21 @@
 	module.exports = UsersStore;
 
 /***/ },
-/* 272 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var CurrentUserStore = __webpack_require__(223);
+	var CurrentUserStore = __webpack_require__(225);
 	
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
 	
 	  mixins: [History],
 	
-	  render: function () {
+	  render: function render() {
 	    var board = this.props.board;
 	    var pinThumbs = [];
 	    var editButton = [];
@@ -36799,7 +37275,7 @@
 	    );
 	  },
 	
-	  handleClick: function (e) {
+	  handleClick: function handleClick(e) {
 	    e.preventDefault();
 	    this.history.pushState({}, "/boards/" + this.props.board.id);
 	  }
@@ -36809,33 +37285,37 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 273 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
+	var LinkedStateMixin = __webpack_require__(209);
 	var History = __webpack_require__(159).History;
 	
-	var BoardsUtil = __webpack_require__(267);
-	var BoardsStore = __webpack_require__(266);
+	var BoardsUtil = __webpack_require__(269);
+	var BoardsStore = __webpack_require__(268);
 	
 	var BoardsForm = React.createClass({
 	  displayName: 'BoardsForm',
 	
 	  mixins: [LinkedStateMixin, History],
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return {
 	      title: "",
 	      description: ""
 	    };
 	  },
 	
-	  updateDescription: function (e) {
-	    this.setState({ description: e.currentTarget.value });
+	  updateDescription: function updateDescription(e) {
+	    if (this.isMounted()) {
+	      this.setState({ description: e.currentTarget.value });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	
 	    return React.createElement(
 	      'div',
@@ -36877,7 +37357,7 @@
 	    );
 	  },
 	
-	  handleSubmit: function (e) {
+	  handleSubmit: function handleSubmit(e) {
 	    e.preventDefault();
 	    if (this.state.title === "") {
 	      $(".required").addClass("invalid");
@@ -36895,19 +37375,21 @@
 	module.exports = BoardsForm;
 
 /***/ },
-/* 274 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
+	var LinkedStateMixin = __webpack_require__(209);
 	var History = __webpack_require__(159).History;
-	var CurrentUserStore = __webpack_require__(223);
-	var PinsIndexItem = __webpack_require__(247);
+	var CurrentUserStore = __webpack_require__(225);
+	var PinsIndexItem = __webpack_require__(249);
 	
-	var BoardsUtil = __webpack_require__(267);
-	var BoardsStore = __webpack_require__(266);
+	var BoardsUtil = __webpack_require__(269);
+	var BoardsStore = __webpack_require__(268);
 	
-	var Masonry = __webpack_require__(251);
+	var Masonry = __webpack_require__(253);
 	var masonryOptions = {
 	  transitionDuration: '0',
 	  isFitWidth: true
@@ -36917,7 +37399,7 @@
 	
 	  mixins: [LinkedStateMixin, History],
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return {
 	      board: {},
 	      author_id: null,
@@ -36926,20 +37408,22 @@
 	    };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.boardListener = BoardsStore.addListener(this.__onChange);
 	    BoardsUtil.fetchSingleBoard(this.props.params.board_id);
 	  },
 	
-	  componentWillUnMount: function () {
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.boardDetailListener.remove();
 	  },
 	
-	  updateDescription: function (e) {
-	    this.setState({ description: e.currentTarget.value });
+	  updateDescription: function updateDescription(e) {
+	    if (this.isMounted()) {
+	      this.setState({ description: e.currentTarget.value });
+	    }
 	  },
 	
-	  __onChange: function (id) {
+	  __onChange: function __onChange(id) {
 	    var boardId;
 	
 	    if (id) {
@@ -36951,15 +37435,17 @@
 	    var board = BoardsStore.find(boardId);
 	    var user = CurrentUserStore.currentUser();
 	    if (typeof board !== "undefined" && board.author_id === user.id) {
-	      this.setState({
-	        board: board,
-	        author_id: board.author_id,
-	        title: board.title,
-	        description: board.description });
+	      if (this.isMounted()) {
+	        this.setState({
+	          board: board,
+	          author_id: board.author_id,
+	          title: board.title,
+	          description: board.description });
+	      }
 	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var buttons = [];
 	    var board = this.state.board;
 	    var user = CurrentUserStore.currentUser();
@@ -36969,7 +37455,7 @@
 	    if (typeof authorId !== "undefined" && authorId === user.id) {
 	      buttons = React.createElement(
 	        'div',
-	        null,
+	        { className: 'page' },
 	        React.createElement(
 	          'div',
 	          { className: 'small-red-button', onClick: this.handleEdit },
@@ -36999,7 +37485,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'board-edit ' },
+	      { className: 'board-edit' },
 	      React.createElement(
 	        'form',
 	        { className: 'form basic-modal group' },
@@ -37053,22 +37539,20 @@
 	    );
 	  },
 	
-	  handleEdit: function (e) {
+	  handleEdit: function handleEdit(e) {
 	    e.preventDefault();
 	    debugger;
 	    if (this.state.title === "") {
 	      $(".required").addClass("invalid");
 	    } else {
 	      var data = { board: { title: this.state.title, description: this.state.description } };
-	      // this.setState(data);
-	      //upon creation call success callback in BoardsUtil.
 	      BoardsUtil.updateBoard(this.state.board.id, data, function (board_id) {
 	        this.history.pushState({}, "/boards/" + board_id);
 	      }.bind(this));
 	    }
 	  },
 	
-	  handleDelete: function (e) {
+	  handleDelete: function handleDelete(e) {
 	    e.preventDefault();
 	    //upon creation call success callback in BoardsUtil.
 	    BoardsUtil.deleteBoard(this.state.board.id, function (user_id) {
@@ -37081,19 +37565,21 @@
 	module.exports = BoardsEdit;
 
 /***/ },
-/* 275 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var BoardsUtil = __webpack_require__(267);
-	var BoardsStore = __webpack_require__(266);
-	var PinsIndexItem = __webpack_require__(247);
-	var CurrentUserStore = __webpack_require__(223);
+	var BoardsUtil = __webpack_require__(269);
+	var BoardsStore = __webpack_require__(268);
+	var PinsIndexItem = __webpack_require__(249);
+	var CurrentUserStore = __webpack_require__(225);
 	
-	var PinsUtil = __webpack_require__(242);
-	var PinsStore = __webpack_require__(246);
+	var PinsUtil = __webpack_require__(244);
+	var PinsStore = __webpack_require__(248);
 	
-	var Masonry = __webpack_require__(251);
+	var Masonry = __webpack_require__(253);
 	var masonryOptions = {
 	  transitionDuration: '0.5s',
 	  isFitWidth: true,
@@ -37106,11 +37592,11 @@
 	var BoardsIndexItem = React.createClass({
 	  displayName: 'BoardsIndexItem',
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { board: {}, boardPins: [], isCurrent: false };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.boardDetailListener = BoardsStore.addListener(this.__onChange);
 	    BoardsUtil.fetchSingleBoard(this.props.params.board_id);
 	
@@ -37118,17 +37604,17 @@
 	    PinsUtil.fetchAllPins();
 	  },
 	
-	  componentWillReceiveProps: function (nextProps) {
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    var boardId = parseInt(nextProps.params.board_id);
 	    BoardsUtil.fetchSingleBoard(boardId, this.__onChange);
 	  },
 	
-	  componentWillUnMount: function () {
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.boardDetailListener.remove();
 	    this.pinListener.remove();
 	  },
 	
-	  __onChange: function (id) {
+	  __onChange: function __onChange(id) {
 	    var boardId;
 	    if (id) {
 	      boardId = id;
@@ -37144,15 +37630,16 @@
 	    if (currentBoard.author_id === currentUser.id) {
 	      isCurrent = true;
 	    }
-	
-	    this.setState({
-	      board: currentBoard,
-	      boardPins: currentPins,
-	      isCurrent: isCurrent
-	    });
+	    if (this.isMounted()) {
+	      this.setState({
+	        board: currentBoard,
+	        boardPins: currentPins,
+	        isCurrent: isCurrent
+	      });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var board = this.state.board;
 	    var boardTitle = "";
 	    var boardDescription = "";
@@ -37243,25 +37730,26 @@
 	module.exports = BoardsIndexItem;
 
 /***/ },
-/* 276 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var SessionApiUtil = __webpack_require__(211);
-	var CurrentUserStore = __webpack_require__(223);
-	var Header = __webpack_require__(277);
-	var Footer = __webpack_require__(221);
+	var SessionApiUtil = __webpack_require__(213);
+	var CurrentUserStore = __webpack_require__(225);
+	var Header = __webpack_require__(279);
+	var Footer = __webpack_require__(223);
 	
 	var App = React.createClass({
 	  displayName: 'App',
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.current_user_listener = CurrentUserStore.addListener(this.forceUpdate.bind(this));
 	    SessionApiUtil.fetchCurrentUser();
 	  },
 	
-	  render: function () {
-	
+	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37280,38 +37768,42 @@
 	module.exports = App;
 
 /***/ },
-/* 277 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var CurrentUserStore = __webpack_require__(223);
+	var CurrentUserStore = __webpack_require__(225);
 	
-	var SearchBar = __webpack_require__(278);
-	var SessionApiUtil = __webpack_require__(211);
+	var SearchBar = __webpack_require__(280);
+	var SessionApiUtil = __webpack_require__(213);
 	
 	var Header = React.createClass({
 	  displayName: 'Header',
 	
 	  mixins: [History],
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { currentUser: {} };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.headerListener = CurrentUserStore.addListener(this._onChange);
 	  },
 	
-	  componentWillUnMount: function () {
+	  componentWillUnMount: function componentWillUnMount() {
 	    this.headerListener.remove();
 	  },
 	
-	  _onChange: function () {
-	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	  _onChange: function _onChange() {
+	    if (this.isMounted()) {
+	      this.setState({ currentUser: CurrentUserStore.currentUser() });
+	    }
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	    var user = this.state.currentUser;
 	    var userBoards;
 	
@@ -37339,8 +37831,7 @@
 	              React.createElement('img', { src: window.pinflix.logo })
 	            )
 	          ),
-	          React.createElement(SearchBar, null),
-	          React.createElement('div', { className: 'tags' })
+	          React.createElement(SearchBar, null)
 	        ),
 	        React.createElement(
 	          'div',
@@ -37368,7 +37859,7 @@
 	    );
 	  },
 	
-	  logout: function (e) {
+	  logout: function logout(e) {
 	    e.preventDefault();
 	    SessionApiUtil.logout(function () {
 	      this.history.pushState({}, "/session/new");
@@ -37380,50 +37871,58 @@
 	module.exports = Header;
 
 /***/ },
-/* 278 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(207);
-	var SearchResultsStore = __webpack_require__(279);
-	var SearchApiUtil = __webpack_require__(281);
+	var LinkedStateMixin = __webpack_require__(209);
+	var SearchResultsStore = __webpack_require__(281);
+	var SearchApiUtil = __webpack_require__(283);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
 	
 	  mixins: [LinkedStateMixin],
 	
-	  getInitialState: function () {
+	  getInitialState: function getInitialState() {
 	    return { page: 1, query: "" };
 	  },
 	
-	  componentDidMount: function () {
+	  componentDidMount: function componentDidMount() {
 	    this.listener = SearchResultsStore.addListener(this._onChange);
 	  },
 	
-	  _onChange: function () {
-	    this.forceUpdate();
+	  _onChange: function _onChange() {
+	    if (this.isMounted()) {
+	      this.forceUpdate();
+	    }
 	  },
 	
-	  search: function (e) {
+	  search: function search(e) {
 	    var query = e.target.value;
 	    SearchApiUtil.search(query, 1);
 	
-	    this.setState({ page: 1, query: query });
+	    if (this.isMounted()) {
+	      this.setState({ page: 1, query: query });
+	    }
 	  },
 	
-	  nextPage: function () {
+	  nextPage: function nextPage() {
 	    var nextPage = this.state.page + 1;
 	    SearchApiUtil.search(this.state.query, nextPage);
 	
-	    this.setState({ page: nextPage });
+	    if (this.isMounted()) {
+	      this.setState({ page: nextPage });
+	    }
 	  },
 	
-	  componentWillUnmount: function () {
+	  componentWillUnmount: function componentWillUnmount() {
 	    this.listener.remove();
 	  },
 	
-	  render: function () {
+	  render: function render() {
 	
 	    var totalCount = SearchResultsStore.meta().totalCount || 0;
 	
@@ -37535,12 +38034,14 @@
 	module.exports = Search;
 
 /***/ },
-/* 279 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(224).Store;
-	var AppDispatcher = __webpack_require__(213);
-	var SearchConstants = __webpack_require__(280);
+	'use strict';
+	
+	var Store = __webpack_require__(226).Store;
+	var AppDispatcher = __webpack_require__(215);
+	var SearchConstants = __webpack_require__(282);
 	
 	var _searchResults = [];
 	var _meta = {};
@@ -37569,9 +38070,10 @@
 	module.exports = SearchResultsStore;
 
 /***/ },
-/* 280 */
+/* 282 */
 /***/ function(module, exports) {
 
+	"use strict";
 	
 	var SearchConstants = {
 	  RECEIVE_SEARCH_RESULTS: "RECEIVE_SEARCH_RESULTS"
@@ -37580,20 +38082,22 @@
 	module.exports = SearchConstants;
 
 /***/ },
-/* 281 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchActions = __webpack_require__(282);
+	'use strict';
+	
+	var SearchActions = __webpack_require__(284);
 	
 	var SearchApiUtil = {
 	
-	  search: function (query, page) {
+	  search: function search(query, page) {
 	    $.ajax({
 	      url: '/api/search',
 	      type: 'GET',
 	      dataType: 'json',
 	      data: { query: query, page: page },
-	      success: function (data) {
+	      success: function success(data) {
 	        SearchActions.receiveResults(data);
 	      }
 	    });
@@ -37604,14 +38108,16 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 282 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchConstants = __webpack_require__(280);
-	var AppDispatcher = __webpack_require__(213);
+	'use strict';
+	
+	var SearchConstants = __webpack_require__(282);
+	var AppDispatcher = __webpack_require__(215);
 	
 	var SearchActions = {
-	  receiveResults: function (data) {
+	  receiveResults: function receiveResults(data) {
 	    AppDispatcher.dispatch({
 	      actionType: SearchConstants.RECEIVE_SEARCH_RESULTS,
 	      searchResults: data.results,

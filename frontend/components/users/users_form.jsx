@@ -4,7 +4,8 @@ var History = require('react-router').History;
 var SessionApiUtil = require('../../util/session_util');
 var UsersApiUtil = require('../../util/users_util');
 var Footer = require('../footer/footer');
-
+import { Form, Input } from 'react-form-validations';
+import FormField from './FormField';
 
 
 var UserForm = React.createClass({
@@ -18,52 +19,47 @@ var UserForm = React.createClass({
     // <p className="errors">Fill out all data</p>
     return (
       <div>
-        <div className="sign-up" onSubmit={this.handleSubmit}>
+        <div className="sign-up">
           <div className="log-in-button button-style-link">
               <a href="#/session/new">Log in</a>
           </div>
 
-        <form action="<%= users_url %>" method="post">
+        <Form validators={this.validators} submit={this.handleSubmit}>
           <h1>Sign Up for PinFlix</h1>
           <p>Join PinFlix and discover and save movie ideas.</p>
           <p>PinFlix is a Pinterest clone.</p>
 
-          <div className="input username required">
-            <input
+          <FormField className="input username required">
+            <Input
               type="text"
-              name="user[username]"
-              id="user_username"
-              placeholder="Username"
-              valueLink={this.linkState('username')}/>
-          </div>
+              name="username"
+              placeholder="Username"/>
+          </FormField>
 
-          <div className="input email required">
-            <input
+          <FormField className="input email required">
+            <Input
               type="text"
-              name="user[email]"
-              id="user_email"
-              placeholder="Email"
-              valueLink={this.linkState('email')}/>
-          </div>
+              name="email"
+              placeholder="Email"/>
+          </FormField>
 
-          <div className="input password required">
-            <input
+        <FormField className="input password required">
+            <Input
               type="password"
-              name="user[password]"
-              id="user_password"
-              placeholder="Password"
-              valueLink={this.linkState('password')}/>
-          </div>
+              name="password"
+              placeholder="Password"/>
+          </FormField>
+
 
           <div className="sign-up-button shade-button">
-            <button>Sign Up</button>
+            <input id="button-style-input" type="submit" value="Sign Up" />
           </div>
 
           <div className="sign-up-button shade-button">
             <button onClick={this.handleGuest}>Guest Sign In</button>
           </div>
+        </Form>
 
-        </form>
       </div>
 
       <Footer />
@@ -71,22 +67,10 @@ var UserForm = React.createClass({
     );
   },
 
-  handleSubmit: function(e) {
-    e.preventDefault();
-    //css validation
-    if(this.state.username === ""){
-      $(".username").addClass("invalid");
-    } else if(this.state.password === ""){
-      $(".password").addClass("invalid");
-    }
-    if(this.state.email === ""){
-      $(".email").addClass("invalid");
-    } else {
-      var credentials = $(e.target).serializeJSON();
-      UsersApiUtil.createUser(credentials, function () {
-        this.history.pushState({}, "/");
-      }.bind(this));
-    }
+  handleSubmit: function(user) {
+    UsersApiUtil.createUser({user}, function () {
+      this.history.pushState({}, "/");
+    }.bind(this));
   },
 
   handleGuest: function(e) {
@@ -100,3 +84,16 @@ var UserForm = React.createClass({
 });
 
 module.exports = UserForm;
+
+UserForm.prototype.validators = {
+  "username": ["presence"],
+  "email": ["presence"],
+  "password": [(field, values) => {
+    const val = values[field];
+    if (!val || val.length < 6) {
+      return "must be at least 6 characters";
+    } else {
+      return "";
+    }
+  }]
+};

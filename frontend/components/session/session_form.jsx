@@ -80,7 +80,9 @@ var SessionForm = React.createClass({
   handleGuest: function(e) {
     e.preventDefault();
     var credentials = {user: {username: "Guest", password: "pinflixguest"} };
-    this.setState(credentials);
+    if(this.isMounted()) {
+      this.setState(credentials);
+    }
     SessionApiUtil.login(credentials, function () {
       this.history.pushState({}, "/");
     }.bind(this));

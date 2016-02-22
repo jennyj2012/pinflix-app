@@ -8,12 +8,10 @@
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="body">
   <script type="text/javascript">
-    window.pinflix = {logo: "<%= asset_path('pinflix_logo.gif') %>", movie: "<%= asset_path('movie_background.jpg') %>" }
+    window.pinflix = {logo: "<%= asset_path('pinflix_logo.gif') %>", movie: "<%= asset_path('movie_background.jpg') %>", background: "<%= asset_path('page_background_blurred.png') %>"}
   </script>
-
-<%= yield %>
-
+  <%= yield %>
 </body>
 </html>

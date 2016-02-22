@@ -16,10 +16,12 @@ var PinsForm = React.createClass({
       photoId: false,
       pin: { },
       httpUrl: "",
+      httpReady: false,
       upload: false,
       imageFile: null,
       imageUrl: "",
-      processing: false
+      processing: false,
+      serverErrors: ""
     };
   },
 
@@ -43,7 +45,7 @@ var PinsForm = React.createClass({
   },
 
   componentWillUnMount: function () {
-      this.pinListener.remove();
+    this.pinListener.remove();
   },
 
   __onChange: function (id){
@@ -59,7 +61,7 @@ var PinsForm = React.createClass({
     }
 
     var prevPin = PinsStore.find(prevPinId);
-    if(typeof prevPin === "undefined"){
+    if(typeof prevPin === "undefined" && this.isMounted()){
       this.setState({
         title: "",
         description: "",
@@ -70,7 +72,7 @@ var PinsForm = React.createClass({
         imageFile: null,
         imageUrl: ""
       });
-    } else {
+    } else if(this.isMounted()) {
       this.setState({
         photoId: true,
         pin: prevPin,
@@ -81,101 +83,112 @@ var PinsForm = React.createClass({
   },
 
   resetURL: function (e){
-    this.setState({httpUrl: "", upload: true});
+    if(this.isMounted()) {
+      this.setState({ httpUrl: "", upload: true, httpReady: false });
+    }
+  },
+
+  loadUrl: function(e){
+    e.preventDefault();
+    if(this.isMounted() && this.state.httpUrl != "") {
+        this.setState({httpReady: true});
+    }
   },
 
   changeFile: function(e) {
-
-    this.event = e;
     var reader = new FileReader();
-    file = e.currentTarget.files[0];
+    var file = e.currentTarget.files[0];
     reader.onloadend = function () {
-      this.setState({
-        imageFile: file,
-        imageUrl: reader.result,
-        upload: true
-      });
+      if(this.isMounted()) {
+        this.setState({
+          imageFile: file,
+          imageUrl: reader.result,
+          upload: true
+        });
+      }
     }.bind(this);
 
     if (file) {
       reader.readAsDataURL(file); // will trigger a load end event when it completes, and invoke reader.onloadend
-
-    } else {
+    } else if(this.isMounted()) {
       this.setState({upload: false, imageFile: null, imageUrl: ""});
     }
   },
 
   changeUrl: function(e){
-    this.setState({ httpUrl: e.currentTarget.value, upload: false });
+    if(this.isMounted()) {
+      this.setState({ httpUrl: e.currentTarget.value, upload: false, imageUrl: "" });
+    }
   },
 
   updateDescription: function(e){
-    this.setState({description: e.currentTarget.value});
+    if(this.isMounted()) {
+      this.setState({description: e.currentTarget.value});
+    }
   },
 
   render: function () {
     var imageDisplay;
     var pin = this.state.pin;
     var filename;
-
     // ******************************
     // INPUT ITEMS
     // ******************************
 
     var inputItems = (
       <div>
-        <div className="input pin-url-input" >
+        <div className="input pin-file-input" onClick={this.resetURL} >
+          <label className="file-upload" >
+            <i className="fa fa-camera"></i>
+            <p>{this.state.imageUrl}</p>
+            <input
+              type="file"
+              className="pin[file]"
+              id="pin_file"
+              onChange={this.changeFile}
+              />
+          </label>
+        </div>
+
+        <div className="input pin-url-input">
           <input
             type="text"
             className="pin[http_url]"
             id="pin_http_url"
             value={this.state.httpUrl}
             onChange={this.changeUrl}
-            placeholder="URL" />
-        </div>
-
-
-        <div className="input pin-file-input" onClick={this.resetURL} >
-        <label className="file-upload" >
-          <i className="fa fa-camera"></i>
-          <p>{this.state.imageUrl}</p>
-        <input
-          type="file"
-          className="pin[file]"
-          id="pin_file"
-          onChange={this.changeFile}
+            placeholder="URL"
           />
-        </label>
-        </div>
+      </div>
+
+          <div className="small-red-button" onClick={this.loadUrl}>
+            <button>LoadUrl</button>
+          </div>
+
     </div>
     );
 
     // ******************************
     // IMAGE PREVIEW SWAP
     // ******************************
-
     //show prevPin photo only
     if (this.state.photoId) {
-      imageDisplay = (
-        <img className="preview-image" src={pin.photo.image_url}/>
-      );
+      imageDisplay = this.generateImage(pin.photo.image_url);
       inputItems = [];
-    }
+
     //else show url or file buttons - reset views based on input in focus
-    else {
-      if (this.state.httpUrl !== "") {
-      imageDisplay = (
-        <img className="preview-image" src={this.state.httpUrl}/>
-      );
-    } else if (this.state.upload) {
-        imageDisplay = (
-          <img className="preview-image" src={this.state.imageUrl}/>
-        );
-      } else {
-        imageDisplay = (
-          <div className="preview-image"></div>
-        );
+    } else if (this.state.httpUrl !== "") {
+      if(this.state.httpReady) {
+        imageDisplay = this.generateImage(this.state.httpUrl);
       }
+      else {
+        imageDisplay = (<div className="preview-image"></div>);
+      }
+
+    } else if (this.state.upload) {
+      imageDisplay = this.generateImage(this.state.imageUrl);
+    } else {
+      imageDisplay = <div className="preview-image"></div>;
     }
 
     // ******************************
@@ -207,6 +220,9 @@ var PinsForm = React.createClass({
               value={this.state.description}></textarea>
 
           {inputItems}
+          <div className="errors">
+            {this.state.serverErrors}
+          </div>
 
           </div>
             <div>
@@ -217,11 +233,16 @@ var PinsForm = React.createClass({
     );
   },
 
+  generateImage: function (src) {
+    return <img className="preview-image" src={src} alt="Image Not Found"/>
+  },
+
   handleSubmit: function(board_id, e) {
+    debugger
     e.preventDefault();
-    if(this.state.title === ""){
+    if(this.state.title === "") {
       $(".required").addClass("invalid");
-    } else {
+    } else if(this.isMounted()) {
       this.setState({processing: true});
       var formData = new FormData();
       formData.append("pin[title]", this.state.title);
@@ -240,9 +261,16 @@ var PinsForm = React.createClass({
         formData.append("pin[prev_photo_id]", this.state.pin.photo.id);
       }
       //upon creation call success callback in PinsUtil.
-      PinsUtil.createPin(formData, function (pin_id) {
-        this.history.pushState({}, "/pins/" + pin_id);
-      }.bind(this));
+      PinsUtil.createPin(
+        formData,
+        function (data) {
+          if(typeof data == "number") {
+            this.history.pushState({}, "/pins/" + data);
+          } else {
+            this.setState({ processing: false, serverErrors: data});
+          }
+        }.bind(this)
+      );
     }
   }
 
