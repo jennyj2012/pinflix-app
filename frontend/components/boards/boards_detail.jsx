@@ -3,6 +3,7 @@ var BoardsUtil = require('../../util/boards_util');
 var BoardsStore = require('../../stores/boards_store');
 var PinsIndexItem = require('../pins/pins_index_item');
 var CurrentUserStore = require('../../stores/current_user_store');
+var SessionApiUtil = require('../../util/session_util');
 
 var PinsUtil = require('../../util/pins_util');
 var PinsStore = require('../../stores/pins_store');
@@ -23,6 +24,8 @@ var BoardsIndexItem = React.createClass({
   },
 
   componentDidMount: function (){
+    SessionApiUtil.fetchCurrentUser();
+
     this.boardDetailListener = BoardsStore.addListener(this.__onChange);
     BoardsUtil.fetchSingleBoard(this.props.params.board_id);
 
@@ -56,7 +59,7 @@ var BoardsIndexItem = React.createClass({
     if (typeof currentBoard !== "undefined" && currentBoard.author_id === currentUser.id){
       isCurrent = true;
     }
-    
+
     if(this.isMounted()) {
       this.setState({
         board: currentBoard,

@@ -37060,6 +37060,7 @@
 	var UsersStore = __webpack_require__(273);
 	var UsersUtil = __webpack_require__(220);
 	var CurrentUserStore = __webpack_require__(225);
+	var SessionApiUtil = __webpack_require__(213);
 	
 	var BoardsIndexItem = __webpack_require__(274);
 	
@@ -37079,6 +37080,8 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
+	    SessionApiUtil.fetchCurrentUser();
+	
 	    this.boardListener = BoardsStore.addListener(this.__onChange);
 	    UsersUtil.fetchSingleUser(this.props.params.user_id);
 	    BoardsUtil.fetchAllBoards();
@@ -37417,6 +37420,7 @@
 	var History = __webpack_require__(159).History;
 	var CurrentUserStore = __webpack_require__(225);
 	var PinsIndexItem = __webpack_require__(249);
+	var SessionApiUtil = __webpack_require__(213);
 	
 	var BoardsUtil = __webpack_require__(269);
 	var BoardsStore = __webpack_require__(268);
@@ -37441,6 +37445,8 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
+	    SessionApiUtil.fetchCurrentUser();
+	
 	    this.boardListener = BoardsStore.addListener(this.__onChange);
 	    BoardsUtil.fetchSingleBoard(this.props.params.board_id);
 	  },
@@ -37607,6 +37613,7 @@
 	var BoardsStore = __webpack_require__(268);
 	var PinsIndexItem = __webpack_require__(249);
 	var CurrentUserStore = __webpack_require__(225);
+	var SessionApiUtil = __webpack_require__(213);
 	
 	var PinsUtil = __webpack_require__(244);
 	var PinsStore = __webpack_require__(248);
@@ -37629,6 +37636,8 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
+	    SessionApiUtil.fetchCurrentUser();
+	
 	    this.boardDetailListener = BoardsStore.addListener(this.__onChange);
 	    BoardsUtil.fetchSingleBoard(this.props.params.board_id);
 	

@@ -3,6 +3,7 @@ var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var History = require('react-router').History;
 var CurrentUserStore = require('../../stores/current_user_store');
 var PinsIndexItem = require('../pins/pins_index_item');
+var SessionApiUtil = require('../../util/session_util');
 
 var BoardsUtil = require('../../util/boards_util');
 var BoardsStore = require('../../stores/boards_store');
@@ -25,6 +26,8 @@ var BoardsEdit = React.createClass({
   },
 
   componentDidMount: function () {
+    SessionApiUtil.fetchCurrentUser();
+
     this.boardListener = BoardsStore.addListener(this.__onChange);
     BoardsUtil.fetchSingleBoard(this.props.params.board_id);
   },

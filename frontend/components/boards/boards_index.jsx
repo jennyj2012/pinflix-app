@@ -4,6 +4,7 @@ var BoardsStore = require('../../stores/boards_store');
 var UsersStore = require('../../stores/users_store');
 var UsersUtil = require('../../util/users_util');
 var CurrentUserStore = require('../../stores/current_user_store');
+var SessionApiUtil = require('../../util/session_util');
 
 var BoardsIndexItem = require('./boards_index_item');
 
@@ -22,6 +23,8 @@ var BoardsIndex = React.createClass({
   },
 
   componentDidMount: function (){
+    SessionApiUtil.fetchCurrentUser();
+
     this.boardListener = BoardsStore.addListener(this.__onChange);
     UsersUtil.fetchSingleUser(this.props.params.user_id);
     BoardsUtil.fetchAllBoards();
