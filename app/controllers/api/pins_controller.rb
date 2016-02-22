@@ -34,7 +34,7 @@ class Api::PinsController < ApplicationController
     if @pin.save
       render "api/pins/show"
     else
-      render json: @pin, status: :unprocessable_entity
+      render json: @pin, status: 422
     end
   end
 

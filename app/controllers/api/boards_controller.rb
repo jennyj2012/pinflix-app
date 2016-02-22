@@ -14,7 +14,7 @@ class Api::BoardsController < ApplicationController
     if @board.save
       render "api/boards/show"
     else
-      render json: @board, status: :unprocessable_entity
+      render json: @board, status: 422
     end
   end
 
@@ -24,7 +24,7 @@ class Api::BoardsController < ApplicationController
     if @board.update(board_params)
       render "api/boards/show"
     else
-      render json: @board, status: :unprocessable_entity
+      render json: @board, status: 422
     end
   end
 

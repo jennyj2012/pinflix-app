@@ -33,7 +33,10 @@ function _ensureLoggedOut(nextState, replace, callback) {
 
   function _redirectIfLoggedIn() {
     if (CurrentUserStore.isLoggedIn()) {
+      $("body").removeClass("body");
        replace({}, '/');
+    } else {
+      $("body").addClass("body");
     }
     callback();
   }
@@ -51,25 +54,28 @@ function _ensureLoggedIn(nextState, replace, callback) {
   function _redirectIfNotLoggedIn() {
 
     if (!CurrentUserStore.isLoggedIn()) {
+      $("body").addClass("body");
        replace({}, '/session/new');
+    } else {
+      $("body").removeClass("body");
     }
     callback();
   }
 }
 
-function _mainBackground() {
-  $("body").removeClass("body");
-}
-
-function _fancyBackground() {
-  $("body").addClass("body");
-}
+// function _mainBackground() {
+//   $("body").removeClass("body");
+// }
+//
+// function _fancyBackground() {
+//   $("body").addClass("body");
+// }
 
 var router = (
   <Router>
     <Route path="session/new" component={SessionForm} onEnter={_ensureLoggedOut} />
     <Route path="users/new" component={UsersForm} onEnter={_ensureLoggedOut} />
-    <Route path="/" component={App} onEnter={_ensureLoggedIn} onEnter={_mainBackground} onLeave={_fancyBackground}>
+    <Route path="/" component={App} onEnter={_ensureLoggedIn}>
       <IndexRoute component={PinsIndex} />
       <Route path="users/:user_id" component={BoardsIndex} />
       <Route path="boards/new" component={BoardsForm} />

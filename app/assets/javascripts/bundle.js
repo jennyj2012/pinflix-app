@@ -80,7 +80,10 @@
 	
 	  function _redirectIfLoggedIn() {
 	    if (CurrentUserStore.isLoggedIn()) {
+	      $("body").removeClass("body");
 	      replace({}, '/');
+	    } else {
+	      $("body").addClass("body");
 	    }
 	    callback();
 	  }
@@ -98,19 +101,22 @@
 	  function _redirectIfNotLoggedIn() {
 	
 	    if (!CurrentUserStore.isLoggedIn()) {
+	      $("body").addClass("body");
 	      replace({}, '/session/new');
+	    } else {
+	      $("body").removeClass("body");
 	    }
 	    callback();
 	  }
 	}
 	
-	function _mainBackground() {
-	  $("body").removeClass("body");
-	}
-	
-	function _fancyBackground() {
-	  $("body").addClass("body");
-	}
+	// function _mainBackground() {
+	//   $("body").removeClass("body");
+	// }
+	//
+	// function _fancyBackground() {
+	//   $("body").addClass("body");
+	// }
 	
 	var router = React.createElement(
 	  Router,
@@ -119,7 +125,7 @@
 	  React.createElement(Route, { path: 'users/new', component: UsersForm, onEnter: _ensureLoggedOut }),
 	  React.createElement(
 	    Route,
-	    { path: '/', component: App, onEnter: _ensureLoggedIn, onEnter: _mainBackground, onLeave: _fancyBackground },
+	    { path: '/', component: App, onEnter: _ensureLoggedIn },
 	    React.createElement(IndexRoute, { component: PinsIndex }),
 	    React.createElement(Route, { path: 'users/:user_id', component: BoardsIndex }),
 	    React.createElement(Route, { path: 'boards/new', component: BoardsForm }),

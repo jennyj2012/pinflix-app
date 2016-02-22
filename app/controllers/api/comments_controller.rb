@@ -16,7 +16,7 @@ class Api::CommentsController < ApplicationController
       @pin = Pin.includes(:comments).find(comment.pin_id)
       render "api/pins/show"
     else
-      render json: comment, status: :unprocessable_entity
+      render json: comment, status: 422
     end
   end
 
