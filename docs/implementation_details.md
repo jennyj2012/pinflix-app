@@ -1,7 +1,7 @@
 # PinFlix
 # By Jenny Juarez
 
-[Heroku link](www.pinflixapp.com)  
+[Live Site](www.pinflixapp.com)  
 
 ## Minimum Viable Product
 
@@ -9,14 +9,14 @@ PinFlix is a movie discovery web application inspired by Pinterest built using R
 
 <!-- This is a Markdown checklist. Use it to keep track of your progress! -->
 
-- [ ] Create an account
-- [ ] Log in / Log out
-- [ ] Create, read, and update pins
-- [ ] Comment on pins
-- [ ] Create, read, update, and delete boards
-- [ ] Organize pins within boards
+- [x] Create an account
+- [x] Log in / Log out
+- [x] Create, read, ~and update~ pins
+- [x] Comment on pins
+- [x] Create, read, update, and delete boards
+- [x] Add pins to boards
 - [ ] Follow / unfollow other boards
-- [ ] Search through pins or boards by subject
+- [x] Search through pins or boards by subject
 
 
 ## Design Docs
@@ -24,7 +24,7 @@ PinFlix is a movie discovery web application inspired by Pinterest built using R
 * [DB schema][schema]
 
 [view]: ./wireframes/views.md
-[schema]: ./schema.md
+[schema]: ./schema.md (updated 2/24/16)
 
 ## Implementation Timeline
 
@@ -78,19 +78,16 @@ the BoardForm).
 - [ ] Like button
 - [ ] Send a pin
 - [ ] Page scraping engines
-- [ ] Finding other users
-- [ ] Adding users to boards
+- [ ] Add/Invite multiple users to boards
 - [ ] Multiple sessions
 - [ ] Follow/Unfollow boards
 - [ ] Follow/Unfollow users
-- [ ] Invite users to boards
-- [ ] Search Users
+- [ ] Refined Search Options
 - [ ] Add multiple tags to pins and boards
 - [ ] Add Info Box
 - [ ] Add default avatar
 - [ ] Upload file validations
-- [ ] Spinners 
-- [ ] Disable buttons while processing
+- [ ] Spinners and disabled buttons while processing
 
 [phase-one]: ./phases/phase1.md
 [phase-two]: ./phases/phase2.md
