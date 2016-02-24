@@ -8,7 +8,18 @@ Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that let
 * Dynamically responds to window resize, animating the grid layout
 * Integrates RESTful operations into React lifecycle components upon page refresh
 * Improves user search experience with categorized pg_search results
-####Users can:
+* Dynamic url hash
+* Uses paperclip to store and upload images via Amazon Web Services S3
+
+##Technologies
+* Reactjs
+* Flux
+* Babel
+* Webpack
+* AWS S3 
+* PostgreSQL
+
+####Basic Usage:
 * Create an account
 * Log in/ Log out
 * View a feed of movies
