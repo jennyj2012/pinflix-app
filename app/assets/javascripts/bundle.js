@@ -24147,7 +24147,7 @@
 	            'div',
 	            { className: 'input email required' },
 	            React.createElement('input', {
-	              type: 'text',
+	              type: 'email',
 	              name: 'user[email]',
 	              id: 'user_email',
 	              valueLink: this.linkState('email'),

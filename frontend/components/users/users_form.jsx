@@ -39,7 +39,7 @@ var UserForm = React.createClass({
 
           <div className="input email required">
             <input
-              type="text"
+              type="email"
               name="user[email]"
               id="user_email"
               valueLink={this.linkState('email')}
