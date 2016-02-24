@@ -80,8 +80,17 @@ the BoardForm).
 - [ ] Page scraping engines
 - [ ] Finding other users
 - [ ] Adding users to boards
-- [ ] Follow Users
 - [ ] Multiple sessions
+- [ ] Follow/Unfollow boards
+- [ ] Follow/Unfollow users
+- [ ] Invite users to boards
+- [ ] Search Users
+- [ ] Add multiple tags to pins and boards
+- [ ] Add Info Box
+- [ ] Add default avatar
+- [ ] Upload file validations
+- [ ] Spinners 
+- [ ] Disable buttons while processing
 
 [phase-one]: ./phases/phase1.md
 [phase-two]: ./phases/phase2.md
