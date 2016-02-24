@@ -1,30 +1,46 @@
 #PINFLIX
 
-Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards. Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flux-architecture.
+Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards. 
 
 [![Pinterest](./docs/wireframes/wireframe_images/pinflix.jpg)](http://www.pinflixapp.com)
 
 ##OVERVIEW
-Users can create an account and Log in/ Log out or use the guest account. The home page features a view a feed of movie. Users can then search for movies, boards, or comments that match their interests. They can create movie pins and boards for different categories, then pin their movie pins to their boards or repin other movie pins to their boards. Like pinterest, users can add comments, and view comments on a movie pin.
+Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flux-architecture.
+* The home page features movie pins. Users can search pins, boards, or comments.
+* Users can add comments to pins and create, read, update, and delete boards.
+* Users can create pins by uploading an image, providing a url, or re-pinning an existing movie pin to a board.
+* Authentication system for user sign in and sign up.
+* Dynamic update of boards, pins and comments
+* Navigation to new pages by updates in the url location hash
 
 ##FEATURES
 * Dynamically responds to window resize, animating the grid layout
 * Integrates RESTful operations into React lifecycle components upon page refresh
 * Improves user search experience with categorized pg_search results
 * Uses paperclip to store and upload images via Amazon Web Services S3
-* Dynamic response to url changes
 
-##TECHNOLOGIES
-* Reactjs
+##FRAMEWORKS
+* Rails
+* React.js 
+* 
+##LIBRARIES AND TECHNOLOGIES
+* Flux Architecture
 * React Router
 * React Masonry
-* Flux
+* JQuery
+* BCrypt
 * Paperclip
 * AWS S3
 * pg_search
 * PostgreSQL
-* Babel
+* Babel (JSX)
 * Webpack
+
+##LANGUAGES
+* Ruby
+* Javascript
+* HTML
+* CSS
 
 ###SYSTEM INFO
 Ruby version 2.3.0
