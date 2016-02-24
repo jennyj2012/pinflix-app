@@ -7,7 +7,7 @@ Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that let
 ##QUICK START
 `gem install bundler bundle install npm install`
 
-##Basic Usage:
+##Basic Usage
 Users can create an account and Log in/ Log out or use the guest account. The home page features a view a feed of movie. Users can then search for movies, boards, or comments that match their interests. They can create movie pins and boards for different categories, then pin their movie pins to their boards or repin other movie pins to their boards. Like pinterest, users can add comments, and view comments on a movie pin. 
 
 ##Features
