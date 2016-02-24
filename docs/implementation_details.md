@@ -11,7 +11,7 @@ PinFlix is a movie discovery web application inspired by Pinterest built using R
 
 - [x] Create an account
 - [x] Log in / Log out
-- [x] Create, read, ~and update~ pins
+- [x] Create, read, ~~and update~~ pins
 - [x] Comment on pins
 - [x] Create, read, update, and delete boards
 - [x] Add pins to boards
@@ -24,7 +24,7 @@ PinFlix is a movie discovery web application inspired by Pinterest built using R
 * [DB schema][schema]
 
 [view]: ./wireframes/views.md
-[schema]: ./schema.md (updated 2/24/16)
+[schema]: ./schema.md _updated 2/24/16_
 
 ## Implementation Timeline
 
