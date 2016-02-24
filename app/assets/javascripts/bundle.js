@@ -31611,7 +31611,7 @@
 	
 	var Masonry = __webpack_require__(251);
 	var masonryOptions = {
-	  transitionDuration: '0.5s',
+	  transitionDuration: '0.2s',
 	  isFitWidth: true,
 	  itemSelector: '.index-item',
 	  columnWidth: '.index-item',
@@ -36777,7 +36777,7 @@
 	
 	var Masonry = __webpack_require__(251);
 	var masonryOptions = {
-	  transitionDuration: '0.5s',
+	  transitionDuration: '0.2s',
 	  isFitWidth: true,
 	  isResizable: true,
 	  isAnimated: true
@@ -37358,7 +37358,7 @@
 	
 	var Masonry = __webpack_require__(251);
 	var masonryOptions = {
-	  transitionDuration: '0.5s',
+	  transitionDuration: '0.2s',
 	  isFitWidth: true,
 	  itemSelector: '.index-item',
 	  columnWidth: '.index-item',

@@ -7,7 +7,7 @@ var CurrentUserStore = require("../../stores/current_user_store");
 
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
-  transitionDuration: '0.5s',
+  transitionDuration: '0.2s',
   isFitWidth: true,
   itemSelector: '.index-item',
   columnWidth: '.index-item',
@@ -65,7 +65,7 @@ var PinsIndex = React.createClass({
           </Masonry>
 
         </div>
-      );    
+      );
     }
   }
 

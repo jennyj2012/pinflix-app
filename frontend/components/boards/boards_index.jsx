@@ -10,7 +10,7 @@ var BoardsIndexItem = require('./boards_index_item');
 
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
-  transitionDuration: '0.5s',
+  transitionDuration: '0.2s',
   isFitWidth: true,
   isResizable: true,
   isAnimated: true
