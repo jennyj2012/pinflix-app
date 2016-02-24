@@ -16,7 +16,7 @@ PinFlix is a movie discovery web application inspired by Pinterest built using R
 - [x] Create, read, update, and delete boards
 - [x] Add pins to boards
 - [ ] Follow / unfollow other boards
-- [x] Search through pins or boards by subject
+- [x] Search for pins, boards, or comments
 
 
 ## Design Docs
