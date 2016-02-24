@@ -1,10 +1,13 @@
 #PINFLIX
 
-Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards. Pinflix is a clone of [Pinterest](https://www.pinterest.com)
+Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards. Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flux-architecture.
 
 ![Pinterest](./docs/wireframes/wireframe_images/pinflix_wireframes.001.jpeg)
 
 ##Features
+* Dynamically responds to window resize, animating the grid layout
+* Integrates RESTful operations into React lifecycle components upon page refresh
+* Improves user search experience with categorized pg_search results
 ####Users can:
 * Create an account
 * Log in/ Log out
