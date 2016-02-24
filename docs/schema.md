@@ -50,7 +50,7 @@ tag_id      | integer   | not null, foreign key (references tags), indexed
 
 ## users
 column name     | data type | details
-----------------A|-----------|-----------------------
+----------------|-----------|-----------------------
 id              | integer   | not null, primary key
 username        | string    | not null, indexed, unique
 password_digest | string    | not null
