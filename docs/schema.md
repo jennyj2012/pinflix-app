@@ -9,8 +9,20 @@ url	        | string    | not null
 description | text      |
 author_id   | integer   | not null, foreign key (references users), indexed
 board_id    | integer   | not null, foreign key (references boards), indexed
+photo_id    | integer   | not null, foreign key (references photos), indexed
 created_at  | datetime  | not null
 updated_at  | datetime  | not null
+
+## photos
+column name        | data type | details
+-------------------|-----------|-----------------------
+id                 | integer   | not null, primary key
+image_file_name    | string    | not null
+image_content_type | string    | not null
+image_file_size    | integer   |
+image_updated_at   | datetime  | not null
+created_at         | datetime  | not null
+updated_at         | datetime  | not null
 
 ## boards
 column name | data type | details
@@ -28,7 +40,7 @@ column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 body        | text    | not null
-author_id     | integer   | not null, foreign key (references users), indexed
+author_id   | integer   | not null, foreign key (references users), indexed
 pin_id      | integer   | not null, foreign key (references pins), indexed
 created_at  | datetime  | not null
 updated_at  | datetime  | not null
