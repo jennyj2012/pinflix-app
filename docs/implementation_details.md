@@ -21,10 +21,10 @@ PinFlix is a movie discovery web application inspired by Pinterest built using R
 
 ## Design Docs
 * [View Wireframes][view]
-* [DB schema][schema]
+* [DB schema][schema] _updated 2/24/16_
 
 [view]: ./wireframes/views.md
-[schema]: ./schema.md _updated 2/24/16_
+[schema]: ./schema.md
 
 ## Implementation Timeline
 
