@@ -30,20 +30,6 @@ Users can create an account and Log in/ Log out or use the guest account. The ho
 >
 >**System dependencies:** babel-core: 6.4.5, babel-loader: 6.2.1, babel-preset-react: 6.3.13, flux: 2.1.1, history: 1.17.0, react: 0.14.6, react-addons-linked-state-mixin: 0.14.6, react-dom: 0.14.6, react-history: 1.0.0, react-router: 1.0.3, webpack: 1.12.12
 
-
-###FUTURE FEATURES
-
-Follow/Unfollow boards,
-Follow/Unfollow users,
-Invite users to boards,
-Search Users,
-Add multiple tags to pins and boards,
-Add Info Box,
-Add default avatar,
-Upload file validations,
-Spinners,
-Disable buttons while processing
-
 ###IMPLEMENTATION DETAILS
 [Implementation Details](./docs/implementation_details.md)
 … Created by Jenny Juarez
