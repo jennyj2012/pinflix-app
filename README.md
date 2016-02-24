@@ -22,7 +22,7 @@ Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flu
 ##FRAMEWORKS
 * Rails
 * React.js 
-* 
+
 ##LIBRARIES AND TECHNOLOGIES
 * Flux Architecture
 * React Router
