@@ -21,7 +21,8 @@ var PinsForm = React.createClass({
       imageFile: null,
       imageUrl: "",
       processing: false,
-      serverErrors: ""
+      serverErrors: "",
+      loaded: false
     };
   },
 
@@ -29,6 +30,8 @@ var PinsForm = React.createClass({
     this.pinListener = PinsStore.addListener(this.__onChange);
     if(typeof this.props.params.pin_id !== "undefined"){
       PinsUtil.fetchSinglePin(this.props.params.pin_id);
+    } else {
+      this.setState({ loaded: true });
     }
   },
 
@@ -70,14 +73,16 @@ var PinsForm = React.createClass({
         httpUrl: "",
         upload: false,
         imageFile: null,
-        imageUrl: ""
+        imageUrl: "",
+        loaded: true
       });
     } else if(this.isMounted()) {
       this.setState({
         photoId: true,
         pin: prevPin,
         title: prevPin.title,
-        description: prevPin.description
+        description: prevPin.description,
+        loaded: true
       });
     }
   },
@@ -195,42 +200,46 @@ var PinsForm = React.createClass({
     // RETURN
     // ******************************
 
-    return (
-      <div className="new-pin">
-        <form className="form basic-modal group">
+    if(!this.state.loaded) {
+      return <div><h2>Loading</h2></div>;
+    } else {
+      return (
+          <div className="new-pin">
+            <form className="form basic-modal group">
 
-          <div className="pin-form-left">
-            <h2> Create a Pin </h2>
-            {imageDisplay}
+              <div className="pin-form-left">
+                <h2> Create a Pin </h2>
+                {imageDisplay}
 
-            <div className="input required">
-              <input
-                type="text"
-                className="pin[title]"
-                id="pin_title"
-                placeholder="Add a Movie Title"
-                valueLink={this.linkState('title')} />
-            </div>
+                <div className="input required">
+                  <input
+                    type="text"
+                    className="pin[title]"
+                    id="pin_title"
+                    placeholder="Add a Movie Title"
+                    valueLink={this.linkState('title')} />
+                </div>
 
-            <textarea
-              className="pin[description]"
-              id="pin_description"
-              placeholder="Add a description"
-              onChange={this.updateDescription}
-              value={this.state.description}></textarea>
+                <textarea
+                  className="pin[description]"
+                  id="pin_description"
+                  placeholder="Add a description"
+                  onChange={this.updateDescription}
+                  value={this.state.description}></textarea>
 
-          {inputItems}
-          <div className="errors">
-            {this.state.serverErrors}
+              {inputItems}
+              <div className="errors">
+                {this.state.serverErrors}
+              </div>
+
+              </div>
+                <div>
+                  <PinFormBoardItem processing={this.state.processing} handleSubmit={this.handleSubmit}/>
+                </div>
+            </form>
           </div>
-
-          </div>
-            <div>
-              <PinFormBoardItem processing={this.state.processing} handleSubmit={this.handleSubmit}/>
-            </div>
-        </form>
-      </div>
-    );
+      );
+    }
   },
 
   generateImage: function (src) {

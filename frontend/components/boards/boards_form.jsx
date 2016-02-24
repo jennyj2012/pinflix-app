@@ -23,32 +23,33 @@ var BoardsForm = React.createClass({
 
    render: function () {
 
-    return(
-      <div>
-        <h2>New Board</h2>
-        <form className="form basic-modal group">
-          <div className="input required">
-            <input
-              type="text"
-              className="board[title]"
-              id="board_title"
-              placeholder="Board Name"
-              valueLink={this.linkState('title')} />
-          </div>
+  return (
+        <div>
+          <form className="form basic-modal group">
+            <h2>New Board</h2>
+            <div className="input required">
+              <input
+                type="text"
+                className="board[title]"
+                id="board_title"
+                placeholder="Board Name"
+                valueLink={this.linkState('title')} />
+            </div>
 
-          <textarea
-            className="board[description]"
-            id="board_description"
-            placeholder="Add a description"
-            onChange={this.updateDescription}
-            value={this.state.description}></textarea>
+            <textarea
+              className="board[description]"
+              id="board_description"
+              placeholder="Add a description"
+              onChange={this.updateDescription}
+              value={this.state.description}></textarea>
 
-          <div className="small-red-button">
-            <button onClick={this.handleSubmit}>Create Board</button>
-          </div>
-        </form>
-      </div>
-    );
+            <div className="small-red-button">
+              <button onClick={this.handleSubmit}>Create Board</button>
+            </div>
+          </form>
+        </div>
+      );
+
   },
 
   handleSubmit: function(e) {

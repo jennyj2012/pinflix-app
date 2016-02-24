@@ -20,7 +20,7 @@ var masonryOptions = {
 
 var BoardsIndexItem = React.createClass({
   getInitialState: function (){
-    return {board: {}, boardPins: [], isCurrent: false};
+    return {board: {}, boardPins: [], isCurrent: false, loaded: false};
   },
 
   componentDidMount: function (){
@@ -64,7 +64,8 @@ var BoardsIndexItem = React.createClass({
       this.setState({
         board: currentBoard,
         boardPins: currentPins,
-        isCurrent: isCurrent
+        isCurrent: isCurrent,
+        loaded: true
       });
     }
   },
@@ -110,29 +111,46 @@ var BoardsIndexItem = React.createClass({
       );
     }
 
-    return (
-      <div className="board-index">
-        <div className="info">
-          <h1>{boardTitle}</h1>
-          <h2>{boardAuthor}</h2>
-          <h4>{boardDescription}</h4>
-          {editButton}
-        </div>
+    //loading div
+    var content;
+    if (!this.state.loaded){
+      content = <h2>"Loading"</h2>;
+    } else {
+      content = (
+        <Masonry
+        className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+        elementType={'div'} // default 'div'
+        options={masonryOptions} // default {}
+        disableImagesLoaded={false} // default false
+        >
+          {createPin}
+          {board_pins}
+        </Masonry>
+      );
+    }
 
-        <div className="group">
-          <Masonry
-          className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
-          elementType={'div'} // default 'div'
-          options={masonryOptions} // default {}
-          disableImagesLoaded={false} // default false
-          >
-            {createPin}
-            {board_pins}
-          </Masonry>
-        </div>
+    var content;
+    if (typeof this.state.board === "undefined"){
+      content = <h2>"Loading"</h2>;
+    } else {
+      content = (
+        <div className="board-index">
+          <div className="info">
+            <h1>{boardTitle}</h1>
+            <h2>{boardAuthor}</h2>
+            <h4>{boardDescription}</h4>
+            {editButton}
+          </div>
 
-      </div>
-    );
+          <div className="group">
+            {content}
+          </div>
+
+        </div>
+      );
+    }
+
+    return content;
   }
 });
 

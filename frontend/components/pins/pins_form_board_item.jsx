@@ -9,7 +9,7 @@ var PinFormBoardItem = React.createClass({
   mixins: [LinkedStateMixin],
 
   getInitialState: function () {
-    return {allBoards: [], currentUser: {}, board_title: "" };
+    return {allBoards: [], currentUser: {}, board_title: "", loaded: false };
   },
 
   componentDidMount: function () {
@@ -26,7 +26,7 @@ var PinFormBoardItem = React.createClass({
   __onChange: function () {
     var userId = CurrentUserStore.currentUser().id;
     if(this.isMounted()) {
-      this.setState({ allBoards: BoardsStore.findByUserId(userId) });
+      this.setState({ allBoards: BoardsStore.findByUserId(userId), loaded: true });
     }
   },
 
@@ -51,10 +51,14 @@ var PinFormBoardItem = React.createClass({
       );
     });
 
-    if(this.props.processing){
-      return <div>Please Wait</div>;
+    var content;
+    if(!this.state.loaded) {
+      content = <h2>Loading</h2>;
+    }
+    else if(this.props.processing) {
+       content = <h2>Please Wait</h2>;
     } else {
-      return(
+      content = (
         <div className="pin-form-right">
           <h2>Pick a board</h2>
           <p>Hover over a board</p>
@@ -76,6 +80,8 @@ var PinFormBoardItem = React.createClass({
         </div>
       );
     }
+
+    return content;
 
   },
 

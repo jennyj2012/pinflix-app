@@ -19,7 +19,7 @@ var masonryOptions = {
 
 var BoardsIndex = React.createClass({
   getInitialState: function (){
-    return {allBoards: [], author: "", isCurrent: false};
+    return {allBoards: [], author: "", isCurrent: false, loaded: false};
   },
 
   componentDidMount: function (){
@@ -64,7 +64,8 @@ var BoardsIndex = React.createClass({
       this.setState({
         allBoards: boards,
         author: username,
-        isCurrent: isCurrent
+        isCurrent: isCurrent,
+        loaded: true
       });
     }
   },
@@ -91,15 +92,23 @@ var BoardsIndex = React.createClass({
       );
     }
 
-    return (
-      <div className="user-board-page group">
-      <div className="info">
-        <h2>{this.state.author} Account</h2>
-      </div>
+    //loading div
+    var content;
+    if (!this.state.loaded){
+      content = <h2>"Loading"</h2>;
+    } else {
+      content = (
+        <div className="user-board-page group">
+          <div className="info">
+            <h2>{this.state.author} Account</h2>
+          </div>
           {createBoard}
           {boards}
-      </div>
-    );
+        </div>
+      );
+    }
+
+    return content;
   }
 });
 

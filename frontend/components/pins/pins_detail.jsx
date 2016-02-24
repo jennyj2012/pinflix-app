@@ -6,7 +6,7 @@ var PinsStore = require('../../stores/pins_store');
 
 var PinsDetail = React.createClass({
   getInitialState: function (){
-    return {pin: {}};
+    return {pin: {}, loaded: false};
   },
 
   componentDidMount: function (){
@@ -32,7 +32,7 @@ var PinsDetail = React.createClass({
     }
 
     if(this.isMounted()) {
-      this.setState({ pin: PinsStore.find(pinId) });
+      this.setState({ pin: PinsStore.find(pinId), loaded: true });
     }
   },
 
@@ -44,16 +44,23 @@ var PinsDetail = React.createClass({
       pinComponent = <PinsIndexItem key={pin.id} pin={pin} showComments={true} />;
     }
 
-    return (
-      <div className="pin-detail">
-      <div className="info">
-      <h2>Pin Detail</h2>
-      </div>
-        <div className="detail">
-        {pinComponent}
+    var content;
+    if (!this.state.loaded){
+      content = <h2>"Loading"</h2>;
+    } else {
+      content = (
+        <div className="pin-detail">
+        <div className="info">
+        <h2>Pin Detail</h2>
         </div>
-      </div>
-    );
+          <div className="detail">
+          {pinComponent}
+          </div>
+        </div>
+      );
+    }
+
+    return content;
   }
 });
 

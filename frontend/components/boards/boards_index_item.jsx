@@ -36,22 +36,23 @@ var BoardsIndexItem = React.createClass({
     }
 
     return (
-      <div className="board-index-item index-item" >
-          <div className="board-detail-link" onClick={this.handleClick}>
-            <section className="title">
-              <figcaption>{board.title}</figcaption>
-            </section>
+        <div className="board-index-item index-item" >
+            <div className="board-detail-link" onClick={this.handleClick}>
+              <section className="title">
+                <figcaption>{board.title}</figcaption>
+              </section>
 
-            <section>
-              <ul className="pin-thumbs group">
-                {pinThumbs}
-              </ul>
-            </section>
-          </div>
+              <section>
+                <ul className="pin-thumbs group">
+                  {pinThumbs}
+                </ul>
+              </section>
+            </div>
 
-          {editButton}
-      </div>
-    );
+            {editButton}
+        </div>
+      );
+
   },
 
   handleClick: function (e) {

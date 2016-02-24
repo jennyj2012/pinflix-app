@@ -17,7 +17,7 @@ var masonryOptions = {
 
 var PinsIndex = React.createClass({
   getInitialState: function (){
-    return {allPins: [], page: 1};
+    return {allPins: [], page: 1, loaded: false};
   },
 
   componentDidMount: function (){
@@ -31,7 +31,7 @@ var PinsIndex = React.createClass({
 
   __onChange: function (){
     if(this.isMounted()) {
-      this.setState({ allPins: PinsStore.all() });
+      this.setState({ allPins: PinsStore.all(), loaded: true });
     }
   },
 
@@ -50,19 +50,23 @@ var PinsIndex = React.createClass({
         return <PinsIndexItem key={pin.id} pin={pin} showComments={false}/>;
     });
 
-    return (
-      <div className="landing-page" >
-        <Masonry
-        className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
-        elementType={'div'} // default 'div'
-        options={masonryOptions} // default {}
-        disableImagesLoaded={false} // default false
-        >
-          {pins}
-        </Masonry>
+    if(!this.state.loaded) {
+      return <div className="landing-page"><h2>Loading</h2></div>
+    } else {
+      return (
+        <div className="landing-page" >
+          <Masonry
+            className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+            elementType={'div'} // default 'div'
+            options={masonryOptions} // default {}
+            disableImagesLoaded={false} // default false
+            >
+            {pins}
+          </Masonry>
 
-      </div>
-    );
+        </div>
+      );    
+    }
   }
 
 });

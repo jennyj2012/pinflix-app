@@ -31,12 +31,6 @@ var CommentsForm = React.createClass({
     }
   },
 
-  keydown: function(e){
-    if(e.target.value == 13 && this.isMounted()) {
-        this.setState({body: e.currentTarget.value});
-    }
-  },
-
   render: function () {
     var comment = this.props.comment;
 
@@ -46,7 +40,7 @@ var CommentsForm = React.createClass({
               <a href="#">
                 {this.state.currentUser.username}
               </a>
-            <form className="comment-form requried" onSubmit={this.handleSubmit} onKeyDown={this.keydown}>
+            <form className="comment-form requried" onSubmit={this.handleSubmit}>
               <textarea
                 className="comment[body]"
                 id="comment_body"

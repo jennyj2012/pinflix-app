@@ -31623,7 +31623,7 @@
 	  displayName: 'PinsIndex',
 	
 	  getInitialState: function getInitialState() {
-	    return { allPins: [], page: 1 };
+	    return { allPins: [], page: 1, loaded: false };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -31637,7 +31637,7 @@
 	
 	  __onChange: function __onChange() {
 	    if (this.isMounted()) {
-	      this.setState({ allPins: PinsStore.all() });
+	      this.setState({ allPins: PinsStore.all(), loaded: true });
 	    }
 	  },
 	
@@ -31655,20 +31655,32 @@
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: false });
 	    });
 	
-	    return React.createElement(
-	      'div',
-	      { className: 'landing-page' },
-	      React.createElement(
-	        Masonry,
-	        {
-	          className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
-	          , elementType: 'div' // default 'div'
-	          , options: masonryOptions // default {}
-	          , disableImagesLoaded: false // default false
-	        },
-	        pins
-	      )
-	    );
+	    if (!this.state.loaded) {
+	      return React.createElement(
+	        'div',
+	        { className: 'landing-page' },
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Loading'
+	        )
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        { className: 'landing-page' },
+	        React.createElement(
+	          Masonry,
+	          {
+	            className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
+	            , elementType: 'div' // default 'div'
+	            , options: masonryOptions // default {}
+	            , disableImagesLoaded: false // default false
+	          },
+	          pins
+	        )
+	      );
+	    }
 	  }
 	
 	});
@@ -32095,12 +32107,6 @@
 	    }
 	  },
 	
-	  keydown: function keydown(e) {
-	    if (e.target.value == 13 && this.isMounted()) {
-	      this.setState({ body: e.currentTarget.value });
-	    }
-	  },
-	
 	  render: function render() {
 	    var comment = this.props.comment;
 	
@@ -32117,7 +32123,7 @@
 	        ),
 	        React.createElement(
 	          'form',
-	          { className: 'comment-form requried', onSubmit: this.handleSubmit, onKeyDown: this.keydown },
+	          { className: 'comment-form requried', onSubmit: this.handleSubmit },
 	          React.createElement('textarea', {
 	            className: 'comment[body]',
 	            id: 'comment_body',
@@ -36023,7 +36029,8 @@
 	      imageFile: null,
 	      imageUrl: "",
 	      processing: false,
-	      serverErrors: ""
+	      serverErrors: "",
+	      loaded: false
 	    };
 	  },
 	
@@ -36031,6 +36038,8 @@
 	    this.pinListener = PinsStore.addListener(this.__onChange);
 	    if (typeof this.props.params.pin_id !== "undefined") {
 	      PinsUtil.fetchSinglePin(this.props.params.pin_id);
+	    } else {
+	      this.setState({ loaded: true });
 	    }
 	  },
 	
@@ -36072,14 +36081,16 @@
 	        httpUrl: "",
 	        upload: false,
 	        imageFile: null,
-	        imageUrl: ""
+	        imageUrl: "",
+	        loaded: true
 	      });
 	    } else if (this.isMounted()) {
 	      this.setState({
 	        photoId: true,
 	        pin: prevPin,
 	        title: prevPin.title,
-	        description: prevPin.description
+	        description: prevPin.description,
+	        loaded: true
 	      });
 	    }
 	  },
@@ -36208,51 +36219,63 @@
 	    // RETURN
 	    // ******************************
 	
-	    return React.createElement(
-	      'div',
-	      { className: 'new-pin' },
-	      React.createElement(
-	        'form',
-	        { className: 'form basic-modal group' },
+	    if (!this.state.loaded) {
+	      return React.createElement(
+	        'div',
+	        null,
 	        React.createElement(
-	          'div',
-	          { className: 'pin-form-left' },
-	          React.createElement(
-	            'h2',
-	            null,
-	            ' Create a Pin '
-	          ),
-	          imageDisplay,
-	          React.createElement(
-	            'div',
-	            { className: 'input required' },
-	            React.createElement('input', {
-	              type: 'text',
-	              className: 'pin[title]',
-	              id: 'pin_title',
-	              placeholder: 'Add a Movie Title',
-	              valueLink: this.linkState('title') })
-	          ),
-	          React.createElement('textarea', {
-	            className: 'pin[description]',
-	            id: 'pin_description',
-	            placeholder: 'Add a description',
-	            onChange: this.updateDescription,
-	            value: this.state.description }),
-	          inputItems,
-	          React.createElement(
-	            'div',
-	            { className: 'errors' },
-	            this.state.serverErrors
-	          )
-	        ),
-	        React.createElement(
-	          'div',
+	          'h2',
 	          null,
-	          React.createElement(PinFormBoardItem, { processing: this.state.processing, handleSubmit: this.handleSubmit })
+	          'Loading'
 	        )
-	      )
-	    );
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        { className: 'new-pin' },
+	        React.createElement(
+	          'form',
+	          { className: 'form basic-modal group' },
+	          React.createElement(
+	            'div',
+	            { className: 'pin-form-left' },
+	            React.createElement(
+	              'h2',
+	              null,
+	              ' Create a Pin '
+	            ),
+	            imageDisplay,
+	            React.createElement(
+	              'div',
+	              { className: 'input required' },
+	              React.createElement('input', {
+	                type: 'text',
+	                className: 'pin[title]',
+	                id: 'pin_title',
+	                placeholder: 'Add a Movie Title',
+	                valueLink: this.linkState('title') })
+	            ),
+	            React.createElement('textarea', {
+	              className: 'pin[description]',
+	              id: 'pin_description',
+	              placeholder: 'Add a description',
+	              onChange: this.updateDescription,
+	              value: this.state.description }),
+	            inputItems,
+	            React.createElement(
+	              'div',
+	              { className: 'errors' },
+	              this.state.serverErrors
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            React.createElement(PinFormBoardItem, { processing: this.state.processing, handleSubmit: this.handleSubmit })
+	          )
+	        )
+	      );
+	    }
 	  },
 	
 	  generateImage: function generateImage(src) {
@@ -36315,7 +36338,7 @@
 	  mixins: [LinkedStateMixin],
 	
 	  getInitialState: function getInitialState() {
-	    return { allBoards: [], currentUser: {}, board_title: "" };
+	    return { allBoards: [], currentUser: {}, board_title: "", loaded: false };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -36332,7 +36355,7 @@
 	  __onChange: function __onChange() {
 	    var userId = CurrentUserStore.currentUser().id;
 	    if (this.isMounted()) {
-	      this.setState({ allBoards: BoardsStore.findByUserId(userId) });
+	      this.setState({ allBoards: BoardsStore.findByUserId(userId), loaded: true });
 	    }
 	  },
 	
@@ -36367,14 +36390,21 @@
 	      );
 	    });
 	
-	    if (this.props.processing) {
-	      return React.createElement(
-	        'div',
+	    var content;
+	    if (!this.state.loaded) {
+	      content = React.createElement(
+	        'h2',
+	        null,
+	        'Loading'
+	      );
+	    } else if (this.props.processing) {
+	      content = React.createElement(
+	        'h2',
 	        null,
 	        'Please Wait'
 	      );
 	    } else {
-	      return React.createElement(
+	      content = React.createElement(
 	        'div',
 	        { className: 'pin-form-right' },
 	        React.createElement(
@@ -36413,6 +36443,8 @@
 	        )
 	      );
 	    }
+	
+	    return content;
 	  },
 	
 	  handleNewBoard: function handleNewBoard(e) {
@@ -36655,7 +36687,7 @@
 	  displayName: 'PinsDetail',
 	
 	  getInitialState: function getInitialState() {
-	    return { pin: {} };
+	    return { pin: {}, loaded: false };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -36681,7 +36713,7 @@
 	    }
 	
 	    if (this.isMounted()) {
-	      this.setState({ pin: PinsStore.find(pinId) });
+	      this.setState({ pin: PinsStore.find(pinId), loaded: true });
 	    }
 	  },
 	
@@ -36693,24 +36725,35 @@
 	      pinComponent = React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
 	    }
 	
-	    return React.createElement(
-	      'div',
-	      { className: 'pin-detail' },
-	      React.createElement(
+	    var content;
+	    if (!this.state.loaded) {
+	      content = React.createElement(
+	        'h2',
+	        null,
+	        '"Loading"'
+	      );
+	    } else {
+	      content = React.createElement(
 	        'div',
-	        { className: 'info' },
+	        { className: 'pin-detail' },
 	        React.createElement(
-	          'h2',
-	          null,
-	          'Pin Detail'
+	          'div',
+	          { className: 'info' },
+	          React.createElement(
+	            'h2',
+	            null,
+	            'Pin Detail'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'detail' },
+	          pinComponent
 	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'detail' },
-	        pinComponent
-	      )
-	    );
+	      );
+	    }
+	
+	    return content;
 	  }
 	});
 	
@@ -36744,7 +36787,7 @@
 	  displayName: 'BoardsIndex',
 	
 	  getInitialState: function getInitialState() {
-	    return { allBoards: [], author: "", isCurrent: false };
+	    return { allBoards: [], author: "", isCurrent: false, loaded: false };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -36788,7 +36831,8 @@
 	      this.setState({
 	        allBoards: boards,
 	        author: username,
-	        isCurrent: isCurrent
+	        isCurrent: isCurrent,
+	        loaded: true
 	      });
 	    }
 	  },
@@ -36814,22 +36858,34 @@
 	      );
 	    }
 	
-	    return React.createElement(
-	      'div',
-	      { className: 'user-board-page group' },
-	      React.createElement(
+	    //loading div
+	    var content;
+	    if (!this.state.loaded) {
+	      content = React.createElement(
+	        'h2',
+	        null,
+	        '"Loading"'
+	      );
+	    } else {
+	      content = React.createElement(
 	        'div',
-	        { className: 'info' },
+	        { className: 'user-board-page group' },
 	        React.createElement(
-	          'h2',
-	          null,
-	          this.state.author,
-	          ' Account'
-	        )
-	      ),
-	      createBoard,
-	      boards
-	    );
+	          'div',
+	          { className: 'info' },
+	          React.createElement(
+	            'h2',
+	            null,
+	            this.state.author,
+	            ' Account'
+	          )
+	        ),
+	        createBoard,
+	        boards
+	      );
+	    }
+	
+	    return content;
 	  }
 	});
 	
@@ -37024,13 +37080,13 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'h2',
-	        null,
-	        'New Board'
-	      ),
-	      React.createElement(
 	        'form',
 	        { className: 'form basic-modal group' },
+	        React.createElement(
+	          'h2',
+	          null,
+	          'New Board'
+	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'input required' },
@@ -37108,7 +37164,8 @@
 	      board: {},
 	      author_id: null,
 	      title: "",
-	      description: ""
+	      description: "",
+	      loaded: false
 	    };
 	  },
 	
@@ -37146,7 +37203,9 @@
 	          board: board,
 	          author_id: board.author_id,
 	          title: board.title,
-	          description: board.description });
+	          description: board.description,
+	          loaded: true
+	        });
 	      }
 	    }
 	  },
@@ -37189,60 +37248,72 @@
 	      });
 	    }
 	
-	    return React.createElement(
-	      'div',
-	      { className: 'board-edit' },
-	      React.createElement(
-	        'form',
-	        { className: 'form basic-modal group' },
+	    //loading div
+	    var content;
+	    if (!this.state.loaded) {
+	      content = React.createElement(
+	        'h2',
+	        null,
+	        '"Loading"'
+	      );
+	    } else {
+	      content = React.createElement(
+	        'div',
+	        { className: 'board-edit' },
 	        React.createElement(
-	          'h1',
-	          null,
-	          this.state.title
-	        ),
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Edit Board'
+	          'form',
+	          { className: 'form basic-modal group' },
+	          React.createElement(
+	            'h1',
+	            null,
+	            this.state.title
+	          ),
+	          React.createElement(
+	            'h2',
+	            null,
+	            'Edit Board'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'input required' },
+	            React.createElement('input', {
+	              type: 'text',
+	              className: 'board[title]',
+	              id: 'board_title',
+	              placeholder: 'Board Name',
+	              valueLink: this.linkState('title') })
+	          ),
+	          React.createElement('textarea', {
+	            className: 'board[description]',
+	            id: 'board_description',
+	            placeholder: 'Add a description',
+	            onChange: this.updateDescription,
+	            value: this.state.description }),
+	          buttons
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'input required' },
-	          React.createElement('input', {
-	            type: 'text',
-	            className: 'board[title]',
-	            id: 'board_title',
-	            placeholder: 'Board Name',
-	            valueLink: this.linkState('title') })
-	        ),
-	        React.createElement('textarea', {
-	          className: 'board[description]',
-	          id: 'board_description',
-	          placeholder: 'Add a description',
-	          onChange: this.updateDescription,
-	          value: this.state.description }),
-	        buttons
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        React.createElement(
-	          'h2',
 	          null,
-	          'Pins In this Board'
-	        ),
-	        React.createElement(
-	          Masonry,
-	          {
-	            className: 'my-gallery-class' // default ''
-	            , elementType: 'ul' // default 'div'
-	            , options: masonryOptions // default {}
-	            , disableImagesLoaded: false // default false
-	          },
-	          pins
+	          React.createElement(
+	            'h2',
+	            null,
+	            'Pins In this Board'
+	          ),
+	          React.createElement(
+	            Masonry,
+	            {
+	              className: 'my-gallery-class' // default ''
+	              , elementType: 'ul' // default 'div'
+	              , options: masonryOptions // default {}
+	              , disableImagesLoaded: false // default false
+	            },
+	            pins
+	          )
 	        )
-	      )
-	    );
+	      );
+	    }
+	
+	    return content;
 	  },
 	
 	  handleEdit: function handleEdit(e) {
@@ -37299,7 +37370,7 @@
 	  displayName: 'BoardsIndexItem',
 	
 	  getInitialState: function getInitialState() {
-	    return { board: {}, boardPins: [], isCurrent: false };
+	    return { board: {}, boardPins: [], isCurrent: false, loaded: false };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -37343,7 +37414,8 @@
 	      this.setState({
 	        board: currentBoard,
 	        boardPins: currentPins,
-	        isCurrent: isCurrent
+	        isCurrent: isCurrent,
+	        loaded: true
 	      });
 	    }
 	  },
@@ -37394,45 +37466,68 @@
 	      );
 	    }
 	
-	    return React.createElement(
-	      'div',
-	      { className: 'board-index' },
-	      React.createElement(
+	    //loading div
+	    var content;
+	    if (!this.state.loaded) {
+	      content = React.createElement(
+	        'h2',
+	        null,
+	        '"Loading"'
+	      );
+	    } else {
+	      content = React.createElement(
+	        Masonry,
+	        {
+	          className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
+	          , elementType: 'div' // default 'div'
+	          , options: masonryOptions // default {}
+	          , disableImagesLoaded: false // default false
+	        },
+	        createPin,
+	        board_pins
+	      );
+	    }
+	
+	    var content;
+	    if (typeof this.state.board === "undefined") {
+	      content = React.createElement(
+	        'h2',
+	        null,
+	        '"Loading"'
+	      );
+	    } else {
+	      content = React.createElement(
 	        'div',
-	        { className: 'info' },
+	        { className: 'board-index' },
 	        React.createElement(
-	          'h1',
-	          null,
-	          boardTitle
+	          'div',
+	          { className: 'info' },
+	          React.createElement(
+	            'h1',
+	            null,
+	            boardTitle
+	          ),
+	          React.createElement(
+	            'h2',
+	            null,
+	            boardAuthor
+	          ),
+	          React.createElement(
+	            'h4',
+	            null,
+	            boardDescription
+	          ),
+	          editButton
 	        ),
 	        React.createElement(
-	          'h2',
-	          null,
-	          boardAuthor
-	        ),
-	        React.createElement(
-	          'h4',
-	          null,
-	          boardDescription
-	        ),
-	        editButton
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'group' },
-	        React.createElement(
-	          Masonry,
-	          {
-	            className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
-	            , elementType: 'div' // default 'div'
-	            , options: masonryOptions // default {}
-	            , disableImagesLoaded: false // default false
-	          },
-	          createPin,
-	          board_pins
+	          'div',
+	          { className: 'group' },
+	          content
 	        )
-	      )
-	    );
+	      );
+	    }
+	
+	    return content;
 	  }
 	});
 	
