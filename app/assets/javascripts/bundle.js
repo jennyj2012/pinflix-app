@@ -36119,7 +36119,7 @@
 	
 	  changeUrl: function changeUrl(e) {
 	    if (this.isMounted()) {
-	      this.setState({ httpUrl: e.currentTarget.value, upload: false, imageUrl: "" });
+	      this.setState({ httpUrl: e.currentTarget.value, upload: false, imageUrl: "", httpReady: false });
 	    }
 	  },
 	

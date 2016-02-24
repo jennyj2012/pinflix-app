@@ -117,7 +117,7 @@ var PinsForm = React.createClass({
 
   changeUrl: function(e){
     if(this.isMounted()) {
-      this.setState({ httpUrl: e.currentTarget.value, upload: false, imageUrl: "" });
+      this.setState({ httpUrl: e.currentTarget.value, upload: false, imageUrl: "", httpReady: false });
     }
   },
 
