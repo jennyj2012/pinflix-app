@@ -4,12 +4,15 @@ Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that let
 
 [![Pinterest](./docs/wireframes/wireframe_images/pinflix_wireframes.001.jpeg)](http://www.pinflixapp.com)
 
+####Basic Usage:
+Users can create an account and Log in/ Log out or use the guest account. The home page features a view a feed of movie. Users can then search for movies, boards, or comments that match their interests. They can create movie pins and boards for different categories, then pin their movie pins to their boards or repin other movie pins to their boards. Like pinterest, users can add comments, and view comments on a movie pin. 
+
 ##Features
 * Dynamically responds to window resize, animating the grid layout
 * Integrates RESTful operations into React lifecycle components upon page refresh
 * Improves user search experience with categorized pg_search results
-* Dynamic url hash
 * Uses paperclip to store and upload images via Amazon Web Services S3
+* Dynamic url hashing
 
 ##Technologies
 * Reactjs
@@ -18,18 +21,6 @@ Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that let
 * Webpack
 * AWS S3 
 * PostgreSQL
-
-####Basic Usage:
-* Create an account
-* Log in/ Log out
-* View a feed of movies
-* Search for movies, boards, or comments that match your interests.
-* Create movie pins.
-* Create boards for different categories.
-* Pin your movie pins to your boards.
-* Repin other movie pins to your boards
-* Comment on a movie pin
-* View comments on a movie pin
 
 ##SYSTEM INFO
 Ruby version 2.3.0 Node version 4.1.1 NPM version 2.1.x
@@ -51,15 +42,15 @@ To run locally start your servers **start postresql:** $ postgres -D /usr/local/
 
 ##FUTURE FEATURES
 
-Follow/Unfollow boards
-Follow/Unfollow users
-Invite users to boards
-Search Users
-Add multiple tags to pins and boards
-Add Info Box
-Add default avatar
-Upload file validations
-Spinners
+Follow/Unfollow boards,
+Follow/Unfollow users,
+Invite users to boards,
+Search Users,
+Add multiple tags to pins and boards,
+Add Info Box,
+Add default avatar,
+Upload file validations,
+Spinners,
 Disable buttons while processing
 
 ##IMPLEMENTATION DETAILS
