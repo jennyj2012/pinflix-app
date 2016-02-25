@@ -101,6 +101,7 @@ var BoardsIndex = React.createClass({
         <div className="user-board-page group">
           <div className="info">
             <h2>{this.state.author} Account</h2>
+            <p>Board Count: {this.state.allBoards.length}</p>
           </div>
           {createBoard}
           {boards}

@@ -36878,6 +36878,12 @@
 	            null,
 	            this.state.author,
 	            ' Account'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'Board Count: ',
+	            this.state.allBoards.length
 	          )
 	        ),
 	        createBoard,
@@ -37436,18 +37442,22 @@
 	      boardDescription = board.description;
 	    }
 	
+	    if (typeof board.description !== "undefined") {
+	      boardDescription = board.description;
+	    }
+	
 	    if (typeof board.author !== "undefined" && typeof board.author.username !== "undefined") {
 	      boardAuthor = "By: " + board.author.username;
 	    }
 	
-	    var board_pins = this.state.boardPins.map(function (pin) {
+	    var boardPins = this.state.boardPins.map(function (pin) {
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: true });
 	    });
 	
 	    if (this.state.isCurrent) {
 	      editButton = React.createElement(
 	        'div',
-	        { className: 'button-style-link' },
+	        { className: 'button-style-link right' },
 	        React.createElement(
 	          'a',
 	          { href: "#/boards/edit/" + board.id },
@@ -37476,32 +37486,11 @@
 	      );
 	    } else {
 	      content = React.createElement(
-	        Masonry,
-	        {
-	          className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
-	          , elementType: 'div' // default 'div'
-	          , options: masonryOptions // default {}
-	          , disableImagesLoaded: false // default false
-	        },
-	        createPin,
-	        board_pins
-	      );
-	    }
-	
-	    var content;
-	    if (typeof this.state.board === "undefined") {
-	      content = React.createElement(
-	        'h2',
-	        null,
-	        '"Loading"'
-	      );
-	    } else {
-	      content = React.createElement(
 	        'div',
 	        { className: 'board-index' },
 	        React.createElement(
 	          'div',
-	          { className: 'info' },
+	          { className: 'info group' },
 	          React.createElement(
 	            'h1',
 	            null,
@@ -37517,12 +37506,28 @@
 	            null,
 	            boardDescription
 	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'Pin count: ',
+	            this.state.boardPins.length
+	          ),
 	          editButton
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'group' },
-	          content
+	          React.createElement(
+	            Masonry,
+	            {
+	              className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
+	              , elementType: 'div' // default 'div'
+	              , options: masonryOptions // default {}
+	              , disableImagesLoaded: false // default false
+	            },
+	            createPin,
+	            boardPins
+	          )
 	        )
 	      );
 	    }

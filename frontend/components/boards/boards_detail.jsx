@@ -87,17 +87,21 @@ var BoardsIndexItem = React.createClass({
       boardDescription = board.description;
     }
 
+    if(typeof board.description !== "undefined"){
+      boardDescription = board.description;
+    }
+
     if(typeof board.author !== "undefined" && typeof board.author.username !== "undefined"){
       boardAuthor = "By: " + board.author.username;
     }
 
-    var board_pins = this.state.boardPins.map(function (pin) {
+    var boardPins = this.state.boardPins.map(function (pin) {
         return <PinsIndexItem key={pin.id} pin={pin} showComments={true} />;
       });
 
     if(this.state.isCurrent){
       editButton = (
-        <div className="button-style-link">
+        <div className="button-style-link right">
             <a href={"#/boards/edit/" + board.id}>Edit</a>
         </div>
       );
@@ -117,33 +121,25 @@ var BoardsIndexItem = React.createClass({
       content = <h2>"Loading"</h2>;
     } else {
       content = (
-        <Masonry
-        className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
-        elementType={'div'} // default 'div'
-        options={masonryOptions} // default {}
-        disableImagesLoaded={false} // default false
-        >
-          {createPin}
-          {board_pins}
-        </Masonry>
-      );
-    }
-
-    var content;
-    if (typeof this.state.board === "undefined"){
-      content = <h2>"Loading"</h2>;
-    } else {
-      content = (
         <div className="board-index">
-          <div className="info">
+          <div className="info group">
             <h1>{boardTitle}</h1>
-            <h2>{boardAuthor}</h2>
+            <h2 >{boardAuthor}</h2>
             <h4>{boardDescription}</h4>
+            <p>Pin count: {this.state.boardPins.length}</p>
             {editButton}
           </div>
 
           <div className="group">
-            {content}
+            <Masonry
+            className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+            elementType={'div'} // default 'div'
+            options={masonryOptions} // default {}
+            disableImagesLoaded={false} // default false
+            >
+              {createPin}
+              {boardPins}
+            </Masonry>
           </div>
 
         </div>
