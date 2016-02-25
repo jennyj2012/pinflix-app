@@ -57,7 +57,7 @@ var SessionForm = React.createClass({
 
             <div className="footer-links group">
               <div className="log-in-action red-shade shade-button">
-                <button onSubmit={this.handleSubmit}>Log In</button>
+                <button onClick={this.handleSubmit}>Log In</button>
               </div>
               <div className="sign-up-link">
                 <a href="#/users/new">Sign up now</a>

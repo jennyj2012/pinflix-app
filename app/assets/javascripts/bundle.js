@@ -25085,7 +25085,7 @@
 	              { className: 'log-in-action red-shade shade-button' },
 	              React.createElement(
 	                'button',
-	                { onSubmit: this.handleSubmit },
+	                { onClick: this.handleSubmit },
 	                'Log In'
 	              )
 	            ),
