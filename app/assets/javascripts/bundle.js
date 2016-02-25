@@ -25016,10 +25016,10 @@
 	      null,
 	      React.createElement(
 	        'div',
-	        { className: 'log-in basic-modal', onSubmit: this.handleSubmit },
+	        { className: 'log-in basic-modal' },
 	        React.createElement(
 	          'form',
-	          null,
+	          { onSubmit: this.handleSubmit },
 	          React.createElement(
 	            'div',
 	            null,
@@ -25085,7 +25085,7 @@
 	              { className: 'log-in-action red-shade shade-button' },
 	              React.createElement(
 	                'button',
-	                null,
+	                { onSubmit: this.handleSubmit },
 	                'Log In'
 	              )
 	            ),
@@ -25106,6 +25106,7 @@
 	  },
 	
 	  handleSubmit: function handleSubmit(e) {
+	    debugger;
 	    e.preventDefault();
 	    if (this.state.username === "") {
 	      $(".username").addClass("invalid");
@@ -25120,6 +25121,7 @@
 	  },
 	
 	  handleGuest: function handleGuest(e) {
+	    debugger;
 	    e.preventDefault();
 	    var credentials = { user: { username: "Guest", password: "pinflixguest" } };
 	    if (this.isMounted()) {

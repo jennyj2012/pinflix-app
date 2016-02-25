@@ -18,9 +18,8 @@ var SessionForm = React.createClass({
 
     return (
       <div>
-        <div className="log-in basic-modal" onSubmit={this.handleSubmit}>
-          <form>
-
+        <div className="log-in basic-modal">
+          <form onSubmit={this.handleSubmit}>
             <div>
               <h1>Log In to PinFlix</h1>
               <p>PinFlix is a movie discovery web application inspired by Pinterest</p>
@@ -58,7 +57,7 @@ var SessionForm = React.createClass({
 
             <div className="footer-links group">
               <div className="log-in-action red-shade shade-button">
-                <button>Log In</button>
+                <button onSubmit={this.handleSubmit}>Log In</button>
               </div>
               <div className="sign-up-link">
                 <a href="#/users/new">Sign up now</a>
@@ -74,6 +73,7 @@ var SessionForm = React.createClass({
   },
 
   handleSubmit: function(e) {
+    debugger
     e.preventDefault();
     if(this.state.username === ""){
       $(".username").addClass("invalid");
@@ -88,6 +88,7 @@ var SessionForm = React.createClass({
   },
 
   handleGuest: function(e) {
+    debugger
     e.preventDefault();
     var credentials = {user: {username: "Guest", password: "pinflixguest"} };
     if(this.isMounted()) {
