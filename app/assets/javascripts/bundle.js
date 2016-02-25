@@ -25053,10 +25053,10 @@
 	            )
 	          )
 	        ),
+	        React.createElement('div', { className: 'divison' }),
 	        React.createElement(
 	          'form',
 	          { onSubmit: this.handleSubmit },
-	          React.createElement('div', { className: 'divison' }),
 	          React.createElement(
 	            'div',
 	            { className: 'input username required' },

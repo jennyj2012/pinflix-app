@@ -32,9 +32,10 @@ var SessionForm = React.createClass({
               <button onClick={this.handleGuest}>Guest Sign In</button>
             </div>
           </div>
-          <form onSubmit={this.handleSubmit}>
 
-            <div className="divison"></div>
+          <div className="divison"></div>
+
+          <form onSubmit={this.handleSubmit}>
 
             <div className="input username required">
               <input
