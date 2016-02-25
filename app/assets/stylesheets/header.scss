@@ -8,7 +8,7 @@
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
   width: 100%;
   z-index: 1000;
-  min-width: 900px;
+  // min-width: 900px;
 
 }
 
@@ -16,14 +16,14 @@
   margin: 0;
   display: block;
   width: 100%;
-  min-width: 1157px;
+  min-width: 877px;
 }
 
 .header-right{
   display: block;
   padding: 10px 20px;
   float: right;
-  width: 265px;
+  // width: 700px;
   position: relative;
   overflow: auto;
 }
@@ -34,7 +34,7 @@
   float: left;
   height: 32px;
   position: relative;
-  width: 70%;
+  width: 60%;
 }
 
 .search-bar {
@@ -109,9 +109,9 @@
   display: block;
 }
 
-.header-right > div {
-  float: left;
-}
+// .header-right > div {
+//   float: left;
+// }
 .user-menu {
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
@@ -160,7 +160,7 @@
  }
 
 .logout {
-  float: right;
+  float:left;
   height: 34px;
 }
 
@@ -198,7 +198,7 @@
 
 .buttonbar
 {
- -webkit-font-smoothing: antialiased;
+   -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
    background-color: #fafafa;
    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f5f5f5));
