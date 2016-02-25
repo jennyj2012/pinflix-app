@@ -25106,7 +25106,6 @@
 	  },
 	
 	  handleSubmit: function handleSubmit(e) {
-	    debugger;
 	    e.preventDefault();
 	    if (this.state.username === "") {
 	      $(".username").addClass("invalid");
@@ -25121,7 +25120,6 @@
 	  },
 	
 	  handleGuest: function handleGuest(e) {
-	    debugger;
 	    e.preventDefault();
 	    var credentials = { user: { username: "Guest", password: "pinflixguest" } };
 	    if (this.isMounted()) {

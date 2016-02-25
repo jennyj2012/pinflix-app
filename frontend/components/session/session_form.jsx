@@ -73,7 +73,6 @@ var SessionForm = React.createClass({
   },
 
   handleSubmit: function(e) {
-    debugger
     e.preventDefault();
     if(this.state.username === ""){
       $(".username").addClass("invalid");
@@ -88,7 +87,6 @@ var SessionForm = React.createClass({
   },
 
   handleGuest: function(e) {
-    debugger
     e.preventDefault();
     var credentials = {user: {username: "Guest", password: "pinflixguest"} };
     if(this.isMounted()) {
