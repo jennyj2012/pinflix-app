@@ -23,9 +23,11 @@ var UserForm = React.createClass({
           </div>
 
         <form onSubmit={this.handleSubmit}>
-          <h1>Sign Up for PinFlix</h1>
-          <p>Join PinFlix and discover and save movie ideas.</p>
-          <p>PinFlix is a Pinterest clone.</p>
+          <div className="intro">
+            <h1>Sign Up for PinFlix</h1>
+            <p>Join PinFlix and discover and save movie ideas.</p>
+            <p>PinFlix is a Pinterest clone.</p>
+          </div>
 
           <div className="input username required">
             <input
@@ -55,9 +57,8 @@ var UserForm = React.createClass({
               placeholder="Password"/>
           </div>
 
-
           <div className="sign-up-button shade-button">
-            <input id="button-style-input" type="submit" value="Sign Up"/>
+            <button>Sign Up</button>
           </div>
 
           <div className="sign-up-button shade-button">

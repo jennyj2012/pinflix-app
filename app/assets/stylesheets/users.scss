@@ -9,7 +9,7 @@
   background-size: cover;
   margin: 100px auto;
   position: relative;
-  border-radius: 5%;
+  border-radius: 5px;
   box-shadow: 0 0 30px #ccc;
   display: block;
   padding: 20px 0;
@@ -35,4 +35,13 @@
 .sign-up h1,
 .sign-up p {
   color: #fff;
+}
+
+.sign-up .button-style-link a {
+  background: #fff;
+  color: #525252;
+}
+.sign-up .button-style-link a:hover {
+  color: #000;
+  background: #fff;
 }

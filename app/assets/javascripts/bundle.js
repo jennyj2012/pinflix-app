@@ -24118,19 +24118,23 @@
 	          'form',
 	          { onSubmit: this.handleSubmit },
 	          React.createElement(
-	            'h1',
-	            null,
-	            'Sign Up for PinFlix'
-	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            'Join PinFlix and discover and save movie ideas.'
-	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            'PinFlix is a Pinterest clone.'
+	            'div',
+	            { className: 'intro' },
+	            React.createElement(
+	              'h1',
+	              null,
+	              'Sign Up for PinFlix'
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              'Join PinFlix and discover and save movie ideas.'
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              'PinFlix is a Pinterest clone.'
+	            )
 	          ),
 	          React.createElement(
 	            'div',
@@ -24166,7 +24170,11 @@
 	          React.createElement(
 	            'div',
 	            { className: 'sign-up-button shade-button' },
-	            React.createElement('input', { id: 'button-style-input', type: 'submit', value: 'Sign Up' })
+	            React.createElement(
+	              'button',
+	              null,
+	              'Sign Up'
+	            )
 	          ),
 	          React.createElement(
 	            'div',
@@ -25013,15 +25021,42 @@
 	          'form',
 	          null,
 	          React.createElement(
-	            'h1',
+	            'div',
 	            null,
-	            'Log In to PinFlix'
+	            React.createElement(
+	              'h1',
+	              null,
+	              'Log In to PinFlix'
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              'PinFlix is a movie discovery web application inspired by Pinterest'
+	            )
 	          ),
 	          React.createElement(
-	            'p',
-	            null,
-	            'PinFlix is a movie discovery web application inspired by Pinterest'
+	            'div',
+	            { className: 'oauth-buttons' },
+	            React.createElement(
+	              'div',
+	              { className: 'facebook button-style-link blue-shade shade-button' },
+	              React.createElement(
+	                'a',
+	                { id: 'facebook-link', href: '/auth/facebook' },
+	                'LOG IN WITH FACEBOOK'
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'guest red-shade shade-button' },
+	              React.createElement(
+	                'button',
+	                { onClick: this.handleGuest },
+	                'Guest Sign In'
+	              )
+	            )
 	          ),
+	          React.createElement('div', { className: 'divison' }),
 	          React.createElement(
 	            'div',
 	            { className: 'input username required' },
@@ -25042,13 +25077,12 @@
 	              placeholder: 'Password',
 	              valueLink: this.linkState('password') })
 	          ),
-	          React.createElement('div', { className: 'division' }),
 	          React.createElement(
 	            'div',
-	            { className: 'action-links group' },
+	            { className: 'footer-links group' },
 	            React.createElement(
 	              'div',
-	              { className: 'shade-button' },
+	              { className: 'log-in-action red-shade shade-button' },
 	              React.createElement(
 	                'button',
 	                null,
@@ -25057,20 +25091,11 @@
 	            ),
 	            React.createElement(
 	              'div',
-	              { className: 'guest-and-link' },
+	              { className: 'sign-up-link' },
 	              React.createElement(
 	                'a',
 	                { href: '#/users/new' },
 	                'Sign up now'
-	              ),
-	              React.createElement(
-	                'div',
-	                { className: 'guest-sign-in shade-button' },
-	                React.createElement(
-	                  'button',
-	                  { onClick: this.handleGuest },
-	                  'Guest Sign In'
-	                )
 	              )
 	            )
 	          )

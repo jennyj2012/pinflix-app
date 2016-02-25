@@ -24,6 +24,13 @@ class Api::SessionsController < ApplicationController
     end
   end
 
+  def omniauth_facebook
+  @user = User.find_or_create_by_auth_hash(auth_hash)
+  log_in(@user)
+  redirect_to root_url + '#/'
+  # render "api/users/show"
+end
+
   def destroy
     if current_user
       sign_out
@@ -33,4 +40,10 @@ class Api::SessionsController < ApplicationController
       render json: {}
     end
   end
+
+  private
+  def auth_hash
+    request.env['omniauth.auth']
+  end
+
 end

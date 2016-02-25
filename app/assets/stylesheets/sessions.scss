@@ -5,34 +5,53 @@
 
 .log-in {
   width: 390px;
-  height: 350px;
+  height: 455px;
 }
 
-.action-links {
+
+.footer-links {
   position: absolute;
   bottom: 0;
   box-sizing: border-box;
   border-top: 1px solid #ccc;
   width: 100%;
-  padding: 30px;
+  padding: 20px 40px;
   background: #eee;
   display: block;
 }
 
-.log-in input {
-}
-
-.log-in button {
-}
-
-.guest-and-link {
+.sign-up-link {
   float: left;
 }
 
-.action-links button {
+.log-in-action button {
   float: right;
   background: #eee;
 }
 
-.action-links button:hover {
+.guest button {
+  width: 307px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.facebook {
+  width: 307px;
+}
+
+#facebook-link {
+  display: block;
+  padding: 15px;
+}
+
+.sign-up .intro {
+  margin-bottom: 20px;
+}
+
+.oauth-butttons div{
+  margin: 50px 0;
+}
+
+.log-in .divison {
+  margin: 20px;
 }

@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   include PgSearch
-  multisearchable :against => [:username, :email], 
+  multisearchable :against => [:username, :email],
   :using => [:tsearch, :trigram]
 
   attr_reader :password
@@ -19,6 +19,23 @@ class User < ActiveRecord::Base
     user = User.find_by_username(username)
     user.try(:has_password?, password) ? user : nil
   end
+
+  def self.find_or_create_by_auth_hash(auth_hash)
+  provider = auth_hash[:provider]
+  uid = auth_hash[:uid]
+
+  user = User.find_by(provider: provider, uid: uid)
+
+  return user if user
+
+  User.create(
+    provider: provider,
+    username: auth_hash[:info][:name],
+    uid: uid,
+    email: auth_hash[:info][:email],
+    password: SecureRandom::urlsafe_base64
+  )
+end
 
   def self.find_by_email(email)
     user = User.find_by_email(email)

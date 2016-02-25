@@ -84,7 +84,7 @@
    background: #eee;
    padding: 10px;
    border: none;
-   border-radius: 5%;
+   border-radius: 5px;
    color: #aaa;
    box-sizing: border-box;
    width: 75%;
@@ -98,7 +98,7 @@
    background: #eee;
    border: 1px solid #aaa;
    padding: 15px;
-   border-radius: 5%;
+   border-radius: 5px;
    color: #aaa;
    width: 70%;
  }
@@ -129,6 +129,7 @@
    border-bottom: 1px solid #ccc;
    margin: 10px 0;
    display: block;
+   height: 1px;
  }
 
  p {
@@ -143,7 +144,7 @@
  .basic-modal {
   margin: 100px auto;
   position: relative;
-  border-radius: 5%;
+  border-radius: 5px;
   box-shadow: 0 0 30px #ccc;
   display: block;
   background: #fff;
@@ -174,34 +175,34 @@
   font-size: 14px;
   cursor: pointer;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   outline: none;
   line-height: normal;
  }
 
- #button-style-input:active,
- #button-style-input:focus,
- #button-style-input:hover{
-   box-shadow: none;
-   outline: 0;
- }
-
- #button-style-input {
-  font-size: 14px;
-  cursor: pointer;
-  border: none;
-  border-radius: 3px;
-  outline: none;
-  line-height: normal;
-  text-align: center;
-  padding: 15px;
-  color: #fff;
-  border-radius: 5%;
-  font: #fff;
-  width: 330px;
-  background-image: linear-gradient(#e3262e, #ab171e);
-  border: 1px solid #aaa;
- }
+ // .button-style-input:active,
+ // .button-style-input:focus,
+ // .button-style-input:hover{
+ //   box-shadow: none;
+ //   outline: 0;
+ // }
+ //
+ // .button-style-input {
+ //  font-size: 14px;
+ //  cursor: pointer;
+ //  border: none;
+ //  border-radius: 3px;
+ //  outline: none;
+ //  line-height: normal;
+ //  text-align: center;
+ //  padding: 15px;
+ //  color: #fff;
+ //  border-radius: 5%;
+ //  font: #fff;
+ //  width: 330px;
+ //  background-image: linear-gradient(#e3262e, #ab171e);
+ //  border: 1px solid #aaa;
+ // }
 
 
  .shade-button {
@@ -213,15 +214,25 @@
    text-align: center;
    padding: 15px;
    color: #fff;
-   border-radius: 5%;
+   border-radius: 5px;
    background-image: linear-gradient(#e3262e, #ab171e);
-   border: 1px solid #aaa;
+   border: 1px solid #fff;
+
  }
 
 /*Add button highlight*/
- #button-style-input:active,
- #button-style-input:focus,
- #button-style-input:hover,
+ .red-shade button:active,
+ .red-shade a:active,
+ .red-shade button:hover,
+ .red-shade a:hover,
+ .red-shade button:focus,
+ .red-shade a:focus,
+ .blue-shade button:active,
+ .blue-shade a:active,
+ .blue-shade button:hover,
+ .blue-shade a:hover,
+ .blue-shade button:focus,
+ .blue-shade a:focus,
  .shade-button button:active,
  .shade-button button:focus,
  .shade-button button:hover,
@@ -231,11 +242,19 @@
  .small-red-button button:focus,
  .small-red-button button:active,
  .small-red-button button:hover {
-   background: #ab171e;
    -moz-box-shadow: inset 0 0 10px #000000;
    -webkit-box-shadow: inset 0 0 10px #000000;
    box-shadow: inset 0 0 10px #000000;
    box-sizing: border-box;
+ }
+
+ .basic-red-button button:active,
+ .basic-red-button button:focus,
+ .basic-red-button button:hover,
+ .small-red-button button:focus,
+ .small-red-button button:active,
+ .small-red-button button:hover {
+   background: #ab171e;
  }
 
  .basic-red-button {
@@ -247,7 +266,7 @@
  .basic-red-button button {
    text-align: center;
    padding: 15px;
-   border-radius: 5%;
+   border-radius: 5px;
    color: #fff;
    background: #bd081c;
  }
@@ -261,26 +280,32 @@
  .small-red-button button {
    text-align: center;
    padding: 5px;
-   border-radius: 5%;
+   border-radius: 5px;
    color: #fff;
-   background-image: linear-gradient(#e3262e, #ab171e);
    border: 1px solid #aaa;
+   background: #e3262e;
+
+ }
+
+ .red-shade button,
+ .red-shade a {
+   background-image: linear-gradient(#e3262e, #ab171e);
+   color: #fff;
+ }
+
+ .blue-shade button,
+ .blue-shade a {
+   background-image: linear-gradient(#3B5998, #263961);
+   color: #fff;
  }
 
  .button-style-link a {
    font-weight: bold;
    padding: 10px;
-   border-radius: 10%;
-   color: #525252;
+   border-radius: 5px;
    text-decoration: none;
-   background: #fff;
    border: 1px solid #aaa;
    box-shadow: 0 0 10px #ccc;
- }
-
- .button-style-link a:hover{
-   color: #000;
-   background: #fff;
  }
 
  .content {
