@@ -25018,44 +25018,44 @@
 	        'div',
 	        { className: 'log-in basic-modal' },
 	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'h1',
+	            null,
+	            'Log In to PinFlix'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'PinFlix is a movie discovery web application inspired by Pinterest'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'oauth-buttons' },
+	          React.createElement(
+	            'div',
+	            { className: 'facebook button-style-link blue-shade shade-button' },
+	            React.createElement(
+	              'a',
+	              { id: 'facebook-link', href: '/auth/facebook' },
+	              'LOG IN WITH FACEBOOK'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'guest red-shade shade-button' },
+	            React.createElement(
+	              'button',
+	              { onClick: this.handleGuest },
+	              'Guest Sign In'
+	            )
+	          )
+	        ),
+	        React.createElement(
 	          'form',
 	          { onSubmit: this.handleSubmit },
-	          React.createElement(
-	            'div',
-	            null,
-	            React.createElement(
-	              'h1',
-	              null,
-	              'Log In to PinFlix'
-	            ),
-	            React.createElement(
-	              'p',
-	              null,
-	              'PinFlix is a movie discovery web application inspired by Pinterest'
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'oauth-buttons' },
-	            React.createElement(
-	              'div',
-	              { className: 'facebook button-style-link blue-shade shade-button' },
-	              React.createElement(
-	                'a',
-	                { id: 'facebook-link', href: '/auth/facebook' },
-	                'LOG IN WITH FACEBOOK'
-	              )
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'guest red-shade shade-button' },
-	              React.createElement(
-	                'button',
-	                { onClick: this.handleGuest },
-	                'Guest Sign In'
-	              )
-	            )
-	          ),
 	          React.createElement('div', { className: 'divison' }),
 	          React.createElement(
 	            'div',
@@ -25085,7 +25085,7 @@
 	              { className: 'log-in-action red-shade shade-button' },
 	              React.createElement(
 	                'button',
-	                { onClick: this.handleSubmit },
+	                null,
 	                'Log In'
 	              )
 	            ),

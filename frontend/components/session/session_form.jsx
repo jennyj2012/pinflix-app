@@ -19,20 +19,20 @@ var SessionForm = React.createClass({
     return (
       <div>
         <div className="log-in basic-modal">
-          <form onSubmit={this.handleSubmit}>
-            <div>
-              <h1>Log In to PinFlix</h1>
-              <p>PinFlix is a movie discovery web application inspired by Pinterest</p>
-            </div>
+          <div>
+            <h1>Log In to PinFlix</h1>
+            <p>PinFlix is a movie discovery web application inspired by Pinterest</p>
+          </div>
 
-            <div className="oauth-buttons">
-              <div className="facebook button-style-link blue-shade shade-button">
-                  <a id="facebook-link" href="/auth/facebook">LOG IN WITH FACEBOOK</a>
-              </div>
-                <div className="guest red-shade shade-button">
-                  <button onClick={this.handleGuest}>Guest Sign In</button>
-                </div>
+          <div className="oauth-buttons">
+            <div className="facebook button-style-link blue-shade shade-button">
+              <a id="facebook-link" href="/auth/facebook">LOG IN WITH FACEBOOK</a>
             </div>
+            <div className="guest red-shade shade-button">
+              <button onClick={this.handleGuest}>Guest Sign In</button>
+            </div>
+          </div>
+          <form onSubmit={this.handleSubmit}>
 
             <div className="divison"></div>
 
@@ -57,7 +57,7 @@ var SessionForm = React.createClass({
 
             <div className="footer-links group">
               <div className="log-in-action red-shade shade-button">
-                <button onClick={this.handleSubmit}>Log In</button>
+                <button>Log In</button>
               </div>
               <div className="sign-up-link">
                 <a href="#/users/new">Sign up now</a>
