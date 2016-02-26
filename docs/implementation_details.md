@@ -1,7 +1,7 @@
 # PinFlix
 # By Jenny Juarez
 
-[Live Site](www.pinflixapp.com)  
+[Live Site](http://www.pinflixapp.com)  
 
 ## Minimum Viable Product
 
