@@ -196,8 +196,7 @@
   margin: auto 0;
 }
 
-.buttonbar
-{
+.buttonbar {
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
    background-color: #fafafa;
@@ -213,4 +212,22 @@
    color: #818181;
    cursor: pointer;
    outline: none;
+}
+
+.user-menu img,
+.user-menu h4 {
+  float: left;
+  display: block;
+}
+
+.user-menu h4 {
+  margin: 0;
+}
+
+.user-pin{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: block;
+  margin: 3px 10px 3px 0;
 }

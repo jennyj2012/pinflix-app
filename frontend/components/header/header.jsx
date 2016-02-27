@@ -52,7 +52,10 @@ var Header = React.createClass({
 
           <div className="header-right group">
             <div className="user-menu user-link" >
-              <a href={userBoards}>{this.state.currentUser.username}</a>
+              <a className="group" href={userBoards}>
+                <img className="user-pin" src={window.pinflix.pin}/>
+                <h4>{this.state.currentUser.username}</h4>
+            </a>
             </div>
 
             <div className="logout">

@@ -1,6 +1,6 @@
 #PINFLIX
 
-Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards. 
+Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards.
 
 [![Pinterest](./docs/wireframes/wireframe_images/pinflix.jpg)](http://www.pinflixapp.com)
 
@@ -18,10 +18,11 @@ Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flu
 * Integrates RESTful operations into React lifecycle components upon page refresh
 * Improves user search experience with categorized pg_search results
 * Uses paperclip to store and upload images via Amazon Web Services S3
+* Omni-Auth Facebook log in
 
 ##FRAMEWORKS
 * Rails
-* React.js 
+* React.js
 
 ##LIBRARIES AND TECHNOLOGIES
 * Flux Architecture

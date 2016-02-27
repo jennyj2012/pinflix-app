@@ -37675,8 +37675,13 @@
 	            { className: 'user-menu user-link' },
 	            React.createElement(
 	              'a',
-	              { href: userBoards },
-	              this.state.currentUser.username
+	              { className: 'group', href: userBoards },
+	              React.createElement('img', { className: 'user-pin', src: window.pinflix.pin }),
+	              React.createElement(
+	                'h4',
+	                null,
+	                this.state.currentUser.username
+	              )
 	            )
 	          ),
 	          React.createElement(

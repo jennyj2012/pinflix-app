@@ -10,7 +10,12 @@
 </head>
 <body>
   <script type="text/javascript">
-    window.pinflix = {logo: "<%= asset_path('pinflix_logo.gif') %>", movie: "<%= asset_path('movie_background.jpg') %>", background: "<%= asset_path('page_background_blurred.png') %>"}
+    window.pinflix = {
+      logo: "<%= asset_path('pinflix_logo.gif') %>",
+      movie: "<%= asset_path('movie_background.jpg') %>",
+      background: "<%= asset_path('page_background_blurred.png') %>",
+      pin: "<%= asset_path('pin.jpg') %>"
+    }
   </script>
   <%= yield %>
 </body>
