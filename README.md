@@ -19,6 +19,7 @@ Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flu
 * Improves user search experience with categorized pg_search results
 * Uses paperclip to store and upload images via Amazon Web Services S3
 * Omni-Auth Facebook log in
+* Optimizes speed of landing-page creating an infinite scroll effect using Kaminari.
 
 ##FRAMEWORKS
 * Rails
@@ -33,6 +34,7 @@ Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flu
 * Paperclip
 * AWS S3
 * pg_search
+* Kaminari
 * PostgreSQL
 * Babel (JSX)
 * Webpack
