@@ -19,5 +19,6 @@ Rails.application.routes.draw do
       only: [:index, :show, :create]
 
     get "search", to: "utils#search"
+    get "total/pins", to: "pins#total"
   end
 end

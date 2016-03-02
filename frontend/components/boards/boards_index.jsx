@@ -11,6 +11,7 @@ var BoardsIndexItem = require('./boards_index_item');
 var Masonry = require('react-masonry-component');
 var masonryOptions = {
   transitionDuration: '0.2s',
+  columnWidth: '.board-index-item',
   isFitWidth: true,
   isResizable: true,
   isAnimated: true
@@ -103,8 +104,18 @@ var BoardsIndex = React.createClass({
             <h2>{this.state.author} Account</h2>
             <p>Board Count: {this.state.allBoards.length}</p>
           </div>
+
+          <Masonry
+            className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+            elementType={'div'} // default 'div'
+            options={masonryOptions} // default {}
+            disableImagesLoaded={false} // default false
+            >
           {createBoard}
           {boards}
+
+        </Masonry>
+
         </div>
       );
     }

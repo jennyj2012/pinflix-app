@@ -60,7 +60,7 @@ var Search = React.createClass({
        </div>
      );
 
-     var userResults = [], pinResults = [], boardResults = [], commentResults = [], tagResults;
+     var userResults = [], pinResults = [], boardResults = [], commentResults = [];
      var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
        if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
           userResults.push(
@@ -98,7 +98,6 @@ var Search = React.createClass({
             <input type="text" placeholder="search" onKeyUp={ this.search }/>
             <div className="search-results hidden">
               {summary}
-              <ul>Tag Results {tagResults}</ul>
               <ul>Pinner Results {userResults}</ul>
               <ul>Board Results {boardResults}</ul>
               <ul>Pin Results {pinResults}</ul>

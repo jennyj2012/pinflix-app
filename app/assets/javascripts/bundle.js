@@ -31644,34 +31644,56 @@
 	  isAnimated: true
 	};
 	
+	var ReactDOM = __webpack_require__(158);
+	
 	var PinsIndex = React.createClass({
 	  displayName: 'PinsIndex',
 	
 	  getInitialState: function getInitialState() {
-	    return { allPins: [], page: 1, loaded: false };
+	    return { allPins: [], page: 1, loaded: false, scrollPos: 0 };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
 	    this.pinListener = PinsStore.addListener(this.__onChange);
-	    PinsUtil.fetchAllPins();
+	    PinsUtil.fetchAllPins(this.state.page);
+	    PinsUtil.fetchTotal();
+	    document.addEventListener('scroll', this.handleScroll);
 	  },
 	
 	  componentWillUnMount: function componentWillUnMount() {
 	    this.pinListener.remove();
+	    document.removeEventListener('scroll', this.handleScroll);
 	  },
 	
 	  __onChange: function __onChange() {
+	    var pins = PinsStore.all();
+	
 	    if (this.isMounted()) {
-	      this.setState({ allPins: PinsStore.all(), loaded: true });
+	      this.setState({ allPins: pins, loaded: true });
+	    }
+	  },
+	
+	  handleScroll: function handleScroll(e) {
+	    e.preventDefault();
+	    var scrollPos = $(window).scrollTop() + $(window).height();
+	
+	    if (this.state.scrollPos < scrollPos && scrollPos >= $(document).height()) {
+	      this.nextPage();
+	    }
+	
+	    if (this.state.scrollPos < scrollPos && this.isMounted()) {
+	      this.setState({ scrollPos: scrollPos });
 	    }
 	  },
 	
 	  nextPage: function nextPage() {
-	    var nextPage = this.state.page + 1;
-	    PinsUtil.fetchAllPins(nextPage);
+	    if (this.state.allPins.length < PinsStore.total()) {
+	      var nextPage = this.state.page + 1;
+	      PinsUtil.fetchAllPins(nextPage);
 	
-	    if (this.isMounted()) {
-	      this.setState({ page: nextPage });
+	      if (this.isMounted()) {
+	        this.setState({ page: nextPage, loaded: false });
+	      }
 	    }
 	  },
 	
@@ -31680,32 +31702,30 @@
 	      return React.createElement(PinsIndexItem, { key: pin.id, pin: pin, showComments: false });
 	    });
 	
+	    var loading;
 	    if (!this.state.loaded) {
-	      return React.createElement(
-	        'div',
-	        { className: 'landing-page' },
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Loading'
-	        )
-	      );
-	    } else {
-	      return React.createElement(
-	        'div',
-	        { className: 'landing-page' },
-	        React.createElement(
-	          Masonry,
-	          {
-	            className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
-	            , elementType: 'div' // default 'div'
-	            , options: masonryOptions // default {}
-	            , disableImagesLoaded: false // default false
-	          },
-	          pins
-	        )
+	      loading = React.createElement(
+	        'h2',
+	        { className: 'loading' },
+	        'Loading'
 	      );
 	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'landing-page' },
+	      React.createElement(
+	        Masonry,
+	        {
+	          className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
+	          , elementType: 'div' // default 'div'
+	          , options: masonryOptions // default {}
+	          , disableImagesLoaded: false // default false
+	        },
+	        pins
+	      ),
+	      loading
+	    );
 	  }
 	
 	});
@@ -31721,18 +31741,28 @@
 	var PinsActions = __webpack_require__(243);
 	
 	var PinsUtil = {
-	  fetchAllPins: function fetchAllPins() {
+	  fetchAllPins: function fetchAllPins(page) {
 	    $.get({
 	      url: "/api/pins",
 	      dataType: "json",
+	      data: { page: page },
 	      success: function success(pins) {
 	        PinsActions.receiveAllPins(pins);
 	      }
 	    });
 	  },
 	
-	  fetchSinglePin: function fetchSinglePin(id, callback) {
+	  fetchTotal: function fetchTotal() {
+	    $.get({
+	      url: "/api/total/pins",
+	      dataType: "json",
+	      success: function success(total) {
+	        PinsActions.recieveTotalPinCount(total);
+	      }
+	    });
+	  },
 	
+	  fetchSinglePin: function fetchSinglePin(id, callback) {
 	    $.get({
 	      url: "/api/pins/" + id,
 	      dataType: "json",
@@ -31804,6 +31834,13 @@
 	      actionType: PinsConstants.SINGLE_PIN_RECEIVED,
 	      pin: pin
 	    });
+	  },
+	
+	  recieveTotalPinCount: function recieveTotalPinCount(total) {
+	    Dispatcher.dispatch({
+	      actionType: PinsConstants.PIN_TOTAL_COUNT,
+	      total: total['total']
+	    });
 	  }
 	
 	};
@@ -31818,7 +31855,8 @@
 	
 	var PinsConstants = {
 	  PINS_RECEIVED: "ALL_PINS_RECEIVED",
-	  SINGLE_PIN_RECEIVED: "SINGLE_PIN_RECEIVED"
+	  SINGLE_PIN_RECEIVED: "SINGLE_PIN_RECEIVED",
+	  PIN_TOTAL_COUNT: "PIN_TOTAL_COUNT"
 	};
 	
 	module.exports = PinsConstants;
@@ -31849,9 +31887,16 @@
 	var PinsStore = new Store(Dispatcher);
 	
 	var _pins = [];
+	var _total = 0;
 	
 	var resetPins = function resetPins(pins) {
 	  _pins = pins;
+	};
+	
+	var addPins = function addPins(pins) {
+	  pins.forEach(function (pin) {
+	    updatePin(pin);
+	  }.bind(this));
 	};
 	
 	var addPin = function addPin(pin) {
@@ -31871,6 +31916,10 @@
 	  } else {
 	    _pins[idx] = pin;
 	  }
+	};
+	
+	var updateTotalCount = function updateTotalCount(total) {
+	  _total = total;
 	};
 	
 	PinsStore.all = function () {
@@ -31893,14 +31942,22 @@
 	  });
 	};
 	
+	PinsStore.total = function () {
+	  return _total;
+	};
+	
 	PinsStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case PinsConstants.ALL_PINS_RECEIVED:
-	      resetPins(payload.pins);
+	      addPins(payload.pins);
 	      PinsStore.__emitChange();
 	      break;
 	    case PinsConstants.SINGLE_PIN_RECEIVED:
 	      updatePin(payload.pin);
+	      PinsStore.__emitChange();
+	      break;
+	    case PinsConstants.PIN_TOTAL_COUNT:
+	      updateTotalCount(payload.total);
 	      PinsStore.__emitChange();
 	      break;
 	    default:
@@ -36803,6 +36860,7 @@
 	var Masonry = __webpack_require__(251);
 	var masonryOptions = {
 	  transitionDuration: '0.2s',
+	  columnWidth: '.board-index-item',
 	  isFitWidth: true,
 	  isResizable: true,
 	  isAnimated: true
@@ -36911,8 +36969,17 @@
 	            this.state.allBoards.length
 	          )
 	        ),
-	        createBoard,
-	        boards
+	        React.createElement(
+	          Masonry,
+	          {
+	            className: 'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix' // default ''
+	            , elementType: 'div' // default 'div'
+	            , options: masonryOptions // default {}
+	            , disableImagesLoaded: false // default false
+	          },
+	          createBoard,
+	          boards
+	        )
 	      );
 	    }
 	
@@ -37795,8 +37862,7 @@
 	    var userResults = [],
 	        pinResults = [],
 	        boardResults = [],
-	        commentResults = [],
-	        tagResults;
+	        commentResults = [];
 	    var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
 	      if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
 	        userResults.push(React.createElement(
@@ -37853,12 +37919,6 @@
 	        'div',
 	        { className: 'search-results hidden' },
 	        summary,
-	        React.createElement(
-	          'ul',
-	          null,
-	          'Tag Results ',
-	          tagResults
-	        ),
 	        React.createElement(
 	          'ul',
 	          null,

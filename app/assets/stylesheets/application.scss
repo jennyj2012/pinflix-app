@@ -180,31 +180,6 @@
   line-height: normal;
  }
 
- // .button-style-input:active,
- // .button-style-input:focus,
- // .button-style-input:hover{
- //   box-shadow: none;
- //   outline: 0;
- // }
- //
- // .button-style-input {
- //  font-size: 14px;
- //  cursor: pointer;
- //  border: none;
- //  border-radius: 3px;
- //  outline: none;
- //  line-height: normal;
- //  text-align: center;
- //  padding: 15px;
- //  color: #fff;
- //  border-radius: 5%;
- //  font: #fff;
- //  width: 330px;
- //  background-image: linear-gradient(#e3262e, #ab171e);
- //  border: 1px solid #aaa;
- // }
-
-
  .shade-button {
    display: block;
    margin: 10px auto;
@@ -354,4 +329,8 @@ html {
 .right {
   float: right;
   display: block;
+}
+
+.loading {
+  padding-bottom: 50px;
 }

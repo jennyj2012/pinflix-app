@@ -4,16 +4,23 @@ var PinsConstants = require('../constants/pins_constants');
 var PinsStore = new Store(Dispatcher);
 
 var _pins = [];
+var _total = 0;
 
-var resetPins = function(pins){
+var resetPins = function (pins){
   _pins = pins;
 };
 
-var addPin = function(pin){
+var addPins = function (pins) {
+  pins.forEach(function (pin) {
+    updatePin(pin);
+  }.bind(this));
+}
+
+var addPin = function (pin) {
   _pins.push(pin);
 };
 
-var updatePin = function(pin){
+var updatePin = function (pin) {
   var idx;
   for(var i = 0; i < _pins.length; i++){
     if(_pins[i].id === pin.id){
@@ -27,6 +34,10 @@ var updatePin = function(pin){
     _pins[idx] = pin;
   }
 };
+
+var updateTotalCount = function (total) {
+  _total = total;
+}
 
 PinsStore.all = function () {
   return _pins.slice();
@@ -48,14 +59,22 @@ PinsStore.findByBoardId = function (id) {
   });
 };
 
+PinsStore.total = function () {
+  return _total;
+}
+
 PinsStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case PinsConstants.ALL_PINS_RECEIVED:
-      resetPins(payload.pins);
+      addPins(payload.pins);
       PinsStore.__emitChange();
       break;
     case PinsConstants.SINGLE_PIN_RECEIVED:
       updatePin(payload.pin);
+      PinsStore.__emitChange();
+      break;
+    case PinsConstants.PIN_TOTAL_COUNT:
+      updateTotalCount(payload.total);
       PinsStore.__emitChange();
       break;
     default:

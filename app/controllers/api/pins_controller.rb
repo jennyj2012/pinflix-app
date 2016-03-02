@@ -2,7 +2,7 @@ class Api::PinsController < ApplicationController
   before_action :require_logged_in!
 
   def index
-    @pins = Pin.all.includes(:author, :comments, :photo)
+    @pins = Pin.all.includes(:author, :comments, :photo).page(params[:page]).per(15)
   end
 
   def show
@@ -38,7 +38,8 @@ class Api::PinsController < ApplicationController
     end
   end
 
-  def update
+  def total
+    @total = Pin.all.count
   end
 
   private

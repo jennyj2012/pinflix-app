@@ -1,18 +1,28 @@
 var PinsActions = require('../actions/pins_actions');
 
 var PinsUtil = {
-  fetchAllPins: function (){
+  fetchAllPins: function (page) {
     $.get({
       url: "/api/pins",
       dataType: "json",
+      data: {page: page},
       success: function (pins) {
         PinsActions.receiveAllPins(pins);
       }
     });
   },
 
-  fetchSinglePin: function (id, callback){
+  fetchTotal: function () {
+    $.get({
+      url: "/api/total/pins",
+      dataType: "json",
+      success: function (total) {
+        PinsActions.recieveTotalPinCount(total);
+      }
+    })
+  },
 
+  fetchSinglePin: function (id, callback) {
     $.get({
       url: "/api/pins/" + id,
       dataType: "json",
@@ -23,7 +33,7 @@ var PinsUtil = {
     });
   },
 
-  createPin: function (formData, callback){
+  createPin: function (formData, callback) {
     $.post({
       url: "/api/pins/",
       dataType: "json",
@@ -40,7 +50,7 @@ var PinsUtil = {
     });
   },
 
-  createPinComment: function (comment){
+  createPinComment: function (comment) {
     $.post({
       url: "/api/comments",
       dataType: "json",
