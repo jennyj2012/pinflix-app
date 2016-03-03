@@ -13,8 +13,7 @@ var PinsIndexItem = React.createClass({
     var pinAuthor = "anonymous";
     var authorLink = "#"
     var comments;
-    var imageURL = pin.photo.image_url;
-    // var hostname;
+    var imageURL = pin.photo.pin_image;
 
     if(typeof pin.author !== "undefined"){
       pinAuthor = pin.author.username;
