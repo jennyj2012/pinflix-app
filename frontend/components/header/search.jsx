@@ -14,6 +14,10 @@ var Search = React.createClass({
     this.listener = SearchResultsStore.addListener(this._onChange);
   },
 
+  componentWillUnmount: function () {
+    this.listener.remove();
+  },
+
   _onChange: function() {
     if(this.isMounted()) {
       this.forceUpdate();
@@ -42,72 +46,72 @@ var Search = React.createClass({
     this.listener.remove();
   },
 
+ render: function () {
 
-   render: function () {
+   var totalCount = SearchResultsStore.meta().totalCount || 0;
+   var pageCount = SearchResultsStore.all().length
+   var nextPageLink = [];
 
-     var totalCount = SearchResultsStore.meta().totalCount || 0;
-     var pageCount = SearchResultsStore.all().length
-     var nextPageLink = [];
+   if (pageCount % totalCount !== 0 && typeof pageCount % totalCount == "number"){
+     nextPageLink = <p onClick={this.nextPage}> Next Page </p>;
+   }
 
-     if (pageCount % totalCount !== 0 && typeof pageCount % totalCount == "number"){
-       nextPageLink = <p onClick={this.nextPage}> Next Page </p>;
+   var summary = (
+     <div>
+       <p> Displaying {pageCount} of {totalCount} </p>
+       {nextPageLink}
+     </div>
+   );
+
+   var userResults = [], pinResults = [], boardResults = [], commentResults = [];
+   var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
+     if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
+        userResults.push(
+          <li key={idx}>
+            <a href={"#/users/" + searchResult.id}>
+            Pinner: {searchResult.username}
+            </a>
+          </li>);
+     } else if (searchResult._type === "Pin" && typeof searchResult.id !== "undefined"){
+        pinResults.push(
+          <li key={idx}>
+            <a href={"#/pins/" + searchResult.id}>
+              Pin: {searchResult.title}
+            </a>
+          </li>);
+     } else if (searchResult._type === "Board" && typeof searchResult.id !== "undefined"){
+        boardResults.push(
+          <li key={idx}>
+            <a href={"#/boards/" + searchResult.id}>
+              Board: {searchResult.title}
+            </a>
+          </li>);
+     } else if (searchResult._type === "Comment" && typeof searchResult.pin_id !== "undefined"){
+        commentResults.push(
+          <li key={idx}>
+            <a href={"#/pins/" + searchResult.pin_id}>
+              Comment: {searchResult.body}
+            </a>
+          </li>);
      }
+   });
 
-     var summary = (
-       <div>
-         <p> Displaying {pageCount} of {totalCount} </p>
-         {nextPageLink}
-       </div>
-     );
-
-     var userResults = [], pinResults = [], boardResults = [], commentResults = [];
-     var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
-       if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
-          userResults.push(
-            <li key={idx}>
-              <a href={"#/users/" + searchResult.id}>
-              Pinner: {searchResult.username}
-              </a>
-            </li>);
-       } else if (searchResult._type === "Pin" && typeof searchResult.id !== "undefined"){
-          pinResults.push(
-            <li key={idx}>
-              <a href={"#/pins/" + searchResult.id}>
-                Pin: {searchResult.title}
-              </a>
-            </li>);
-       } else if (searchResult._type === "Board" && typeof searchResult.id !== "undefined"){
-          boardResults.push(
-            <li key={idx}>
-              <a href={"#/boards/" + searchResult.id}>
-                Board: {searchResult.title}
-              </a>
-            </li>);
-       } else if (searchResult._type === "Comment" && typeof searchResult.pin_id !== "undefined"){
-          commentResults.push(
-            <li key={idx}>
-              <a href={"#/pins/" + searchResult.pin_id}>
-                Comment: {searchResult.body}
-              </a>
-            </li>);
-       }
-     });
-
-    return(
-          <div className = "search-bar">
-            <input type="text" placeholder="search" onKeyUp={ this.search }/>
-            <div className="search-results hidden">
-              {summary}
-              <ul>Pinner Results {userResults}</ul>
-              <ul>Board Results {boardResults}</ul>
-              <ul>Pin Results {pinResults}</ul>
-              <ul>Comment Results {commentResults}</ul>
-            </div>
-
+  return(
+        <div className = "search-bar">
+          <input type="text" placeholder="search" onKeyUp={ this.search }/>
+          <div className="search-results hidden">
+            {summary}
+            <ul>Pinner Results {userResults}</ul>
+            <ul>Board Results {boardResults}</ul>
+            <ul>Pin Results {pinResults}</ul>
+            <ul>Comment Results {commentResults}</ul>
           </div>
+
+        </div>
 
     );
   }
+
 
 });
 
