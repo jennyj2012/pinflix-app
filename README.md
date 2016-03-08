@@ -2,7 +2,7 @@
 
 Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards.
 
-[![Pinterest](./docs/wireframes/wireframe_images/pinflix.jpg)](http://www.pinflixapp.com)
+[![](./docs/wireframes/wireframe_images/pinflix.jpg)](http://www.pinflixapp.com)
 
 ##OVERVIEW
 Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flux-architecture.
