@@ -76,7 +76,7 @@ var BoardsEdit = React.createClass({
 
     if(typeof authorId !== "undefined" && authorId === user.id){
       buttons = (
-        <div className="page">
+        <div>
           <div className="small-red-button" onClick={this.handleEdit}>
             <button>Edit Board</button>
           </div>
@@ -99,39 +99,41 @@ var BoardsEdit = React.createClass({
       content = <h2>"Loading"</h2>;
     } else {
       content = (
-        <div className="board-edit" >
-          <form className="form basic-modal group" >
-            <h1>{this.state.title}</h1>
-            <h2>Edit Board</h2>
-            <div className="input required">
-              <input
-                type="text"
-                className="board[title]"
-                id="board_title"
-                placeholder="Board Name"
-                valueLink={this.linkState('title')} />
+        <div className="page">
+          <div className="board-edit inner-page">
+            <form className="form basic-modal group" >
+              <h1>{this.state.title}</h1>
+              <h2>Edit Board</h2>
+              <div className="input required">
+                <input
+                  type="text"
+                  className="board[title]"
+                  id="board_title"
+                  placeholder="Board Name"
+                  valueLink={this.linkState('title')} />
+              </div>
+
+              <textarea
+                className="board[description]"
+                id="board_description"
+                placeholder="Add a description"
+                onChange={this.updateDescription}
+                value={this.state.description}></textarea>
+
+              {buttons}
+            </form>
+
+            <div>
+              <h2>Pins In this Board</h2>
+                <Masonry
+                className={'my-gallery-class'} // default ''
+                elementType={'ul'} // default 'div'
+                options={masonryOptions} // default {}
+                disableImagesLoaded={false} // default false
+                >
+                  {pins}
+                </Masonry>
             </div>
-
-            <textarea
-              className="board[description]"
-              id="board_description"
-              placeholder="Add a description"
-              onChange={this.updateDescription}
-              value={this.state.description}></textarea>
-
-            {buttons}
-          </form>
-
-          <div>
-            <h2>Pins In this Board</h2>
-              <Masonry
-              className={'my-gallery-class'} // default ''
-              elementType={'ul'} // default 'div'
-              options={masonryOptions} // default {}
-              disableImagesLoaded={false} // default false
-              >
-                {pins}
-              </Masonry>
           </div>
         </div>
       );

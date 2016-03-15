@@ -291,10 +291,6 @@
    margin: 0 auto;
  }
 
- .hidden {
-   display: none;
- }
-
  .my-gallery-class {
     margin: 0px auto;
  }
@@ -317,8 +313,7 @@ html {
 }
 
 .page {
-  height: 100%;
-  background: #eee;
+  width: 100%;
 }
 
 .left {
@@ -333,4 +328,19 @@ html {
 
 .loading {
   padding-bottom: 50px;
+}
+
+.inner-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 500px) {
+  .hidden {
+    display: block;
+  }
 }

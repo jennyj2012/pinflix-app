@@ -6,7 +6,6 @@
   background-color: #fff;
   -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.22);
-  width: 100%;
   z-index: 1000;
   // min-width: 900px;
 
@@ -15,7 +14,6 @@
 .header-center{
   margin: 0;
   display: block;
-  width: 100%;
   min-width: 877px;
 }
 
@@ -46,20 +44,22 @@
 }
 
 .search-bar input {
-  overflow: hidden;
-  border-top: 1px solid #dfdfdf;
+  padding: 6px 0 6px 4px;
+  width: 100%;
   background-color: #f3f3f3;
   background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f5f5f5));
   background: -webkit-linear-gradient(#f0f0f0, #f5f5f5);
   background: linear-gradient(#f0f0f0, #f5f5f5);
   box-sizing: border-box;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 5%;
-  border-bottom-right-radius: 5%;
-  border: 1px solid #d6d3ce;
+
+  border-radius: 0 5px 5px 0;
+  border-top: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  border-left: 1px solid #dfdfdf;
+
   -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.12) inset;
   box-shadow: 0 0 3px rgba(0,0,0,0.12) inset;
+
   font-size: 14px;
   text-align: left;
   -webkit-font-smoothing: antialiased;
@@ -67,27 +67,30 @@
   color: #a7a7a7;
   font-size: 16px;
   font-weight: 600;
-  height: 30px;
   line-height: 20px;
-  padding: 6px 0 6px 4px;
-  width: 100%;
 }
 
 .search-results {
+  padding: 5px 15px;
   margin: 0 auto;
-  position: absolute;
+  box-sizing: border-box;
+  position: relative;
   width: 100%;
-  height: 200px;
   background: #fff;
-  opacity: .9;
-  overflow: scroll;
+  opacity: 1;
+  border-radius: 0 0 5px 5px;
+  border-bottom: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  border-left: 1px solid #dfdfdf;
+
 }
 
-.search-results ul{
+.search-results ul {
   text-align: left;
   font-weight: bold;
   font-size: 16px;
   border-bottom: 1px solid #ccc;
+  color: #e3262e;
 }
 
 .search-results li {
@@ -99,8 +102,20 @@
   text-overflow: ellipsis;
 }
 
+.search-results li:hover{
+  background-color: #ccc;
+}
+
 .search-results span {
   text-align: right;
+}
+
+.search-results a {
+  color: #000;
+}
+
+.search-results p {
+  color: #dfdfdf;
 }
 
 .search-bar:active .search-results,
@@ -124,7 +139,7 @@
    background-color: #f5f5f5;
 
    border: 1px solid #d4d4d4;
-   border-radius: 6px 0 0 6px;
+   border-radius: 5px 0 0 5px;
    box-sizing: border-box;
    color: #818181;
    cursor: pointer;
@@ -184,7 +199,7 @@
 .logo {
   float: left;
   width: 42px;
-  height: 30px;
+  height: 34px;
   border-radius: 6px 0 0 6px;
   padding: 2px;
 }

@@ -1,13 +1,15 @@
-.footer-left {
-  text-align: left;
-  padding: 0 10px;
-  position: fixed;
-  bottom: 0;
-  background-color: #fff;
+.footer-center {
+  padding: 1px 20px;
   opacity: .9;
-  width: 100%;
+  text-align: left;
+  display: block;
+  height: 100%;
+  background-color: #fff;
 }
 
 .footer {
   margin-top: 50px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }

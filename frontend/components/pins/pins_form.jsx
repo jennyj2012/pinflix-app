@@ -204,39 +204,41 @@ var PinsForm = React.createClass({
       return <div><h2>Loading</h2></div>;
     } else {
       return (
-          <div className="new-pin">
-            <form className="form basic-modal group">
+          <div className="page">
+            <div className="new-pin inner-page">
+              <form className="form basic-modal group">
 
-              <div className="pin-form-left">
-                <h2> Create a Pin </h2>
-                {imageDisplay}
+                <div className="pin-form-left">
+                  <h2> Create a Pin </h2>
+                  {imageDisplay}
 
-                <div className="input required">
-                  <input
-                    type="text"
-                    className="pin[title]"
-                    id="pin_title"
-                    placeholder="Add a Movie Title"
-                    valueLink={this.linkState('title')} />
+                  <div className="input required">
+                    <input
+                      type="text"
+                      className="pin[title]"
+                      id="pin_title"
+                      placeholder="Add a Movie Title"
+                      valueLink={this.linkState('title')} />
+                  </div>
+
+                  <textarea
+                    className="pin[description]"
+                    id="pin_description"
+                    placeholder="Add a description"
+                    onChange={this.updateDescription}
+                    value={this.state.description}></textarea>
+
+                {inputItems}
+                <div className="errors">
+                  {this.state.serverErrors}
                 </div>
 
-                <textarea
-                  className="pin[description]"
-                  id="pin_description"
-                  placeholder="Add a description"
-                  onChange={this.updateDescription}
-                  value={this.state.description}></textarea>
-
-              {inputItems}
-              <div className="errors">
-                {this.state.serverErrors}
-              </div>
-
-              </div>
-                <div>
-                  <PinFormBoardItem processing={this.state.processing} handleSubmit={this.handleSubmit}/>
                 </div>
-            </form>
+                  <div>
+                    <PinFormBoardItem processing={this.state.processing} handleSubmit={this.handleSubmit}/>
+                  </div>
+              </form>
+            </div>
           </div>
       );
     }

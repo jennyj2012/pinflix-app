@@ -37,8 +37,8 @@ var Header = React.createClass({
     }
 
     return(
-      <div className="header">
-        <div className ="header-center group">
+      <div className="header page">
+        <div className ="header-center group inner-page">
 
           <div className="header-left group">
             <div>

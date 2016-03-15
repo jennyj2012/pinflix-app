@@ -79,20 +79,22 @@ var PinsIndex = React.createClass({
     }
 
     return (
-      <div className="landing-page">
+      <div className="page">
+        <div className="landing-page inner-page">
 
-        <Masonry
-          className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
-          elementType={'div'} // default 'div'
-          options={masonryOptions} // default {}
-          disableImagesLoaded={false} // default false
-          >
+          <Masonry
+            className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+            elementType={'div'} // default 'div'
+            options={masonryOptions} // default {}
+            disableImagesLoaded={false} // default false
+            >
 
-          {pins}
+            {pins}
 
-          </Masonry>
-          {loading}
+            </Masonry>
+            {loading}
 
+        </div>
       </div>
     );
   }

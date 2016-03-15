@@ -99,23 +99,25 @@ var BoardsIndex = React.createClass({
       content = <h2>"Loading"</h2>;
     } else {
       content = (
-        <div className="user-board-page group">
-          <div className="info">
-            <h2>{this.state.author} Account</h2>
-            <p>Board Count: {this.state.allBoards.length}</p>
+        <div className="page">
+          <div className="user-board-page group inner-page">
+            <div className="info">
+              <h2>{this.state.author} Account</h2>
+              <p>Board Count: {this.state.allBoards.length}</p>
+            </div>
+
+            <Masonry
+              className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
+              elementType={'div'} // default 'div'
+              options={masonryOptions} // default {}
+              disableImagesLoaded={false} // default false
+              >
+            {createBoard}
+            {boards}
+
+          </Masonry>
+
           </div>
-
-          <Masonry
-            className={'grid my-gallery-class masonry-container transitions-enabled infinite-scroll centered clearfix'} // default ''
-            elementType={'div'} // default 'div'
-            options={masonryOptions} // default {}
-            disableImagesLoaded={false} // default false
-            >
-          {createBoard}
-          {boards}
-
-        </Masonry>
-
         </div>
       );
     }

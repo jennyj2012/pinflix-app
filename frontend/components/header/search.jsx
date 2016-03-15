@@ -51,6 +51,9 @@ var Search = React.createClass({
    var totalCount = SearchResultsStore.meta().totalCount || 0;
    var pageCount = SearchResultsStore.all().length
    var nextPageLink = [];
+   var searchHash = { User: [], Pin: [], Board: [], Comment: [] };
+   var filteredSearch = [];
+
 
    if (pageCount % totalCount !== 0 && typeof pageCount % totalCount == "number"){
      nextPageLink = <p onClick={this.nextPage}> Next Page </p>;
@@ -63,31 +66,30 @@ var Search = React.createClass({
      </div>
    );
 
-   var userResults = [], pinResults = [], boardResults = [], commentResults = [];
    var searchResults = SearchResultsStore.all().forEach(function (searchResult, idx) {
      if (searchResult._type === "User" && typeof searchResult.id !== "undefined") {
-        userResults.push(
+        searchHash['User'].push(
           <li key={idx}>
             <a href={"#/users/" + searchResult.id}>
             Pinner: {searchResult.username}
             </a>
           </li>);
      } else if (searchResult._type === "Pin" && typeof searchResult.id !== "undefined"){
-        pinResults.push(
+        searchHash['Pin'].push(
           <li key={idx}>
             <a href={"#/pins/" + searchResult.id}>
               Pin: {searchResult.title}
             </a>
           </li>);
      } else if (searchResult._type === "Board" && typeof searchResult.id !== "undefined"){
-        boardResults.push(
+        searchHash['Board'].push(
           <li key={idx}>
             <a href={"#/boards/" + searchResult.id}>
               Board: {searchResult.title}
             </a>
           </li>);
      } else if (searchResult._type === "Comment" && typeof searchResult.pin_id !== "undefined"){
-        commentResults.push(
+        searchHash['Comment'].push(
           <li key={idx}>
             <a href={"#/pins/" + searchResult.pin_id}>
               Comment: {searchResult.body}
@@ -96,15 +98,18 @@ var Search = React.createClass({
      }
    });
 
+   filteredSearch = Object.keys(searchHash).map( function (searchKey) {
+     if(searchHash[searchKey].length > 0){
+       return <ul key={searchKey} >{searchKey.toString()} Results: {searchHash[searchKey]}</ul>
+     }
+   }.bind(this));
+
   return(
         <div className = "search-bar">
           <input type="text" placeholder="search" onKeyUp={ this.search }/>
           <div className="search-results hidden">
-            {summary}
-            <ul>Pinner Results {userResults}</ul>
-            <ul>Board Results {boardResults}</ul>
-            <ul>Pin Results {pinResults}</ul>
-            <ul>Comment Results {commentResults}</ul>
+          {filteredSearch}
+          {summary}
           </div>
 
         </div>
