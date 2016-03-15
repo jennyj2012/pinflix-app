@@ -14,9 +14,9 @@ Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flu
 * Navigation to new pages by updates in the url location hash
 
 ##FEATURES
-* Dynamically responds to window resize, animating the grid layout
-* Integrates RESTful operations into React lifecycle components upon page refresh
-* Improves user search experience with categorized pg_search results
+* Binds a listener to the window resize event to dynamically animate the grid layout
+* Reliably renders React components upon page refresh by using RESTful operations to repopulate the emptied stores already mounted in the virtual DOM.
+* Improves user search experience by indexing across tables and categorizing results
 * Uses paperclip to store and upload images via Amazon Web Services S3
 * Omni-Auth Facebook log in
 * Optimizes speed of landing-page creating an infinite scroll effect using Kaminari.
