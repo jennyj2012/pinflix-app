@@ -340,12 +340,28 @@ html {
   display: none;
 }
 
-@media (max-width: 500px) {
+
+#root:last-child > div {
+  margin-bottom: 50px;
+}
+
+@media (max-width: 900px) {
   .hidden {
     display: block;
   }
 }
 
-#root:last-child > div {
-  margin-bottom: 50px;
+@media (min-width: 900px) {
+}
+
+@media (min-width: 650px) and (max-width: 899px) {
+  .basic-modal {
+    width: 600px;
+  }
+}
+
+@media (max-width: 649px) {
+  .basic-modal {
+    width: 350px;
+  }
 }

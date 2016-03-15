@@ -152,3 +152,12 @@
   cursor: pointer;
   overflow: hidden;
 }
+
+@media (max-width: 900px) {
+  .form,
+  .pin-form-left,
+  .pin-form-right{
+    margin: auto;
+    float: none;
+  }
+}
