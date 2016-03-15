@@ -7,7 +7,9 @@ var Footer = require('./footer/footer');
 
 var App = React.createClass({
   componentDidMount: function () {
-    this.current_user_listener = CurrentUserStore.addListener(this.forceUpdate.bind(this));
+    this.current_user_listener = CurrentUserStore.addListener(function () {
+      if(this.isMounted()) { this.forceUpdate.bind(this) };
+    }.bind(this));
     SessionApiUtil.fetchCurrentUser();
   },
 

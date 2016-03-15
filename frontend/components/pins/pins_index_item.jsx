@@ -34,7 +34,7 @@ var PinsIndexItem = React.createClass({
     return (
       <div className="index-item pin pin-item">
 
-        <div className="pin-image-link" href={pinLink}>
+        <div className="pin-image-link">
 
           <div className="overlay hidden" onClick={this.showPinDetails}/>
           <div className="pin-it-button hidden small-red-button">
@@ -44,7 +44,7 @@ var PinsIndexItem = React.createClass({
           <img className="pin-image" src={imageURL} />
         </div>
 
-        <div className="pin-summary group">
+        <div className="pin-summary group" onClick={this.showPinDetails}>
 
           <section className="title">
             <figcaption>{pin.title}</figcaption>

@@ -28,7 +28,6 @@ class Api::SessionsController < ApplicationController
   @user = User.find_or_create_by_auth_hash(auth_hash)
   log_in(@user)
   redirect_to root_url + '#/'
-  # render "api/users/show"
 end
 
   def destroy

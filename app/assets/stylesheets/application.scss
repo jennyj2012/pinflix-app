@@ -310,6 +310,7 @@
 
 html {
   overflow-y: scroll;
+  overflow-x: scroll;
 }
 
 .page {
@@ -343,4 +344,8 @@ html {
   .hidden {
     display: block;
   }
+}
+
+#root:last-child > div {
+  margin-bottom: 50px;
 }

@@ -31,8 +31,8 @@ var PinsIndex = React.createClass({
   },
 
   componentWillUnMount: function (){
-    this.pinListener.remove();
     document.removeEventListener('scroll', this.handleScroll);
+    this.pinListener.remove();
   },
 
   __onChange: function () {
