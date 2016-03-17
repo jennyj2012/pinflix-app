@@ -26,11 +26,11 @@ var BoardsIndexItem = React.createClass({
   componentDidMount: function (){
     SessionApiUtil.fetchCurrentUser();
 
-    this.boardDetailListener = BoardsStore.addListener(this.__onChange);
-    BoardsUtil.fetchSingleBoard(this.props.params.board_id);
-
     this.pinListener = PinsStore.addListener(this.__onChange);
     PinsUtil.fetchAllPins();
+
+    this.boardDetailListener = BoardsStore.addListener(this.__onChange);
+    BoardsUtil.fetchSingleBoard(this.props.params.board_id);
   },
 
   componentWillReceiveProps: function(nextProps) {
@@ -71,23 +71,22 @@ var BoardsIndexItem = React.createClass({
   },
 
   render: function () {
-    var board = this.state.board;
+    var board = this.state.board || {};
     var boardTitle = "";
     var boardDescription = "";
     var boardAuthor = "";
     var editButton = [];
     var createPin = [];
 
-
-    if(typeof board.title !== "undefined"){
+    if(typeof board.title !== "undefined") {
       boardTitle = board.title;
     }
 
-    if(typeof board.description !== "undefined"){
+    if(typeof board.description !== "undefined") {
       boardDescription = board.description;
     }
 
-    if(typeof board.description !== "undefined"){
+    if(typeof board.description !== "undefined") {
       boardDescription = board.description;
     }
 

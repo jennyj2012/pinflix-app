@@ -11,6 +11,7 @@ var resetPins = function (pins){
 };
 
 var addPins = function (pins) {
+
   pins.forEach(function (pin) {
     updatePin(pin);
   }.bind(this));
@@ -54,6 +55,7 @@ PinsStore.find = function (id) {
 };
 
 PinsStore.findByBoardId = function (id) {
+
   return _pins.filter(function (pin) {
     return pin.board_id === id;
   });

@@ -2,7 +2,11 @@ class Api::PinsController < ApplicationController
   before_action :require_logged_in!
 
   def index
-    @pins = Pin.all.includes(:author, :comments, :photo).page(params[:page]).per(15)
+    if(params[:page])
+      @pins = Pin.all.includes(:author, :comments, :photo).page(params[:page]).per(15)
+    else
+      @pins = Pin.all.includes(:author, :comments, :photo)
+    end
   end
 
   def show
