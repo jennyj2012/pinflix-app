@@ -105,9 +105,9 @@ var Search = React.createClass({
    }.bind(this));
 
   return(
-        <div className = "search-bar">
-          <input type="text" placeholder="search" onKeyUp={ this.search }/>
-          <div className="search-results hidden">
+        <div className="search-bar">
+          <input id="search-input" type="text" placeholder="search" onKeyUp={ this.search }/>
+          <div className="search-results hidden-focus">
           {filteredSearch}
           {summary}
           </div>

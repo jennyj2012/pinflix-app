@@ -332,7 +332,7 @@ html {
 }
 
 .inner-page {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
@@ -343,6 +343,10 @@ html {
 
 #root:last-child > div {
   margin-bottom: 50px;
+}
+
+.hidden-focus {
+  display: none;
 }
 
 @media (max-width: 900px) {

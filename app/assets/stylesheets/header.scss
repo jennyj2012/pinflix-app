@@ -33,7 +33,6 @@
 .search-bar {
   vertical-align: middle;
   float: left;
-  background: transparent;
   border: 0;
 }
 
@@ -112,15 +111,6 @@
   color: #dfdfdf;
 }
 
-.search-bar:active .search-results,
-.search-bar:focus .search-results,
-.search-bar:hover .search-results {
-  display: block;
-}
-
-// .header-right > div {
-//   float: left;
-// }
 .user-menu {
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
@@ -239,6 +229,12 @@
   margin: 3px 10px 3px 0;
 }
 
+.search-bar:hover .hidden-focus,
+.search-bar:focus .hidden-focus,
+.search-bar:active .hidden-focus {
+  display: block;
+}
+
 @media (min-width: 900px) {
   .user-menu {
     width: 195px;
@@ -255,8 +251,6 @@
   .search-bar {
     width: 550px;
   }
-
-
 }
 
 @media (min-width: 650px) and (max-width: 899px) {
