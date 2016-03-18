@@ -25,7 +25,7 @@ var PinsIndex = React.createClass({
 
   componentDidMount: function (){
     this.pinListener = PinsStore.addListener(this.__onChange);
-    PinsUtil.fetchAllPins(this.state.page);
+    PinsUtil.fetchAllPins({page: this.state.page});
     PinsUtil.fetchTotal();
     document.addEventListener('scroll', this.handleScroll);
   },
@@ -59,7 +59,7 @@ var PinsIndex = React.createClass({
   nextPage: function () {
     if(this.state.allPins.length < PinsStore.total()){
       var nextPage = this.state.page + 1;
-      PinsUtil.fetchAllPins(nextPage);
+      PinsUtil.fetchAllPins({page: nextPage});
 
       if(this.isMounted()) {
         this.setState({page: nextPage, loaded: false });

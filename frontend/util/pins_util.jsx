@@ -1,11 +1,11 @@
 var PinsActions = require('../actions/pins_actions');
 
 var PinsUtil = {
-  fetchAllPins: function (page) {
+  fetchAllPins: function (payload) {
     $.get({
       url: "/api/pins",
       dataType: "json",
-      data: {page: page},
+      data: payload,
       success: function (pins) {
         PinsActions.receiveAllPins(pins);
       }

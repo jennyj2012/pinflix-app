@@ -27,7 +27,7 @@ var BoardsIndexItem = React.createClass({
     SessionApiUtil.fetchCurrentUser();
 
     this.pinListener = PinsStore.addListener(this.__onChange);
-    PinsUtil.fetchAllPins();
+    PinsUtil.fetchAllPins({board_id: this.props.params.board_id});
 
     this.boardDetailListener = BoardsStore.addListener(this.__onChange);
     BoardsUtil.fetchSingleBoard(this.props.params.board_id);

@@ -4,6 +4,8 @@ class Api::PinsController < ApplicationController
   def index
     if(params[:page])
       @pins = Pin.all.includes(:author, :comments, :photo).page(params[:page]).per(15)
+    elsif(params[:board_id])
+      @pins = Pin.includes(:author, :comments, :photo).where(board_id: params[:board_id])
     else
       @pins = Pin.all.includes(:author, :comments, :photo)
     end
