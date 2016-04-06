@@ -1,5 +1,6 @@
 var React = require('react');
 var PinsUtil = require('../../util/pins_util');
+var CurrentUserStore = require('../../stores/current_user_store');
 
 var CommentsIndexItem = React.createClass({
 
@@ -7,6 +8,7 @@ var CommentsIndexItem = React.createClass({
     var comment = this.props.comment;
     var authorLink = "#";
     var deleteButton = [];
+    var currentUser = CurrentUserStore.currentUser();
 
     var commentAuthor;
     if (comment.author){
@@ -16,11 +18,13 @@ var CommentsIndexItem = React.createClass({
       commentAuthor = "anonymous";
     }
 
-    deleteButton = (
-      <div className="right basic-red-button" onClick={this.handleDelete.bind(this, comment.id)}>
-        <button>Delete</button>
-      </div>
-    );
+    if(comment.author.id === currentUser.id) {
+      deleteButton = (
+        <div className="right basic-red-button" onClick={this.handleDelete.bind(this, comment.id)}>
+          <button>Delete</button>
+        </div>
+      );
+    }
 
     return (
       <div>
