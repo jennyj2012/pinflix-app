@@ -50,7 +50,7 @@
  }
 
 .body {
-   background: image-url('page_background_blurred.png') no-repeat;
+   background: image-url('page_background_blurred_255.jpg') no-repeat;
    background-size: cover;
    background-repeat: repeat;
    animation: animatedBackground 200s linear infinite;
@@ -240,7 +240,7 @@
 
  .basic-red-button button {
    text-align: center;
-   padding: 15px;
+   padding: 10px;
    border-radius: 5px;
    color: #fff;
    background: #bd081c;

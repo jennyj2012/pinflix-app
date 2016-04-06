@@ -61,6 +61,17 @@ var PinsUtil = {
     });
   },
 
+  deletePinComment: function (id) {
+    $.ajax({
+      url: "/api/comments/" + id,
+      dataType: "json",
+      type: 'DELETE',
+      success: function (pin) {
+        PinsActions.receiveSinglePin(pin);
+      }
+    });
+  },
+
 };
 
 module.exports = PinsUtil;

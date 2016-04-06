@@ -48,7 +48,7 @@ var CommentsForm = React.createClass({
                 onChange={this.updateBody}
                 value={this.state.body}></textarea>
 
-            <div className="comment-button basic-red-button">
+              <div className="comment-button basic-red-button group">
               <button>Comment</button>
             </div>
             </form>

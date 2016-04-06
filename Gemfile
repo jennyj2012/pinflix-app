@@ -47,6 +47,10 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'better_errors'
   gem 'pry-rails'
+
+  gem "rspec", "~> 3.1.0"
+  gem "rspec-rails"
+  gem 'factory_girl_rails'
 end
 
 group :development do
@@ -55,6 +59,14 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'faker'
+  gem "shoulda-matchers"
+  gem 'guard-rspec'
+  gem 'launchy' #used to open pages in the middle of capybara tests
 end
 
 group :production do

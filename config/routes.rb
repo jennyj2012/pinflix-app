@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     resources :boards,
       only: [:index, :show, :create, :update, :destroy]
     resources :comments,
-      only: [:index, :show, :create]
+      only: [:index, :show, :create, :destroy]
 
     get "search", to: "utils#search"
     get "total/pins", to: "pins#total"

@@ -3,10 +3,19 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .comment-form section {
-  
+
 }
-.comment-form textarea{
+.comment-form textarea {
 }
 
-.comment-form button{
+.comment-form button {
+}
+
+.comment button {
+  float: right;
+}
+
+.comment a {
+  margin: 5px 0;
+  display: block;
 }
