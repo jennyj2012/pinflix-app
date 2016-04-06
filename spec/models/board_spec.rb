@@ -8,13 +8,4 @@ RSpec.describe Board, :type => :model do
     expect(subject).to be_valid
   end
 
-  # context 'is invalid' do
-  #   specify 'when username is blank' do
-  #     expect(build(:user, username: '')).not_to be_valid
-  #   end
-  #   specify 'when password is less than 6 characters' do
-  #     expect(build(:user, password: 'test')).not_to be_valid
-  #   end
-  # end
-
 end
