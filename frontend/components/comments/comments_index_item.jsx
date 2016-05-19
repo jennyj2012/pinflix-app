@@ -20,8 +20,8 @@ var CommentsIndexItem = React.createClass({
 
     if(comment.author.id === currentUser.id) {
       deleteButton = (
-        <div className="right basic-red-button" onClick={this.handleDelete.bind(this, comment.id)}>
-          <button>Delete</button>
+        <div className="delete-wrapper" onClick={this.handleDelete.bind(this, comment.id)}>
+          <button>X</button>
         </div>
       );
     }
@@ -32,8 +32,8 @@ var CommentsIndexItem = React.createClass({
             <a href={authorLink}>
               Commenter: {commentAuthor}
             </a>
-            <div className="comment-show group">
-              <p className="left">{comment.body}</p>
+            <div className="comment-show">
+                <p>{comment.body}</p>
               {deleteButton}
             </div>
           </section>

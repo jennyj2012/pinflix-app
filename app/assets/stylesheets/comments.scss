@@ -8,14 +8,22 @@
 .comment-form textarea {
 }
 
-.comment-form button {
-}
-
 .comment button {
   float: right;
+  position: relative;
 }
 
 .comment a {
   margin: 5px 0;
   display: block;
+}
+
+.comment-show {
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment-show p {
+  width: 80%;
+  word-wrap: break-word;
 }
