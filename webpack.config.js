@@ -1,5 +1,34 @@
 var path = require("path");
+var ModernizrWebpackPlugin = require('modernizr-webpack-plugin');
 
+//https://github.com/Modernizr/Modernizr/blob/master/lib/config-all.json
+var config = {
+  'classPrefix': "modernizr-",
+  'options':[
+    'addTest',
+    'atRule',
+    'domPrefixes',
+    'hasEvent',
+    'html5shiv',
+    'html5printshiv',
+    'load',
+    'mq',
+    'prefixed',
+    'prefixes',
+    'prefixedCSS',
+    'setClasses',
+    'testAllProps',
+    'testProp',
+    'testStyles'
+  ],
+  'feature-detects':[
+    'css/all',
+    'css/gradients',
+    'css/flexbox',
+    'touchevents',
+    'css/mediaqueries'
+  ]
+}
 module.exports = {
   context: __dirname,
   entry: "./frontend/pinflix.jsx",
@@ -29,5 +58,8 @@ module.exports = {
   devtool: 'source-maps',
   resolve: {
     extensions: ["", ".js", ".jsx" ]
-  }
+  },
+  plugins: [
+   new ModernizrWebpackPlugin(config)
+  ]
 };

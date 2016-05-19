@@ -336,9 +336,6 @@ html {
   margin: 0 auto;
 }
 
-.hidden {
-  display: none;
-}
 
 
 #root:last-child > div {
@@ -348,11 +345,13 @@ html {
 .hidden-focus {
   display: none;
 }
-
-@media (max-width: 900px) {
-  .hidden {
+// .touchevents is a css attribute of Modernizr npm webpack plugin
+.modernizr-touchevents .hidden {
     display: block;
-  }
+}
+
+.modernizr-no-touchevents .hidden {
+    display: none;
 }
 
 @media (min-width: 900px) {
