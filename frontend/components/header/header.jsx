@@ -38,11 +38,11 @@ var Header = React.createClass({
 
     return(
       <div className="header page">
-        <div className ="header-center group inner-page">
+        <div className ="header-center inner-page">
 
-          <div className="header-left group">
-            <div>
-              <a href="/" className="logo buttonbar">
+          <div className="header-left">
+            <div className="logo">
+              <a href="/" className="buttonbar">
                 <img src={window.pinflix.logo}/>
               </a>
             </div>
@@ -50,12 +50,12 @@ var Header = React.createClass({
               <SearchBar/>
           </div>
 
-          <div className="header-right group">
+          <div className="header-right">
             <div className="user-menu user-link" >
               <a className="group" href={userBoards}>
                 <img className="user-pin" src={window.pinflix.pin}/>
                 <h4>{this.state.currentUser.username}</h4>
-            </a>
+              </a>
             </div>
 
             <div className="logout">
