@@ -3,7 +3,8 @@ var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
-var History = require('react-router').History;
+
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 var UsersForm = require('./components/users/users_form');
 var SessionForm = require('./components/session/session_form');
@@ -63,16 +64,8 @@ function _ensureLoggedIn(nextState, replace, callback) {
   }
 }
 
-// function _mainBackground() {
-//   $("body").removeClass("body");
-// }
-//
-// function _fancyBackground() {
-//   $("body").addClass("body");
-// }
-
 var router = (
-  <Router>
+  <Router history={createBrowserHistory()}>
     <Route path="session/new" component={SessionForm} onEnter={_ensureLoggedOut} />
     <Route path="users/new" component={UsersForm} onEnter={_ensureLoggedOut} />
     <Route path="/" component={App} onEnter={_ensureLoggedIn}>
