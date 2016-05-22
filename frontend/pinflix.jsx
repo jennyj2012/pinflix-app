@@ -3,8 +3,7 @@ var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
-
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+var History = require('history').createHashHistory;
 
 var UsersForm = require('./components/users/users_form');
 var SessionForm = require('./components/session/session_form');
@@ -65,7 +64,7 @@ function _ensureLoggedIn(nextState, replace, callback) {
 }
 
 var router = (
-  <Router history={createBrowserHistory()}>
+  <Router history={History({queryKey: false})}>
     <Route path="session/new" component={SessionForm} onEnter={_ensureLoggedOut} />
     <Route path="users/new" component={UsersForm} onEnter={_ensureLoggedOut} />
     <Route path="/" component={App} onEnter={_ensureLoggedIn}>
