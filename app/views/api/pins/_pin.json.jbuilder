@@ -4,6 +4,8 @@ json.author do
   json.extract! pin.author, :id, :username
 end
 
+json.board_name pin.board.title
+
 json.photo do
   json.partial! 'api/photos/photo', photo: pin.photo
 end

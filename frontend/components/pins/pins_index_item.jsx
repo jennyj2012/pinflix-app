@@ -14,6 +14,8 @@ var PinsIndexItem = React.createClass({
     var authorLink = "#"
     var comments;
     var imageURL = pin.photo.pin_image;
+    var boardName = pin.board_name;
+    var boardLink = "#/boards/" + pin.board_id;
 
     if(typeof pin.author !== "undefined"){
       pinAuthor = pin.author.username;
@@ -30,6 +32,7 @@ var PinsIndexItem = React.createClass({
     } else {
       comments = [];
     }
+
 
     return (
       <div className="index-item pin pin-item">
@@ -52,6 +55,11 @@ var PinsIndexItem = React.createClass({
 
           <div className="divison"></div>
 
+            <section className="">
+              <a href={boardLink}>
+                Board: {boardName}</a>
+            </section>
+            
           <section className="description">
             {pin.description}
           </section>
@@ -61,6 +69,8 @@ var PinsIndexItem = React.createClass({
             Author: {pinAuthor}
             </a>
           </section>
+
+
 
           {comments}
         </div>
