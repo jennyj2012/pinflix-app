@@ -3,11 +3,11 @@ class Api::PinsController < ApplicationController
 
   def index
     if(params[:page])
-      @pins = Pin.all.includes(:author, :comments, :photo).page(params[:page]).per(15)
+      @pins = Pin.all.includes(:author, :comments, :photo).order("created_at DESC").page(params[:page]).per(15)
     elsif(params[:board_id])
-      @pins = Pin.includes(:author, :comments, :photo).where(board_id: params[:board_id])
+      @pins = Pin.includes(:author, :comments, :photo).where(board_id: params[:board_id]).order("created_at DESC")
     else
-      @pins = Pin.all.includes(:author, :comments, :photo)
+      @pins = Pin.all.includes(:author, :comments, :photo).order("created_at DESC")
     end
   end
 
