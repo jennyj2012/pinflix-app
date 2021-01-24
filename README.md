@@ -1,3 +1,5 @@
+## Note this project is archived
+
 # PINFLIX
 
 Welcome to [PinFlix], a movie discovery site that lets you find and group movies into boards.
