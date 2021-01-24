@@ -1,10 +1,10 @@
-#PINFLIX
+# PINFLIX
 
 Welcome to [PinFlix](http://www.pinflixapp.com), a movie discovery site that lets you find and group movies into boards.
 
 [![](./docs/wireframes/wireframe_images/pinflix.jpg)](http://www.pinflixapp.com)
 
-##OVERVIEW
+## OVERVIEW
 Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flux-architecture.
 * The home page features movie pins. Users can search pins, boards, or comments.
 * Users can add comments to pins and create, read, update, and delete boards.
@@ -13,7 +13,7 @@ Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flu
 * Dynamic update of boards, pins and comments
 * Navigation to new pages by updates in the url location hash
 
-##FEATURES
+## FEATURES
 * Binds a listener to the window resize event to dynamically animate the grid layout
 * Reliably renders React components upon page refresh by using RESTful operations to repopulate the emptied stores already mounted in the virtual DOM.
 * Improves user search experience by indexing across tables and categorizing results
@@ -21,11 +21,11 @@ Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flu
 * Omni-Auth Facebook log in
 * Optimizes speed of landing-page creating an infinite scroll effect using Kaminari.
 
-##FRAMEWORKS
+## FRAMEWORKS
 * Rails
 * React.js
 
-##LIBRARIES AND TECHNOLOGIES
+## LIBRARIES AND TECHNOLOGIES
 * Flux Architecture
 * React Router
 * React Masonry
@@ -39,13 +39,13 @@ Pinflix is a clone of [Pinterest](https://www.pinterest.com) and built using flu
 * Babel (JSX)
 * Webpack
 
-##LANGUAGES
+## LANGUAGES
 * Ruby
 * Javascript
 * HTML
 * CSS
 
-###SYSTEM INFO
+### SYSTEM INFO
 Ruby version 2.3.0
 Node version 4.1.1
 NPM version 2.1.x
@@ -61,7 +61,7 @@ react-history: 1.0.0
 react-router: 1.0.3
 webpack: 1.12.12
 
-###IMPLEMENTATION DETAILS
+### IMPLEMENTATION DETAILS
 [Implementation Details](./docs/implementation_details.md)
 
 Developed by Jenny Juarez
